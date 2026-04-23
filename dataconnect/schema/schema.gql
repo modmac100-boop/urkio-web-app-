@@ -1,0 +1,41 @@
+# Urkio Clinical Vault Schema
+# Relational schema for Specialists, Patients, and AI-driven Clinical Sessions
+
+type Specialist @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String! @unique # Firebase Auth UID
+  displayName: String!
+  role: String! # Practitioner, Psychologist, etc.
+  specialization: String
+  characterAssetId: String # ID of the 2D character selected for patients
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type Patient @table {
+  id: UUID! @default(expr: "uuidV4()")
+  userId: String @unique # Optional link to a User account
+  clientName: String!
+  caseCode: String! @unique
+  age: Int
+  gender: String
+  primarySpecialist: Specialist! @ref # Link to the primary specialist
+  createdAt: Timestamp! @default(expr: "request.time")
+}
+
+type ClinicalSession @table {
+  id: UUID! @default(expr: "uuidV4()")
+  patient: Patient! @ref
+  specialist: Specialist! @ref
+  sessionDate: Timestamp! @default(expr: "request.time")
+  audioTranscript: String
+  summary: String
+  emotionalSentiment: Float # 0.0 (Stress) to 1.0 (Positive)
+  keywordsOfConcern: [String!]
+  
+  # AI Grounding: Vector embedding of the transcript for semantic search
+  # Using Vertex AI text-embedding-005
+  transcriptEmbedding: Vector @col(size: 768)
+  
+  status: String! @default(value: "completed")
+  createdAt: Timestamp! @default(expr: "request.time")
+}

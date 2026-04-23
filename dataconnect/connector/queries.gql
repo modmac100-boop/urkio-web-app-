@@ -1,0 +1,41 @@
+# Queries for Urkio Specialist Dashboard
+
+# Get clinical history for a patient, ordered by date
+query GetPatientHistory($patientId: UUID!) @auth(level: USER) {
+  clinicalSessions(
+    where: { patient: { id: { eq: $patientId } } }
+    orderBy: [{ sessionDate: DESC }]
+  ) {
+    id
+    sessionDate
+    summary
+    emotionalSentiment
+    keywordsOfConcern
+  }
+}
+
+# Semantic Search for Keywords across clinical sessions
+query SearchSessions($queryText: String!) @auth(level: USER) {
+  clinicalSessions_transcriptEmbedding_similarity(
+    compare_embed: { model: "text-embedding-005", text: $queryText }
+    method: COSINE
+    limit: 5
+  ) {
+    id
+    sessionDate
+    summary
+    patient {
+      clientName
+      caseCode
+    }
+  }
+}
+
+# Get current specialist details
+query GetSpecialistDetails($uid: String!) @auth(level: USER) {
+  specialists(where: { userId: { eq: $uid } }) {
+    id
+    displayName
+    characterAssetId
+  }
+}

@@ -1,0 +1,31 @@
+
+> react-example@0.0.0 build
+> vite build
+
+vite v6.4.2 building for production...
+transforming...
+✓ 51 modules transformed.
+✗ Build failed in 535ms
+error during build:
+[vite:esbuild] Transform failed with 1 error:
+/Users/sameralhalaki/Desktop/urkio-web-test/src/pages/Agenda.tsx:1159:27: ERROR: Expected "}" but found "==="
+file: /Users/sameralhalaki/Desktop/urkio-web-test/src/pages/Agenda.tsx:1159:27
+
+Expected "}" but found "==="
+1157|                  <p className="text-zinc-500 max-w-md font-medium text-sm leading-relaxed">
+1158|                    {activeSection === 'records' ? 'Access deep-dive clinical histories, session participation metrics, and multi-specialist collaboration logs for assigned cases.' : 
+1159|              {activeSection === 'workstation' && (
+   |                             ^
+1160|                <div className="p-10 bg-white rounded-3xl border border-slate-200 min-h-[600px] flex flex-col items-center justify-center text-center shadow-sm">
+1161|                    <div className="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-[#004e99] mb-8">
+
+    at failureErrorWithLog (/Users/sameralhalaki/Desktop/urkio-web-test/node_modules/vite/node_modules/esbuild/lib/main.js:1467:15)
+    at /Users/sameralhalaki/Desktop/urkio-web-test/node_modules/vite/node_modules/esbuild/lib/main.js:736:50
+    at responseCallbacks.<computed> (/Users/sameralhalaki/Desktop/urkio-web-test/node_modules/vite/node_modules/esbuild/lib/main.js:603:9)
+    at handleIncomingPacket (/Users/sameralhalaki/Desktop/urkio-web-test/node_modules/vite/node_modules/esbuild/lib/main.js:658:12)
+    at Socket.readFromStdout (/Users/sameralhalaki/Desktop/urkio-web-test/node_modules/vite/node_modules/esbuild/lib/main.js:581:7)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+    at Readable.push (node:internal/streams/readable:390:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:189:23)

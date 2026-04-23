@@ -1,0 +1,41 @@
+# Mutations for Clinical Data Management
+
+# Add a new clinical session with sentiment data
+mutation CreateClinicalSession(
+  $patientId: UUID!
+  $specialistId: UUID!
+  $transcript: String!
+  $summary: String
+  $sentiment: Float
+  $keywords: [String!]
+) @auth(level: USER) {
+  clinicalSession_insert(
+    data: {
+      patientId: $patientId
+      specialistId: $specialistId
+      audioTranscript: $transcript
+      summary: $summary
+      emotionalSentiment: $sentiment
+      keywordsOfConcern: $keywords
+      transcriptEmbedding_embed: {
+        model: "text-embedding-005"
+        text: $transcript
+      }
+    }
+  )
+}
+
+# Link a patient to a primary specialist
+mutation AssignPatient(
+  $clientName: String!
+  $caseCode: String!
+  $specialistId: UUID!
+) @auth(level: USER) {
+  patient_insert(
+    data: {
+      clientName: $clientName
+      caseCode: $caseCode
+      primarySpecialistId: $specialistId
+    }
+  )
+}

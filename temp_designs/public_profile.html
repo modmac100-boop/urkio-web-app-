@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Social Profile - Alex Rivera</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6366f1",
+                        "accent-blue": "#4f46e5",
+                        "background-light": "#f8fafc",
+                        "surface": "#ffffff",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "2xl": "2.5rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 30px -10px rgba(0, 0, 0, 0.05)',
+                        'glow': '0 0 20px rgba(99, 102, 241, 0.2)',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fill-1 { font-variation-settings: 'FILL' 1; }
+        .gradient-button {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-light text-slate-800 min-h-screen pb-24">
+<!-- Header Navigation -->
+<header class="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-slate-100">
+<div class="flex items-center justify-between px-6 py-4 max-w-2xl mx-auto">
+<button class="flex items-center justify-center p-2 rounded-xl hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined text-slate-700">arrow_back</span>
+</button>
+<h1 class="text-sm font-bold uppercase tracking-widest text-slate-400">Profile</h1>
+<button class="flex items-center justify-center p-2 rounded-xl hover:bg-slate-100 transition-colors">
+<span class="material-symbols-outlined text-slate-700">settings</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-4 pt-8">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="size-36 rounded-full bg-linear-to-tr from-purple-500 to-indigo-500 p-1.5 shadow-lg">
+<div class="w-full h-full rounded-full border-4 border-white bg-cover bg-center" data-alt="Professional headshot of a smiling man with short dark hair" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBgRCODccG-HXwoDK4TD1wgf2tGwwpd6hWvGCACeIOlQokBfm51i1zLFuQWvcZrLOMKgIyKCvbI3r3D2Cbnks3unW8JzGb_1ijLHyzNr90fPnfSjtjpYv4JBGVLdWzCM8UY_pw2mYjsGtEY30h5zQNUKtspydIwaRIeIDp2GqvEJchWTRKqZhuYyFiSqD7yZCpG1A45LRsG2DVhcXIpeEk7PH4Y_xmk2ozCZM5YORcGiFXsD27seQob8Oe22FokCSPJBGs6cTlLE6U')"></div>
+</div>
+<div class="absolute bottom-1 right-1 gradient-button text-white p-2 rounded-full border-4 border-white">
+<span class="material-symbols-outlined text-xs block font-bold">verified</span>
+</div>
+</div>
+<h2 class="text-3xl font-bold tracking-tight text-slate-900">Alex Rivera</h2>
+<p class="text-slate-500 font-medium mt-2 max-w-xs">Digital Product Designer &amp; Mental Health Advocate</p>
+<div class="flex items-center gap-1.5 text-slate-400 text-sm mt-3 font-semibold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">location_on</span>
+<span>San Francisco, CA</span>
+</div>
+<!-- Social Links Buttons -->
+<div class="grid grid-cols-4 gap-4 mt-8 w-full">
+<a class="flex flex-col items-center gap-2 group" href="#">
+<div class="size-14 rounded-2xl bg-white shadow-soft flex items-center justify-center group-hover:scale-105 transition-all duration-300 border border-slate-100">
+<span class="material-symbols-outlined text-indigo-500">public</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Web</span>
+</a>
+<a class="flex flex-col items-center gap-2 group" href="#">
+<div class="size-14 rounded-2xl bg-white shadow-soft flex items-center justify-center group-hover:scale-105 transition-all duration-300 border border-slate-100">
+<span class="material-symbols-outlined text-indigo-500">link</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">LinkedIn</span>
+</a>
+<a class="flex flex-col items-center gap-2 group" href="#">
+<div class="size-14 rounded-2xl bg-white shadow-soft flex items-center justify-center group-hover:scale-105 transition-all duration-300 border border-slate-100">
+<span class="material-symbols-outlined text-indigo-500">alternate_email</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Twitter</span>
+</a>
+<a class="flex flex-col items-center gap-2 group" href="#">
+<div class="size-14 rounded-2xl bg-white shadow-soft flex items-center justify-center group-hover:scale-105 transition-all duration-300 border border-slate-100">
+<span class="material-symbols-outlined text-indigo-500">camera</span>
+</div>
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Insta</span>
+</a>
+</div>
+</section>
+<!-- Stats Card -->
+<section class="mt-10 bg-white rounded-3xl p-6 shadow-soft border border-slate-50 flex justify-around">
+<div class="text-center">
+<p class="text-xl font-bold text-slate-900">1.2k</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Posts</p>
+</div>
+<div class="w-px bg-slate-100"></div>
+<div class="text-center">
+<p class="text-xl font-bold text-indigo-600">14.5k</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Followers</p>
+</div>
+<div class="w-px bg-slate-100"></div>
+<div class="text-center">
+<p class="text-xl font-bold text-slate-900">892</p>
+<p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold mt-1">Following</p>
+</div>
+</section>
+<!-- Privacy & Settings -->
+<section class="mt-8 space-y-3">
+<h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-2 mb-4">Account Security</h3>
+<div class="flex items-center justify-between p-5 bg-white rounded-3xl shadow-soft border border-slate-50 group cursor-pointer hover:border-indigo-100 transition-colors">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-2xl bg-indigo-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-indigo-500">visibility</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900">Profile Visibility</p>
+<p class="text-xs text-slate-400 font-medium mt-0.5">Public Mode Enabled</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-indigo-500 transition-colors">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-5 bg-white rounded-3xl shadow-soft border border-slate-50 group cursor-pointer hover:border-indigo-100 transition-colors">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-2xl bg-purple-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-purple-500">shield_person</span>
+</div>
+<div>
+<p class="font-bold text-sm text-slate-900">Account Status</p>
+<p class="text-xs text-slate-400 font-medium mt-0.5">Verified &amp; Secure</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-300 group-hover:text-purple-500 transition-colors">chevron_right</span>
+</div>
+</section>
+<!-- Create Post Input -->
+<section class="mt-10">
+<div class="bg-white p-5 rounded-3xl shadow-soft border border-slate-50">
+<div class="flex gap-4 items-center">
+<div class="size-12 rounded-2xl bg-cover bg-center shadow-sm" data-alt="Small profile avatar of Alex Rivera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAnlGz7yxT5gnY0_TdoEzHwK1DtyMEwHNeOZ_xQKe7eEMYHAJpcngU0F68GiGpaK8Z5M9fxRLatVJ9ik75C1o7yRP_6DPYPn5koOa_SHvQwFGYiGD3PQZ_UNBnLqP9J_DLLjygDjcHoC24nF844pt1L3LZGdbbYh-INU0gcsHbPtEOz7vrE793Ktjm1pmaxcrwgo5rA1-HE0eZLjNAMKMdzH_t60S204npM_d4NUabc7vXzv2-MMCDA1bN99x5N5I2NLx6lXui2vFE')"></div>
+<div class="flex-1 bg-slate-50 border border-slate-100 px-5 py-3.5 rounded-2xl text-slate-400 text-sm font-medium">
+                    What's on your mind?
+                </div>
+</div>
+<div class="flex justify-between items-center mt-5 pt-5 border-t border-slate-50">
+<div class="flex gap-4">
+<button class="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined text-lg text-emerald-400">image</span> MEDIA
+                    </button>
+<button class="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-indigo-500 transition-colors">
+<span class="material-symbols-outlined text-lg text-rose-400">videocam</span> VIDEO
+                    </button>
+</div>
+<button class="gradient-button text-white px-6 py-2 rounded-full text-xs font-bold tracking-widest uppercase">Post</button>
+</div>
+</div>
+</section>
+<!-- Feed -->
+<section class="mt-10 space-y-6">
+<h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] ml-2">Recent Journey</h3>
+<article class="bg-white rounded-[2.5rem] shadow-soft border border-slate-50 overflow-hidden">
+<div class="p-6 flex justify-between items-center">
+<div class="flex gap-4">
+<div class="size-12 rounded-2xl bg-cover bg-center" data-alt="Avatar of Alex Rivera" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCosDxUbXTT1E67UlwDpycsCDMdV6cyy2652-JjI52Dx2wSwu--PDtN-bsGToWmk6tMopM2uP3gQXM8lPEVIc5gPt8aUq3oF2v8jzZZj8SKovtweKHCcVaU6toX27Lzr_othPlCpVA6CZe0wIiVdKaK7hOabD5_yEZDmB0SUEX43uxulrEtwUFlTS6PfBPJWT5S-3eIaN6gxXZrGW9h0vey9nRcLT8ApUH7IpZnX2ZK-G3NUuLVIeQnxji3eIrxF0jCfsXKjEyxcIA')"></div>
+<div>
+<p class="font-bold text-slate-900">Alex Rivera</p>
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">2 hours ago</p>
+</div>
+</div>
+<button class="text-slate-300 p-2"><span class="material-symbols-outlined">more_horiz</span></button>
+</div>
+<div class="px-6 pb-4">
+<p class="text-sm leading-relaxed text-slate-600 font-medium italic">"Design is more than just pixels; it's about creating spaces where people feel safe and supported." 🌿</p>
+</div>
+<div class="mx-6 mb-6 rounded-3xl overflow-hidden shadow-md">
+<div class="w-full aspect-video bg-cover bg-center" data-alt="Peaceful nature scene" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAyeJobgzOP9erQI98YbOfAf7GesoqFHX09DYiXhmQazPLXd_7jTp6yrTUBEDgoINY-i0tCF1qrcfz9ZtbTD52Je5u-6Gy79swa5Lz4b2Wu9SNVlZHymDE9QoPMb6ztgg3DcE4N0vBpJj31b_IPBpZXu1JN9pru7GhUQg6xgkE9S7TQ-n6R9exPsOcKnuRhO_nVuEmsizFxDQjLPCuANbZhiY1K3A6wdPkgtxdsNTLPofVSYk8Enb2luiSpm0qpBdleTz10E-QPus')"></div>
+</div>
+<div class="px-6 py-5 bg-slate-50 flex items-center justify-between">
+<div class="flex gap-6">
+<button class="flex items-center gap-2 text-slate-400 hover:text-rose-500">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+<span class="text-xs font-bold">124</span>
+</button>
+<button class="flex items-center gap-2 text-slate-400 hover:text-indigo-500">
+<span class="material-symbols-outlined text-[20px]">chat_bubble</span>
+<span class="text-xs font-bold">18</span>
+</button>
+</div>
+<button class="text-slate-400 hover:text-indigo-500">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-28 right-6 z-40">
+<button class="gradient-button flex items-center gap-3 text-white px-6 py-4 rounded-3xl font-bold text-sm tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-lg">
+<span class="material-symbols-outlined text-lg">bolt</span>
+<span>Join Session</span>
+</button>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-6 left-6 right-6 z-50">
+<div class="glass-card flex justify-around items-center h-20 rounded-[2.5rem] shadow-2xl px-4 border border-white/50">
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[9px] font-bold uppercase tracking-wider">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+<span class="text-[9px] font-bold uppercase tracking-wider">Circles</span>
+</a>
+<a class="flex flex-col items-center justify-center gradient-button text-white size-14 rounded-2xl -mt-12 transition-transform hover:rotate-12" href="#">
+<span class="material-symbols-outlined text-3xl">add</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-[9px] font-bold uppercase tracking-wider">Alerts</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-indigo-600" href="#">
+<span class="material-symbols-outlined fill-1">person</span>
+<span class="text-[9px] font-bold uppercase tracking-wider">You</span>
+</a>
+</div>
+</nav>
+</body></html>

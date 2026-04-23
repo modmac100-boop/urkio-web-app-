@@ -1,0 +1,176 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the Urkio platform.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "specialist", "admin"] },
+        "verificationStatus": { "type": "string", "enum": ["none", "pending", "approved", "rejected"] },
+        "primaryRole": { "type": "string", "description": "e.g., Psychologist, Social Worker" },
+        "npiNumber": { "type": "string" },
+        "credentialUrl": { "type": "string" },
+        "joinCommunity": { "type": "boolean" },
+        "bio": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "twitter": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "instagram": { "type": "string" },
+        "website": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "A post in the Healing Circle.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "content": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "likesCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "content", "likesCount", "createdAt"]
+    },
+    "Case": {
+      "title": "Case",
+      "description": "An anonymized case study in the Specialist Hub.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "title", "description", "createdAt"]
+    },
+    "Task": {
+      "title": "Task",
+      "description": "A task with a due date.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "authorId": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "dueDate": { "type": "string", "format": "date-time" },
+        "reminderDate": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "completed"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "title", "status", "createdAt"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "An appointment or consultation session with a client.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "expertId": { "type": "string" },
+        "clientName": { "type": "string" },
+        "clientPhone": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["expertId", "clientName", "clientPhone", "date", "createdAt"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "A course, session, or live stream created by an expert.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "creatorPhoto": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "type": { "type": "string", "enum": ["course", "session", "live_stream"] },
+        "date": { "type": "string", "format": "date-time" },
+        "link": { "type": "string" },
+        "price": { "type": "number" },
+        "rating": { "type": "number" },
+        "ratingCount": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["creatorId", "creatorName", "title", "description", "type", "date", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review and rating for an event.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "eventId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPhoto": { "type": "string" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["eventId", "userId", "userName", "rating", "createdAt"]
+    },
+    "Circle": {
+      "title": "Circle",
+      "description": "A private or public group created by an expert.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "creatorId": { "type": "string" },
+        "creatorName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "description", "creatorId", "creatorName", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/circles/{circleId}": {
+      "schema": { "$ref": "#/entities/Circle" },
+      "description": "Expert-created circles/groups."
+    },
+    "/events/{eventId}": {
+      "schema": { "$ref": "#/entities/Event" },
+      "description": "Courses, sessions, and live streams."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/Review" },
+      "description": "Reviews for events."
+    },
+    "/appointments/{appointmentId}": {
+      "schema": { "$ref": "#/entities/Appointment" },
+      "description": "Expert appointments and client contact info."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User profiles and verification status."
+    },
+    "/posts/{postId}": {
+      "schema": { "$ref": "#/entities/Post" },
+      "description": "Healing Circle posts."
+    },
+    "/cases/{caseId}": {
+      "schema": { "$ref": "#/entities/Case" },
+      "description": "Specialist Hub cases."
+    },
+    "/tasks/{taskId}": {
+      "schema": { "$ref": "#/entities/Task" },
+      "description": "User tasks."
+    }
+  }
+}

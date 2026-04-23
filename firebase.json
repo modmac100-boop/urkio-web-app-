@@ -1,0 +1,103 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/chat",
+        "function": "chat",
+        "region": "us-central1"
+      },
+      {
+        "source": "/api/analyze-voice",
+        "function": "analyzeVoice",
+        "region": "us-central1"
+      },
+      {
+        "source": "/api/get-stream-token",
+        "function": "getStreamToken",
+        "region": "us-central1"
+      },
+      {
+        "source": "/api/agora/token",
+        "function": "agoraToken",
+        "region": "us-central1"
+      },
+      {
+        "source": "/api/voice-booking",
+        "function": "handleVoiceBooking",
+        "region": "us-central1"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/**",
+        "headers": [
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin-allow-popups"
+          },
+          {
+            "key": "Cross-Origin-Embedder-Policy",
+            "value": "unsafe-none"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://urkio.app"
+          },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://*.google.com https://*.gstatic.com https://apis.google.com https://www.google.com https://www.gstatic.com https://*.firebaseapp.com https://*.google-analytics.com https://*.agora.io https://download.agora.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.gstatic.com https://*.gstatic.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://*.googleusercontent.com https://*.google.com https://www.gstatic.com https://*.gstatic.com https://*.firebasestorage.googleapis.com https://firebasestorage.googleapis.com https://ui-avatars.com https://i.pravatar.cc https://images.unsplash.com https://lh3.googleusercontent.com https://appleid.apple.com; media-src 'self' blob: https://firebasestorage.googleapis.com https://*.firebasestorage.googleapis.com https://assets.mixkit.co; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://*.firebaseapp.com https://*.cloudfunctions.net https://*.google-analytics.com https://*.google.com https://www.google.com https://apis.google.com https://accounts.google.com https://*.agora.io https://*.edge.agora.io https://*.sd-rtn.com wss://*.agora.io wss://*.sd-rtn.com https://*.stream.io wss://*.stream.io https://*.stream-io-api.com https://getstream.io https://appleid.apple.com; worker-src 'self' blob:; frame-src 'self' https://*.firebaseapp.com https://*.google.com https://accounts.google.com https://apis.google.com https://appleid.apple.com;"
+          },
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=31536000; includeSubDomains"
+          }
+        ]
+      }
+    ]
+  },
+  "firestore": {
+    "database": "ai-studio-92949eef-99e2-41aa-a143-ca33be3fd8fd",
+    "location": "us-central1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "disallowLegacyRuntimeConfig": true,
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint",
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
+  "auth": {
+    "providers": {
+      "emailPassword": true
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "dataconnect": {
+    "source": "dataconnect"
+  }
+}

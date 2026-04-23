@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Urkio User Profile - Alex Rivers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 1rem;
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="hidden lg:flex w-72 flex-col fixed inset-y-0 border-r border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark p-6 overflow-y-auto">
+<div class="flex items-center gap-3 mb-10">
+<div class="bg-primary h-10 w-10 rounded-lg flex items-center justify-center text-white font-bold text-xl">U</div>
+<span class="text-2xl font-bold tracking-tight text-primary">Urkio</span>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">house</span>
+                    Home
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">explore</span>
+                    Discover
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+                    Messages
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">notifications</span>
+                    Notifications
+                </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</div>
+<div class="mt-10 pt-10 border-t border-slate-200 dark:border-slate-800">
+<h3 class="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Your Journey</h3>
+<div class="flex flex-col gap-4 px-4">
+<div class="flex flex-col gap-2">
+<div class="flex justify-between text-sm font-medium">
+<span>Healing Path</span>
+<span class="text-primary">75%</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%]"></div>
+</div>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed italic">"Stage: Deep Reflection &amp; Integration"</p>
+</div>
+</div>
+<div class="mt-auto pt-6">
+<div class="flex items-center gap-3 px-4 py-3 bg-slate-100 dark:bg-slate-800/50 rounded-xl">
+<div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Portrait of Alex Rivers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCukHoDYodqr9GJC120baVzo0pfE7Pr2OOjl1mtDTByTQSMR6x3xJJz5aobVpefZSzSkTo_qMjePEKQs-DuaulVnVHVPb7-eVG-Yec37bDm7A3VHMDKUSqTgSTfQXOD15HpHQoRtCqbLAkOYa6DfAbcpzGCCtDs_bxSa0gUPvoICW8yj0mBwZAZmKBooPRK25cVs5y38NQZs6Gxt_DY544bR2eq3JQEBydHouHuJ1yNbhfrfedsPMmpz_yr8A54UDituHRu1jm4PHk"/>
+</div>
+<div class="flex flex-col overflow-hidden">
+<span class="text-sm font-bold truncate">Alex Rivers</span>
+<span class="text-xs text-slate-500">@alex_healing</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-72 min-h-screen p-4 md:p-8 lg:p-12">
+<!-- Header Section -->
+<div class="max-w-6xl mx-auto">
+<div class="relative h-64 md:h-80 w-full rounded-3xl overflow-hidden mb-20 bg-linear-to-br from-primary/20 to-slate-800">
+<div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+<img class="w-full h-full object-cover opacity-60" data-alt="Serene mountain landscape background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfkfyGh_Oy-y2kuKrSUlCo2qtLoum4jA9aKtK7y79ioly5UctMqugrYQtsmzFNBUJmrt2P-o1kgtd9RW8Yyw69W0E5KGBpnLsWq8-2jW7Ci6eiqLH2rbyi_EvbRcXorLAv2slOCPRctcv-A0Fmfm-CTht-IIWEgiFBcaIxyJEEa4JXqj9Nf9iCQ1fz6idIKO-j-MAguFMe4lUMyYXCCmrc8CCfg39oAM7FjSdJ1ruJa07QixuTne8AYiyXG3eictA3zLFwounDbJM"/>
+<!-- Profile Stats/Action Overlay -->
+<div class="absolute -bottom-16 left-0 right-0 px-6 md:px-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="flex items-end gap-6">
+<div class="h-32 w-32 md:h-40 md:w-40 rounded-3xl border-4 border-background-light dark:border-background-dark overflow-hidden bg-slate-800 shadow-xl">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of Alex Rivers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA28Ehzny4mqo9Eb4RsI4glO1LJmuIPCyMm7T9ShEbkXNN5IVILNuDUIZxneCJf0gJ8bt1UaBwUdgFa8wVC0GlXS4WYrs2PH4XmZ5IPuYn4-gV7SBLuP7lv6HfCySsbE-YMA2LxPFRd6PxhJdn7tR-RerC3cmewZzMT-IFKmBXFenNjxJqPXT5_q8AAHBB2X_Slu_tbNi7AsftgtMH0GqoAt7ioWOa6eONVmedpUeWjnyG2YaOsPLs4_uVgJ0k6LzRaOaiRV7EmXF0"/>
+</div>
+<div class="mb-2">
+<h1 class="text-3xl md:text-4xl font-bold">Alex Rivers</h1>
+<p class="text-slate-500 dark:text-slate-400 font-medium">Mindfulness &amp; Recovery Coach</p>
+</div>
+</div>
+<div class="flex gap-3 mb-2">
+<button class="flex-1 md:flex-none px-6 py-3 rounded-xl bg-slate-200 dark:bg-slate-800 font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+                                Message
+                            </button>
+<button class="flex-1 md:flex-none px-8 py-3 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                                Follow
+                            </button>
+</div>
+</div>
+</div>
+<!-- Stats and Quick Info -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 mt-4 md:mt-0">
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Followers</p>
+<p class="text-2xl font-bold">1.2k</p>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Following</p>
+<p class="text-2xl font-bold">450</p>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Media</p>
+<p class="text-2xl font-bold">124</p>
+</div>
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+<p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Healing Score</p>
+<p class="text-2xl font-bold text-primary">88%</p>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Content -->
+<div class="lg:col-span-8 space-y-12">
+<!-- Video Gallery -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-2xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">movie</span>
+                                    Healing Sessions
+                                </h2>
+<a class="text-primary font-medium text-sm hover:underline" href="#">View all</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="group relative aspect-video rounded-2xl overflow-hidden bg-slate-800 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Yoga practitioner at sunrise" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRaNP12wuB61IYMm07kAZLtUoRB-nR9QO9d4s_9YTCNOdAYgonIzE5UPemXAxQCBHqGAqubkJ0ssXwm4JTdEOrXn-a2f4S-RMqOclnn84lsqMucNQZqzkmc6ldxarWWXagS1zbqdB33uFQHicoW0gEUG4P4jExHM_Wrke4jWsp1Ieu7PFjg-AFVrkn3FNLVtAh3Vuksj9VOtVHs2WNShxxpkHpCZYXVBarCiIahxzdUGu4Pbt6bQ2aQyxtGKEliUvjKMnqiihrygY"/>
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-100 group-hover:bg-black/40 transition-all">
+<div class="h-14 w-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="text-white font-bold text-lg drop-shadow-md">Morning Breathwork Ritual</h3>
+<p class="text-white/80 text-xs">12:45 • Mindfulness</p>
+</div>
+</div>
+<div class="group relative aspect-video rounded-2xl overflow-hidden bg-slate-800 cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Person meditating in nature" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3xgzSd_CU4r20Y333zxtgnrnu01lWnBNf2l0xtlaSwkkkkEk6mfR5ijYxwW0Z0UUx3pxOTjmOzZcREdbXHIHT-2vi8sTxW6Epf2I1ZD2xBk4Yr61NcD64iKG-QBVCxB9AoMnse29sA7qaoC5AnLeB-MUI-mGi0EErcin5F5ovVM8maouKyVARJaqRfdhHklARpDGS5SSrbP1lHRQbsYEeWQFC7_muezlbynupC0rnVtQHAZPwvv7ofIf6pSLDGoZINpB7lgORSBs"/>
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+<div class="h-14 w-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+</div>
+</div>
+<div class="absolute bottom-4 left-4 right-4">
+<h3 class="text-white font-bold text-lg drop-shadow-md">Managing Social Anxiety</h3>
+<p class="text-white/80 text-xs">08:20 • Therapy</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Masonry Photo Grid -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-2xl font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">collections</span>
+                                    Gallery
+                                </h2>
+<a class="text-primary font-medium text-sm hover:underline" href="#">Full gallery</a>
+</div>
+<div class="masonry-grid">
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Light rays in a dark room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK6QBu7QTzvdjckPh-eS-D7MIX81BtJ8dfIdFA8w13HRpLUssCQxqePLk1oLUDq4UyBTPuMR8TP2VfaQ40VK9AAhiwzYUW4HtE8Zn0lcmlbdiRQN9j-xnXoLrCe44oGSPJR2t6wHSMzsbYBqgqrfCx2r1WuwSzIpCM9-VsXrCykq_ZH2GPqr6uXROZRBkU0Z0Ph5D1wWNLGJVgLHuP1bNAaAkqa8nysDWjd0NTBpfk8QNvPngGZveOrJ4DiIe0XWnWBmaW-gvjZYQ"/>
+</div>
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Calm ocean waves at dusk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHNaE1jvxX-5a7OqBElsPpMOxSavYU8Hch6nvowUbnMJfkUes1aVwr5_WeeB23R9oGUq6wGgrkI_3mn3I8jUosIQO7yrLQgMru--X269c50DWolDS-DeIZTfr0WBUiOdwZgGIRpUEj_wztqqaZwGKYwTtO4fAXZgVr4CC7_Kj58MBn8Mi_o2D5gidxxoOvbHatcTlPjLIZVVOGCNG7zFSlZKPaHXXJ3LqlOQZCEIuUXQEzKZ0EFbefyNRZBnRUiBgKvG3N_BYp8yc"/>
+</div>
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Close up of a green leaf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9a0Rgv-hCSgMSxIcPi4DpBcZy-p2EnxpqgwxH78_BZWmeMoGvRFOsoy-sH0N6ywbLkXS6MHMnbE8afFs7QLlkYWdzs0ZZJ28sRnX72f8Bsoce1RJqk5By6khEqmGTjItBHwvc4jtQ0_VJXv2dyWR3AF1vk6gDqY-sOQKe8_PGHmU6E9ayPD3BW73zSfms_IKnnnMYhjrNULbns1rWmH3XBE5tI9M0ViKajJzBReTOIXLzw1k0lx3GN9UZY1h-m59g-g7_7fOR4W8"/>
+</div>
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Cozy cabin in the woods" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG6m_zAEgX_05wGfIkeEWKw4xCn6a20RG6ESzn47NJa84gO_JwCicZSda0wZ2K22oVZDpJmSEoGvkksg-5CvCdMvBky98n19zMb3YgUwGCZkqxjJygskukb-FUiqliqwHSZg24h6JbjpQntr7fTO2ulCDzBZg93lALmn30qoDRhUed3BXtJ7D1aMia4f7xk_DiMIsAZMwRKbkOvn5e-0q7kE-9q4Q6JAk4xHYQZlebmTLyzAdisrNqz-YszNV3sxO2Kyy3jvnbbsM"/>
+</div>
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Tall trees from a low angle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGAM4D7ZN76-HvJrz-9ven3YxO1uw5pFI-Itu7QA1EbjxobRxZGmkNcFk6DrLWIU12y2X0pehnywylDNpX2l-pSC0Qc8dUcl3KJ1pEZDpSPVZj7S_9OgOe6cs-WN_enwrglI1Vo4JbWdrxxbu3ApzeiutDShzPcaSRvhsLu-cXgE0KtHThtEYlhR_Np8mhQe8IWEjLY5Y2JkLKD4Lnn3uWApgDqp4DpYh3_teOoRPDo_pcYxLYeyHK7V1Lw-bTMzitn3DkFG-k2Dk"/>
+</div>
+<div class="masonry-item">
+<img class="w-full rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800" data-alt="Sunlight through forest trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgsB0V8Y2CNzmmn6LSw0UuMCDb6A8m5ATOGynp1DVEncBH9bfZWitL98PolyzFzVN1X7vkviBckjoNvd-i7tERHWz_ldIzY9Dfh2QedptpZm2fmUde61RL4PRob019pWIr0D7p6IbNYSmgKZOjwgjsSqcWPaVRRJUlpmPznRvRGQ4YKTWz8utNiCfzV4oUo4sLuLcEm762kNRtbiwQpKFomv0YBG06SjcT2LBx-E_G8uRsHTtGjmkxNa5pYc0kMiWD7zRRvfscxT0"/>
+</div>
+</div>
+</section>
+<!-- Chronological Posts -->
+<section>
+<h2 class="text-2xl font-bold flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">history</span>
+                                Journey Feed
+                            </h2>
+<div class="space-y-6">
+<div class="bg-white dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
+<div class="flex gap-4 mb-4">
+<div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<div>
+<p class="font-bold">A Breakthrough in Acceptance</p>
+<p class="text-xs text-slate-500">Posted 2 days ago • Public</p>
+</div>
+</div>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                                        Today was a significant day. I finally understood that healing isn't about getting rid of memories, but about changing my relationship with them. This realization came after a long session in the mountains...
+                                    </p>
+<div class="flex items-center gap-6 text-sm text-slate-500 font-medium">
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">favorite</span> 243</button>
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">chat_bubble</span> 18</button>
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span> Share</button>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-800/30 p-6 rounded-3xl border border-slate-100 dark:border-slate-800">
+<div class="flex gap-4 mb-4">
+<div class="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">psychology</span>
+</div>
+<div>
+<p class="font-bold">New Routine: 5-Minute Grounding</p>
+<p class="text-xs text-slate-500">Posted 1 week ago • Public</p>
+</div>
+</div>
+<p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4">
+                                        Sharing my current grounding technique for those struggling with evening restlessness. It only takes 5 minutes and uses the 5-4-3-2-1 method. Check the video gallery for a full walkthrough!
+                                    </p>
+<div class="flex items-center gap-6 text-sm text-slate-500 font-medium">
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">favorite</span> 156</button>
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">chat_bubble</span> 5</button>
+<button class="flex items-center gap-1 hover:text-primary"><span class="material-symbols-outlined text-[18px]">share</span> Share</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Stats/Sidebar Content -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Journey Visualization Card -->
+<div class="bg-linear-to-br from-slate-800 to-slate-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden border border-slate-700">
+<div class="absolute -right-12 -top-12 h-40 w-40 bg-primary/20 rounded-full blur-3xl"></div>
+<h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">auto_graph</span>
+                                Journey Status
+                            </h3>
+<div class="space-y-6 relative z-10">
+<div class="flex items-center gap-4">
+<div class="flex-1">
+<div class="flex justify-between text-xs text-slate-400 mb-2 font-medium">
+<span>CURRENT STAGE</span>
+<span class="text-white">75% COMPLETE</span>
+</div>
+<div class="w-full bg-slate-700 h-2.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[75%] rounded-full shadow-[0_0_10px_#136dec]"></div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<div class="mt-1 h-5 w-5 rounded-full bg-green-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-500 text-[14px]">check</span>
+</div>
+<div>
+<p class="text-sm font-semibold">Self-Discovery</p>
+<p class="text-xs text-slate-400">Completed May 2023</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="mt-1 h-5 w-5 rounded-full bg-primary flex items-center justify-center">
+<div class="h-2 w-2 rounded-full bg-white"></div>
+</div>
+<div>
+<p class="text-sm font-semibold">Integration &amp; Flow</p>
+<p class="text-xs text-slate-400 italic">In Progress...</p>
+</div>
+</div>
+<div class="flex items-start gap-3 opacity-40">
+<div class="mt-1 h-5 w-5 rounded-full bg-slate-700 flex items-center justify-center"></div>
+<div>
+<p class="text-sm font-semibold">Purpose &amp; Advocacy</p>
+<p class="text-xs text-slate-400 italic">Locked</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 transition-colors text-sm font-bold">
+                                Download Progress Report
+                            </button>
+</div>
+<!-- Bio Card -->
+<div class="bg-white dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800">
+<h3 class="text-lg font-bold mb-4">About Alex</h3>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
+                                Certified Mindfulness practitioner focused on holistic recovery. Believes in the power of shared journeying and community support. Joined Urkio in June 2022 to document my path and help others find theirs.
+                            </p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-slate-400">location_on</span>
+<span>Vancouver, Canada</span>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-slate-400">link</span>
+<a class="text-primary hover:underline" href="#">alexrivers.com</a>
+</div>
+<div class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-slate-400">calendar_month</span>
+<span>Joined June 2022</span>
+</div>
+</div>
+</div>
+<!-- Community Sidebar Links -->
+<div class="bg-white dark:bg-slate-800/30 p-8 rounded-3xl border border-slate-100 dark:border-slate-800">
+<h3 class="text-lg font-bold mb-4">Urkio Circle</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Female circle member profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPzvvg8HVU0eKaDwKoQiWRa-QewXa63aLUbbLdANWT7kiRwYdaYlnxfb6gkv1GL9V9NvmgZSgi6w-2t7-bcXD4SO-lftQAjl0G6jI7m3_CesDOft1sRk9rfRPchYvYq6mzdazFNiAz7FGM2yAxg_9Aajpb8dgdYAPQBMuKIXGTFplwCksEf32-IneCPNaatAnoS4ISk3plr8qq5g6rqekG2JDePTz2YMSv3-9kmcQi-zsTgL671nBULfosoN7JggSjS0R4kO8DB1g"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Sarah Chen</span>
+<span class="text-xs text-slate-500">Mentee</span>
+</div>
+</div>
+<button class="text-primary text-xs font-bold px-3 py-1 bg-primary/10 rounded-lg">Follow</button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Male circle member profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV94igZK4YrfHhvrVqJ73_BQf_OSljzROvGa1N0gn8wWgE0aZ5XCIYLZ0vEvWmtXuhEwFqoJWHn-iPpF6KcUfaQsn47KptgupuHWN0jeW7H8lp3FfZTInoC8xjoawvWAxX6_SfgqkK74WdKLHzvGWY6z3hvLhUpz669dnHvyvqeq4mWHxUmUivBDLLatdESj3Ou9-gTmI4hXB0n7Un6eyww-GUng0nqXBPzWTUHBMgS2iTxCefsvStDk6FvA8R43Qhk-LEFHVldlc"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Marcus Thorne</span>
+<span class="text-xs text-slate-500">Facilitator</span>
+</div>
+</div>
+<button class="text-primary text-xs font-bold px-3 py-1 bg-primary/10 rounded-lg">Follow</button>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Female circle member profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmmrJ93GZTUB1M4oRAq1x44R8QZc8RQJvmdK5qCCbh8qnepBX1NpDPrAK8Skhod1NZbO0gnWD1WOTTJbTrmRWMqd4n0tGgV4f01mIYDu33CQcUzvhCZEL7e16mDM0RrpTCaDntowaHlaiLM56_m7U2hv76XjfuezKtOx3oFwBGyIe2WpVvhn5E-E-lmO7vC1Q4cHQ0G73N-TtBq-Ksef1ozIjpkXfyu0KXaWOB2Ew_yjeynRCBAch-NchsNgf7ebSkj_AAisBwxLE"/>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-bold">Elena Vance</span>
+<span class="text-xs text-slate-500">Journeyer</span>
+</div>
+</div>
+<button class="text-primary text-xs font-bold px-3 py-1 bg-primary/10 rounded-lg">Follow</button>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">Show more</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

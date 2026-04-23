@@ -1,0 +1,5 @@
+connectorId: "clinical-connector"
+generate:
+  javascriptSdk:
+    outputDir: "../src/lib/dataconnect"
+    package: "@urkio/dataconnect"

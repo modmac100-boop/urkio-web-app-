@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#136dec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101822",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-size: 20px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-3 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M39.5563 34.1455V13.8546C39.5563 15.708 36.8773 17.3437 32.7927 18.3189C30.2914 18.916 27.263 19.2655 24 19.2655C20.737 19.2655 17.7086 18.916 15.2073 18.3189C11.1227 17.3437 8.44365 15.708 8.44365 13.8546V34.1455C8.44365 35.9988 11.1227 37.6346 15.2073 38.6098C17.7086 39.2069 20.737 39.5564 24 39.5564C27.263 39.5564 30.2914 39.2069 32.7927 38.6098C36.8773 37.6346 39.5563 35.9988 39.5563 34.1455Z"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em]">Urkio</h2>
+</div>
+<label class="flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full bg-slate-200 dark:bg-slate-800">
+<div class="text-slate-500 dark:text-slate-400 flex border-none items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-500 px-4 pl-2 text-base font-normal" placeholder="Search" value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="flex items-center gap-9">
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Explore</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Network</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Messages</a>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary/20 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-primary/20 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar close up photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDlJ_zp3p-ZDEH7MduNRTp2FjOQZZiF4dbrvRRbHdcz4PYKkX8lDLnw0CVCLw7qZB8iyo29hsprKjCiK6VQfAcJmONgD4IsXp1pVvAQao0PJoCBeAISTlLQmnLxja9I39k9BupiEPPmVDxd3xJwZznSSWXougeH35dBByTEaLMeh0Ixkl9WLzmHoLIWnERKNoqgCbbCBVSIV0G0ea3m8YcUc3L97XyfmJlbxwEQKYc_vmpJzQK12iXaQpT5OjVlJ6QJEI6f8QEJWjU");'></div>
+</div>
+</header>
+<!-- Content Area -->
+<main class="flex flex-1 justify-center py-10 px-4 md:px-40">
+<div class="layout-content-container flex flex-col max-w-[800px] flex-1 gap-8">
+<!-- Header -->
+<div class="flex flex-col gap-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-black leading-tight tracking-[-0.033em]">Edit Profile</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg font-normal">Manage your public presence and professional journey goals.</p>
+</div>
+<!-- Profile Photo Section -->
+<section class="bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-200 dark:border-slate-800">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-6">Profile Photo</h2>
+<div class="flex flex-col sm:flex-row items-center gap-6">
+<div class="relative group">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 border-4 border-primary/10" data-alt="Large user profile professional headshot photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIj6TP2EVul9XmiW8jpptkGWI-mg3HZ58A1TjA6WAOdE-tVkbi4CTsXUQGJRDQy132HB124qC-c8CIeE4R_bFRPKt5FoojPLfm1fD8R9oCghb24j3-2xvlJvdePR4On1Hkgj1uIVHS52pPFfL_jpgTeX18h1wV_ZcgyWs5VzU_M0EJdcZUAMiUX8Ty57j5pxseUlnBpXPw5nHVU279z4biVm87X4hg1ZVohjRz00pyCzC-8Y56XhX4xyIfW7f3W8p4_PUECXRVDNM");'></div>
+<div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-white text-3xl">photo_camera</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 items-center sm:items-start text-center sm:text-left">
+<p class="text-slate-900 dark:text-slate-100 text-lg font-semibold">Professional Identity</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Update your photo to help people recognize you. <br/>Recommended size: 400x400px, JPG or PNG.</p>
+<div class="flex gap-3 mt-1">
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary/90 transition-colors">Upload New</button>
+<button class="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">Remove</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Form Section -->
+<form class="flex flex-col gap-8">
+<!-- Basic Information -->
+<div class="flex flex-col gap-6">
+<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold">Public Information</h2>
+<div class="flex items-center gap-2">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Show Info</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-300 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Full Name</span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="text" value="Alex Rivera"/>
+</label>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Professional Headline</span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="text" value="Senior Product Designer @ Urkio"/>
+</label>
+<label class="flex flex-col gap-2 md:col-span-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Bio</span>
+<textarea class="form-textarea rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary min-h-[120px]" placeholder="Tell the world about your journey...">Passionate designer focused on building accessible, high-performance user interfaces. Currently leading the design system team at Urkio. Obsessed with clean typography and functional minimalism.</textarea>
+</label>
+</div>
+</div>
+<!-- Journey Goals -->
+<div class="flex flex-col gap-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">Journey Goals</h2>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-xs font-bold flex items-center gap-1">
+                                        Mentorship <span class="material-symbols-outlined text-[14px] cursor-pointer">close</span>
+</span>
+<span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-xs font-bold flex items-center gap-1">
+                                        Networking <span class="material-symbols-outlined text-[14px] cursor-pointer">close</span>
+</span>
+<span class="px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full text-xs font-bold flex items-center gap-1">
+                                        Open Source <span class="material-symbols-outlined text-[14px] cursor-pointer">close</span>
+</span>
+<button class="px-3 py-1 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-full text-xs font-bold hover:bg-primary/10 hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">add</span> Add Goal
+                                    </button>
+</div>
+<label class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300">Detailed Vision</span>
+<textarea class="form-textarea rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" placeholder="What are you currently aiming for?">My primary goal for 2024 is to contribute to three major open-source UI libraries and mentor at least 5 junior designers entering the SaaS space.</textarea>
+</label>
+</div>
+</div>
+<!-- Social Links -->
+<div class="flex flex-col gap-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold border-b border-slate-200 dark:border-slate-800 pb-2">Connect &amp; Social</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">language</span> Website
+                                    </span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="url" value="https://arivera.design"/>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">link</span> LinkedIn
+                                    </span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="url" value="linkedin.com/in/arivera"/>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">alternate_email</span> X (Twitter)
+                                    </span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="text" value="@arivera_ux"/>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">code</span> GitHub
+                                    </span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary" type="text" value="github.com/alexr-ux"/>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row justify-end gap-4 pt-6 border-t border-slate-200 dark:border-slate-800">
+<button class="px-8 py-3 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors" type="button">Cancel</button>
+<button class="px-8 py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all" type="submit">Save Profile Changes</button>
+</div>
+</form>
+<!-- Danger Zone -->
+<div class="mt-8 p-6 border border-red-500/30 bg-red-500/5 rounded-xl flex items-center justify-between">
+<div>
+<h3 class="text-red-500 font-bold text-lg">Danger Zone</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Once you delete your account, there is no going back. Please be certain.</p>
+</div>
+<button class="px-4 py-2 border border-red-500/50 text-red-500 font-bold rounded-lg hover:bg-red-500 hover:text-white transition-all text-sm">Delete Account</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-10 px-10 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-slate-500 dark:text-slate-400 text-xs uppercase tracking-widest font-semibold">Urkio Professional Network © 2024</p>
+</footer>
+</div>
+</div>
+</body></html>

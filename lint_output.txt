@@ -1,0 +1,33 @@
+
+> react-example@0.0.0 lint
+> tsc --noEmit
+
+src/components/notifications/NotificationCenter.tsx(168,35): error TS2339: Property 'roomId' does not exist on type 'Notification'.
+src/components/notifications/NotificationPermissionBanner.tsx(47,17): error TS2345: Argument of type 'NotificationPermission' is not assignable to parameter of type 'SetStateAction<"denied" | "granted">'.
+  Type '"default"' is not assignable to type 'SetStateAction<"denied" | "granted">'.
+src/components/OnlinePresenceHome.tsx(57,28): error TS2339: Property 'email' does not exist on type 'OnlineUser'.
+src/components/OnlinePresenceHome.tsx(61,18): error TS2339: Property 'email' does not exist on type 'OnlineUser'.
+src/components/profile/UserProfileEditor.tsx(196,38): error TS2304: Cannot find name 'serverTimestamp'.
+src/components/profile/UserProfileEditor.tsx(614,10): error TS2739: Type '{ status: "active" | "calling" | "ringing"; type: "video"; partner: { uid: string; displayName: string; photoURL: string; }; onEnd: () => void; }' is missing the following properties from type 'CallInterfaceProps': onAccept, onDecline
+src/hooks/useAccessControl.ts(2,29): error TS2307: Cannot find module '../context/AuthContext' or its corresponding type declarations.
+src/pages/AdminBetaInsights.tsx(33,67): error TS2339: Property 'rating' does not exist on type '{ id: string; }'.
+src/pages/AdminBetaInsights.tsx(34,45): error TS2339: Property 'aiOrientationUseful' does not exist on type '{ id: string; }'.
+src/pages/AdminDashboard.tsx(764,90): error TS2554: Expected 2 arguments, but got 3.
+src/pages/Agenda.tsx(378,179): error TS2339: Property 'protocol' does not exist on type 'TFunction<"translation", undefined>'.
+src/pages/Agenda.tsx(379,30): error TS2739: Type '{ isVerified: any; age: any; }' is missing the following properties from type '{ isVerified: boolean; age: number; guardianVerifiedLabel: string; guardianPendingLabel: string; }': guardianVerifiedLabel, guardianPendingLabel
+src/pages/Agenda.tsx(462,103): error TS2339: Property 'manual_log' does not exist on type 'TFunction<"translation", undefined>'.
+src/pages/ClinicalWorkstation.tsx(209,7): error TS2304: Cannot find name 'setShowDebrief'.
+src/pages/ClinicalWorkstation.tsx(651,10): error TS2304: Cannot find name 'showDebrief'.
+src/pages/ClinicalWorkstation.tsx(655,15): error TS2304: Cannot find name 'setShowDebrief'.
+src/pages/HealingCourses.tsx(177,28): error TS2304: Cannot find name 'CheckCircle2'.
+src/pages/PatientJourney.tsx(96,11): error TS2322: Type '(snapshot: UploadResult) => Promise<string>' is not assignable to type 'ValueOrFunction<Renderable, UploadResult>'.
+  Type '(snapshot: UploadResult) => Promise<string>' is not assignable to type 'ValueFunction<Renderable, UploadResult>'.
+    Type 'Promise<string>' is not assignable to type 'Renderable'.
+src/pages/ProfileSettings.tsx(199,23): error TS2448: Block-scoped variable 'isExpert' used before its declaration.
+src/pages/ProfileSettings.tsx(322,22): error TS2304: Cannot find name 'serverTimestamp'.
+src/utils/integrityTest.ts(7,29): error TS2307: Cannot find module '../src/firebase' or its corresponding type declarations.
+urkio-next/src/components/ui/button.tsx(5,20): error TS2307: Cannot find module '@/lib/utils' or its corresponding type declarations.
+urkio-next/src/components/ui/button.tsx(57,6): error TS2322: Type '{ ref?: Ref<HTMLButtonElement>; key?: Key; disabled?: boolean; form?: string; formAction?: string | ((formData: FormData) => void | Promise<void>); ... 288 more ...; className: any; }' is not assignable to type 'IntrinsicAttributes'.
+  Types of property 'key' are incompatible.
+    Type 'import("/Users/sameralhalaki/Desktop/urkio-web-test/urkio-next/node_modules/@types/react/index").Key' is not assignable to type 'React.Key'.
+      Type 'typeof import("/Users/sameralhalaki/Desktop/urkio-web-test/urkio-next/node_modules/@types/react/index").optimisticKey' is not assignable to type 'Key'.
