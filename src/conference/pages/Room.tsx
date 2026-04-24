@@ -273,7 +273,7 @@ export function Room({ user, userData }: RoomProps) {
               isOpen={showInviteModal} 
               onClose={() => setShowInviteModal(false)} 
               roomId={roomId}
-              joinUrl={window.location.origin + (window.location.pathname.includes('/conference/') ? (window.location.pathname.endsWith(roomId) ? window.location.pathname : `/conference/${roomId}`) : `/conference/${roomId}`)}
+              joinUrl={`${window.location.origin}/healing-suite/${roomId}?role=audience&mode=private`}
             />
           </StreamTheme>
         </StreamCall>

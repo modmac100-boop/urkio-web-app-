@@ -80,7 +80,7 @@ export function useHealingSession(
   const fetchToken = async (channelName: string, uid: number, publisherRole: boolean): Promise<{ token: string | null; appId: string }> => {
     try {
       const generateToken = httpsCallable(functions, 'generateAgoraToken');
-      const result = await generateToken({ channelName, role: publisherRole ? 'publisher' : 'subscriber' });
+      const result = await generateToken({ channelName, uid, role: publisherRole ? 'publisher' : 'subscriber' });
       const data = result.data as any;
       return { token: data.token, appId: APP_ID };
     } catch (err) {
@@ -161,8 +161,9 @@ export function useHealingSession(
         }
       });
 
-      // ── Fetch Token & Connect ─────────────────────────────────────────────
-      const isPublisher = role === 'host';
+      // In 'private' mode, everyone is a publisher (1-on-1 session). 
+      // In 'broadcast' mode, only the 'host' role publishes.
+      const isPublisher = mode === 'private' || role === 'host';
       const { token, appId } = await fetchToken(sessionId, userUid, isPublisher);
       const activeAppId = appId || APP_ID;
 

@@ -18,6 +18,7 @@ interface Notification {
   read: boolean;
   createdAt: any;
   roomId?: string;
+  joinUrl?: string;
 }
 
 interface NotificationCenterProps {
@@ -166,8 +167,22 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
     if ((notification.type === 'message' || notification.type === 'call') && notification.data?.conversationId) {
       navigate(`/inbox?id=${notification.data.conversationId}`);
     } else if (notification.type === 'session_invite' || notification.type === 'live_stream_invite') {
-      const roomId = notification.roomId || notification.data?.roomId;
-      if (roomId) navigate(`/room/${roomId}`);
+      const joinUrl = notification.joinUrl || notification.data?.joinUrl;
+      if (joinUrl) {
+        if (joinUrl.startsWith('http')) {
+          try {
+            const url = new URL(joinUrl);
+            navigate(url.pathname + url.search);
+          } catch (e) {
+            navigate(joinUrl);
+          }
+        } else {
+          navigate(joinUrl);
+        }
+      } else {
+        const roomId = notification.roomId || notification.data?.roomId;
+        if (roomId) navigate(`/healing-suite/${roomId}?role=audience&mode=private`);
+      }
     } else if (notification.type === 'follow' && notification.data?.followerId) {
       navigate(`/user/${notification.data.followerId}`);
     } else if (notification.type === 'event_reminder' && notification.data?.eventId) {
