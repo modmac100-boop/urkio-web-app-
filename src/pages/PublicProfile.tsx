@@ -66,6 +66,13 @@ export function PublicProfile({
   const [activeStories, setActiveStories] = useState<any[]>([]);
   const [isResumeOverlayOpen, setIsResumeOverlayOpen] = useState(false);
 
+  // Auto-open resume overlay when ?resume=1 is in the URL
+  useEffect(() => {
+    if (searchParams.get('resume') === '1') {
+      setIsResumeOverlayOpen(true);
+    }
+  }, [searchParams]);
+
   const isOwnProfile = currentUser?.uid === userId;
   const rawRole = ((profileData?.role || profileData?.primaryRole || profileData?.userType || '')).toLowerCase();
   const rawBio = (profileData?.bio || '').toLowerCase();

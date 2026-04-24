@@ -193,117 +193,117 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                </div>
 
                {loading ? (
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                   {[1, 2, 3, 4].map(i => (
-                     <div key={i} className="h-96 rounded-[3.5rem] bg-white/5 animate-pulse border border-white/5" />
+                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                   {[1, 2, 3, 4, 5, 6].map(i => (
+                     <div key={i} className="h-72 rounded-2xl bg-white/5 animate-pulse border border-white/5" />
                    ))}
                  </div>
                ) : (
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredExperts.map((expert) => (
                       <div 
                         key={expert.id}
-                        onClick={() => navigate(`/user/${expert.id}`)}
-                        className="group bg-[#22242c] rounded-3xl overflow-hidden transition-all duration-500 cursor-pointer flex flex-col shadow-2xl hover:-translate-y-1 hover:shadow-3xl border border-white/5"
+                        onClick={() => navigate(`/user/${expert.id}?resume=1`)}
+                        className="group bg-[#22242c] rounded-2xl overflow-hidden transition-all duration-500 cursor-pointer flex flex-col shadow-2xl hover:-translate-y-1 hover:shadow-3xl border border-white/5"
                       >
                          {/* Card Header: Edge-to-edge Image */}
-                         <div className="relative h-64 w-full overflow-hidden flex items-center justify-center bg-linear-to-br from-[#f8f9fa] to-[#d1d5db]">
+                         <div className="relative h-40 w-full overflow-hidden flex items-center justify-center bg-linear-to-br from-[#f8f9fa] to-[#d1d5db]">
                            <img 
-                             src={expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'Expert')}&background=random&color=fff&size=512`}
+                             src={expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'Expert')}&background=random&color=fff&size=256`}
                              alt={expert.displayName}
                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                            />
                            
                            {/* Bottom fade into card bg */}
-                           <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-[#22242c] to-transparent pointer-events-none" />
+                           <div className="absolute inset-x-0 bottom-0 h-20 bg-linear-to-t from-[#22242c] to-transparent pointer-events-none" />
 
                            {/* Active Badge */}
                            {expert.isOnline && (
-                             <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 backdrop-blur-md rounded-full border border-emerald-500/20">
+                             <div className="absolute top-3 left-3 z-10 flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 backdrop-blur-md rounded-full border border-emerald-500/20">
                                <div className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                               <span className="text-[9px] font-black tracking-widest uppercase text-emerald-400">ACTIVE</span>
+                               <span className="text-[8px] font-black tracking-widest uppercase text-emerald-400">ACTIVE</span>
                              </div>
                            )}
 
                            {/* Star Rating */}
-                           <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/10 shadow-lg">
-                             <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                             <span className="text-[11px] font-black text-white">{expert.rating || '4.9'}</span>
+                           <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1 px-2 py-0.5 bg-white/10 backdrop-blur-md rounded-full border border-white/10 shadow-lg">
+                             <Star className="size-3 fill-amber-400 text-amber-400" />
+                             <span className="text-[10px] font-black text-white">{expert.rating || '4.9'}</span>
                            </div>
                          </div>
 
                          {/* Card Body */}
-                         <div className="p-6 md:p-8 pt-0 flex flex-col flex-1 relative z-10">
+                         <div className="p-4 pt-0 flex flex-col flex-1 relative z-10">
                             
-                            <div className="flex items-center justify-between mb-1 mt-4">
-                               <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight group-hover:text-[#a8c8ff] transition-colors line-clamp-1 mr-2">
+                            <div className="flex items-center justify-between mb-0.5 mt-3">
+                               <h3 className="text-base font-bold text-white tracking-tight group-hover:text-[#a8c8ff] transition-colors line-clamp-1 mr-1">
                                  {expert.displayName || "Elite Practitioner"}
                                </h3>
-                               <span className="text-[10px] font-bold text-[#8b919e] uppercase tracking-widest shrink-0">
+                               <span className="text-[9px] font-bold text-[#8b919e] uppercase tracking-widest shrink-0">
                                  {expert.hourlyRate ? `$${expert.hourlyRate}/HR` : 'PREMIUM'}
                                </span>
                             </div>
 
-                            <p className="text-[10px] font-semibold text-[#a8c8ff] mb-4">
+                            <p className="text-[9px] font-semibold text-[#a8c8ff] mb-2">
                                {expert.specialty || expert.primaryRole || "Psychologist"}
                             </p>
 
-                            <p className="text-[13px] font-medium text-[#8b919e] italic leading-relaxed line-clamp-2 mb-6">
+                            <p className="text-[11px] font-medium text-[#8b919e] italic leading-relaxed line-clamp-2 mb-3">
                                "{expert.bio || "Dedicated to transforming human potential through architectural healing and mindfulness."}"
                             </p>
 
-                            <div className="flex items-center gap-5 mb-6">
-                               <div className="flex items-center gap-1.5 text-[#8b919e]">
-                                 <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                 <span className="text-[9px] font-black uppercase tracking-widest">{expert.location || 'DAMASCUS'}</span>
+                            <div className="flex items-center gap-3 mb-3">
+                               <div className="flex items-center gap-1 text-[#8b919e]">
+                                 <svg className="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                 <span className="text-[8px] font-black uppercase tracking-widest">{expert.location || 'DAMASCUS'}</span>
                                </div>
-                               <div className="flex items-center gap-1.5 text-[#8b919e]">
-                                 <Calendar className="size-3.5" />
-                                 <span className="text-[9px] font-black uppercase tracking-widest">{expert.experience || '8+ YEARS'}</span>
+                               <div className="flex items-center gap-1 text-[#8b919e]">
+                                 <Calendar className="size-3" />
+                                 <span className="text-[8px] font-black uppercase tracking-widest">{expert.experience || '8+ YEARS'}</span>
                                </div>
                             </div>
 
-                            <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                            <div className="flex flex-wrap gap-1.5 mb-3 mt-auto">
                                {(expert.tags || ['STRESS RELIEF', 'MINDFULNESS', 'TRAUMA ZEN']).slice(0,3).map((tag: string) => (
-                                 <span key={tag} className="px-2 py-1 bg-white/5 rounded-lg text-[8px] font-black text-[#8b919e] uppercase tracking-widest whitespace-nowrap">
+                                 <span key={tag} className="px-1.5 py-0.5 bg-white/5 rounded-md text-[7px] font-black text-[#8b919e] uppercase tracking-widest whitespace-nowrap">
                                    {tag}
                                  </span>
                                ))}
                             </div>
 
-                            <div className="flex flex-col gap-3 mt-auto">
-                               <div className="flex gap-2">
+                            <div className="flex flex-col gap-2 mt-auto">
+                               <div className="flex gap-1.5">
                                  <button 
                                    onClick={(e) => { e.stopPropagation(); navigate(`/user/${expert.id}?action=book`) }}
-                                   className="flex-1 bg-[#b0cfff] text-[#122b5e] rounded-xl py-3 px-4 flex items-center justify-between hover:brightness-110 active:scale-95 transition-all shadow-md"
+                                   className="flex-1 bg-[#b0cfff] text-[#122b5e] rounded-lg py-2 px-3 flex items-center justify-between hover:brightness-110 active:scale-95 transition-all shadow-md"
                                  >
-                                   <span className="text-[11px] font-black uppercase tracking-widest">BOOK NOW</span>
-                                   <ChevronRight className="size-3.5 stroke-[3px]" />
+                                   <span className="text-[10px] font-black uppercase tracking-widest">BOOK NOW</span>
+                                   <ChevronRight className="size-3 stroke-[3px]" />
                                  </button>
                                  <button 
                                    onClick={(e) => { 
                                      e.stopPropagation(); 
                                      navigate(`/conference/${expert.id}?type=video`);
                                    }}
-                                   className="flex-1 bg-emerald-500 text-white rounded-xl py-3 px-4 flex items-center justify-between hover:brightness-110 active:scale-95 transition-all shadow-md"
+                                   className="flex-1 bg-emerald-500 text-white rounded-lg py-2 px-3 flex items-center justify-between hover:brightness-110 active:scale-95 transition-all shadow-md"
                                  >
-                                   <span className="text-[11px] font-black uppercase tracking-widest">INSTANT CALL</span>
-                                   <Phone className="size-3.5" />
+                                   <span className="text-[10px] font-black uppercase tracking-widest">INSTANT CALL</span>
+                                   <Phone className="size-3" />
                                  </button>
                                </div>
 
-                               <div className="flex gap-2">
+                               <div className="flex gap-1.5">
                                  <button 
                                    onClick={(e) => { e.stopPropagation(); navigate(`/messenger?partnerId=${expert.id}`) }}
-                                   className="flex-1 bg-[#2f313a] rounded-xl py-2 px-4 flex items-center justify-center gap-2 text-white hover:bg-[#3a3c46] transition-colors shadow-md text-[10px] font-black uppercase tracking-widest"
+                                   className="flex-1 bg-[#2f313a] rounded-lg py-1.5 px-3 flex items-center justify-center gap-1.5 text-white hover:bg-[#3a3c46] transition-colors shadow-md text-[9px] font-black uppercase tracking-widest"
                                  >
-                                   <MessageSquare className="size-3.5" />
+                                   <MessageSquare className="size-3" />
                                    MESSAGE
                                  </button>
 
                                  <button 
                                    onClick={(e) => { e.stopPropagation(); navigate(`/user/${expert.id}`) }}
-                                   className="flex-1 bg-[#2f313a] rounded-xl py-2 px-4 flex items-center justify-center text-white hover:bg-[#3a3c46] transition-colors shadow-md text-[10px] font-black uppercase tracking-widest"
+                                   className="flex-1 bg-[#2f313a] rounded-lg py-1.5 px-3 flex items-center justify-center text-white hover:bg-[#3a3c46] transition-colors shadow-md text-[9px] font-black uppercase tracking-widest"
                                  >
                                    PROFILE
                                  </button>
