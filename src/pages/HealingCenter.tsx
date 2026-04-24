@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Search, Calendar, Heart, BadgeCheck, Settings, HelpCircle, 
   Star, ChevronRight, Filter, MessageSquare, Briefcase, Award,
-  Clock, DollarSign, ExternalLink, ShieldCheck, Phone
+  Clock, DollarSign, ExternalLink, ShieldCheck, Phone, Minimize2
 } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, query, getDocs, limit, where } from 'firebase/firestore';
@@ -230,6 +230,18 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                              <Star className="size-3 fill-amber-400 text-amber-400" />
                              <span className="text-[10px] font-black text-white">{expert.rating || '4.9'}</span>
                            </div>
+
+                           {/* Scale Down to Resume Icon */}
+                           <button 
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               navigate(`/user/${expert.id}?resume=1`);
+                             }}
+                             className="absolute top-3 right-3 z-20 size-8 bg-white/10 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all hover:scale-110 active:scale-95 group/scale"
+                             title="Scale Down to Resume"
+                           >
+                             <Minimize2 className="size-4 group-hover/scale:rotate-90 transition-transform" />
+                           </button>
                          </div>
 
                          {/* Card Body */}
