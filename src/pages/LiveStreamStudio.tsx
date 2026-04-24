@@ -413,7 +413,7 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
         roomId={activeRoomId}
-        joinUrl={`${window.location.origin}/healing-suite/${activeRoomId}?role=audience&mode=broadcast`}
+        joinUrl={`${window.location.origin}/room/${activeRoomId}`}
       />
     </div>
   );

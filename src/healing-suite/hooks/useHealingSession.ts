@@ -1,6 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { functions } from '../../firebase';
-import { httpsCallable } from 'firebase/functions';
 import AgoraRTC, {
   IAgoraRTCClient,
   ILocalVideoTrack,
@@ -79,18 +77,17 @@ export function useHealingSession(
   // ── Token Fetch ─────────────────────────────────────────────────────────────
   const fetchToken = async (channelName: string, uid: number, publisherRole: boolean): Promise<{ token: string | null; appId: string }> => {
     try {
-      const response = await fetch('/api/agora-token', {
+      const res = await fetch('/api/agora/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ channelName, uid, role: publisherRole ? 'publisher' : 'subscriber' }),
+        body: JSON.stringify({
+          channelName,
+          uid,
+          role: publisherRole ? 'publisher' : 'subscriber',
+        }),
       });
-      if (!response.ok) {
-        throw new Error(`Failed to fetch token: ${response.statusText}`);
-      }
-      const data = await response.json();
-      return { token: data.token, appId: data.appId || APP_ID };
-    } catch (err) {
-      console.error('[HealingSuite] Failed to fetch Agora token via API:', err);
+      return await res.json();
+    } catch {
       return { token: null, appId: APP_ID };
     }
   };
@@ -167,9 +164,8 @@ export function useHealingSession(
         }
       });
 
-      // In 'private' mode, everyone is a publisher (1-on-1 session). 
-      // In 'broadcast' mode, only the 'host' role publishes.
-      const isPublisher = mode === 'private' || role === 'host';
+      // ── Fetch Token & Connect ─────────────────────────────────────────────
+      const isPublisher = role === 'host';
       const { token, appId } = await fetchToken(sessionId, userUid, isPublisher);
       const activeAppId = appId || APP_ID;
 

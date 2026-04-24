@@ -487,7 +487,7 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
         roomId={roomId}
-        joinUrl={`${window.location.origin}/healing-suite/${roomId}?role=audience&mode=private`}
+        joinUrl={`${window.location.origin}/room/${roomId}`}
       />
     </div>
   );

@@ -496,9 +496,4 @@ html {
   border-color: rgba(10, 61, 145, 0.4);
 }
 
-/* Mobile scaling fix (scale down by 25%) */
-@media (max-width: 768px) {
-  html {
-    zoom: 0.75;
-  }
-}
+
