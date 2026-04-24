@@ -1,4 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { functions } from '../../firebase';
+import { httpsCallable } from 'firebase/functions';
 import AgoraRTC, {
   IAgoraRTCClient,
   ILocalVideoTrack,
@@ -77,17 +79,12 @@ export function useHealingSession(
   // ── Token Fetch ─────────────────────────────────────────────────────────────
   const fetchToken = async (channelName: string, uid: number, publisherRole: boolean): Promise<{ token: string | null; appId: string }> => {
     try {
-      const res = await fetch('/api/agora/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          channelName,
-          uid,
-          role: publisherRole ? 'publisher' : 'subscriber',
-        }),
-      });
-      return await res.json();
-    } catch {
+      const generateToken = httpsCallable(functions, 'generateAgoraToken');
+      const result = await generateToken({ channelName, role: publisherRole ? 'publisher' : 'subscriber' });
+      const data = result.data as any;
+      return { token: data.token, appId: APP_ID };
+    } catch (err) {
+      console.error('[HealingSuite] Failed to fetch Agora token via Cloud Function:', err);
       return { token: null, appId: APP_ID };
     }
   };

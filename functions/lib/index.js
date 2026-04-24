@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateAgoraToken = exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
+exports.rotateAgoraSecret = exports.generateAgoraToken = exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
 const logger = require("firebase-functions/logger");
 // Removed unused V2 import
 const firestore_1 = require("firebase-functions/v2/firestore");
@@ -966,5 +966,46 @@ exports.generateAgoraToken = functionsV1
     const role = RtcRole.PUBLISHER;
     const token = RtcTokenBuilder.buildTokenWithUserAccount(APP_ID, APP_CERTIFICATE, channelName, uid, role, privilegeExpiredTs, privilegeExpiredTs);
     return { token, uid };
+});
+// ═══════════════════════════════════════════════════════════════════════════
+// 12. AUTOMATED SECRET ROTATION (Pub/Sub Trigger)
+// ═══════════════════════════════════════════════════════════════════════════
+const pubsub_1 = require("firebase-functions/v2/pubsub");
+const secret_manager_1 = require("@google-cloud/secret-manager");
+const secretManagerClient = new secret_manager_1.SecretManagerServiceClient();
+exports.rotateAgoraSecret = (0, pubsub_1.onMessagePublished)("secret-rotation-topic", async (event) => {
+    try {
+        // 1. Generate new secret value.
+        // NOTE: In a real-world scenario with Agora, you'd call Agora's REST API to rotate the primary/secondary certificate.
+        // Here we generate a placeholder secure string as an example of rotation logic.
+        const newSecretValue = "generated-agora-secret-" + Date.now();
+        // Use GCLOUD_PROJECT to dynamically get the project ID for Secret Manager path
+        const projectId = process.env.GCLOUD_PROJECT || process.env.FIREBASE_CONFIG ? JSON.parse(process.env.FIREBASE_CONFIG).projectId : "gen-lang-client-0305219649";
+        const secretName = `projects/${projectId}/secrets/AGORA_APP_CERTIFICATE`;
+        // 2. Add the new version to Secret Manager
+        const [version] = await secretManagerClient.addSecretVersion({
+            parent: secretName,
+            payload: { data: Buffer.from(newSecretValue, 'utf8') },
+        });
+        logger.info(`Successfully added new AGORA_APP_CERTIFICATE version: ${version.name}`);
+        // 3. Cleanup: Destroy secret versions older than 30 days
+        const [versions] = await secretManagerClient.listSecretVersions({
+            parent: secretName,
+        });
+        const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+        for (const v of versions) {
+            // Only check ENABLED versions to avoid destroying already destroyed/disabled ones
+            if (v.createTime && v.state === "ENABLED") {
+                const createTimeMs = (Number(v.createTime.seconds) * 1000) + Math.round(Number(v.createTime.nanos) / 1000000);
+                if (createTimeMs < thirtyDaysAgo) {
+                    await secretManagerClient.destroySecretVersion({ name: v.name });
+                    logger.info(`Destroyed old secret version (>30 days): ${v.name}`);
+                }
+            }
+        }
+    }
+    catch (err) {
+        logger.error("Secret rotation failed:", err);
+    }
 });
 //# sourceMappingURL=index.js.map
