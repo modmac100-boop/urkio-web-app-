@@ -10,7 +10,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const functionsV1 = require("firebase-functions/v1");
 // 1. API Route for the AI Agent (Streaming Chat)
-exports.chat = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }).https.onRequest(async (req, res) => {
+exports.chat = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "512MB", timeoutSeconds: 75 }).https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.method === 'OPTIONS') {
         res.set('Access-Control-Allow-Methods', 'GET, POST');
@@ -104,7 +104,7 @@ Always use Google Search to find the most up-to-date, accurate information when 
     }
 });
 // 1.1 Voice Note Analysis API (Production)
-exports.analyzeVoice = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }).https.onRequest(async (req, res) => {
+exports.analyzeVoice = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "512MB", timeoutSeconds: 75 }).https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     if (req.method === 'OPTIONS') {
         res.set('Access-Control-Allow-Methods', 'POST');
@@ -153,7 +153,7 @@ exports.analyzeVoice = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API
     }
 });
 // 2. Proactive Sensor (Trigger)
-exports.onNoteCreated = (0, firestore_1.onDocumentCreated)("homii_entries/{entryId}", async (event) => {
+exports.onNoteCreated = (0, firestore_1.onDocumentCreated)({ document: "homii_entries/{entryId}", memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (event) => {
     const snapshot = event.data;
     if (!snapshot) {
         return;
@@ -190,7 +190,7 @@ exports.onNoteCreated = (0, firestore_1.onDocumentCreated)("homii_entries/{entry
     }
 });
 // 3. Follow Notification
-exports.onFollowCreated = (0, firestore_1.onDocumentCreated)("follows/{followId}", async (event) => {
+exports.onFollowCreated = (0, firestore_1.onDocumentCreated)({ document: "follows/{followId}", memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (event) => {
     const snapshot = event.data;
     if (!snapshot)
         return;
@@ -218,7 +218,7 @@ exports.onFollowCreated = (0, firestore_1.onDocumentCreated)("follows/{followId}
     }
 });
 // 4. Message Notification
-exports.onMessageCreated = (0, firestore_1.onDocumentCreated)("conversations/{conversationId}/messages/{messageId}", async (event) => {
+exports.onMessageCreated = (0, firestore_1.onDocumentCreated)({ document: "conversations/{conversationId}/messages/{messageId}", memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (event) => {
     const { conversationId } = event.params;
     const snapshot = event.data;
     if (!snapshot)
@@ -254,7 +254,7 @@ exports.onMessageCreated = (0, firestore_1.onDocumentCreated)("conversations/{co
 });
 // 5. Daily Event Reminders (Scheduled)
 const scheduler_1 = require("firebase-functions/v2/scheduler");
-exports.eventReminderTask = (0, scheduler_1.onSchedule)("every day 09:00", async (_event) => {
+exports.eventReminderTask = (0, scheduler_1.onSchedule)({ schedule: "every day 09:00", memory: "512MiB", timeoutSeconds: 75, maxInstances: 25 }, async (_event) => {
     const now = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(now.getDate() + 1);
@@ -287,7 +287,7 @@ exports.eventReminderTask = (0, scheduler_1.onSchedule)("every day 09:00", async
 });
 // 6. Generate Stream Video Token
 exports.getStreamToken = functionsV1
-    .runWith({ secrets: ['STREAM_API_SECRET'] })
+    .runWith({ secrets: ['STREAM_API_SECRET'], memory: "512MB", timeoutSeconds: 75 })
     .https.onCall(async (data, context) => {
     const apiKey = 'zzyb8w6me2rg';
     const apiSecret = process.env.STREAM_API_SECRET;
@@ -310,7 +310,7 @@ exports.getStreamToken = functionsV1
     }
 });
 // 7. Push Notification Dispatcher (FCM)
-exports.onNotificationCreatedPushDispatcher = (0, firestore_1.onDocumentCreated)("notifications/{notificationId}", async (event) => {
+exports.onNotificationCreatedPushDispatcher = (0, firestore_1.onDocumentCreated)({ document: "notifications/{notificationId}", memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (event) => {
     const snapshot = event.data;
     if (!snapshot)
         return;
@@ -376,7 +376,7 @@ const https_1 = require("firebase-functions/v2/https");
  *   "notes": "Child difficulty topic"
  * }
  */
-exports.handleVoiceBooking = (0, https_1.onRequest)({ cors: true, secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }, async (req, res) => {
+exports.handleVoiceBooking = (0, https_1.onRequest)({ cors: true, secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (req, res) => {
     // CORS pre-flight
     if (req.method === "OPTIONS") {
         res.status(204).send("");
@@ -705,7 +705,7 @@ exports.handleVoiceBooking = (0, https_1.onRequest)({ cors: true, secrets: ["GOO
  * acknowledgment phrases, and turn-taking configuration.
  * Can be re-called to update settings without redeploying.
  */
-exports.seedAgentBehaviorConfig = functionsV1.https.onCall(async (_data, context) => {
+exports.seedAgentBehaviorConfig = functionsV1.runWith({ memory: "512MB", timeoutSeconds: 75 }).https.onCall(async (_data, context) => {
     // Only admins can seed/update this config
     if (!context.auth) {
         throw new functionsV1.https.HttpsError("unauthenticated", "Must be authenticated.");
@@ -797,7 +797,7 @@ exports.seedAgentBehaviorConfig = functionsV1.https.onCall(async (_data, context
  * starting point for the healing session.
  */
 exports.generateClinicalOrientation = functionsV1
-    .runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] })
+    .runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "512MB", timeoutSeconds: 75 })
     .https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functionsV1.https.HttpsError("unauthenticated", "Auth required.");
@@ -839,7 +839,7 @@ exports.generateClinicalOrientation = functionsV1
  * GOOD SAMARITAN AI SAFEGUARD (PDPL 2026)
  * Real-time monitoring for crisis keywords.
  */
-exports.monitorSessionIntegrity = (0, firestore_1.onDocumentUpdated)("appointments/{appointmentId}", async (event) => {
+exports.monitorSessionIntegrity = (0, firestore_1.onDocumentUpdated)({ document: "appointments/{appointmentId}", memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (event) => {
     const newData = event.data?.after.data();
     const oldData = event.data?.before.data();
     if (!newData || !newData.transcript || newData.transcript === oldData?.transcript)
@@ -874,7 +874,7 @@ exports.monitorSessionIntegrity = (0, firestore_1.onDocumentUpdated)("appointmen
 // ═══════════════════════════════════════════════════════════════════════════
 // AGORA RTC TOKEN GENERATOR — Virtual Healing Suite
 // ═══════════════════════════════════════════════════════════════════════════
-exports.agoraToken = (0, https_1.onRequest)({ cors: true, secrets: ["AGORA_APP_CERTIFICATE"] }, async (req, res) => {
+exports.agoraToken = (0, https_1.onRequest)({ cors: true, secrets: ["AGORA_APP_CERTIFICATE"], memory: "512MiB", timeoutSeconds: 75, concurrency: 100, maxInstances: 25 }, async (req, res) => {
     if (req.method === "OPTIONS") {
         res.status(204).send("");
         return;
@@ -905,7 +905,7 @@ exports.agoraToken = (0, https_1.onRequest)({ cors: true, secrets: ["AGORA_APP_C
     }
 });
 // 10. Generate Clinical Synthesis (AI Orientation)
-exports.generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }).https.onCall(async (data, context) => {
+exports.generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "512MB", timeoutSeconds: 75 }).https.onCall(async (data, context) => {
     if (!context.auth) {
         throw new functionsV1.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
     }
@@ -943,7 +943,9 @@ exports.generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE_GENE
 // 11. Generate Agora Token (onCall)
 exports.generateAgoraToken = functionsV1
     .runWith({
-    secrets: ["AGORA_APP_CERTIFICATE"]
+    secrets: ["AGORA_APP_CERTIFICATE"],
+    memory: "512MB",
+    timeoutSeconds: 75
 })
     .https.onCall(async (data, context) => {
     // Auth Check
@@ -973,7 +975,7 @@ exports.generateAgoraToken = functionsV1
 const pubsub_1 = require("firebase-functions/v2/pubsub");
 const secret_manager_1 = require("@google-cloud/secret-manager");
 const secretManagerClient = new secret_manager_1.SecretManagerServiceClient();
-exports.rotateAgoraSecret = (0, pubsub_1.onMessagePublished)("secret-rotation-topic", async (event) => {
+exports.rotateAgoraSecret = (0, pubsub_1.onMessagePublished)({ topic: "secret-rotation-topic", memory: "512MiB", timeoutSeconds: 75, maxInstances: 25 }, async (event) => {
     try {
         // 1. Generate new secret value.
         // NOTE: In a real-world scenario with Agora, you'd call Agora's REST API to rotate the primary/secondary certificate.
