@@ -1,0 +1,53 @@
+{
+  "node": {
+    "0025650f8778001415c493cc766ac8ad3125a6ab42": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 98817,
+          "async": false,
+          "exportedName": "invalidateCacheAction",
+          "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+        }
+      },
+      "exportedName": "invalidateCacheAction",
+      "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/server-actions.js"
+    },
+    "00b67afb2552282883a4f2b5d44e59fa1df60ae4a4": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 98817,
+          "async": false,
+          "exportedName": "createOrReadKeylessAction",
+          "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "exportedName": "createOrReadKeylessAction",
+      "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "0032359352725fdee12d053e1c8b655a26b0fe2627": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 98817,
+          "async": false,
+          "exportedName": "deleteKeylessAction",
+          "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "exportedName": "deleteKeylessAction",
+      "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    },
+    "40088be4e2125ec3f1d7101b4d271a1d7cd517d6eb": {
+      "workers": {
+        "app/_not-found/page": {
+          "moduleId": 98817,
+          "async": false,
+          "exportedName": "syncKeylessConfigAction",
+          "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+        }
+      },
+      "exportedName": "syncKeylessConfigAction",
+      "filename": "Desktop/urkio-web-test/urkio-next/node_modules/@clerk/nextjs/dist/esm/app-router/keyless-actions.js"
+    }
+  },
+  "edge": {}
+}

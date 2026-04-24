@@ -1,0 +1,3 @@
+module.exports=[19971,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(95785);a.n(d("[project]/Desktop/urkio-web-test/urkio-next/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},11558,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(95785);a.n(d("[project]/Desktop/urkio-web-test/urkio-next/node_modules/next/dist/client/components/builtin/global-error.js"))},95620,a=>{"use strict";a.i(19971);var b=a.i(11558);a.n(b)},84210,a=>{a.n(a.i(95620))}];
+
+//# sourceMappingURL=0_.o_next_dist_client_components_builtin_global-error_12lariw.js.map
