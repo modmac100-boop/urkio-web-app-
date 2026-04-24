@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
+exports.generateAgoraToken = exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
 const logger = require("firebase-functions/logger");
 // Removed unused V2 import
 const firestore_1 = require("firebase-functions/v2/firestore");
@@ -874,7 +874,7 @@ exports.monitorSessionIntegrity = (0, firestore_1.onDocumentUpdated)("appointmen
 // ═══════════════════════════════════════════════════════════════════════════
 // AGORA RTC TOKEN GENERATOR — Virtual Healing Suite
 // ═══════════════════════════════════════════════════════════════════════════
-exports.agoraToken = (0, https_1.onRequest)({ cors: true }, async (req, res) => {
+exports.agoraToken = (0, https_1.onRequest)({ cors: true, secrets: ["AGORA_APP_CERTIFICATE"] }, async (req, res) => {
     if (req.method === "OPTIONS") {
         res.status(204).send("");
         return;
@@ -939,5 +939,32 @@ exports.generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE_GENE
         logger.error("Error in generateClinicalSynthesis:", error);
         throw new functionsV1.https.HttpsError('internal', error.message);
     }
+});
+// 11. Generate Agora Token (onCall)
+exports.generateAgoraToken = functionsV1
+    .runWith({
+    secrets: ["AGORA_APP_CERTIFICATE"]
+})
+    .https.onCall(async (data, context) => {
+    // Auth Check
+    if (!context.auth) {
+        throw new functionsV1.https.HttpsError('unauthenticated', 'يجب تسجيل الدخول أولاً.');
+    }
+    // 1. App ID remains in standard config (it's not a secret)
+    const APP_ID = functionsV1.config?.()?.agora?.app_id || process.env.AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
+    // 2. Access the Secret from process.env
+    const APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
+    if (!APP_CERTIFICATE) {
+        throw new functionsV1.https.HttpsError('internal', 'خطأ في إعدادات الخادم.');
+    }
+    const channelName = data.channelName;
+    const uid = context.auth.uid;
+    const expirationTimeInSeconds = 3600 * 2;
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
+    const { RtcTokenBuilder, RtcRole } = await Promise.resolve().then(() => require('agora-token'));
+    const role = RtcRole.PUBLISHER;
+    const token = RtcTokenBuilder.buildTokenWithUserAccount(APP_ID, APP_CERTIFICATE, channelName, uid, role, privilegeExpiredTs, privilegeExpiredTs);
+    return { token, uid };
 });
 //# sourceMappingURL=index.js.map

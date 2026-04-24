@@ -16,6 +16,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@ai-sdk/google": "^0.0.51",
+    "@google-cloud/secret-manager": "^6.1.1",
     "@google/genai": "^1.45.0",
     "@stream-io/node-sdk": "^0.7.45",
     "agora-token": "^2.0.5",
