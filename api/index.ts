@@ -9,9 +9,17 @@ dotenv.config();
 const app = express();
 app.use(express.json({ limit: '50mb' }));
 
-// ─── Health Check ─────────────────────────────────────────────────────────────
+// ─── Health & Debug ──────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', environment: process.env.NODE_ENV });
+  res.json({ 
+    status: 'ok', 
+    environment: process.env.NODE_ENV,
+    config: {
+      hasAppId: !!process.env.VITE_AGORA_APP_ID,
+      hasCertificate: !!process.env.AGORA_APP_CERTIFICATE,
+      appIdPrefix: process.env.VITE_AGORA_APP_ID ? process.env.VITE_AGORA_APP_ID.substring(0, 4) : 'none'
+    }
+  });
 });
 
 // ─── Agora Token Generation ───────────────────────────────────────────────────

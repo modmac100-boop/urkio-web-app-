@@ -1,9 +1,5 @@
 {
-  "functions": {
-    "api/index.ts": {
-      "runtime": "vercel-node@latest"
-    }
-  },
+  "framework": "vite",
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api/index.ts" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }

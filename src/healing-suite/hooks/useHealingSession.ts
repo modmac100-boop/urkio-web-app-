@@ -174,11 +174,21 @@ export function useHealingSession(
       }
 
       try {
+        console.log(`[HealingSuite] Attempting join for ${sessionId} with token: ${!!token}`);
         await client.join(activeAppId, sessionId, token, userUid);
       } catch (joinErr: any) {
-        if (joinErr.message?.includes('dynamic use static key') || joinErr.code === 'CAN_NOT_GET_GATEWAY_SERVER') {
-          console.warn('[HealingSuite] Project mismatch detected. Retrying without token...');
+        console.error('[HealingSuite] Initial join failed:', joinErr);
+        
+        const isTokenError = joinErr.message?.includes('dynamic use static key') || joinErr.code === 'CAN_NOT_GET_GATEWAY_SERVER';
+        
+        if (isTokenError && token !== null) {
+          // If we had a token but it failed, maybe it's expired or wrong
+          console.warn('[HealingSuite] Token join failed. Retrying without token as fallback...');
           await client.join(activeAppId, sessionId, null, userUid);
+        } else if (isTokenError && token === null) {
+          // If we had NO token and it failed with this error, it's DEFINITELY a missing certificate
+          console.error('[HealingSuite] PROJECT REQUIRES TOKEN. AGORA_APP_CERTIFICATE is likely missing on Vercel.');
+          throw new Error('Security Error: This Agora project requires an App Certificate. Please add AGORA_APP_CERTIFICATE to your Vercel Environment Variables.');
         } else {
           throw joinErr;
         }
