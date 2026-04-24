@@ -1,0 +1,17 @@
+Retrieving project…
+The vercel.json file should be inside of the provided root directory.
+Deploying modmac100-boops-projects/urkio-web-app
+Uploading [--------------------] (0.0B/141B)
+Uploading [====================] (141.0B/141B)
+Inspect: https://vercel.com/modmac100-boops-projects/urkio-web-app/9F7VwskQcWLrD9j9uFuKoVhRMei4 [2s]
+Production: https://urkio-web-jrzs2twgf-modmac100-boops-projects.vercel.app [2s]
+https://urkio-web-jrzs2twgf-modmac100-boops-projects.vercel.appBuilding...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 2 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Previous build caches not available.
+Building: Downloading 266 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 51.6.1
+Error: Command "vite build" exited with 127

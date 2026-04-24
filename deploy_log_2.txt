@@ -1,0 +1,85 @@
+Retrieving project…
+The vercel.json file should be inside of the provided root directory.
+Deploying modmac100-boops-projects/urkio-web-app
+Inspect: https://vercel.com/modmac100-boops-projects/urkio-web-app/7uhYK8N2xPEZheaGi8MTTdsrREfW [2s]
+Production: https://urkio-web-9sqj8dvsx-modmac100-boops-projects.vercel.app [2s]
+https://urkio-web-9sqj8dvsx-modmac100-boops-projects.vercel.appBuilding...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 2 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Previous build caches not available.
+Building: Downloading 267 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 51.6.1
+Building: npm warn deprecated prebuild-install@7.1.3: No longer maintained. Please contact the author of the relevant native addon; alternatives are available.
+Building: npm warn deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+Building: npm warn deprecated agora-access-token@2.0.4: The package has been deprecated. Please use 'agora-token' instead, sorry for the inconvenience caused.
+Building: npm warn deprecated json-ptr@3.1.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+Building: npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+Building: npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+Building: npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+Building: npm warn deprecated source-map@0.8.0-beta.0: The work that was done in this beta branch won't be included in future versions
+Building: npm warn deprecated glob@10.5.0: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
+Building: added 1229 packages, and audited 1230 packages in 29s
+Building: 147 packages are looking for funding
+Building: run `npm fund` for details
+Building: 9 vulnerabilities (8 moderate, 1 critical)
+Building: To address issues that do not require attention, run:
+Building: npm audit fix
+Building: To address all issues (including breaking changes), run:
+Building: npm audit fix --force
+Building: Run `npm audit` for details.
+Building: > react-example@0.0.0 build
+Building: > vite build
+Building: vite v6.4.2 building for production...
+Building: transforming...
+Building: ✓ 2929 modules transformed.
+Building: rendering chunks...
+Building: [plugin vite:reporter]
+Building: (!) /vercel/path0/node_modules/firebase/messaging/dist/esm/index.esm.js is dynamically imported by /vercel/path0/src/components/notifications/NotificationCenter.tsx but also statically imported by /vercel/path0/src/firebase.ts, /vercel/path0/src/hooks/useWebPushNotifications.ts, dynamic import will not move module into another chunk.
+Building: [plugin vite:reporter]
+Building: (!) /vercel/path0/src/firebase.ts is dynamically imported by /vercel/path0/src/components/notifications/NotificationCenter.tsx but also statically imported by /vercel/path0/src/App.tsx, /vercel/path0/src/components/AdminDashboardFeed.tsx, /vercel/path0/src/components/BookSessionModal.tsx, /vercel/path0/src/components/CreateEventModal.tsx, /vercel/path0/src/components/EventDetailsModal.tsx, /vercel/path0/src/components/FollowButton.tsx, /vercel/path0/src/components/FollowsModal.tsx, /vercel/path0/src/components/GlobalSearch.tsx, /vercel/path0/src/components/GoLiveModal.tsx, /vercel/path0/src/components/InteractionsModal.tsx, /vercel/path0/src/components/Layout.tsx, /vercel/path0/src/components/NewAppointmentModal.tsx, /vercel/path0/src/components/OnboardingModal.tsx, /vercel/path0/src/components/OnlinePresenceHome.tsx, /vercel/path0/src/components/PostSessionDebrief.tsx, /vercel/path0/src/components/Sidebar.tsx, /vercel/path0/src/components/SignInModal.tsx, /vercel/path0/src/components/messaging/ChatWindow.tsx, /vercel/path0/src/components/messaging/ForwardModal.tsx, /vercel/path0/src/components/messaging/NewMessageModal.tsx, /vercel/path0/src/components/messaging/SessionInviteModal.tsx, /vercel/path0/src/components/messaging/SideChat.tsx, /vercel/path0/src/components/messaging/SimpleLiveChat.tsx, /vercel/path0/src/components/messaging/StreamCallRoom.tsx, /vercel/path0/src/components/notifications/NotificationCenter.tsx, /vercel/path0/src/components/profile/ArticleCreatorModal.tsx, /vercel/path0/src/components/profile/CommentsSection.tsx, /vercel/path0/src/components/profile/FeedPost.tsx, /vercel/path0/src/components/profile/PostCreator.tsx, /vercel/path0/src/components/profile/ResumeOverlay.tsx, /vercel/path0/src/components/profile/StoryBar.tsx, /vercel/path0/src/components/profile/UserProfileEditor.tsx, /vercel/path0/src/components/security/SessionTimeout.tsx, /vercel/path0/src/contexts/CallContext.tsx, /vercel/path0/src/healing-suite/pages/HealingRoom.tsx, /vercel/path0/src/hooks/useSessionMetadata.ts, /vercel/path0/src/hooks/useWebPushNotifications.ts, /vercel/path0/src/pages/AdminBetaInsights.tsx, /vercel/path0/src/pages/AdminDashboard.tsx, /vercel/path0/src/pages/AdminPortal.tsx, /vercel/path0/src/pages/Agenda.tsx, /vercel/path0/src/pages/AuthAction.tsx, /vercel/path0/src/pages/ClinicalWorkstation.tsx, /vercel/path0/src/pages/Events.tsx, /vercel/path0/src/pages/ExpertList.tsx, /vercel/path0/src/pages/ExpertVerificationForm.tsx, /vercel/path0/src/pages/HealingCenter.tsx, /vercel/path0/src/pages/HealingCourses.tsx, /vercel/path0/src/pages/Home.tsx, /vercel/path0/src/pages/Homii.tsx, /vercel/path0/src/pages/Messenger.tsx, /vercel/path0/src/pages/PatientJourney.tsx, /vercel/path0/src/pages/PublicProfile.tsx, /vercel/path0/src/pages/SecretVault.tsx, /vercel/path0/src/pages/Settings.tsx, /vercel/path0/src/pages/SpecialistDashboard.tsx, /vercel/path0/src/pages/Tasks.tsx, /vercel/path0/src/pages/TermsAndConditions.tsx, /vercel/path0/src/pages/TherapyRoom.tsx, /vercel/path0/src/utils/seedInvites.ts, /vercel/path0/src/utils/specialistProvisioning.ts, dynamic import will not move module into another chunk.
+Building: [plugin vite:reporter]
+Building: (!) /vercel/path0/node_modules/react-hot-toast/dist/index.mjs is dynamically imported by /vercel/path0/src/conference/components/SetupScreen.tsx but also statically imported by /vercel/path0/src/App.tsx, /vercel/path0/src/components/CreateEventModal.tsx, /vercel/path0/src/components/HomiiVoiceSettingsModal.tsx, /vercel/path0/src/components/NewAppointmentModal.tsx, /vercel/path0/src/components/PostSessionDebrief.tsx, /vercel/path0/src/components/ProfileLayout.tsx, /vercel/path0/src/components/messaging/ChatWindow.tsx, /vercel/path0/src/components/messaging/ForwardModal.tsx, /vercel/path0/src/components/messaging/SessionInviteModal.tsx, /vercel/path0/src/components/messaging/StreamCallRoom.tsx, /vercel/path0/src/components/profile/ArticleCreatorModal.tsx, /vercel/path0/src/components/profile/CommentsSection.tsx, /vercel/path0/src/components/profile/FeedPost.tsx, /vercel/path0/src/components/profile/PostCreator.tsx, /vercel/path0/src/components/profile/ProfileHeader.tsx, /vercel/path0/src/components/profile/StoryBar.tsx, /vercel/path0/src/components/profile/UserProfileEditor.tsx, /vercel/path0/src/components/security/MFAGate.tsx, /vercel/path0/src/components/security/SessionTimeout.tsx, /vercel/path0/src/contexts/CallContext.tsx, /vercel/path0/src/pages/AdminDashboard.tsx, /vercel/path0/src/pages/Agenda.tsx, /vercel/path0/src/pages/ClinicalWorkstation.tsx, /vercel/path0/src/pages/Home.tsx, /vercel/path0/src/pages/Homii.tsx, /vercel/path0/src/pages/LiveStreamStudio.tsx, /vercel/path0/src/pages/Messenger.tsx, /vercel/path0/src/pages/PatientJourney.tsx, /vercel/path0/src/pages/PublicProfile.tsx, /vercel/path0/src/pages/Settings.tsx, /vercel/path0/src/pages/SpecialistDashboard.tsx, /vercel/path0/src/pages/TermsAndConditions.tsx, /vercel/path0/src/pages/TherapyRoom.tsx, dynamic import will not move module into another chunk.
+Building: computing gzip size...
+Building: dist/index.html                                             1.60 kB │ gzip:   0.75 kB
+Building: dist/assets/index-C62_vEdL.css                            439.98 kB │ gzip:  63.37 kB
+Building: dist/assets/seedInvites-CLuzHRLw.js                         1.00 kB │ gzip:   0.68 kB
+Building: dist/assets/specialistProvisioning-D6jkQWX7.js              1.06 kB │ gzip:   0.62 kB
+Building: dist/assets/VideoTile-C2iDOUU2.js                           2.36 kB │ gzip:   1.02 kB
+Building: dist/assets/AdminBetaInsights-B-u8N8UH.js                   6.94 kB │ gzip:   2.27 kB
+Building: dist/assets/HealingCourses-DOzHjDYF.js                      8.43 kB │ gzip:   3.05 kB
+Building: dist/assets/ExpertDashboard-BXupnoie.js                     9.72 kB │ gzip:   3.29 kB
+Building: dist/assets/UrkioGuide-Mm1MIY9H.js                         10.02 kB │ gzip:   3.73 kB
+Building: dist/assets/ExpertList-Cjb8TGYZ.js                         10.67 kB │ gzip:   3.41 kB
+Building: dist/assets/AdminPortal-DEubEkgK.js                        12.13 kB │ gzip:   3.57 kB
+Building: dist/assets/ExpertVerificationForm-dZtApzw5.js             12.22 kB │ gzip:   3.40 kB
+Building: dist/assets/SecretVault-ERBDimj1.js                        14.72 kB │ gzip:   4.38 kB
+Building: dist/assets/HealingCenter-Dvp7-fcv.js                      15.29 kB │ gzip:   4.47 kB
+Building: dist/assets/LiveStreamStudio-Djglf6d7.js                   15.44 kB │ gzip:   4.01 kB
+Building: dist/assets/Messenger-Dx17iphw.js                          18.25 kB │ gzip:   5.22 kB
+Building: dist/assets/SpecialistDashboard-Bki3oVUI.js                18.27 kB │ gzip:   5.00 kB
+Building: dist/assets/Agenda-B2W5kq9h.js                             20.78 kB │ gzip:   5.50 kB
+Building: dist/assets/TherapyRoom-CSl397ja.js                        21.38 kB │ gzip:   5.66 kB
+Building: dist/assets/Homii-D3wNY3Kz.js                              22.65 kB │ gzip:   6.30 kB
+Building: dist/assets/LandingPage-teao7Qk_.js                        25.06 kB │ gzip:   6.44 kB
+Building: dist/assets/HealingRoom-BdyIKLXM.js                        29.52 kB │ gzip:   8.92 kB
+Building: dist/assets/ClinicalWorkstation-COlnYPVT.js                38.33 kB │ gzip:  10.54 kB
+Building: dist/assets/vendor-react-BxrQM6YO.js                       49.94 kB │ gzip:  17.63 kB
+Building: dist/assets/AdminDashboard-4WkNjtvg.js                     57.12 kB │ gzip:  12.16 kB
+Building: dist/assets/vendor-ui-g8hFQLll.js                          80.38 kB │ gzip:  18.28 kB
+Building: dist/assets/PublicProfile-C4JF51Qs.js                     123.16 kB │ gzip:  28.82 kB
+Building: dist/assets/latency-chart-Bj5OSYzg.es-Bbcvf7Lp.js         131.89 kB │ gzip:  47.04 kB
+Building: dist/assets/background-filters-RdXfNf6_.es-BSHPUYg6.js    191.10 kB │ gzip:  55.79 kB
+Building: dist/assets/vendor-firebase-MyJQCnWf.js                   598.40 kB │ gzip: 142.25 kB
+Building: dist/assets/useHealingSession-CbBvWWZD.js               1,533.25 kB │ gzip: 420.69 kB
+Building: dist/assets/index-BBL42rR5.js                           1,616.07 kB │ gzip: 466.11 kB
+Building: (!) Some chunks are larger than 1000 kB after minification. Consider:
+Building: - Using dynamic import() to code-split the application
+Building: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+Building: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Building: ✓ built in 17.50s
+Building: Error: No Output Directory named "dist" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.
+Building: Learn More: https://vercel.link/missing-public-directory
+Error: No Output Directory named "dist" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.
