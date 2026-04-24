@@ -15,6 +15,7 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [isCameraOn, setIsCameraOn] = useState(true);
   const [isMicOn, setIsMicOn] = useState(true);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -99,13 +100,35 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
               </div>
             </div>
 
+            <div className="space-y-4">
+              <label className="flex items-start gap-3 cursor-pointer group p-4 bg-zinc-50 dark:bg-white/5 rounded-2xl border border-zinc-100 dark:border-white/5 transition-all hover:bg-zinc-100 dark:hover:bg-white/10">
+                <div className="relative flex items-center justify-center mt-0.5">
+                  <input 
+                    type="checkbox" 
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                    className="peer appearance-none size-5 rounded-lg border-2 border-zinc-200 dark:border-white/10 checked:bg-ur-primary checked:border-ur-primary transition-all cursor-pointer"
+                  />
+                  <div className="absolute opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity">
+                    <svg className="size-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-[11px] font-black uppercase tracking-widest text-zinc-900 dark:text-white">Professional Conduct Agreement</p>
+                  <p className="text-[10px] text-zinc-500 leading-relaxed font-medium">
+                    I agree to the <span className="text-ur-primary underline">Good Behavior Policy</span> and acknowledge that this session is monitored for clinical standards and data is highly secured.
+                  </p>
+                </div>
+              </label>
+            </div>
+
             <button
               onClick={() => {
                 stream?.getTracks().forEach(t => t.stop());
                 onJoin();
               }}
-              disabled={isJoining}
-              className="w-full py-5 milled-gradient disabled:opacity-50 text-white rounded-2xl font-headline font-black text-xs uppercase tracking-[0.3em] transition-all shadow-xl shadow-ur-primary/20 active:scale-95 flex items-center justify-center gap-4 overflow-hidden group"
+              disabled={isJoining || !acceptedTerms}
+              className="w-full py-5 bg-ur-primary disabled:bg-zinc-400 disabled:opacity-50 text-white rounded-2xl font-headline font-black text-xs uppercase tracking-[0.3em] transition-all shadow-xl shadow-ur-primary/20 active:scale-95 flex items-center justify-center gap-4 overflow-hidden group"
             >
               {isJoining ? (
                 <>
@@ -114,7 +137,7 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
                 </>
               ) : (
                 <>
-                  Join Meeting
+                  Join Secure Session
                   <Play className="size-4 fill-current group-hover:translate-x-2 transition-transform" />
                 </>
               )}

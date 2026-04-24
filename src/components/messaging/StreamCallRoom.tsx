@@ -28,12 +28,19 @@ export function StreamCallRoom({ callId, user, userData, type, onLeaveRoom }: St
   const [hasJoined, setHasJoined] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
 
   const [isVerifying, setIsVerifying] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
   const [inputCode, setInputCode] = useState(urlCode || '');
   const [verificationError, setVerificationError] = useState<string | null>(null);
   const [isJoining, setIsJoining] = useState(false);
+
+  const isSpecialist = userData?.role === 'specialist' || 
+                       ['admin', 'management', 'founder', 'expert', 'verifiedexpert', 'psychologist', 'practitioner'].includes(userData?.role || '') ||
+                       userData?.email === 'urkio@urkio.com';
 
   const {
     client,
@@ -179,6 +186,54 @@ export function StreamCallRoom({ callId, user, userData, type, onLeaveRoom }: St
     }
   };
 
+  const startRecording = async () => {
+    try {
+      // Capture the screen or the video element
+      // For clinical security, we capture the display with audio
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { frameRate: { ideal: 30 } },
+        audio: true
+      });
+      
+      const recorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm;codecs=vp9,opus'
+      });
+
+      const chunks: Blob[] = [];
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunks.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunks, { type: 'video/webm' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `urkio-session-${callId}-${new Date().toISOString()}.webm`;
+        a.click();
+        
+        // Clean up tracks
+        stream.getTracks().forEach(track => track.stop());
+        toast.success("Recording saved and downloaded.");
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+      toast.success("Recording started. Please select the window to record.");
+    } catch (err) {
+      console.error("Recording failed:", err);
+      toast.error("Failed to start recording. Permission denied.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+  };
+
   // Invitation and Chat logic handled by modals and sidebar state
 
   if (error) {
@@ -315,14 +370,32 @@ export function StreamCallRoom({ callId, user, userData, type, onLeaveRoom }: St
               </div>
 
               <div className="flex items-center gap-3 pointer-events-auto">
-                <button 
-                  onClick={() => setShowInviteModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-300 hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group"
-                  title="Invite Others to Session"
-                >
-                  <LinkIcon className="size-4" />
-                  <span className="text-xs font-bold">Invite</span>
-                </button>
+                {/* Recording Button - Expert Only */}
+                {isSpecialist && (
+                  <button 
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={clsx(
+                      "flex items-center gap-2 px-4 py-2 rounded-xl border transition-all hover:scale-105 active:scale-95 group",
+                      isRecording ? "bg-red-500/20 border-red-500 text-red-500" : "bg-white/5 border-white/5 text-slate-300 hover:bg-white/10"
+                    )}
+                    title={isRecording ? "Stop Recording" : "Start Recording"}
+                  >
+                    <div className={clsx("size-2 rounded-full", isRecording ? "bg-red-500 animate-pulse" : "bg-slate-500")} />
+                    <span className="text-xs font-bold">{isRecording ? "Recording..." : "Record"}</span>
+                  </button>
+                )}
+
+                {/* Invite Button - Expert Only */}
+                {isSpecialist && (
+                  <button 
+                    onClick={() => setShowInviteModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-slate-300 hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group"
+                    title="Invite Others to Session"
+                  >
+                    <LinkIcon className="size-4" />
+                    <span className="text-xs font-bold">Invite</span>
+                  </button>
+                )}
 
                 <button 
                   onClick={() => setShowChat(!showChat)}
