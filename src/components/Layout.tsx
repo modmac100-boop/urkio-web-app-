@@ -300,10 +300,18 @@ export function Layout({
             {user ? (
               <div className="flex items-center gap-4">
                 <div className="hidden sm:flex items-center gap-1 border-e border-zinc-100 dark:border-zinc-800 pe-4">
-                  <button className="p-2 text-zinc-400 hover:text-ur-primary hover:bg-ur-primary/5 rounded-xl transition-all group" title="Start Video Call">
+                  <button 
+                    onClick={() => navigate('/messenger?action=video')}
+                    className="p-2 text-zinc-400 hover:text-ur-primary hover:bg-ur-primary/5 rounded-xl transition-all group" 
+                    title="Start Video Call"
+                  >
                     <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">video_call</span>
                   </button>
-                  <button className="p-2 text-zinc-400 hover:text-ur-primary hover:bg-ur-primary/5 rounded-xl transition-all group" title="Start Voice Call">
+                  <button 
+                    onClick={() => navigate('/messenger?action=audio')}
+                    className="p-2 text-zinc-400 hover:text-ur-primary hover:bg-ur-primary/5 rounded-xl transition-all group" 
+                    title="Start Voice Call"
+                  >
                     <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">phone</span>
                   </button>
                 </div>

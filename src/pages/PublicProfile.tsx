@@ -26,6 +26,7 @@ import { UserProfileEditor } from '../components/profile/UserProfileEditor';
 import { ResumeOverlay } from '../components/profile/ResumeOverlay';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '../contexts/AppContext';
+import { useCalls } from '../contexts/CallContext';
 import { useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
@@ -39,6 +40,7 @@ export function PublicProfile({
 }) {
   const { t } = useTranslation();
   const { setActiveChatPartner } = useApp();
+  const { initiateCall } = useCalls();
   const { userId } = useParams();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -275,6 +277,28 @@ export function PublicProfile({
     });
   };
 
+  const handleVideoCall = async () => {
+    if (!currentUser) { setShowSignIn(true); return; }
+    if (!profileData || !userId) return;
+    const roomId = `${currentUser.uid}_${userId}`;
+    await initiateCall(
+      { uid: userId, displayName: profileData.displayName, photoURL: profileData.photoURL },
+      'video',
+      roomId
+    );
+  };
+
+  const handleAudioCall = async () => {
+    if (!currentUser) { setShowSignIn(true); return; }
+    if (!profileData || !userId) return;
+    const roomId = `${currentUser.uid}_${userId}`;
+    await initiateCall(
+      { uid: userId, displayName: profileData.displayName, photoURL: profileData.photoURL },
+      'audio',
+      roomId
+    );
+  };
+
   // ─── Owner: avatar upload directly from profile header ───────────────────
   const handleAvatarUpload = async (file: File) => {
     if (!currentUser || !userId) return;
@@ -504,6 +528,8 @@ export function PublicProfile({
             isExpert={isExpert}
             activeStories={activeStories}
             onShowResume={() => setIsResumeOverlayOpen(true)}
+            onVideoCallClick={!isOwnProfile ? handleVideoCall : undefined}
+            onAudioCallClick={!isOwnProfile ? handleAudioCall : undefined}
           />
 
           {/* Stories Bar */}

@@ -88,12 +88,14 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
         const data = { id: change.doc.id, ...change.doc.data() } as CallData;
         if (change.type === 'modified') {
           if (data.status === 'accepted') {
-            toast.success('Call accepted');
-            navigate(`/room/${data.roomId}?type=${data.type}`);
+            // Caller is already in the room — just dismiss the overlay
+            toast.success(`${data.receiverName} joined the call`);
             setActiveOutgoingCall(null);
           } else if (data.status === 'declined') {
-            toast.error('Call declined');
+            toast.error('Call was declined');
             setActiveOutgoingCall(null);
+            // Navigate back if still on the room page
+            navigate(-1);
           } else if (data.status === 'ended') {
             setActiveOutgoingCall(null);
           }
@@ -128,6 +130,9 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
 
     await setDoc(doc(db, 'calls', callId), callData);
     setActiveOutgoingCall({ id: callId, ...callData } as CallData);
+
+    // Caller navigates to the room immediately — callee will join when they accept
+    navigate(`/room/${roomId}?type=${type}`);
   };
 
   const acceptCall = async () => {

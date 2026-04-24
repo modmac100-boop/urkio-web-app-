@@ -79,6 +79,9 @@ interface ProfileHeaderProps {
   connections?: string;
   activeStories?: Story[];
   onShowResume?: () => void;
+  /** Triggered when visitor clicks video/audio call buttons on expert profiles */
+  onVideoCallClick?: () => void;
+  onAudioCallClick?: () => void;
 }
 
 /* ─── Social icon definitions ───────────────────────────────────────────────── */
@@ -203,6 +206,8 @@ export function ProfileHeader({
   connections = "842",
   activeStories = [],
   onShowResume,
+  onVideoCallClick,
+  onAudioCallClick,
 }: ProfileHeaderProps) {
   const navigate = useNavigate();
   const [contactOpen, setContactOpen] = useState(false);
@@ -443,20 +448,6 @@ export function ProfileHeader({
                 </>
               ) : (
                 <>
-                  {userData?.role === 'specialist' && (
-                    <GlassButton
-                      onClick={() => {
-                        const roomId = `URK-${(userData.uid || '0000').slice(-4).toUpperCase()}-XZ`;
-                        window.location.href = `/conference/${roomId}`;
-                      }}
-                      variant="colorful"
-                      className="px-6! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                      style={{ background: 'linear-gradient(135deg, #10b981, #34d399)' }}
-                    >
-                      <Phone className="w-4 h-4 me-2" />
-                      INSTANT CALL
-                    </GlassButton>
-                  )}
                   <GlassButton
                     onClick={onFollowClick}
                     variant={isFollowing ? 'light' : 'colorful'}
@@ -472,6 +463,26 @@ export function ProfileHeader({
                     <MessageSquare className="w-4 h-4 me-2" />
                     MESSAGE
                   </GlassButton>
+                  {isExpert && onVideoCallClick && (
+                    <button
+                      onClick={onVideoCallClick}
+                      title="Start Video Call"
+                      className="flex items-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-lg shadow-emerald-500/30"
+                    >
+                      <Video className="w-4 h-4" />
+                      VIDEO
+                    </button>
+                  )}
+                  {isExpert && onAudioCallClick && (
+                    <button
+                      onClick={onAudioCallClick}
+                      title="Start Audio Call"
+                      className="flex items-center gap-2 px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
+                    >
+                      <Phone className="w-4 h-4" />
+                      CALL
+                    </button>
+                  )}
                   {isExpert && (
                     <GlassButton
                       onClick={() => {
