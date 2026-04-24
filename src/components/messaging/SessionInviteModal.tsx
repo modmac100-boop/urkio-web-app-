@@ -10,9 +10,12 @@ interface SessionInviteModalProps {
   onClose: () => void;
   roomId: string;
   joinUrl: string;
+  /** 'therapy' for TherapyRoom, 'live' for LiveStreamStudio, 'guild' for HealingCourses */
+  sessionType?: 'therapy' | 'live' | 'guild';
+  sessionTitle?: string;
 }
 
-export function SessionInviteModal({ isOpen, onClose, roomId, joinUrl }: SessionInviteModalProps) {
+export function SessionInviteModal({ isOpen, onClose, roomId, joinUrl, sessionType = 'therapy', sessionTitle }: SessionInviteModalProps) {
   const [copiedLink, setCopiedLink] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
@@ -61,24 +64,82 @@ export function SessionInviteModal({ isOpen, onClose, roomId, joinUrl }: Session
   }, [searchQuery]);
 
   const handleSendInvite = async (user: any) => {
+    const senderName = auth.currentUser?.displayName || 'Urkio Specialist';
+    const typeMap: Record<string, string> = {
+      live: 'live_stream_invite',
+      therapy: 'session_invite',
+      guild: 'session_invite',
+    };
+    const labelMap: Record<string, string> = {
+      live: 'Live Stream',
+      therapy: 'Therapy Session',
+      guild: 'Healing Guild',
+    };
+    const notifType = typeMap[sessionType] || 'session_invite';
+    const label = sessionTitle || labelMap[sessionType] || 'Secure Session';
+    const body = `${senderName} invited you to join: "${label}". Tap to join now.`;
+
     try {
+      // 1. Create in-app notification
       await addDoc(collection(db, 'notifications'), {
         userId: user.id,
-        type: 'session_invite',
-        title: 'New Session Invite',
-        content: `You have been invited to a secure session: ${roomId}`,
-        roomId: roomId,
-        joinUrl: joinUrl,
+        type: notifType,
+        title: `📹 Session Invite from ${senderName}`,
+        body,
+        content: body, // legacy field fallback
+        roomId,
+        joinUrl,
         senderId: auth.currentUser?.uid,
-        senderName: auth.currentUser?.displayName || 'Urkio Specialist',
+        senderName,
         createdAt: serverTimestamp(),
-        read: false
+        read: false,
       });
-      // Also send a message to the direct chat if possible
-      // (Skipping complex chat resolution for now, just notification is enough for 'Invite')
-      toast.success(`Invite sent to ${user.displayName}`);
+
+      // 2. Also write a Firestore message into their DM conversation so it appears in Messenger
+      const currentUid = auth.currentUser?.uid;
+      if (currentUid) {
+        const { getDocs, query: fsQuery, where: fsWhere } = await import('firebase/firestore');
+        const convQ = fsQuery(
+          collection(db, 'conversations'),
+          fsWhere('participants', 'array-contains', currentUid)
+        );
+        const convSnap = await getDocs(convQ);
+        const existingConv = convSnap.docs.find(d => {
+          const p: string[] = d.data().participants || [];
+          return p.includes(user.id);
+        });
+        const convRef = existingConv
+          ? existingConv.ref
+          : await addDoc(collection(db, 'conversations'), {
+              participants: [currentUid, user.id],
+              type: 'individual',
+              updatedAt: serverTimestamp(),
+              unreadCount: { [user.id]: 1 },
+            });
+        await addDoc(collection(db, 'conversations', convRef.id, 'messages'), {
+          text: `🎥 You've been invited to join a ${label}. Tap the link to join:\n${joinUrl}`,
+          type: 'session_invite',
+          senderId: currentUid,
+          roomId,
+          joinUrl,
+          createdAt: serverTimestamp(),
+          read: false,
+        });
+        // Update lastMessage on conversation
+        const { updateDoc: fsUpdate } = await import('firebase/firestore');
+        await fsUpdate(convRef, {
+          lastMessage: { text: `🎥 Session invite: ${label}`, senderId: currentUid, timestamp: serverTimestamp() },
+          updatedAt: serverTimestamp(),
+          [`unreadCount.${user.id}`]: 1,
+        });
+      }
+
+      toast.success(`✅ Invite sent to ${user.displayName}`);
+      setSearchQuery('');
+      setSearchResults([]);
     } catch (err) {
-      toast.error("Failed to send invite");
+      console.error(err);
+      toast.error('Failed to send invite');
     }
   };
 
@@ -121,6 +182,8 @@ export function SessionInviteModal({ isOpen, onClose, roomId, joinUrl }: Session
     }
   };
 
+  const sessionLabel = sessionTitle || (sessionType === 'live' ? 'Live Stream' : sessionType === 'guild' ? 'Healing Guild' : 'Therapy Session');
+
   return (
     <div className="fixed inset-0 z-101 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 dark:border-white/10 transform animate-in zoom-in-95 duration-200">
@@ -131,8 +194,8 @@ export function SessionInviteModal({ isOpen, onClose, roomId, joinUrl }: Session
                 <ShieldCheck className="size-6 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Invite to Session</h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Secure & Encrypted</p>
+                <h3 className="text-xl font-black text-slate-900 dark:text-white tracking-tight">Invite to {sessionLabel}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Secure &amp; Encrypted · <span className="font-mono text-primary">{roomId}</span></p>
               </div>
             </div>
             <button 

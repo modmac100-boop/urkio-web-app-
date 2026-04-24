@@ -414,6 +414,8 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
         onClose={() => setShowInviteModal(false)}
         roomId={activeRoomId}
         joinUrl={`${window.location.origin}/room/${activeRoomId}`}
+        sessionType="live"
+        sessionTitle="Live Broadcast"
       />
     </div>
   );

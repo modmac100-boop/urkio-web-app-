@@ -488,6 +488,8 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
         onClose={() => setShowInviteModal(false)}
         roomId={roomId}
         joinUrl={`${window.location.origin}/room/${roomId}`}
+        sessionType="therapy"
+        sessionTitle="Clinical Therapy Session"
       />
     </div>
   );
