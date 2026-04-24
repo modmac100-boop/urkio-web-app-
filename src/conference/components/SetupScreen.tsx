@@ -128,7 +128,7 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
                 onJoin();
               }}
               disabled={isJoining || !acceptedTerms}
-              className="w-full py-5 bg-ur-primary disabled:bg-zinc-400 disabled:opacity-50 text-white rounded-2xl font-headline font-black text-xs uppercase tracking-[0.3em] transition-all shadow-xl shadow-ur-primary/20 active:scale-95 flex items-center justify-center gap-4 overflow-hidden group"
+              className="w-full py-5 milled-gradient disabled:opacity-50 text-white rounded-2xl font-headline font-black text-xs uppercase tracking-[0.3em] transition-all shadow-xl shadow-ur-primary/20 active:scale-95 flex items-center justify-center gap-4 overflow-hidden group"
             >
               {isJoining ? (
                 <>

@@ -356,7 +356,7 @@ export function StreamCallRoom({ callId, user, userData, type, onLeaveRoom }: St
         <StreamCall call={call}>
           <StreamTheme>
             {/* Room Header Info */}
-            <div className="absolute top-0 inset-s-0 w-full p-6 flex items-center justify-between z-100 bg-linear-to-b from-black/60 to-transparent pointer-events-none">
+            <div className="absolute top-0 inset-s-0 w-full p-6 flex items-center justify-between z-[100] bg-linear-to-b from-black/60 to-transparent pointer-events-none">
               <div className="flex items-center gap-4 pointer-events-auto">
                 <div className="size-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/10">
                   <Shield className="size-5 text-teal-400" />
