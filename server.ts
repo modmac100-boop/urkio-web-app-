@@ -144,6 +144,40 @@ async function startServer() {
     });
   });
 
+  // ─── Agora Token Generation ───────────────────────────────────────────────────
+  app.post('/api/agora/token', async (req, res) => {
+    try {
+      const appId = process.env.VITE_AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
+      const appCertificate = process.env.AGORA_APP_CERTIFICATE || "63e7a05a48ac41e5af746e75d0dbdfac";
+      const { channelName, uid, role } = req.body;
+
+      if (!channelName) {
+        return res.status(400).json({ error: "channelName is required" });
+      }
+
+      const expirationSeconds = 3600;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const expirationTimestamp = currentTimestamp + expirationSeconds;
+
+      const rtcRole = role === "publisher" ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER;
+      
+      const token = RtcTokenBuilder.buildTokenWithUid(
+        appId,
+        appCertificate,
+        channelName,
+        uid || 0,
+        rtcRole,
+        expirationTimestamp,
+        expirationTimestamp
+      );
+
+      res.status(200).json({ token, appId });
+    } catch (err: any) {
+      console.error('[agoraToken] Token generation failed:', err);
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({

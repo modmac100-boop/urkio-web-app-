@@ -569,6 +569,7 @@ export default function App() {
                   <Route path="/live" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/vault" element={user ? <SecretVault user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/room/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
+                  <Route path="/call/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/conference" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/conference/:roomId" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/healing-suite/:sessionId" element={user ? <HealingRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />

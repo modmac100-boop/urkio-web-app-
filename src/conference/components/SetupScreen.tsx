@@ -30,6 +30,10 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
         }
       } catch (err) {
         console.error('Failed to get media devices:', err);
+        // We use window.alert if toast isn't available, but App has Toaster
+        import('react-hot-toast').then(({ toast }) => {
+          toast.error('Camera/Mic access denied. Please check browser permissions and ensure you are on a secure (HTTPS) connection.');
+        });
       }
     }
     setupDevices();
