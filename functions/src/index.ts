@@ -808,7 +808,7 @@ export const handleVoiceBooking = onRequest(
  * acknowledgment phrases, and turn-taking configuration.
  * Can be re-called to update settings without redeploying.
  */
-export const seedAgentBehaviorConfig = functionsV1.runWith({ memory: "1GiB", timeoutSeconds: 120 }).https.onCall(
+export const seedAgentBehaviorConfig = functionsV1.runWith({ memory: "2GiB", timeoutSeconds: 120, minInstances: 1 }).https.onCall(
   async (_data, context) => {
     // Only admins can seed/update this config
     if (!context.auth) {
@@ -926,7 +926,7 @@ export const seedAgentBehaviorConfig = functionsV1.runWith({ memory: "1GiB", tim
  * starting point for the healing session.
  */
 export const generateClinicalOrientation = functionsV1
-  .runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "1GiB", timeoutSeconds: 120 })
+  .runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"], memory: "2GiB", timeoutSeconds: 120, minInstances: 1 })
   .https.onCall(async (data, context) => {
     if (!context.auth) {
       throw new functionsV1.https.HttpsError("unauthenticated", "Auth required.");
@@ -974,7 +974,7 @@ export const generateClinicalOrientation = functionsV1
  * GOOD SAMARITAN AI SAFEGUARD (PDPL 2026)
  * Real-time monitoring for crisis keywords.
  */
-export const monitorSessionIntegrity = onDocumentUpdated({ document: "appointments/{appointmentId}", memory: "1GiB", timeoutSeconds: 120, concurrency: 100, maxInstances: 50 }, async (event: any) => {
+export const monitorSessionIntegrity = onDocumentUpdated({ document: "appointments/{appointmentId}", memory: "2GiB", timeoutSeconds: 120, concurrency: 200, maxInstances: 100, minInstances: 1 }, async (event: any) => {
   const newData = event.data?.after.data();
   const oldData = event.data?.before.data();
 
