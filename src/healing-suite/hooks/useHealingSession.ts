@@ -173,7 +173,16 @@ export function useHealingSession(
         throw new Error('Agora App ID is not configured. Add VITE_AGORA_APP_ID to your .env file.');
       }
 
-      await client.join(activeAppId, sessionId, token, userUid);
+      try {
+        await client.join(activeAppId, sessionId, token, userUid);
+      } catch (joinErr: any) {
+        if (joinErr.message?.includes('dynamic use static key') || joinErr.code === 'CAN_NOT_GET_GATEWAY_SERVER') {
+          console.warn('[HealingSuite] Project mismatch detected. Retrying without token...');
+          await client.join(activeAppId, sessionId, null, userUid);
+        } else {
+          throw joinErr;
+        }
+      }
 
       // In broadcast mode, set client role before publishing
       if (mode === 'broadcast') {
@@ -184,25 +193,37 @@ export function useHealingSession(
       if (isPublisher || mode !== 'broadcast') {
         const profile = VIDEO_PROFILES[mode];
 
-        const [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(
-          {
-            // Studio-Grade Audio settings for healing sessions
-            AEC: true,   // Acoustic Echo Cancellation
-            ANS: true,   // Adaptive Noise Suppression
-            AGC: true,   // Automatic Gain Control
-            encoderConfig: { sampleRate: 48000, stereo: true, bitrate: 128 },
-          },
-          {
-            encoderConfig: {
-              width: profile.width,
-              height: profile.height,
-              frameRate: profile.frameRate,
-              bitrateMin: profile.bitrateMin,
-              bitrateMax: profile.bitrateMax,
+        let audioTrack: IMicrophoneAudioTrack;
+        let videoTrack: ICameraVideoTrack;
+
+        try {
+          [audioTrack, videoTrack] = await AgoraRTC.createMicrophoneAndCameraTracks(
+            {
+              AEC: true,
+              ANS: true,
+              AGC: true,
+              encoderConfig: { sampleRate: 48000, stereo: true, bitrate: 128 },
             },
-            optimizationMode: 'motion',
+            {
+              encoderConfig: {
+                width: profile.width,
+                height: profile.height,
+                frameRate: profile.frameRate,
+                bitrateMin: profile.bitrateMin,
+                bitrateMax: profile.bitrateMax,
+              },
+              optimizationMode: 'motion',
+            }
+          ) as [IMicrophoneAudioTrack, ICameraVideoTrack];
+        } catch (mediaErr: any) {
+          console.error('[HealingSuite] Media track creation failed:', mediaErr);
+          if (mediaErr.message?.includes('Permission') || mediaErr.code === 'PERMISSION_DENIED') {
+            throw new Error('Camera/Mic permission denied. Please allow access in your browser settings.');
+          } else if (mediaErr.message?.includes('NotFoundError') || mediaErr.code === 'DEVICE_NOT_FOUND') {
+            throw new Error('Camera/Mic not found. Please ensure your devices are connected.');
           }
-        ) as [IMicrophoneAudioTrack, ICameraVideoTrack];
+          throw mediaErr;
+        }
 
         await client.publish([audioTrack, videoTrack]);
 

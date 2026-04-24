@@ -1,5 +1,6 @@
 import express from 'express';
-import { RtcTokenBuilder, RtcRole } from 'agora-token';
+import pkg from 'agora-token';
+const { RtcTokenBuilder, RtcRole } = pkg;
 import { GoogleGenAI } from '@google/genai';
 import dotenv from 'dotenv';
 
@@ -17,11 +18,16 @@ app.get('/api/health', (req, res) => {
 app.post('/api/agora/token', async (req, res) => {
   try {
     const appId = process.env.VITE_AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
-    const appCertificate = process.env.AGORA_APP_CERTIFICATE || "63e7a05a48ac41e5af746e75d0dbdfac";
+    const appCertificate = process.env.AGORA_APP_CERTIFICATE || ""; // Default to empty to trigger fallback
     const { channelName, uid, role } = req.body;
 
     if (!channelName) {
       return res.status(400).json({ error: "channelName is required" });
+    }
+
+    if (!appCertificate) {
+      console.warn('[agoraToken] AGORA_APP_CERTIFICATE is missing. Joining without token (Testing Mode).');
+      return res.status(200).json({ token: null, appId });
     }
 
     const expirationSeconds = 3600;
