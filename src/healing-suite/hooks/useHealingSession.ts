@@ -79,12 +79,18 @@ export function useHealingSession(
   // ── Token Fetch ─────────────────────────────────────────────────────────────
   const fetchToken = async (channelName: string, uid: number, publisherRole: boolean): Promise<{ token: string | null; appId: string }> => {
     try {
-      const generateToken = httpsCallable(functions, 'generateAgoraToken');
-      const result = await generateToken({ channelName, uid, role: publisherRole ? 'publisher' : 'subscriber' });
-      const data = result.data as any;
-      return { token: data.token, appId: APP_ID };
+      const response = await fetch('/api/agora-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ channelName, uid, role: publisherRole ? 'publisher' : 'subscriber' }),
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch token: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return { token: data.token, appId: data.appId || APP_ID };
     } catch (err) {
-      console.error('[HealingSuite] Failed to fetch Agora token via Cloud Function:', err);
+      console.error('[HealingSuite] Failed to fetch Agora token via API:', err);
       return { token: null, appId: APP_ID };
     }
   };
