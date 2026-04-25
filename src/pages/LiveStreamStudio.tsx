@@ -40,12 +40,14 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
      isCameraOff,
      isScreenSharing,
      isRecording,
+     isZenMode,
      networkQuality,
      error,
      join,
      leave,
      toggleMute,
      toggleCamera,
+     toggleZenMode,
      toggleScreenShare,
      startRecording,
      stopRecording,
@@ -125,7 +127,11 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
   };
 
   return (
-    <div className="bg-[#101319] text-[#e1e2ea] overflow-hidden selection:bg-[#a8c8ff] selection:text-[#003062] min-h-screen relative font-manrope">
+  return (
+    <div className={clsx(
+      "bg-[#101319] text-[#e1e2ea] overflow-hidden selection:bg-[#a8c8ff] selection:text-[#003062] min-h-screen relative font-manrope transition-all duration-500",
+      isZenMode && "zen-mode-container scale-25 fixed top-6 right-6 w-[100vw] h-[100vh] border-2 border-white/20 shadow-2xl z-[1000] pointer-events-auto"
+    )}>
       
       {/* Antigravity Background Elements (using standard tailwind arbitrary values since custom config wasn't saved globally in our setup) */}
       <div className="absolute w-96 h-96 bg-msgr-primary-container/20 top-[-10%] left-[-10%] blur-[120px] rounded-full z-0 pointer-events-none"></div>
@@ -246,7 +252,7 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
                       <LucideVideoOff className="size-24 text-slate-700" />
                    </div>
                 ) : (
-                   <div id="local-video-container" className="w-full h-full object-cover opacity-90 transition-opacity"></div>
+                   <div id="local-video-container" className="w-full h-full object-cover opacity-90 transition-opacity video-mirror-transform"></div>
                 )}
                 
                 {/* Video Overlays */}
@@ -290,6 +296,16 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
                       </button>
                       <button onClick={() => toast.success('Presentation mode engaged')} className="p-3 rounded-full hover:bg-white/10 text-white transition-colors">
                         <LucidePresentation className="size-5" />
+                      </button>
+                      <button 
+                        onClick={toggleZenMode} 
+                        className={clsx(
+                          "p-3 rounded-full transition-all text-white",
+                          isZenMode ? "bg-blue-600" : "hover:bg-white/10"
+                        )}
+                        title={isZenMode ? "Normal View" : "Minimize (25%)"}
+                      >
+                        <span className="material-symbols-outlined text-xl">{isZenMode ? 'fullscreen' : 'zoom_in'}</span>
                       </button>
                       <div className="w-px bg-white/10 mx-1 my-2"></div>
                       <button onClick={handlePublish} className="p-3 rounded-full bg-[#93000a] text-[#ffb4ab] hover:bg-red-800 transition-colors">

@@ -42,10 +42,12 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
     isMuted,
     isCameraOff,
     isRecording,
+    isZenMode,
     join,
     leave,
     toggleMute,
     toggleCamera,
+    toggleZenMode,
     startRecording,
     stopRecording
   } = useHealingSession(roomId, 'private', 0, 'host'); // 0 uid will let agora assign one
@@ -111,7 +113,13 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
   if (!isAdminOrExpert) return null;
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="flex h-[calc(100vh-140px)] md:h-[calc(100vh-64px)] w-full bg-[#101319] text-[#e1e2ea] font-['Manrope'] overflow-hidden selection:bg-msgr-primary-container/30 relative rounded-2xl md:rounded-none">
+    <div 
+      dir={isRTL ? 'rtl' : 'ltr'} 
+      className={clsx(
+        "flex h-[calc(100vh-140px)] md:h-[calc(100vh-64px)] w-full bg-[#101319] text-[#e1e2ea] font-['Manrope'] overflow-hidden selection:bg-msgr-primary-container/30 relative rounded-2xl md:rounded-none transition-all duration-500",
+        isZenMode && "zen-mode-container scale-25 fixed top-6 right-6 w-[100vw] h-[100vh] border-2 border-white/20 shadow-2xl z-[1000] pointer-events-auto"
+      )}
+    >
 
       {/* Background Orbs */}
       <div className="absolute top-[-200px] left-[-100px] w-[600px] h-[600px] rounded-full bg-msgr-primary-container blur-[120px] opacity-15 pointer-events-none z-0" />
@@ -248,25 +256,35 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
 
               {connectionState === 'CONNECTED' ? (
                 <>
-                  <VideoTile
-                    videoTrack={localVideoTrack || undefined}
-                    isLocal
-                    name="You (Host)"
-                    isOff={isCameraOff}
-                    className="w-full h-full absolute inset-0 rounded-none border-none"
-                  />
+                  {/* Background Track - Prioritize Remote Participant */}
+                  {remoteUsers.length > 0 ? (
+                    <VideoTile
+                      videoTrack={remoteUsers[0].videoTrack}
+                      name={t('therapyRoom.patient')}
+                      className="w-full h-full absolute inset-0 rounded-none border-none"
+                    />
+                  ) : (
+                    <VideoTile
+                      videoTrack={localVideoTrack || undefined}
+                      isLocal
+                      name={t('therapyRoom.youHost')}
+                      isOff={isCameraOff}
+                      className="w-full h-full absolute inset-0 rounded-none border-none"
+                    />
+                  )}
 
-                  {/* Remote Feed Picture-in-Picture */}
-                  {remoteUsers.map((rUser, i) => (
-                    <div key={rUser.uid} className={`absolute top-6 right-6 w-48 h-32 rounded-xl overflow-hidden shadow-2xl border border-white/10 z-20 ${i > 0 ? 'hidden' : ''}`}>
+                  {/* Picture-in-Picture Track */}
+                  {remoteUsers.length > 0 && (
+                    <div className="absolute top-6 right-6 w-48 h-32 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20 z-20 group hover:w-64 hover:h-40 transition-all duration-300">
                       <VideoTile
-                        videoTrack={rUser.videoTrack}
-                        name={`Patient ${rUser.uid}`}
-                        isOff={false}
+                        videoTrack={localVideoTrack || undefined}
+                        isLocal
+                        name={t('therapyRoom.you')}
+                        isOff={isCameraOff}
                         className="w-full h-full rounded-none border-none"
                       />
                     </div>
-                  ))}
+                  )}
                 </>
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-black/40">
@@ -303,6 +321,16 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
                     </button>
                     <button onClick={toggleCamera} className="size-12 rounded-full bg-[#32353b]/60 backdrop-blur-xl flex items-center justify-center hover:bg-white/10 transition-colors text-white border border-white/10 shadow-xl">
                       {isCameraOff ? <VideoOff className="size-5 text-red-400" /> : <Video className="size-5" />}
+                    </button>
+                    <button 
+                      onClick={toggleZenMode} 
+                      className={clsx(
+                        "size-12 rounded-full backdrop-blur-xl flex items-center justify-center transition-all text-white border border-white/10 shadow-xl",
+                        isZenMode ? "bg-blue-500 shadow-blue-500/20" : "bg-[#32353b]/60 hover:bg-white/10"
+                      )}
+                      title={isZenMode ? "Normal View" : "Minimize (25%)"}
+                    >
+                      <span className="material-symbols-outlined text-xl">{isZenMode ? 'fullscreen' : 'zoom_in'}</span>
                     </button>
                   </div>
                 </div>

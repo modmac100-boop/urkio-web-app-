@@ -237,7 +237,6 @@ export function Layout({
           isOpen={isSignUpModalOpen} 
           onClose={() => { setIsSignUpModalOpen(false); setAuthError(null); }} 
           onComplete={onSignUp}
-          initialType={signupType}
           error={authError}
           isAuthenticating={isAuthenticating}
           onSwitchToSignIn={() => {
@@ -485,7 +484,6 @@ export function Layout({
           isOpen={isSignUpModalOpen} 
           onClose={() => { setIsSignUpModalOpen(false); setAuthError(null); }} 
           onComplete={onSignUp}
-          initialType={signupType}
           error={authError}
           isAuthenticating={isAuthenticating}
           onSwitchToSignIn={() => {

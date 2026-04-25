@@ -503,3 +503,22 @@ html {
   transform: scaleX(-1) !important;
   -webkit-transform: scaleX(-1) !important; /* For Safari support on MacBook */
 }
+
+/* ── Zen Mode / 25% Scaling ───────────────────────────────────────────── */
+.zen-mode-container {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              width 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              top 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top right;
+  z-index: 40;
+}
+
+.scale-25 {
+  transform: scale(0.25);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+  border-radius: 2rem;
+  overflow: hidden;
+  pointer-events: auto;
+}

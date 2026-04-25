@@ -105,9 +105,9 @@ export function SessionControls({
         </ControlBtn>
       )}
 
-      {/* Zen Mode */}
-      <ControlBtn onClick={onToggleZen} active={isZenMode} label={isZenMode ? 'Exit Zen' : 'Zen focus'}>
-        <Maximize2 size={20} />
+      {/* Zen Mode / Minimize */}
+      <ControlBtn onClick={onToggleZen} active={isZenMode} label={isZenMode ? 'Normal View' : 'Minimize (25%)'}>
+        <span className="material-symbols-outlined text-xl">{isZenMode ? 'fullscreen' : 'zoom_in'}</span>
       </ControlBtn>
 
       <div className={clsx(

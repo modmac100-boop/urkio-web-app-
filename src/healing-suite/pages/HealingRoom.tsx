@@ -160,8 +160,8 @@ export function HealingRoom({ user, userData }: HealingRoomProps) {
 
   return (
     <div className={clsx(
-      'min-h-screen bg-[#101319] text-[#e1e2ea] flex flex-col relative overflow-hidden font-sans',
-      isZenMode && 'cursor-none'
+      'min-h-screen bg-[#101319] text-[#e1e2ea] flex flex-col relative overflow-hidden font-sans transition-all duration-500',
+      isZenMode && 'zen-mode-container scale-25 fixed top-6 right-6 w-[100vw] h-[100vh] border-2 border-white/20 shadow-2xl z-[1000] pointer-events-auto'
     )}>
       <style>{`
         .glass-panel {
@@ -253,8 +253,17 @@ export function HealingRoom({ user, userData }: HealingRoomProps) {
           {/* Video Stage (Left/Center) */}
           <div className="flex-1 flex flex-col gap-6 overflow-hidden">
             <div className="relative flex-1 bg-[#1d2026] rounded-4xl overflow-hidden group shadow-2xl border border-white/5">
-              {/* Primary Video Feed */}
-              {role === 'host' ? (
+              {/* Primary Video Feed - Prioritize Remote Participant */}
+              {remoteUsers.length > 0 ? (
+                <VideoTile
+                  videoTrack={remoteUsers[0].videoTrack}
+                  isOff={!remoteUsers[0].videoTrack}
+                  isMuted={!remoteUsers[0].audioTrack}
+                  name={role === 'host' ? 'Participant' : 'Specialist'}
+                  isHost
+                  className="w-full h-full object-cover"
+                />
+              ) : (
                 <VideoTile
                   videoTrack={localVideoTrack || undefined}
                   isLocal
@@ -265,22 +274,6 @@ export function HealingRoom({ user, userData }: HealingRoomProps) {
                   isHost
                   className="w-full h-full object-cover"
                 />
-              ) : remoteUsers[0] ? (
-                <VideoTile
-                  videoTrack={remoteUsers[0].videoTrack}
-                  isOff={!remoteUsers[0].videoTrack}
-                  isMuted={!remoteUsers[0].audioTrack}
-                  name="Practitioner"
-                  isHost
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center space-y-4">
-                   <div className="size-20 bg-primary/20 rounded-4xl flex items-center justify-center animate-pulse">
-                      <Shield className="size-10 text-primary" />
-                   </div>
-                   <p className="text-on-surface-variant font-bold uppercase tracking-widest">Waiting for session to begin...</p>
-                </div>
               )}
 
               {/* Floating Controls Overlay */}

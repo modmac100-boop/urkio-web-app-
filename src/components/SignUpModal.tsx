@@ -7,7 +7,6 @@ export function SignUpModal({
   onClose, 
   onComplete, 
   onSwitchToSignIn,
-  initialType,
   error,
   isAuthenticating = false
 }: { 
@@ -15,13 +14,11 @@ export function SignUpModal({
   onClose: () => void; 
   onComplete: (data: any, isGoogle: boolean, isApple: boolean) => Promise<void> | void;
   onSwitchToSignIn?: () => void;
-  initialType: 'user' | 'expert';
   error?: string | null;
   isAuthenticating?: boolean;
 }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-  const [userType, setUserType] = useState<'user' | 'expert'>('user');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const isPending = isLoading || isAuthenticating;
@@ -34,24 +31,12 @@ export function SignUpModal({
     fullName: '',
     age: '',
     gender: '',
-    phone: '',
-    location: '',
-    occupation: '',
-    pronouns: '',
-    goals: 'Personal Growth',
-    bio: '',
-    primaryRole: 'Psychologist',
-    skills: '',
-    npiNumber: '',
-    baaAccepted: false,
-    joinCommunity: true,
     termsAccepted: false,
   });
 
   const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
-    setUserType('user');
     setLocalError(null);
   }, [isOpen]);
 
@@ -86,12 +71,7 @@ export function SignUpModal({
         fullName: formData.fullName,
         age: formData.age,
         gender: formData.gender,
-        phone: formData.phone,
-        location: formData.location,
-        occupation: formData.occupation,
-        pronouns: formData.pronouns,
-        goals: formData.goals,
-        bio: formData.bio,
+        role: 'user', // Explicitly set role
       }, isGoogle, isApple);
       
       setIsSuccess(true);
