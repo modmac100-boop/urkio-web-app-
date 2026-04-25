@@ -19,10 +19,13 @@ export function VideoPlayer() {
       }`}>
         {participants.map((p) => (
           <div key={p.sessionId} className="relative rounded-[3rem] overflow-hidden bg-zinc-900 shadow-2xl border border-white/5 group transition-all duration-500 hover:scale-[1.01] hover:border-ur-primary/30">
-            <ParticipantView 
-              participant={p} 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
-            />
+            {/* Mirror local participant video so you see a natural reflection */}
+            <div className={p.isLocalParticipant ? 'video-mirror-transform w-full h-full' : 'w-full h-full'}>
+              <ParticipantView 
+                participant={p} 
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+              />
+            </div>
             
             {/* Participant Identity Overlay */}
             <div className="absolute bottom-6 inset-s-6 px-4 py-2 bg-black/40 backdrop-blur-2xl rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-white border border-white/10 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">

@@ -206,8 +206,8 @@ export function Homii({ user, userData }: { user: any; userData: any }) {
 
   return (
     <div className="flex h-screen bg-[#020617] text-slate-200 font-['Manrope'] overflow-hidden selection:bg-indigo-500/30">
-      {/* ── Immersive Glass Sidebar ── */}
-      <aside className="w-20 lg:w-24 bg-[#0a0f1e]/40 backdrop-blur-2xl border-r border-slate-800 flex flex-col items-center py-10 z-50">
+      {/* ── Immersive Glass Sidebar — hidden on mobile, visible lg+ ── */}
+      <aside className="hidden lg:flex w-20 xl:w-24 bg-[#0a0f1e]/40 backdrop-blur-2xl border-r border-slate-800 flex-col items-center py-10 z-50">
         <div className="size-14 rounded-4xl bg-linear-to-tr from-indigo-500 to-purple-600 flex items-center justify-center shadow-[0_0_30px_rgba(79,70,229,0.3)] mb-14 rotate-6 hover:rotate-0 transition-transform duration-500 cursor-pointer" onClick={() => navigate('/')}>
           <Globe className="size-7 text-white" />
         </div>
@@ -247,42 +247,42 @@ export function Homii({ user, userData }: { user: any; userData: any }) {
       </aside>
 
       {/* ── Main Canvas ── */}
-      <main className="flex-1 relative flex flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_-20%,#1e1b4b_0%,#020617_100%)]">
+      <main className="flex-1 relative flex flex-col overflow-hidden bg-[radial-gradient(circle_at_50%_-20%,#1e1b4b_0%,#020617_100%)] pb-24 lg:pb-0">
         
         {/* Abstract Background Noise & Blooms */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] translate-y-1/2 pointer-events-none" />
 
-        {/* Header Bar */}
-        <header className="h-24 flex items-center justify-between px-16 relative z-40">
-          <div className="flex items-center gap-10">
+        {/* Header Bar — compact on mobile */}
+        <header className="h-16 md:h-24 flex items-center justify-between px-4 md:px-16 relative z-40">
+          <div className="flex items-center gap-4 md:gap-10">
             <div className="flex flex-col">
-              <div className="flex items-center gap-2 mb-1">
+              <div className="hidden md:flex items-center gap-2 mb-1">
                 <div className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-2">
                   <Cloud className="size-3 text-indigo-400" />
                   <span className="text-[8px] font-black uppercase tracking-widest text-indigo-400">Live Reflection Hub</span>
                 </div>
               </div>
-              <h1 className="text-5xl font-black text-white italic tracking-tighter">Voice Journal</h1>
-              <p className="text-sm font-medium text-slate-500 max-w-sm mt-3 leading-relaxed">
+              <h1 className="text-2xl md:text-5xl font-black text-white italic tracking-tighter">Voice Journal</h1>
+              <p className="hidden md:block text-sm font-medium text-slate-500 max-w-sm mt-3 leading-relaxed">
                 Speak freely. Our architectural sanctuary protects your thoughts with end-to-end neural encryption.
               </p>
             </div>
-            <div className="h-8 w-px bg-slate-800" />
-            <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-800/50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 shadow-inner">
+            <div className="hidden md:block h-8 w-px bg-slate-800" />
+            <div className="hidden md:flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/50 border border-slate-800/50 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 shadow-inner">
               <span className="size-2 rounded-full bg-indigo-500 animate-ping" />
               Live Network Active
             </div>
           </div>
 
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-4 py-2 px-6 bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl">
-              <div className="text-right">
+          <div className="flex items-center gap-4 md:gap-8">
+            <div className="flex items-center gap-3 py-2 px-4 bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl">
+              <div className="hidden sm:block text-right">
                 <p className="text-xs font-black text-slate-200">{userData?.displayName || 'Urkio User'}</p>
                 <p className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">{userData?.userCode || 'PATIENT.XZ-9'}</p>
               </div>
-              <div className="size-10 rounded-xl overflow-hidden border border-slate-700 p-0.5">
+              <div className="size-9 rounded-xl overflow-hidden border border-slate-700 p-0.5">
                 <img src={userData?.photoURL || "https://ui-avatars.com/api/?name=" + (userData?.displayName || 'D')} className="w-full h-full object-cover rounded-lg" alt="Profile" />
               </div>
             </div>
@@ -294,10 +294,10 @@ export function Homii({ user, userData }: { user: any; userData: any }) {
         </header>
 
         {/* Central Immersive Interaction Area */}
-        <div className="flex-1 flex flex-col items-center justify-center p-12 relative z-30">
+        <div className="flex-1 flex flex-col items-center justify-center p-4 md:p-12 relative z-30 overflow-y-auto">
           
-          {/* Orbital Visualization System */}
-          <div className="relative size-[500px] flex items-center justify-center">
+          {/* Orbital Visualization System — scales from 280px on mobile to 500px on desktop */}
+          <div className="relative size-[280px] sm:size-[360px] md:size-[500px] flex items-center justify-center">
             
             {/* Spinning Rings */}
             <div className="absolute inset-0 rounded-full border border-slate-800/50 animate-[spin_30s_linear_infinite]" />
@@ -391,47 +391,49 @@ export function Homii({ user, userData }: { user: any; userData: any }) {
           </div>
         </div>
 
-        {/* Control Footer */}
-        <footer className="h-40 px-16 flex items-center justify-center bg-[#0a0f1e]/60 backdrop-blur-3xl border-t border-slate-800 z-50">
-           <div className="flex items-center gap-12">
+        {/* Control Footer — stacks on mobile, horizontal on desktop */}
+        <footer className="shrink-0 px-4 md:px-16 py-4 md:h-40 flex items-center justify-center bg-[#0a0f1e]/60 backdrop-blur-3xl border-t border-slate-800 z-50">
+           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-12">
               {/* Reset Action */}
               <button 
                 onClick={handleDelete}
-                className="size-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 hover:text-red-400 hover:border-red-500/50 transition-all shadow-xl"
+                className="size-14 md:size-16 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 hover:text-red-400 hover:border-red-500/50 transition-all shadow-xl"
               >
-                <Trash2 className="size-6" />
+                <Trash2 className="size-5 md:size-6" />
               </button>
 
-              <div className="h-10 w-px bg-slate-800" />
+              <div className="h-8 w-px bg-slate-800 hidden md:block" />
 
               {/* Aura Breathing */}
               <button 
                 onClick={() => setIsBreathing(!isBreathing)}
                 className={clsx(
-                  "size-16 rounded-2xl border flex items-center justify-center transition-all shadow-xl",
+                  "size-14 md:size-16 rounded-2xl border flex items-center justify-center transition-all shadow-xl",
                   isBreathing ? "bg-indigo-500 text-white border-indigo-400" : "bg-slate-900 border-slate-800 text-slate-500 hover:text-indigo-400"
                 )}
               >
-                <Wind className="size-6" />
+                <Wind className="size-5 md:size-6" />
               </button>
 
               {/* Main Actions Group */}
-              <div className="flex gap-4 p-2 bg-slate-900/40 rounded-3xl border border-white/5">
+              <div className="flex gap-3 p-1.5 bg-slate-900/40 rounded-3xl border border-white/5">
                 <button 
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !audioBlob}
-                  className="px-10 py-5 rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-3 hover:from-slate-700 transition-all shadow-2xl disabled:opacity-30"
+                  className="px-5 md:px-10 py-4 md:py-5 rounded-2xl bg-linear-to-br from-slate-800/80 to-slate-900/80 border border-white/10 text-white font-black text-[10px] uppercase tracking-widest flex items-center gap-3 hover:from-slate-700 transition-all shadow-2xl disabled:opacity-30"
                 >
                   {isAnalyzing ? <Activity className="size-4 animate-spin text-indigo-400" /> : <Sparkles className="size-4 text-indigo-400" />}
-                  Tone Analytics
+                  <span className="hidden sm:inline">Tone Analytics</span>
+                  <span className="sm:hidden">Analyze</span>
                 </button>
                 
                 <button 
                   onClick={handleSave}
                   disabled={!audioBlob}
-                  className="px-10 py-5 rounded-2xl bg-indigo-500 text-slate-900 font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-500/20 hover:bg-indigo-400 active:scale-95 transition-all disabled:opacity-30"
+                  className="px-5 md:px-10 py-4 md:py-5 rounded-2xl bg-indigo-500 text-slate-900 font-black text-[10px] uppercase tracking-widest shadow-2xl shadow-indigo-500/20 hover:bg-indigo-400 active:scale-95 transition-all disabled:opacity-30"
                 >
-                  Vault Entry
+                  <span className="hidden sm:inline">Vault Entry</span>
+                  <span className="sm:hidden">Save</span>
                 </button>
               </div>
            </div>

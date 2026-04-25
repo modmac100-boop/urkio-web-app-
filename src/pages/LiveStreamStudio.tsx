@@ -127,7 +127,6 @@ export function LiveStreamStudio({ user, userData }: { user: any; userData: any 
   };
 
   return (
-  return (
     <div className={clsx(
       "bg-[#101319] text-[#e1e2ea] overflow-hidden selection:bg-[#a8c8ff] selection:text-[#003062] min-h-screen relative font-manrope transition-all duration-500",
       isZenMode && "zen-mode-container scale-25 fixed top-6 right-6 w-[100vw] h-[100vh] border-2 border-white/20 shadow-2xl z-[1000] pointer-events-auto"

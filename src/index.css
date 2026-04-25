@@ -522,3 +522,28 @@ html {
   overflow: hidden;
   pointer-events: auto;
 }
+
+/* ── Mobile Safe Area & Touch Target Fixes ────────────────────────────────── */
+
+/* Respect iOS home-bar / notch on all main content areas */
+.mobile-safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px);
+}
+
+/* Ensure touch targets are never smaller than 44×44px on mobile */
+@media (max-width: 1280px) {
+  button, a[role="button"], [role="button"] {
+    min-height: 44px;
+  }
+}
+
+/* Smooth scroll on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent horizontal scroll overflow on mobile */
+body {
+  overflow-x: hidden;
+}
+

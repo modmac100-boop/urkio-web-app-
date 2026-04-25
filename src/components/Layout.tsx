@@ -444,7 +444,7 @@ export function Layout({
 
       {/* Main Content Area */}
       <div className="flex-1 flex min-w-0 overflow-hidden relative">
-        <main className={clsx("flex-1 overflow-y-auto custom-scrollbar", 
+        <main className={clsx("flex-1 overflow-y-auto custom-scrollbar xl:pb-0 mobile-safe-bottom", 
           location.pathname === '/experts' || location.pathname === '/admin' || location.pathname === '/messenger' ? "" : "p-4 md:p-8"
         )}>
           <div className={clsx(
