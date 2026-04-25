@@ -50,6 +50,7 @@ import { Landing as ConferenceLanding } from './conference/pages/Landing';
 import { Room as ConferenceRoom } from './conference/pages/Room';
 import { AuthAction } from './pages/AuthAction';
 import PatientJourney from './pages/PatientJourney';
+import { ExpertPublicSpace } from './pages/ExpertPublicSpace';
 
 
 
@@ -550,6 +551,7 @@ export default function App() {
                   <Route path="/healing-center" element={<HealingCenter user={user} userData={userData} />} />
                   <Route path="/specialist-hub" element={<Navigate to="/healing-center" replace />} />
                   <Route path="/specialist-dashboard" element={user ? <SpecialistDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
+                  <Route path="/expert/:expertId" element={<ExpertPublicSpace user={user} userData={userData} />} />
                   <Route path="/expert-dashboard" element={user ? <ExpertDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/agenda" element={user ? <MFAGate user={user} userData={userData}><Agenda user={user} userData={userData} /></MFAGate> : <Navigate to="/landing" replace />} />
                   <Route path="/clinical-workstation" element={user ? <MFAGate user={user} userData={userData}><ClinicalWorkstation user={user} userData={userData} /></MFAGate> : <Navigate to="/landing" replace />} />

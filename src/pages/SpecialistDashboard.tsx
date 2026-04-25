@@ -211,6 +211,9 @@ export function SpecialistDashboard({ user, userData }: any) {
           <button onClick={() => setIsUploadingAnnounce(true)} className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-pink-600/10 text-pink-600 px-4 py-3 rounded-xl font-headline font-black text-[10px] uppercase tracking-widest border border-pink-100">
             <Video className="w-4 h-4" /> <span>{t('specialistDashboard.uploadAnnounce')}</span>
           </button>
+          <button onClick={() => navigate(`/expert/${user.uid}`)} className="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-ur-primary/10 text-ur-primary px-4 py-3 rounded-xl font-headline font-black text-[10px] uppercase tracking-widest border border-ur-primary/20 hover:bg-ur-primary/20 transition-all">
+            <Sparkles className="w-4 h-4" /> My Practice Page
+          </button>
           <button onClick={startVideoCall} className="flex-1 sm:flex-none bg-ur-primary text-white px-4 py-3 rounded-xl font-headline font-black text-[10px] uppercase tracking-widest shadow-lg">
             <Video className="w-4 h-4 inline me-2" /> {t('specialistDashboard.videoSession')}
           </button>
