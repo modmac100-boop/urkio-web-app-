@@ -247,7 +247,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
                       {item.sentToTherapist && <ShieldCheck className="size-3 text-[#a8c8ff]" />}
                     </div>
                     <span className="text-[9px] font-black text-[#5b616e] uppercase tracking-[0.2em]">
-                      {item.createdAt?.toDate?.() ? formatDistanceToNow(item.createdAt.toDate(), { addSuffix: true }) : 'Neural Origin'}
+                      {item.createdAt?.toDate ? formatDistanceToNow(item.createdAt.toDate(), { addSuffix: true }) : 'Neural Origin'}
                     </span>
                   </div>
                 </div>

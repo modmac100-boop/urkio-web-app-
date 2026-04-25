@@ -21,7 +21,7 @@ export function SignUpModal({
 }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-  const [userType, setUserType] = useState<'user' | 'expert'>(initialType);
+  const [userType, setUserType] = useState<'user' | 'expert'>('user');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const isPending = isLoading || isAuthenticating;
@@ -33,8 +33,9 @@ export function SignUpModal({
     confirmPassword: '',
     fullName: '',
     age: '',
-    location: '',
+    gender: '',
     phone: '',
+    location: '',
     occupation: '',
     pronouns: '',
     goals: 'Personal Growth',
@@ -50,9 +51,9 @@ export function SignUpModal({
   const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
-    setUserType(initialType);
+    setUserType('user');
     setLocalError(null);
-  }, [initialType, isOpen]);
+  }, [isOpen]);
 
   useEffect(() => {
     setIsLoading(false);
@@ -71,11 +72,6 @@ export function SignUpModal({
       return;
     }
 
-    if (userType === 'expert' && !formData.baaAccepted && !isSocial) {
-      setLocalError("Please accept the Business Associate Agreement (BAA) to continue.");
-      return;
-    }
-
     if (!isSocial && formData.password !== formData.confirmPassword) {
       setLocalError("Passwords do not match.");
       return;
@@ -84,25 +80,18 @@ export function SignUpModal({
     setIsLoading(true);
     try {
       await onComplete({
-        userType,
+        userType: 'user',
         email: formData.email,
         password: formData.password,
         fullName: formData.fullName,
         age: formData.age,
-        location: formData.location,
+        gender: formData.gender,
         phone: formData.phone,
+        location: formData.location,
         occupation: formData.occupation,
-        ...(userType === 'user' ? {
-          pronouns: formData.pronouns,
-          goals: formData.goals,
-          bio: formData.bio,
-        } : {
-          primaryRole: formData.primaryRole,
-          skills: formData.skills,
-          npiNumber: formData.npiNumber,
-          baaAccepted: formData.baaAccepted,
-          joinCommunity: formData.joinCommunity,
-        })
+        pronouns: formData.pronouns,
+        goals: formData.goals,
+        bio: formData.bio,
       }, isGoogle, isApple);
       
       setIsSuccess(true);
@@ -162,29 +151,6 @@ export function SignUpModal({
               <span>{error || localError}</span>
             </div>
           )}
-
-          <div className="flex p-1.5 bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl mb-8 shadow-inner border border-slate-200/50 dark:border-slate-700/50">
-            <button
-              type="button"
-              onClick={() => setUserType('user')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm transition-all duration-300 ${
-                userType === 'user' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-[0_2px_8px_-2px_rgba(0,0,0,0.12)] scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[18px]">person</span>
-              {t('auth.member')}
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserType('expert')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-sm transition-all duration-300 ${
-                userType === 'expert' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-[0_2px_8px_-2px_rgba(0,0,0,0.12)] scale-[1.02]' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 hover:bg-black/5 dark:hover:bg-white/5'
-              }`}
-            >
-              <span className="material-symbols-outlined text-[18px]">verified_user</span>
-              {t('auth.expert')}
-            </button>
-          </div>
 
           {/* Social Logins */}
           <div className="grid grid-cols-2 gap-4 mb-8">
@@ -319,100 +285,26 @@ export function SignUpModal({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" htmlFor="phone">{t('auth.phoneLabel', 'Phone Number')}</label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" htmlFor="gender">{t('auth.genderLabel', 'Gender')}</label>
                 <div className="relative">
-                  <span className="material-symbols-outlined absolute inset-s-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">phone</span>
-                  <input 
-                    className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 h-12 bg-[#FBFBFB] dark:bg-slate-800/50 border border-black/5 dark:border-white/5 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 transition-all outline-none" 
-                    id="phone" 
-                    placeholder="+1 234 567 8900" 
-                    type="tel"
+                  <span className="material-symbols-outlined absolute inset-s-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">wc</span>
+                  <select 
+                    className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 h-12 bg-[#FBFBFB] dark:bg-slate-800/50 border border-black/5 dark:border-white/5 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary text-black dark:text-white transition-all outline-none appearance-none cursor-pointer" 
+                    id="gender" 
                     required
-                    value={formData.phone}
-                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                    value={formData.gender}
+                    onChange={e => setFormData({ ...formData, gender: e.target.value })}
                     disabled={isPending}
-                  />
+                  >
+                    <option value="" disabled>{t('auth.selectOption', 'Select...')}</option>
+                    <option value="Male">{t('auth.genderMale', 'Male')}</option>
+                    <option value="Female">{t('auth.genderFemale', 'Female')}</option>
+                    <option value="Other">{t('auth.genderOther', 'Other')}</option>
+                  </select>
+                  <span className="material-symbols-outlined absolute inset-e-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
                 </div>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" htmlFor="location">{t('auth.locationLabel', 'Location / Country')}</label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute inset-s-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">location_on</span>
-                <input 
-                  className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 h-12 bg-[#FBFBFB] dark:bg-slate-800/50 border border-black/5 dark:border-white/5 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 transition-all outline-none" 
-                  id="location" 
-                  placeholder="City, Country" 
-                  type="text"
-                  required
-                  value={formData.location}
-                  onChange={e => setFormData({ ...formData, location: e.target.value })}
-                  disabled={isPending}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" htmlFor="occupation">{t('auth.occupationLabel', 'Occupation')}</label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute inset-s-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">work</span>
-                <input 
-                  className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 h-12 bg-[#FBFBFB] dark:bg-slate-800/50 border border-black/5 dark:border-white/5 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary text-black dark:text-white placeholder:text-black/20 dark:placeholder:text-white/20 transition-all outline-none" 
-                  id="occupation" 
-                  placeholder="e.g. Engineer" 
-                  type="text"
-                  required
-                  value={formData.occupation}
-                  onChange={e => setFormData({ ...formData, occupation: e.target.value })}
-                  disabled={isPending}
-                />
-              </div>
-            </div>
-
-            {userType === 'expert' && (
-              <div className="pt-2 space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5" htmlFor="skills">{t('auth.skillsLabel', 'Expertise / Skills')}</label>
-                  <div className="relative">
-                    <span className="material-symbols-outlined absolute inset-s-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">psychology</span>
-                    <select 
-                      className="w-full ltr:pl-10 rtl:pr-10 ltr:pr-4 rtl:pl-4 h-11 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary text-slate-900 dark:text-white transition-all outline-none appearance-none cursor-pointer" 
-                      id="skills" 
-                      required
-                      value={formData.skills}
-                      onChange={e => setFormData({ ...formData, skills: e.target.value })}
-                      disabled={isPending}
-                    >
-                      <option value="" disabled>{t('auth.selectOption', 'Select...')}</option>
-                      <option value="Doctor">{t('auth.skillDoctor', 'Doctor')}</option>
-                      <option value="Psychologist">{t('auth.skillPsychologist', 'Psychologist')}</option>
-                      <option value="Therapist">{t('auth.skillTherapist', 'Therapist')}</option>
-                      <option value="Social Worker">{t('auth.skillSocialWorker', 'Social Worker')}</option>
-                      <option value="Life Coach">{t('auth.skillLifeCoach', 'Life Coach')}</option>
-                      <option value="Child Difficulties">{t('auth.skillChildDifficulties', 'Child Difficulties')}</option>
-                      <option value="Case Manager">{t('auth.skillCaseManager', 'Case Manager')}</option>
-                      <option value="Healing Specialist">{t('auth.skillHealingSpecialist', 'Healing Specialist')}</option>
-                      <option value="Other">{t('auth.skillOther', 'Other')}</option>
-                    </select>
-                    <span className="material-symbols-outlined absolute inset-e-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">expand_more</span>
-                  </div>
-                </div>
-
-                <label className="relative p-8 bg-linear-to-r from-emerald-500/5 via-primary/5 to-purple-500/5 dark:from-emerald-500/10 dark:via-primary/10 dark:to-purple-500/10 rounded-2xl border border-slate-200 dark:border-slate-700/50 overflow-hidden group flex items-start gap-4 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    required
-                    checked={formData.baaAccepted}
-                    onChange={e => setFormData({ ...formData, baaAccepted: e.target.checked })}
-                    className="mt-1 w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary"
-                  />
-                  <span className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    {t('auth.baaAgreement')}
-                  </span>
-                </label>
-              </div>
-            )}
 
             <div className="pt-2 flex flex-col gap-3">
               <label className="relative p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700/50 group flex items-start gap-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">

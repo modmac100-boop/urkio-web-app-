@@ -497,3 +497,9 @@ html {
 }
 
 
+
+/* ── Agora Mirroring Fixes ────────────────────────────────────────────── */
+.video-mirror-transform video {
+  transform: scaleX(-1) !important;
+  -webkit-transform: scaleX(-1) !important; /* For Safari support on MacBook */
+}

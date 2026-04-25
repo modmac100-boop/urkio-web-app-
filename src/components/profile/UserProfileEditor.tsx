@@ -50,6 +50,9 @@ export function UserProfileEditor({
     tiktok: '',
     youtube: '',
     website: '',
+    occupation: '',
+    gender: '',
+    age: '',
     hourlyRate: '',
     isOnline: false,
     specialty: '',
@@ -90,6 +93,9 @@ export function UserProfileEditor({
         tiktok: userData.tiktok || '',
         youtube: userData.youtube || '',
         website: userData.website || '',
+        occupation: userData.occupation || '',
+        gender: userData.gender || '',
+        age: userData.age || '',
         hourlyRate: userData.hourlyRate || '',
         isOnline: userData.isOnline || false,
         specialty: initialSpecialty,
@@ -338,6 +344,45 @@ export function UserProfileEditor({
                           placeholder="City, Country"
                         />
                       </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Occupation</label>
+                      <input 
+                        type="text" 
+                        name="occupation" 
+                        value={formData.occupation} 
+                        onChange={handleChange}
+                        className="w-full bg-white/50 dark:bg-slate-800/50 border border-black/5 dark:border-slate-700/50 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all" 
+                        placeholder="e.g. Engineer, Artist"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Gender</label>
+                      <select 
+                        name="gender" 
+                        value={formData.gender} 
+                        onChange={handleChange}
+                        className="w-full bg-white/50 dark:bg-slate-800/50 border border-black/5 dark:border-slate-700/50 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all appearance-none"
+                      >
+                        <option value="">{t('auth.selectOption', 'Select...')}</option>
+                        <option value="Male">{t('auth.genderMale', 'Male')}</option>
+                        <option value="Female">{t('auth.genderFemale', 'Female')}</option>
+                        <option value="Other">{t('auth.genderOther', 'Other')}</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 px-1">Age</label>
+                      <input 
+                        type="number" 
+                        name="age" 
+                        value={formData.age} 
+                        onChange={handleChange}
+                        className="w-full bg-white/50 dark:bg-slate-800/50 border border-black/5 dark:border-slate-700/50 rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none transition-all" 
+                        placeholder="25"
+                      />
                     </div>
                     
                     <div className="space-y-2 md:col-span-2">

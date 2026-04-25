@@ -142,6 +142,15 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
                 </>
               )}
             </button>
+
+            {/* Error Message Display */}
+            {isJoining === false && !isCameraOn && (
+               <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
+                 <p className="text-[10px] font-bold text-red-400 uppercase tracking-widest text-center">
+                   Connection Alert: Optics or Mesh sync failed. Check browser permissions.
+                 </p>
+               </div>
+            )}
           </div>
         </div>
 
@@ -165,32 +174,41 @@ export function SetupScreen({ onJoin, userName, isJoining = false }: SetupScreen
                 </div>
               )}
 
-              {/* Float Controls */}
-              <div className="absolute bottom-10 inset-s-1/2 -translate-x-1/2 flex gap-6 p-3 bg-black/40 backdrop-blur-2xl rounded-3xl border border-white/10 group-hover:scale-105 transition-transform duration-500">
-                <button
-                  onClick={toggleMic}
-                  className={`size-14 rounded-2xl flex items-center justify-center transition-all ${
-                    isMicOn ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-red-500 text-white shadow-lg shadow-red-500/20'
-                  }`}
-                  title={isMicOn ? 'Mute' : 'Unmute'}
-                >
-                  {isMicOn ? <Mic className="size-6" /> : <MicOff className="size-6" />}
-                </button>
-                <button
-                  onClick={toggleCamera}
-                  className={`size-14 rounded-2xl flex items-center justify-center transition-all ${
-                    isCameraOn ? 'bg-white/10 text-white hover:bg-white/20' : 'bg-red-500 text-white shadow-lg shadow-red-500/20'
-                  }`}
-                  title={isCameraOn ? 'Stop Camera' : 'Start Camera'}
-                >
-                  {isCameraOn ? <Video className="size-6" /> : <VideoOff className="size-6" />}
-                </button>
-              </div>
-
               {/* Identity Tag */}
               <div className="absolute top-10 inset-s-10 px-4 py-2 bg-black/20 backdrop-blur-md border border-white/10 rounded-xl">
                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/60">Live Preview</span>
               </div>
+            </div>
+
+            {/* Prominent Controls Outside Preview */}
+            <div className="mt-8 flex justify-center gap-8">
+              <button
+                onClick={toggleMic}
+                className={`flex flex-col items-center gap-3 group transition-all`}
+              >
+                <div className={`size-16 rounded-[2rem] flex items-center justify-center transition-all ${
+                  isMicOn ? 'bg-zinc-100 dark:bg-white/5 text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-white/10' : 'bg-red-500 text-white shadow-xl shadow-red-500/20'
+                }`}>
+                  {isMicOn ? <Mic className="size-6" /> : <MicOff className="size-6" />}
+                </div>
+                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+                  {isMicOn ? 'Mic Active' : 'Mic Muted'}
+                </span>
+              </button>
+
+              <button
+                onClick={toggleCamera}
+                className={`flex flex-col items-center gap-3 group transition-all`}
+              >
+                <div className={`size-16 rounded-[2rem] flex items-center justify-center transition-all ${
+                  isCameraOn ? 'bg-zinc-100 dark:bg-white/5 text-zinc-900 dark:text-white hover:bg-zinc-200 dark:hover:bg-white/10' : 'bg-red-500 text-white shadow-xl shadow-red-500/20'
+                }`}>
+                  {isCameraOn ? <Video className="size-6" /> : <VideoOff className="size-6" />}
+                </div>
+                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors">
+                  {isCameraOn ? 'Optics On' : 'Optics Off'}
+                </span>
+              </button>
             </div>
         </div>
       </div>

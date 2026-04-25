@@ -30,7 +30,10 @@ export function VideoTile({
     <div className={`relative bg-[#191c21] rounded-2xl overflow-hidden border border-white/5 group shadow-lg ${className}`}>
       {/* Video Content */}
       {!isOff && videoTrack ? (
-        <div ref={ref} className="w-full h-full object-cover" />
+        <div 
+          ref={ref} 
+          className={`w-full h-full object-cover ${isLocal ? 'video-mirror-transform' : ''}`} 
+        />
       ) : (
         <div className="w-full h-full flex flex-col items-center justify-center bg-[#1d2026]">
           {avatar

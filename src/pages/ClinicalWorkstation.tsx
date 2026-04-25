@@ -617,7 +617,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                        <p className="text-xs text-zinc-500 line-clamp-3 leading-relaxed italic">{report.content || 'No report content available.'}</p>
                     </div>
                     <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                       <span>{report.createdAt ? format(report.createdAt.toDate(), 'MMM dd, yyyy') : '--'}</span>
+                       <span>{report.createdAt?.toDate ? format(report.createdAt.toDate(), 'MMM dd, yyyy') : '--'}</span>
                        <button 
                          onClick={() => { setSessionNotes(report.content); setAiOrientation(report.aiOrientation || ''); setActiveTab('notes'); }}
                          className="text-[#004e99] hover:underline"
