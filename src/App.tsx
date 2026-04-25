@@ -51,60 +51,7 @@ import { Room as ConferenceRoom } from './conference/pages/Room';
 import { AuthAction } from './pages/AuthAction';
 import PatientJourney from './pages/PatientJourney';
 
-// Guest Conference Join Screen — shown to unauthenticated users with a direct room link
-function GuestConferenceJoin() {
-  const { roomId } = useParams();
-  return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 text-center font-body">
-      {/* Ambient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 size-[500px] bg-ur-primary/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="relative z-10 max-w-md w-full space-y-10">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-4">
-          <div className="size-20 milled-gradient rounded-[2rem] flex items-center justify-center shadow-2xl shadow-ur-primary/30">
-            <span className="material-symbols-outlined text-white text-4xl">videocam</span>
-          </div>
-          <div>
-            <h1 className="text-4xl font-headline font-black text-white tracking-tighter">Join Session</h1>
-            <p className="text-zinc-500 text-sm font-medium mt-2">
-              Room <span className="text-ur-primary font-mono font-black">{roomId}</span>
-            </p>
-          </div>
-        </div>
 
-        {/* Card */}
-        <div className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
-          <p className="text-zinc-400 text-sm leading-relaxed">
-            You&apos;ve been invited to a private Urkio session. Sign in or create a free account to join.
-          </p>
-          <div className="space-y-3">
-            <button
-              onClick={() => {
-                sessionStorage.setItem('urkio_post_login_redirect', `/conference/${roomId}`);
-                window.dispatchEvent(new CustomEvent('open-signin'));
-              }}
-              className="w-full py-4 milled-gradient text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-ur-primary/20 active:scale-95 transition-all"
-            >
-              Sign In to Join
-            </button>
-            <button
-              onClick={() => {
-                sessionStorage.setItem('urkio_post_login_redirect', `/conference/${roomId}`);
-                window.dispatchEvent(new CustomEvent('open-signup'));
-              }}
-              className="w-full py-4 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] hover:bg-white/10 active:scale-95 transition-all"
-            >
-              Create Free Account
-            </button>
-          </div>
-          <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-            🔒 End-to-end encrypted · PDPL 2026 compliant
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 import { OnboardingModal } from './components/OnboardingModal';
 import { ThemeProvider } from './contexts/ThemeContext';
@@ -627,7 +574,7 @@ export default function App() {
                   <Route path="/room/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/call/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/conference" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/conference/:roomId" element={user ? <ConferenceRoom user={user} userData={userData} /> : <GuestConferenceJoin />} />
+                  <Route path="/conference/:roomId" element={user ? <ConferenceRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/healing-suite/:sessionId" element={user ? <HealingRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/messenger" element={user ? <Messenger user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/inbox" element={user ? <Navigate to="/messenger" replace /> : <Navigate to="/landing" replace />} />
