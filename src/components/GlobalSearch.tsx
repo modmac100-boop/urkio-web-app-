@@ -41,7 +41,7 @@ export function GlobalSearch() {
 
   // Quick Actions
   const quickActions = [
-    { id: 'act-call', type: 'action', title: 'Start Instant Call', icon: Zap, action: () => navigate('/conference/URK-NEW-XZ'), subtitle: 'Launch new video room' },
+    { id: 'act-call', type: 'action', title: 'Start Instant Call', icon: Zap, action: () => navigate('/therapy-room/URK-NEW-XZ'), subtitle: 'Launch new video room' },
     { id: 'act-verify', type: 'action', title: 'Expert Verification', icon: Rocket, action: () => navigate('/verify'), subtitle: 'Apply for clinical status' },
   ];
 

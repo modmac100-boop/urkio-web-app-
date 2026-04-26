@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Menu, X, Video, FileText, Settings, LayoutDashboard, Clock, BookOpen,
   Play, Square, Send, Archive, HelpCircle, Bell, History, ArrowRight,
@@ -14,11 +14,8 @@ import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { SessionInviteModal } from '../components/messaging/SessionInviteModal';
 
-export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
-  const navigate = useNavigate();
-  const [roomId, setRoomId] = useState<string>('');
+  const { roomId: urlRoomId } = useParams();
+  const [roomId, setRoomId] = useState<string>(urlRoomId || '');
   const [sessionNotes, setSessionNotes] = useState('');
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState<any[]>([
@@ -53,14 +50,21 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
   } = useHealingSession(roomId, 'private', 0, 'host'); // 0 uid will let agora assign one
 
   // Protect route
-  const isAdminOrExpert = ['admin', 'management', 'founder'].includes(userData?.role) || ['specialist', 'expert', 'verifiedexpert', 'psychologist', 'practitioner'].includes(userData?.role || '') || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(userData?.email?.toLowerCase()) || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(user?.email?.toLowerCase());
+  const isAdminOrExpert = user && (
+    ['admin', 'management', 'founder'].includes(userData?.role) || 
+    ['specialist', 'expert', 'verifiedexpert', 'psychologist', 'practitioner'].includes(userData?.role || '') || 
+    ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(userData?.email?.toLowerCase()) || 
+    ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(user?.email?.toLowerCase())
+  );
 
   useEffect(() => {
-    if (!isAdminOrExpert) {
-      toast.error('Unauthorized access.');
+    // If there's no roomId in the URL, this is the expert's private office - require expert role.
+    // If there IS a roomId, it's a specific session (likely booked) - allow the client/guest to join.
+    if (!urlRoomId && !isAdminOrExpert) {
+      toast.error('Unauthorized access to Private Therapy Room.');
       navigate('/');
     }
-  }, [isAdminOrExpert, navigate]);
+  }, [isAdminOrExpert, navigate, urlRoomId]);
 
   const handleSendInvite = () => {
     setShowInviteModal(true);
@@ -89,7 +93,7 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
     try {
       await addDoc(collection(db, 'clinicalNotes'), {
         roomId,
-        expertId: user.uid,
+        expertId: user?.uid || 'guest',
         notes: sessionNotes,
         createdAt: serverTimestamp(),
       });
@@ -110,7 +114,17 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
     setChatInput('');
   };
 
-  if (!isAdminOrExpert) return null;
+  // Auto-join for guests if they land on a room link
+  useEffect(() => {
+    if (urlRoomId && !isAdminOrExpert && connectionState === 'DISCONNECTED') {
+      console.log("[TherapyRoom] Guest detected, auto-joining session:", urlRoomId);
+      join();
+    }
+  }, [urlRoomId, isAdminOrExpert, connectionState, join]);
+
+  // Access control: If no roomId and not expert, we already navigate away in useEffect.
+  // We allow guests if they have a specific roomId.
+  // if (!user) return null; // Removed to allow guest access
 
   return (
     <div 
@@ -194,8 +208,14 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
                 connectionState !== 'DISCONNECTED' ? "bg-red-500/20 text-red-500 border border-red-500/30" : "bg-msgr-primary-container text-white shadow-msgr-primary-container/20 hover:bg-[#005eb5]"
               )}
             >
-                            <Video className="size-4" />
-              {isSidebarOpen && <span>{connectionState !== 'DISCONNECTED' ? t('therapyRoom.endSession') : t('therapyRoom.newSession')}</span>}
+              <Video className="size-4" />
+              {isSidebarOpen && (
+                <span>
+                  {connectionState !== 'DISCONNECTED' 
+                    ? t('therapyRoom.endSession') 
+                    : (isAdminOrExpert ? t('therapyRoom.newSession') : t('messaging.joinSession'))}
+                </span>
+              )}
             </button>
             <div className="flex items-center gap-3 px-2">
               <img alt="Provider" className="size-10 rounded-full object-cover border border-white/10" src={userData?.photoURL || "https://ui-avatars.com/api/?name=Dr"} />
@@ -429,85 +449,87 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
             </div>
           </section>
 
-          {/* Right Pane: Clinical Documentation & Workspace */}
-          <section className="flex-none lg:flex-1 flex flex-col gap-6 min-w-0 h-[600px] lg:h-full">
-            {/* Documentation Editor */}
-            <div className="flex-1 bg-[#32353b]/40 backdrop-blur-xl rounded-2xl border border-white/5 flex flex-col shadow-lg overflow-hidden">
-              <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
-                <div>
-                                    <h2 className="text-lg font-bold text-white tracking-tight">{t('therapyRoom.clinicalDocumentation')}</h2>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">{t('therapyRoom.subjectiveObjective')}</p>
+          {/* Right Pane: Clinical Documentation & Workspace (Expert Only) */}
+          {isAdminOrExpert && (
+            <section className="flex-none lg:flex-1 flex flex-col gap-6 min-w-0 h-[600px] lg:h-full">
+              {/* Documentation Editor */}
+              <div className="flex-1 bg-[#32353b]/40 backdrop-blur-xl rounded-2xl border border-white/5 flex flex-col shadow-lg overflow-hidden">
+                <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                  <div>
+                    <h2 className="text-lg font-bold text-white tracking-tight">{t('therapyRoom.clinicalDocumentation')}</h2>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 mt-1">{t('therapyRoom.subjectiveObjective')}</p>
+                  </div>
+                  <div className="hidden sm:flex gap-1 bg-[#191c21] rounded-lg p-1 border border-white/5">
+                    <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><Bold className="size-4" /></button>
+                    <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><Italic className="size-4" /></button>
+                    <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><List className="size-4" /></button>
+                    <div className="w-px h-6 bg-white/10 my-auto mx-1"></div>
+                    <button onClick={handleSaveNotes} title="Save Notes" className="p-1.5 hover:bg-emerald-500/20 rounded-md transition-colors text-emerald-400 hover:text-emerald-300"><Save className="size-4" /></button>
+                    <button onClick={handleDownloadNotes} title="Download Notes" className="p-1.5 hover:bg-blue-500/20 rounded-md transition-colors text-blue-400 hover:text-blue-300"><Download className="size-4" /></button>
+                  </div>
                 </div>
-                <div className="hidden sm:flex gap-1 bg-[#191c21] rounded-lg p-1 border border-white/5">
-                  <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><Bold className="size-4" /></button>
-                  <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><Italic className="size-4" /></button>
-                  <button className="p-1.5 hover:bg-white/5 rounded-md transition-colors text-slate-400 hover:text-white"><List className="size-4" /></button>
-                  <div className="w-px h-6 bg-white/10 my-auto mx-1"></div>
-                  <button onClick={handleSaveNotes} title="Save Notes" className="p-1.5 hover:bg-emerald-500/20 rounded-md transition-colors text-emerald-400 hover:text-emerald-300"><Save className="size-4" /></button>
-                  <button onClick={handleDownloadNotes} title="Download Notes" className="p-1.5 hover:bg-blue-500/20 rounded-md transition-colors text-blue-400 hover:text-blue-300"><Download className="size-4" /></button>
+
+                <div className="flex-1 p-6 lg:p-8">
+                  <textarea
+                    className="w-full h-full bg-transparent border-none focus:ring-0 text-sm leading-relaxed text-[#e1e2ea] placeholder-slate-600 resize-none outline-none custom-scrollbar"
+                    placeholder="Start typing clinical notes here... &#10;&#10;Use '/' for AI commands or to pull data from patient history."
+                    value={sessionNotes}
+                    onChange={e => setSessionNotes(e.target.value)}
+                  />
+                </div>
+
+                <div className="p-4 border-t border-white/5 flex justify-between items-center bg-black/20">
+                  <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
+                    <span className="size-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.5)]"></span>
+                    {t('therapyRoom.cloudSynced')}
+                  </div>
+                  <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                    {t('therapyRoom.words')}: {sessionNotes.split(/\s+/).filter(w => w.length > 0).length}
+                  </div>
                 </div>
               </div>
 
-              <div className="flex-1 p-6 lg:p-8">
-                <textarea
-                  className="w-full h-full bg-transparent border-none focus:ring-0 text-sm leading-relaxed text-[#e1e2ea] placeholder-slate-600 resize-none outline-none custom-scrollbar"
-                  placeholder="Start typing clinical notes here... &#10;&#10;Use '/' for AI commands or to pull data from patient history."
-                  value={sessionNotes}
-                  onChange={e => setSessionNotes(e.target.value)}
-                />
-              </div>
-
-              <div className="p-4 border-t border-white/5 flex justify-between items-center bg-black/20">
-                                <div className="flex items-center gap-2 text-[10px] font-bold text-emerald-400 uppercase tracking-widest">
-                  <span className="size-1.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.5)]"></span>
-                  {t('therapyRoom.cloudSynced')}
-                </div>
-                <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                  {t('therapyRoom.words')}: {sessionNotes.split(/\s+/).filter(w => w.length > 0).length}
-                </div>
-              </div>
-            </div>
-
-            {/* File Explorer & Actions Bento */}
-            <div className="h-auto md:h-64 grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
-              {/* File Explorer */}
-              <div className="bg-[#32353b]/40 backdrop-blur-xl rounded-2xl p-5 border border-white/5 flex flex-col shadow-lg overflow-hidden h-64 md:h-auto">
-                                <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center justify-between">
-                  {t('therapyRoom.caseDocuments')}
-                  <button className="hover:text-blue-400 transition-colors bg-white/5 p-1.5 rounded-lg"><ArrowRight className="size-3" /></button>
-                </h3>
-                <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar pr-2">
-                  {[
-                    { n: 'intake_form.pdf', date: 'Oct 12' },
-                    { n: 'scan_results.jpg', date: 'Nov 04' },
-                    { n: 'referral_notes.docx', date: 'Jan 20' }
-                  ].map((file, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-colors group border border-transparent hover:border-white/5">
-                      <div className="size-8 rounded-lg bg-msgr-primary-container/10 flex items-center justify-center">
-                        <FileText className="size-4 text-[#a8c8ff]" />
+              {/* File Explorer & Actions Bento */}
+              <div className="h-auto md:h-64 grid grid-cols-1 md:grid-cols-2 gap-6 shrink-0">
+                {/* File Explorer */}
+                <div className="bg-[#32353b]/40 backdrop-blur-xl rounded-2xl p-5 border border-white/5 flex flex-col shadow-lg overflow-hidden h-64 md:h-auto">
+                  <h3 className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center justify-between">
+                    {t('therapyRoom.caseDocuments')}
+                    <button className="hover:text-blue-400 transition-colors bg-white/5 p-1.5 rounded-lg"><ArrowRight className="size-3" /></button>
+                  </h3>
+                  <div className="space-y-2 overflow-y-auto flex-1 custom-scrollbar pr-2">
+                    {[
+                      { n: 'intake_form.pdf', date: 'Oct 12' },
+                      { n: 'scan_results.jpg', date: 'Nov 04' },
+                      { n: 'referral_notes.docx', date: 'Jan 20' }
+                    ].map((file, i) => (
+                      <div key={i} className="flex items-center gap-3 p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-colors group border border-transparent hover:border-white/5">
+                        <div className="size-8 rounded-lg bg-msgr-primary-container/10 flex items-center justify-center">
+                          <FileText className="size-4 text-[#a8c8ff]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-bold text-white truncate">{file.n}</p>
+                          <p className="text-[8px] text-slate-500 uppercase tracking-widest mt-0.5">{file.date}</p>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-white truncate">{file.n}</p>
-                        <p className="text-[8px] text-slate-500 uppercase tracking-widest mt-0.5">{file.date}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                {/* Quick Actions */}
+                <div className="flex flex-col gap-3">
+                  <button className="flex-1 bg-[#32353b]/40 backdrop-blur-xl hover:bg-msgr-primary-container/20 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all shadow-lg text-blue-400 min-h-[100px]">
+                    <Send className="size-5 group-hover:-translate-y-1 transition-transform" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest group-hover:text-white">{t('therapyRoom.sendToManager')}</span>
+                  </button>
+                  <button className="flex-1 bg-[#32353b]/40 backdrop-blur-xl hover:bg-slate-800 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all shadow-lg text-slate-500 hover:text-slate-300 min-h-[100px]">
+                    <Archive className="size-5 group-hover:scale-110 transition-transform" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{t('therapyRoom.moveToArchive')}</span>
+                  </button>
                 </div>
               </div>
-
-              {/* Quick Actions */}
-              <div className="flex flex-col gap-3">
-                                <button className="flex-1 bg-[#32353b]/40 backdrop-blur-xl hover:bg-msgr-primary-container/20 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all shadow-lg text-blue-400 min-h-[100px]">
-                  <Send className="size-5 group-hover:-translate-y-1 transition-transform" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest group-hover:text-white">{t('therapyRoom.sendToManager')}</span>
-                </button>
-                <button className="flex-1 bg-[#32353b]/40 backdrop-blur-xl hover:bg-slate-800 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-2 group transition-all shadow-lg text-slate-500 hover:text-slate-300 min-h-[100px]">
-                  <Archive className="size-5 group-hover:scale-110 transition-transform" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">{t('therapyRoom.moveToArchive')}</span>
-                </button>
-              </div>
-            </div>
-          </section>
+            </section>
+          )}
         </div>
       </main>
 
@@ -515,7 +537,7 @@ export function TherapyRoom({ user, userData }: { user: any, userData: any }) {
         isOpen={showInviteModal}
         onClose={() => setShowInviteModal(false)}
         roomId={roomId}
-        joinUrl={`${window.location.origin}/room/${roomId}`}
+        joinUrl={`${window.location.origin}/therapy-room/${roomId}`}
         sessionType="therapy"
         sessionTitle="Clinical Therapy Session"
       />

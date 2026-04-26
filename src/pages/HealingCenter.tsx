@@ -295,7 +295,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                                  <button 
                                    onClick={(e) => { 
                                      e.stopPropagation(); 
-                                     navigate(`/conference/${expert.id}?type=video`);
+                                     navigate(`/therapy-room/${expert.id}?type=video`);
                                    }}
                                    className="flex-1 bg-emerald-500 text-white rounded-lg py-2 px-3 flex items-center justify-between hover:brightness-110 active:scale-95 transition-all shadow-md"
                                  >

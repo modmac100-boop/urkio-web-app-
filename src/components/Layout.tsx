@@ -19,7 +19,6 @@ import { SignInModal } from './SignInModal';
 import { SignUpModal } from './SignUpModal';
 import { AvatarWithBadges } from './UserBadges';
 import { CallInterface } from './messaging/CallInterface';
-import { StreamCallRoom } from './messaging/StreamCallRoom';
 
 export function Layout({ 
   children, 
@@ -47,7 +46,6 @@ export function Layout({
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [signupType, setSignupType] = useState<'user' | 'expert'>('user');
   const { activeChatPartner, setActiveChatPartner } = useApp();
-  const [activeCall, setActiveCall] = useState<any>(null);
 
 
   useEffect(() => {
@@ -106,37 +104,8 @@ export function Layout({
       setUnreadMessages(snapshot.size);
     }, (err) => console.error("Msg snapshot error:", err));
 
-    // Call Listener
-    const qCalls = query(
-      collection(db, 'calls'),
-      where('participants', 'array-contains', user.uid),
-      where('status', 'in', ['ringing', 'calling', 'active'])
-    );
-
-    const unsubscribeCalls = onSnapshot(qCalls, (snapshot) => {
-      const callDoc = snapshot.docs[0];
-      if (callDoc) {
-        const data = callDoc.data();
-        // If we are the recipient and it's ringing
-        if (data.recipientId === user.uid && data.status === 'ringing') {
-          setActiveCall({ id: callDoc.id, ...data });
-        } 
-        // If we are the initiator and it's calling/active
-        else if (data.initiatorId === user.uid) {
-          setActiveCall({ id: callDoc.id, ...data });
-        }
-        else if (data.status === 'active') {
-          setActiveCall({ id: callDoc.id, ...data });
-        }
-      } else {
-        setActiveCall(null);
-      }
-    });
-
-    return () => {
       unsubNotif();
       unsubMsg();
-      unsubscribeCalls();
     };
   }, [user?.uid]);
 
@@ -186,31 +155,7 @@ export function Layout({
     }
   };
 
-  const handleAcceptCall = async () => {
-    if (!activeCall) return;
-    await updateDoc(doc(db, 'calls', activeCall.id), {
-      status: 'active',
-      startedAt: serverTimestamp()
-    });
-  };
 
-  const handleDeclineCall = async () => {
-    if (!activeCall) return;
-    await updateDoc(doc(db, 'calls', activeCall.id), {
-      status: 'rejected',
-      endedAt: serverTimestamp()
-    });
-    setActiveCall(null);
-  };
-
-  const handleEndCall = async () => {
-    if (!activeCall) return;
-    await updateDoc(doc(db, 'calls', activeCall.id), {
-      status: 'ended',
-      endedAt: serverTimestamp()
-    });
-    setActiveCall(null);
-  };
 
 
   const hideHeaderPaths = ['/landing', '/messenger', '/agenda', '/clinical-workstation'];
@@ -492,31 +437,7 @@ export function Layout({
           }}
         />
 
-        {/* Call Overlays */}
-        {activeCall && (activeCall.status === 'ringing' || activeCall.status === 'calling') && (
-          <CallInterface
-            status={activeCall.status}
-            type={activeCall.type}
-            partner={{
-              uid: activeCall.initiatorId === user.uid ? activeCall.recipientId : activeCall.initiatorId,
-              displayName: activeCall.initiatorId === user.uid ? activeCall.recipientName : activeCall.initiatorName,
-              photoURL: activeCall.initiatorId === user.uid ? activeCall.recipientPhoto : activeCall.initiatorPhoto
-            }}
-            onAccept={handleAcceptCall}
-            onDecline={handleDeclineCall}
-            onEnd={handleEndCall}
-          />
-        )}
 
-        {activeCall && activeCall.status === 'active' && (
-          <StreamCallRoom
-            callId={activeCall.id}
-            user={user}
-            userData={userData}
-            type={activeCall.type || 'video'}
-            onLeaveRoom={handleEndCall}
-          />
-        )}
       </div>
 
       {/* 🛡️ PDPL 2026 Compliance Footer */}

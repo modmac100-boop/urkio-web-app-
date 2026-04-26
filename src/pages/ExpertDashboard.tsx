@@ -18,11 +18,14 @@ import {
   TrendingUp,
   AlertCircle,
   Save,
-  Navigation
+  Navigation,
+  BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 import { useAnimationOrchestrator } from '../utils/AnimationOrchestrator';
 
 // Custom SVG Chart Component for Live Insights
@@ -137,6 +140,23 @@ export function ExpertDashboard({ user, userData }: any) {
   const [sentiment, setSentiment] = useState(0.65);
   const [history, setHistory] = useState([0.4, 0.55, 0.45, 0.7, 0.6, 0.8, 0.65]);
   const [isSecure, setIsSecure] = useState(true);
+  const [stats, setStats] = useState({ cases: 0, appts: 0, reports: 0, courses: 0 });
+
+  useEffect(() => {
+    if (!user?.uid) return;
+
+    const qCases = query(collection(db, 'cases'), where('authorId', '==', user.uid));
+    const qAppts = query(collection(db, 'appointments'), where('expertId', '==', user.uid));
+    const qReps = query(collection(db, 'confidential_reports'), where('authorId', '==', user.uid));
+    const qCourses = query(collection(db, 'events'), where('expertId', '==', user.uid), where('type', '==', 'course'));
+
+    const unsubCases = onSnapshot(qCases, snap => setStats(prev => ({ ...prev, cases: snap.size })));
+    const unsubAppts = onSnapshot(qAppts, snap => setStats(prev => ({ ...prev, appts: snap.size })));
+    const unsubReps = onSnapshot(qReps, snap => setStats(prev => ({ ...prev, reports: snap.size })));
+    const unsubCourses = onSnapshot(qCourses, snap => setStats(prev => ({ ...prev, courses: snap.size })));
+
+    return () => { unsubCases(); unsubAppts(); unsubReps(); unsubCourses(); };
+  }, [user.uid]);
 
   return (
     <div className="min-h-screen bg-[#faf9f6] text-[#1b1c1a] font-body flex flex-col">
@@ -167,6 +187,21 @@ export function ExpertDashboard({ user, userData }: any) {
             <Video size={16} /> Start Secure Session
           </button>
         </header>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Active Cases', val: stats.cases, icon: Shield, color: 'text-[#004e99]' },
+            { label: 'Total Sessions', val: stats.appts, icon: Calendar, color: 'text-ur-primary' },
+            { label: 'Published Courses', val: stats.courses, icon: BookOpen, color: 'text-emerald-500' },
+            { label: 'Reports', val: stats.reports, icon: MessageSquare, color: 'text-amber-500' }
+          ].map(stat => (
+            <div key={stat.label} className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm">
+              <stat.icon className={`size-5 ${stat.color} mb-3`} />
+              <p className="text-2xl font-black italic text-zinc-900 leading-none">{stat.val}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-1">{stat.label}</p>
+            </div>
+          ))}
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Live Insights */}

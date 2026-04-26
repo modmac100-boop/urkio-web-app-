@@ -25,9 +25,7 @@ const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ defaul
 const Messenger = lazy(() => import('./pages/Messenger'));
 const PublicProfile = lazy(() => import('./pages/PublicProfile').then(m => ({ default: m.PublicProfile })));
 const Homii = lazy(() => import('./pages/Homii').then(m => ({ default: m.Homii })));
-const LiveStreamStudio = lazy(() => import('./pages/LiveStreamStudio').then(m => ({ default: m.LiveStreamStudio })));
 const SecretVault = lazy(() => import('./pages/SecretVault').then(m => ({ default: m.SecretVault })));
-const HealingRoom = lazy(() => import('./healing-suite/pages/HealingRoom').then(m => ({ default: m.HealingRoom })));
 
 const ExpertList = lazy(() => import('./pages/ExpertList').then(m => ({ default: m.ExpertList })));
 const HealingCenter = lazy(() => import('./pages/HealingCenter').then(m => ({ default: m.HealingCenter })));
@@ -43,11 +41,8 @@ import { Events } from './pages/Events';
 import { Settings } from './pages/Settings';
 import { ProfileSettings } from './pages/ProfileSettings';
 import {Loader2} from 'lucide-react';
-import { Notifications } from './pages/Notifications';
-import { StreamCallRoom } from './components/messaging/StreamCallRoom';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { Landing as ConferenceLanding } from './conference/pages/Landing';
-import { Room as ConferenceRoom } from './conference/pages/Room';
+import { useParams } from 'react-router-dom';
+
 import { AuthAction } from './pages/AuthAction';
 import PatientJourney from './pages/PatientJourney';
 import { ExpertPublicSpace } from './pages/ExpertPublicSpace';
@@ -67,26 +62,11 @@ import { MFAGate } from './components/security/MFAGate';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { ActiveConsentHandshake } from './components/security/ActiveConsentHandshake';
 
-
-
-function RoomPageRoute({ user, userData }: any) {
+const NavigateToTherapyRoom = () => {
   const { roomId } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const type = (searchParams.get('type') as 'audio' | 'video') || 'video';
+  return <Navigate to={roomId ? `/therapy-room/${roomId}` : '/therapy-room'} replace />;
+};
 
-  if (!roomId) return <Navigate to="/" replace />;
-
-  return (
-    <StreamCallRoom
-      callId={roomId}
-      user={user}
-      userData={userData}
-      type={type}
-      onLeaveRoom={() => navigate(-1)}
-    />
-  );
-}
 
 export default function App() {
   const [user, setUser] = useState<any>(null);
@@ -536,6 +516,7 @@ export default function App() {
                   <Route path="/expert-list" element={<ExpertList user={user} userData={userData} />} />
                   <Route path="/healing-courses" element={<HealingCourses user={user} userData={userData} />} />
                   <Route path="/therapy-room" element={user ? <TherapyRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
+                  <Route path="/therapy-room/:roomId" element={<TherapyRoom user={user} userData={userData} />} />
                   <Route path="/dietitians" element={<Navigate to="/expert-list" replace />} />
                   <Route path="/user/:userId" element={<PublicProfile currentUser={user} userData={userData} />} />
                   <Route path="/user/:userId/edit" element={user ? <Navigate to={`/user/${user.uid}?tab=settings`} replace /> : <Navigate to="/landing" replace />} />
@@ -571,13 +552,11 @@ export default function App() {
                   <Route path="/profile" element={user ? <Navigate to={`/user/${user.uid}?tab=settings`} replace /> : <Navigate to="/landing" replace />} />
                   <Route path="/settings" element={user ? <Settings user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/homii" element={user ? <Homii user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/live" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/vault" element={user ? <SecretVault user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/room/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/call/:roomId" element={user ? <RoomPageRoute user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/conference" element={user ? <LiveStreamStudio user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/conference/:roomId" element={user ? <ConferenceRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
-                  <Route path="/healing-suite/:sessionId" element={user ? <HealingRoom user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
+                  <Route path="/room/:roomId" element={<NavigateToTherapyRoom />} />
+                  <Route path="/call/:roomId" element={<NavigateToTherapyRoom />} />
+                  <Route path="/conference" element={<Navigate to="/therapy-room" replace />} />
+                  <Route path="/conference/:roomId" element={<NavigateToTherapyRoom />} />
                   <Route path="/messenger" element={user ? <Messenger user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/inbox" element={user ? <Navigate to="/messenger" replace /> : <Navigate to="/landing" replace />} />
                   

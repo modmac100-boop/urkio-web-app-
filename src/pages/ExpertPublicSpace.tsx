@@ -51,7 +51,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
   };
 
   const copy = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/conference/${roomCode}`);
+    navigator.clipboard.writeText(`${window.location.origin}/therapy-room/${roomCode}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -257,6 +257,19 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
                     </button>
                   </>
                 )}
+                <button 
+                  onClick={() => {
+                    const url = window.location.href;
+                    navigator.clipboard.writeText(url);
+                    toast.success('Practice Link Copied!', {
+                      icon: '🔗',
+                      style: { borderRadius: '1rem', background: '#0f1117', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }
+                    });
+                  }}
+                  className="px-6 py-4 bg-white/5 border border-white/10 text-zinc-400 rounded-2xl font-black text-xs uppercase tracking-widest hover:text-white hover:border-white/20 transition-all flex items-center gap-2"
+                >
+                  <Copy className="size-4" /> Share
+                </button>
               </div>
             </div>
           </div>
@@ -266,12 +279,36 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
       {/* About */}
       {expert.bio && (
         <section className="relative z-10 px-6 md:px-16 pb-20">
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-10 md:p-14">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="md:col-span-2 bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-10 md:p-14">
               <h2 className="text-2xl font-headline font-black text-white tracking-tighter uppercase mb-6 flex items-center gap-3">
                 <Sparkles className="size-5 text-ur-primary" /> About
               </h2>
-              <p className="text-zinc-400 leading-relaxed text-base">{expert.bio}</p>
+              <p className="text-zinc-400 leading-relaxed text-base whitespace-pre-wrap">{expert.bio}</p>
+            </div>
+            
+            {/* Clinical Agenda Preview */}
+            <div className="bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+              <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                <Clock className="size-4 text-ur-primary" /> Clinic Hours
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { day: 'Monday - Friday', time: '09:00 AM - 06:00 PM' },
+                  { day: 'Saturday', time: '10:00 AM - 02:00 PM' },
+                  { day: 'Sunday', time: 'Closed' }
+                ].map(slot => (
+                  <div key={slot.day} className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                    <span className="text-zinc-500">{slot.day}</span>
+                    <span className="text-zinc-300">{slot.time}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="pt-6 border-t border-white/5">
+                <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest leading-relaxed">
+                  Timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone}
+                </p>
+              </div>
             </div>
           </div>
         </section>

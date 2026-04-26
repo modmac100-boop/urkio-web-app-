@@ -64,14 +64,16 @@ function UploadAnnounceModal({ user, userData, onClose }: any) {
 
 export function SpecialistDashboard({ user, userData }: any) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<'cases' | 'agenda' | 'reports'>('cases');
+  const [activeTab, setActiveTab] = useState<'cases' | 'agenda' | 'reports' | 'courses'>('cases');
   const [isUploadingAnnounce, setIsUploadingAnnounce] = useState(false);
   const [cases, setCases] = useState<any[]>([]);
   const [appointments, setAppointments] = useState<any[]>([]);
   const [reports, setReports] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [isAddingCase, setIsAddingCase] = useState(false);
   const [isAddingAppointment, setIsAddingAppointment] = useState(false);
   const [isWritingReport, setIsWritingReport] = useState(false);
+  const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   const [newCase, setNewCase] = useState({ title: '', description: '', tags: '' });
@@ -80,6 +82,7 @@ export function SpecialistDashboard({ user, userData }: any) {
     estimation: '', caseCode: '', tier: '1', category: 'General Anxiety', assignedExpert: '',
     symptoms: '', medicalHistory: ''
   });
+  const [newCourseItem, setNewCourseItem] = useState({ title: '', description: '', date: '', sessionType: 'Healing Course' });
   const [searchTerm, setSearchTerm] = useState('');
   const [newReport, setNewReport] = useState({ title: '', content: '', patientId: '', apptId: '' });
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -97,7 +100,9 @@ export function SpecialistDashboard({ user, userData }: any) {
       return;
     }
 
-    const qCases = query(collection(db, 'cases'), orderBy('createdAt', 'desc'));
+    const qCases = isAdmin
+      ? query(collection(db, 'cases'), orderBy('createdAt', 'desc'))
+      : query(collection(db, 'cases'), where('authorId', '==', user.uid), orderBy('createdAt', 'desc'));
     const unsubCases = onSnapshot(qCases, snap => setCases(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
 
     const qAppts = isAdmin 
@@ -118,7 +123,14 @@ export function SpecialistDashboard({ user, userData }: any) {
       setReports(data);
     });
 
-    return () => { unsubCases(); unsubAppts(); unsubReps(); };
+    const qCourses = isAdmin
+      ? query(collection(db, 'events'), where('type', '==', 'course'))
+      : query(collection(db, 'events'), where('type', '==', 'course'), where('expertId', '==', user.uid));
+    const unsubCourses = onSnapshot(qCourses, snap => {
+      setCourses(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
+    return () => { unsubCases(); unsubAppts(); unsubReps(); unsubCourses(); };
   }, [userData, user.uid, navigate, isAdmin]);
 
   const handleAddCase = async (e: React.FormEvent) => {
@@ -177,18 +189,38 @@ export function SpecialistDashboard({ user, userData }: any) {
     } catch (err) { setError('Failed to save report'); }
   };
 
+  const handleAddCourse = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, 'events'), {
+        ...newCourseItem,
+        type: 'course',
+        expertId: user.uid,
+        expertName: userData.displayName || user.email,
+        createdAt: serverTimestamp()
+      });
+      setIsAddingCourse(false);
+      setNewCourseItem({ title: '', description: '', date: '', sessionType: 'Healing Course' });
+      toast.success('Course published successfully');
+    } catch (err) { setError('Failed to add course'); }
+  };
+
+  const handleDeleteCourse = async (id: string) => {
+    if (window.confirm('Delete this course?')) await deleteDoc(doc(db, 'events', id));
+  };
+
   const handleDeleteAppointment = async (id: string) => {
     if (window.confirm('Delete this case?')) await deleteDoc(doc(db, 'appointments', id));
   };
 
   const startVideoCall = () => {
     const roomId = `urkio-session-${Math.random().toString(36).substring(7)}`;
-    navigate(`/room/${roomId}?type=video`);
+    navigate(`/therapy-room/${roomId}?type=video`);
   };
 
   const copySessionLink = (type: 'video' | 'audio') => {
     const roomId = `urkio-session-${Math.random().toString(36).substring(7)}`;
-    const link = `${window.location.origin}/room/${roomId}?type=${type}`;
+    const link = `${window.location.origin}/therapy-room/${roomId}?type=${type}`;
     navigator.clipboard.writeText(link);
     toast.success(`${type} link copied!`);
   };
@@ -221,6 +253,7 @@ export function SpecialistDashboard({ user, userData }: any) {
             onClick={() => {
               if (activeTab === 'cases') setIsAddingCase(!isAddingCase);
               else if (activeTab === 'agenda') setIsAddingAppointment(!isAddingAppointment);
+              else if (activeTab === 'courses') setIsAddingCourse(!isAddingCourse);
               else setIsWritingReport(!isWritingReport);
             }}
             className="flex-1 sm:flex-none bg-ur-primary/10 text-ur-primary px-4 py-3 rounded-xl font-headline font-black text-[10px] uppercase tracking-widest border border-ur-primary/20"
@@ -259,8 +292,8 @@ export function SpecialistDashboard({ user, userData }: any) {
               </button>
               <button 
                 onClick={() => {
-                  const id = Math.floor(100000 + Math.random() * 900000);
-                  const link = `${window.location.origin}/healing-suite/UK-${id}?mode=private&role=audience`;
+                  const id = Math.floor(1000 + Math.random() * 9000);
+                  const link = `${window.location.origin}/therapy-room/XRQ-${id}`;
                   navigator.clipboard.writeText(link);
                   toast.success("Invite link copied!");
                 }}
@@ -297,6 +330,7 @@ export function SpecialistDashboard({ user, userData }: any) {
         {[
           { id: 'cases', label: t('specialistDashboard.caseStudies'), icon: 'folder_open' },
           { id: 'agenda', label: 'Clinical Agenda', icon: 'event' },
+          { id: 'courses', label: 'My Courses', icon: 'school' },
           { id: 'reports', label: 'Confidential', icon: 'lock' }
         ].map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id as any)} className={clsx("flex items-center gap-3 px-8 py-3.5 rounded-3xl font-headline font-black text-[10px] uppercase tracking-widest transition-all", activeTab === tab.id ? "bg-white dark:bg-zinc-800 text-ur-primary shadow-lg border border-zinc-100" : "text-zinc-400")}>
@@ -373,6 +407,52 @@ export function SpecialistDashboard({ user, userData }: any) {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+      {activeTab === 'courses' && (
+        <div className="grid gap-6">
+          {isAddingCourse && (
+            <form onSubmit={handleAddCourse} className="bg-white rounded-[2rem] p-8 border border-zinc-200 shadow-xl space-y-6">
+              <h2 className="text-xl font-headline font-black uppercase tracking-widest text-ur-primary">Create Healing Course</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" placeholder="Course Title" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.title} onChange={e => setNewCourseItem({...newCourseItem, title: e.target.value})} required />
+                <input type="date" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.date} onChange={e => setNewCourseItem({...newCourseItem, date: e.target.value})} required />
+                <select className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.sessionType} onChange={e => setNewCourseItem({...newCourseItem, sessionType: e.target.value})}>
+                    <option>Healing Course</option>
+                    <option>Workshop</option>
+                    <option>Masterclass</option>
+                    <option>Group Therapy</option>
+                </select>
+              </div>
+              <textarea placeholder="Course Description & Learning Outcomes" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-32" value={newCourseItem.description} onChange={e => setNewCourseItem({...newCourseItem, description: e.target.value})} required />
+              <div className="flex justify-end gap-3">
+                <button type="button" onClick={() => setIsAddingCourse(false)} className="px-6 py-2">Cancel</button>
+                <button type="submit" className="px-8 py-3 bg-ur-primary text-white rounded-2xl font-bold">Publish to My Place</button>
+              </div>
+            </form>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {courses.map(course => (
+              <div key={course.id} className="bg-white p-8 rounded-[2rem] border border-zinc-100 shadow-sm group hover:shadow-xl transition-all">
+                <div className="flex justify-between items-start mb-6">
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-ur-primary bg-ur-primary/10 px-3 py-1.5 rounded-full">{course.sessionType}</span>
+                  <button onClick={() => handleDeleteCourse(course.id)} className="text-zinc-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4"/></button>
+                </div>
+                <h3 className="text-xl font-headline font-black mb-3">{course.title}</h3>
+                <p className="text-zinc-500 text-sm leading-relaxed line-clamp-3 mb-6">{course.description}</p>
+                <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 uppercase tracking-widest pt-6 border-t border-zinc-50">
+                  <Calendar className="w-3 h-3" /> {course.date ? format(new Date(course.date), 'MMM d, yyyy') : 'Flexible Start'}
+                </div>
+              </div>
+            ))}
+            {courses.length === 0 && !isAddingCourse && (
+              <div className="col-span-full py-20 text-center border-2 border-dashed border-zinc-100 rounded-[2.5rem]">
+                <p className="text-zinc-400 font-black text-xs uppercase tracking-widest">You haven't published any courses yet.</p>
+                <button onClick={() => setIsAddingCourse(true)} className="mt-4 text-ur-primary font-black text-xs uppercase tracking-widest hover:underline">Create your first course</button>
+              </div>
+            )}
           </div>
         </div>
       )}

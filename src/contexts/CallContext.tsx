@@ -132,7 +132,7 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
     setActiveOutgoingCall({ id: callId, ...callData } as CallData);
 
     // Caller navigates to the room immediately — callee will join when they accept
-    navigate(`/room/${roomId}?type=${type}`);
+    navigate(`/therapy-room/${roomId}?type=${type}`);
   };
 
   const acceptCall = async () => {
@@ -141,7 +141,7 @@ export function CallProvider({ children }: { children: React.ReactNode }) {
       await updateDoc(doc(db, 'calls', activeIncomingCall.id), {
         status: 'accepted'
       });
-      navigate(`/room/${activeIncomingCall.roomId}?type=${activeIncomingCall.type}`);
+      navigate(`/therapy-room/${activeIncomingCall.roomId}?type=${activeIncomingCall.type}`);
       setActiveIncomingCall(null);
       ringingAudioRef.current?.pause();
     } catch (err) {

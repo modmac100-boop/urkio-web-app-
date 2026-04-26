@@ -11,7 +11,7 @@ import { UrkioMockData } from '../mockData';
 import { EventDetailsModal } from '../components/EventDetailsModal';
 import clsx from 'clsx';
 
-export function HealingCourses({ user, userData }: { user: any, userData: any }) {
+export function HealingCourses({ user, userData, expertId }: { user: any, userData: any, expertId?: string }) {
   const { t } = useTranslation();
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,11 +37,9 @@ export function HealingCourses({ user, userData }: { user: any, userData: any })
 
   useEffect(() => {
     // query only type 'course'
-    const q = query(
-      collection(db, 'events'), 
-      where('type', '==', 'course'),
-      orderBy('date', 'asc')
-    );
+    const q = expertId 
+      ? query(collection(db, 'events'), where('type', '==', 'course'), where('expertId', '==', expertId), orderBy('date', 'asc'))
+      : query(collection(db, 'events'), where('type', '==', 'course'), orderBy('date', 'asc'));
     
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

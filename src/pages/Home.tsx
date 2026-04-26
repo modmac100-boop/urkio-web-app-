@@ -529,7 +529,7 @@ export function Home({ user, userData }: { user: any, userData: any }) {
         {/* Instant Action Bar */}
         <div className="grid grid-cols-1 gap-4 mb-8">
           <Link
-            to="/conference"
+            to="/therapy-room"
             className="flex-1 group relative overflow-hidden bg-zinc-950 dark:bg-zinc-100 p-4 rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.98] shadow-xl border border-zinc-800 dark:border-white/20"
           >
             <div className="absolute top-0 inset-e-0 w-32 h-32 bg-ur-primary/20 blur-3xl rounded-full" />
