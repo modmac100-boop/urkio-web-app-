@@ -63,7 +63,7 @@ export function OnlinePresenceHome({ user }: { user: any }) {
           if (!u.email || name.includes('guest') || email.includes('guest')) return false;
           
           const isAdmin = ['admin', 'management', 'founder'].includes(role) || name.includes('admin') || name.includes('urkio') || email.includes('admin') || email.includes('urkio');
-          const isExpert = ['specialist', 'expert', 'case_manager', 'practitioner'].includes(role) || u.isSpecialist || u.verificationStatus === 'approved';
+          const isExpert = ['specialist', 'expert', 'case_manager', 'practitioner'].includes(role) || u.isSpecialist || ['approved', 'verified'].includes(u.verificationStatus || '');
           const isCircle = circleIds.includes(u.id);
           
           // Strict 24-Hour Expiry Logic

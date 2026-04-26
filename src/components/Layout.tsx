@@ -111,17 +111,17 @@ export function Layout({
   }, [user?.uid]);
 
 
-  const role = userData?.role?.toLowerCase();
+  const role = (userData?.role || userData?.userType || '').toLowerCase();
   const userEmail = (user?.email || '').toLowerCase();
-  const isSpecialRole = 
-    (role && ['specialist', 'expert', 'case_manager', 'admin', 'management', 'manager', 'verifiedexpert', 'practitioner'].includes(role)) || 
-    userEmail.includes('urkio') || 
-    userEmail === 'sameralhalaki@gmail.com' ||
-    userEmail === 'banason150@gmail.com';
+  const isVerified = userData?.verificationStatus === 'verified' || userData?.verificationStatus === 'approved';
+  const isMasterAdmin = ['founder', 'admin', 'management', 'manager'].includes(role) || 
+                        ['urkio@urkio.com', 'sameralhalaki@gmail.com', 'banason150@gmail.com'].includes(userEmail);
+  const isSpecialRole = isMasterAdmin || (['specialist', 'expert', 'verifiedexpert', 'practitioner'].includes(role) && isVerified);
 
   const navItems = [
     ...(isSpecialRole ? [
-      { path: '/agenda', label: t('nav.myAgenda'), icon: 'dashboard', highlight: true },
+      { path: '/specialist-dashboard', label: t('nav.specialistHub'), icon: 'shield_person', highlight: true },
+      { path: '/agenda', label: t('nav.myAgenda'), icon: 'dashboard', highlight: false },
       { path: '/clinical-workstation', label: t('nav.practice'), icon: 'clinical_notes', highlight: false }
     ] : []),
     { path: '/', label: t('nav.professionalFeed'), icon: 'dynamic_feed' },

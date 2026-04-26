@@ -57,7 +57,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl">
+    <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-[#0f1117] border border-white/10 rounded-[2.5rem] w-full max-w-lg p-10 relative shadow-2xl">
         <button onClick={onClose} className="absolute top-8 right-8 text-white/40 hover:text-white transition-colors"><X className="size-6" /></button>
 
@@ -105,7 +105,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
           </>
         ) : (
           <div className="text-center space-y-8">
-            <div className="size-20 bg-green-500/10 border border-green-500/20 rounded-[2rem] flex items-center justify-center mx-auto">
+            <div className="bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-4xl border border-slate-200 dark:border-slate-800 p-8 flex items-center justify-center mx-auto">
               <Check className="size-10 text-green-400" />
             </div>
             <div>
@@ -172,7 +172,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
   return (
     <div className="min-h-screen bg-zinc-950 text-white font-body selection:bg-ur-primary/30">
       {/* Ambient Background */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 w-screen h-screen z-0 bg-slate-950 flex flex-col overflow-hidden">
         <div className="absolute top-[-20%] right-[-10%] w-[60%] h-[60%] bg-ur-primary/5 rounded-full blur-[180px]" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-purple-500/5 rounded-full blur-[140px]" />
       </div>
@@ -191,7 +191,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
           <div className="flex flex-col md:flex-row gap-10 items-start">
             {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="size-32 md:size-44 rounded-[2.5rem] overflow-hidden border-4 border-white/10 shadow-2xl">
+              <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border-4 border-white/10 shadow-2xl">
                 <img src={expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'E')}&background=1a1a2e&color=fff&size=300`}
                   alt={expert.displayName} className="w-full h-full object-cover" />
               </div>
@@ -206,7 +206,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
             <div className="flex-1 space-y-5">
               <div>
                 {isOwner && (
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-ur-primary/10 border border-ur-primary/20 rounded-full text-[10px] font-black text-ur-primary uppercase tracking-widest mb-4">
+                  <div className="absolute top-4 inset-x-4 flex items-center gap-2 px-3 py-1 bg-ur-primary/10 border border-ur-primary/20 rounded-full text-[10px] font-black text-ur-primary uppercase tracking-widest mb-4">
                     <Edit3 className="size-3" /> Your Practice Page
                   </div>
                 )}
@@ -280,15 +280,15 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
       {expert.bio && (
         <section className="relative z-10 px-6 md:px-16 pb-20">
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-10 md:p-14">
-              <h2 className="text-2xl font-headline font-black text-white tracking-tighter uppercase mb-6 flex items-center gap-3">
+            <div className="md:col-span-2 bg-white/3 border border-white/5 rounded-[2.5rem] p-10 md:p-14">
+              <h2 className="text-4xl md:text-6xl font-headline font-black text-white tracking-widest uppercase mb-4 flex items-center gap-3">
                 <Sparkles className="size-5 text-ur-primary" /> About
               </h2>
               <p className="text-zinc-400 leading-relaxed text-base whitespace-pre-wrap">{expert.bio}</p>
             </div>
             
             {/* Clinical Agenda Preview */}
-            <div className="bg-white/[0.03] border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+            <div className="bg-white/3 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
               <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                 <Clock className="size-4 text-ur-primary" /> Clinic Hours
               </h3>
@@ -330,7 +330,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
           </div>
 
           {courses.length === 0 ? (
-            <div className="py-24 text-center bg-white/[0.02] border border-dashed border-white/10 rounded-[2.5rem]">
+            <div className="py-24 text-center bg-white/2 border border-dashed border-white/10 rounded-[2.5rem]">
               <BookOpen className="size-12 text-white/10 mx-auto mb-4" />
               <p className="text-zinc-600 font-black text-xs uppercase tracking-widest">
                 {isOwner ? 'No courses yet — create one from your Specialist Dashboard' : 'No courses published yet'}
@@ -339,7 +339,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {courses.map(course => (
-                <div key={course.id} className="group bg-white/[0.04] border border-white/10 rounded-[2rem] p-8 hover:bg-white/[0.08] hover:border-ur-primary/30 transition-all duration-300 cursor-pointer">
+                <div key={course.id} className="group bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl rounded-4xl border border-white/10 p-8 hover:shadow-2xl hover:shadow-ur-primary/10 transition-all duration-500 cursor-pointer">
                   <div className="mb-6">
                     <span className="text-[9px] font-black uppercase tracking-widest text-ur-primary bg-ur-primary/10 px-3 py-1.5 rounded-full border border-ur-primary/20">
                       {course.sessionType || 'Healing Course'}

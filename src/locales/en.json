@@ -7,7 +7,7 @@
     "community": "Community",
     "aiGuide": "AI Guide",
     "myTasks": "My Tasks",
-    "specialistHub": "Healing Center",
+    "specialistHub": "Gold Command Center",
     "healingHub": "Healing Center",
     "instantCall": "Instant Call",
     "adminPanel": "Admin Panel",
@@ -416,7 +416,7 @@
     "retry": "Re-synchronize Hub"
   },
   "specialistDashboard": {
-    "title": "Specialist Dashboard",
+    "title": "Gold Clinical Command Center",
     "subtitle": "Manage your practice and collaborate with peers.",
     "uploadAnnounce": "Upload Announce",
     "videoSession": "Video Session",
@@ -429,7 +429,7 @@
     "scheduleAppointment": "Schedule Appointment",
     "noAppointments": "No appointments scheduled",
     "noAppointmentsDesc": "Keep track of your client sessions and contact info here.",
-    "accessCodes": "Access Codes",
+    "accessCodes": "Gold Access Codes",
     "accessCodesDesc": "Share these codes with users to unlock specific professional courses."
   },
   "experts": {

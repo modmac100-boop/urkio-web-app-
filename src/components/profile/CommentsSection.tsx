@@ -120,7 +120,7 @@ function CommentItem({
           
           {/* Comment Summary */}
           {(comment.likesCount && comment.likesCount > 0) || (comment.repostsCount && comment.repostsCount > 0) ? (
-            <div className="absolute -bottom-3 end-4 bg-white dark:bg-zinc-800 border border-border-light rounded-full px-2 py-0.5 shadow-sm flex items-center gap-1.5 z-10">
+            <div className="absolute -bottom-3 inset-e-4 bg-white dark:bg-zinc-800 border border-border-light rounded-full px-2 py-0.5 shadow-sm flex items-center gap-1.5 z-10">
               <div className="flex -space-x-1">
                 {Array.from(new Set(Object.values(comment.reactions || {}))).slice(0, 3).map((emoji, i) => (
                   <span key={i} className="text-[10px]">{emoji}</span>
@@ -181,7 +181,7 @@ function CommentItem({
                   initial={{ opacity: 0, y: 10, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                  className="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-zinc-800 border border-border-light rounded-2xl shadow-2xl z-[60] grid grid-cols-4 sm:grid-cols-8 gap-1 min-w-max"
+                  className="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-zinc-800 border border-border-light rounded-2xl shadow-2xl z-60 grid grid-cols-4 sm:grid-cols-8 gap-1 min-w-max"
                   onMouseEnter={() => {
                     if (reactionTimeoutRef.current) clearTimeout(reactionTimeoutRef.current);
                   }}

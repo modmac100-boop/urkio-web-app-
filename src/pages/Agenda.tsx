@@ -194,7 +194,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
   if (isLocked && !isAdmin) {
     const hasPin = !!userData?.clinicalPin;
     return (
-      <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("fixed inset-0 bg-[#080a0f] flex items-center justify-center p-6 z-[200] font-['Manrope']")}>
+      <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("fixed inset-0 bg-[#080a0f] flex items-center justify-center p-6 z-200 font-['Manrope']")}>
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-msgr-primary-container/10 blur-[180px] animate-pulse" />
           <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-[#a8c8ff]/5 blur-[150px]" />
@@ -461,7 +461,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
         </div>
 
         {showBookingModal && (
-          <div className="fixed inset-0 flex items-center justify-center p-6 z-[300] font-['Manrope']">
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-300 flex items-center justify-center p-6 font-['Manrope']">
             <div className="absolute inset-0 bg-[#080a0f]/90 backdrop-blur-xl" onClick={() => setShowBookingModal(false)} />
             <div className="w-full max-w-2xl relative bg-[#11141b] border border-white/10 rounded-[3.5rem] p-16 shadow-2xl overflow-hidden">
               <div className="mb-12 flex items-center gap-6">

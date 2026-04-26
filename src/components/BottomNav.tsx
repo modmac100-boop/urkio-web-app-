@@ -29,7 +29,7 @@ export function BottomNav({ isSpecialRole }: BottomNavProps) {
     { id: 'home', path: '/', icon: Home, label: t('nav.homePage') },
     { id: 'messenger', path: '/messenger', icon: MessageCircle, label: t('nav.inbox') },
     { id: 'instantCall', path: '/conference', icon: Disc, label: t('nav.instantCall'), isAction: true },
-    { id: 'clinical', path: '/agenda', icon: Sparkles, label: 'Hub' },
+    { id: 'clinical', path: '/specialist-dashboard', icon: Sparkles, label: t('nav.specialistHub') },
     { id: 'therapy-room', path: '/therapy-room', icon: Stethoscope, label: 'Session' },
   ];
 

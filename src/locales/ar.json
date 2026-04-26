@@ -7,7 +7,7 @@
     "community": "المجتمع",
     "aiGuide": "دليل الذكاء الاصطناعي",
     "myTasks": "مهامي",
-    "specialistHub": "مركز الخبراء",
+    "specialistHub": "مركز القيادة الذهبي",
     "healingHub": "مركز الخبراء",
     "instantCall": "مكالمة فورية",
     "adminPanel": "لوحة التحكم",
@@ -395,7 +395,7 @@
     "notes": "ملاحظات (اختياري)"
   },
   "specialistDashboard": {
-    "title": "لوحة تحكم المتخصص",
+    "title": "مركز القيادة السريري الذهبي",
     "subtitle": "أدر ممارستك وتعاون مع زملائك.",
     "uploadAnnounce": "رفع إعلان",
     "videoSession": "جلسة فيديو",
@@ -408,7 +408,7 @@
     "scheduleAppointment": "جدولة موعد",
     "noAppointments": "لا توجد مواعيد مجدولة",
     "noAppointmentsDesc": "تتبع جلسات عملائك ومعلومات الاتصال هنا.",
-    "accessCodes": "أكواد الوصول",
+    "accessCodes": "أكواد الوصول الذهبية",
     "accessCodesDesc": "شارك هذه الأكواد مع المستخدمين لفتح دورات استشفاء محددة."
   },
   "experts": {

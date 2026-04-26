@@ -195,7 +195,7 @@ export function ExpertDashboard({ user, userData }: any) {
             { label: 'Published Courses', val: stats.courses, icon: BookOpen, color: 'text-emerald-500' },
             { label: 'Reports', val: stats.reports, icon: MessageSquare, color: 'text-amber-500' }
           ].map(stat => (
-            <div key={stat.label} className="bg-white p-6 rounded-[2rem] border border-zinc-100 shadow-sm">
+            <div key={stat.label} className="bg-white p-6 rounded-4xl border border-zinc-100 shadow-sm">
               <stat.icon className={`size-5 ${stat.color} mb-3`} />
               <p className="text-2xl font-black italic text-zinc-900 leading-none">{stat.val}</p>
               <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mt-1">{stat.label}</p>

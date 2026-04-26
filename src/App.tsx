@@ -531,7 +531,7 @@ export default function App() {
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsAndConditions user={user} />} />
                   <Route path="/healing-center" element={<HealingCenter user={user} userData={userData} />} />
-                  <Route path="/specialist-hub" element={<Navigate to="/healing-center" replace />} />
+                  <Route path="/specialist-hub" element={<Navigate to="/specialist-dashboard" replace />} />
                   <Route path="/specialist-dashboard" element={user ? <SpecialistDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/expert/:expertId" element={<ExpertPublicSpace user={user} userData={userData} />} />
                   <Route path="/expert-dashboard" element={user ? <ExpertDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />

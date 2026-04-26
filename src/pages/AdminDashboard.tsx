@@ -1059,13 +1059,13 @@ export function AdminDashboard({ user, userData }: any) {
                                    role: 'specialist',
                                    isSpecialist: true,
                                    isExpert: true,
-                                   verificationStatus: 'approved',
+                                   verificationStatus: 'verified',
                                    isExpertPending: false,
                                    specialty: expert.primaryRole || 'Specialist',
                                    specialization: expert.primaryRole || 'Specialist',
                                    hasSpecialistHub: true,
-                                    approvedAt: serverTimestamp(),
-                                    approvalNote: expert.applicationLetter || expert.primaryRole || 'Approved by admin.',
+                                   approvedAt: serverTimestamp(),
+                                   approvalNote: expert.applicationLetter || expert.primaryRole || 'Approved by admin.',
                                  });
                                  
                                  // Automate Provisioning

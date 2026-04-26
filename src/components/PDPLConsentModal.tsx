@@ -36,7 +36,7 @@ export function PDPLConsentModal({ userId, onComplete }: { userId: string, onCom
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-xl">
+    <div className="fixed inset-0 z-1000 flex items-center justify-center p-6 bg-zinc-950/90 backdrop-blur-xl">
       <motion.div 
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

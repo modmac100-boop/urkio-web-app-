@@ -91,7 +91,7 @@ export function NewMessageModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-[#1b1c1a]/60 backdrop-blur-md" onClick={onClose} />
       
       <motion.div 

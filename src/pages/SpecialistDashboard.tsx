@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc, doc, where, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { FileText, Users, Tag, Plus, Video, Calendar, Phone, Trash2, Clock, Link as LinkIcon, X, UploadCloud, Loader2, ShieldCheck, Copy, Check, Sparkles } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -86,13 +86,20 @@ export function SpecialistDashboard({ user, userData }: any) {
   const [searchTerm, setSearchTerm] = useState('');
   const [newReport, setNewReport] = useState({ title: '', content: '', patientId: '', apptId: '' });
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [accessCodes, setAccessCodes] = useState<string[]>(userData?.clinicalKeys || []);
+
+  useEffect(() => {
+    if (userData?.clinicalKeys) {
+      setAccessCodes(userData.clinicalKeys);
+    }
+  }, [userData?.clinicalKeys]);
 
   const navigate = useNavigate();
   const isAdmin = userData?.role === 'admin' || userData?.role === 'management' || userData?.role === 'founder' || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(userData?.email?.toLowerCase()) || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(user?.email?.toLowerCase());
 
   useEffect(() => {
     const role = (userData?.role || userData?.userType || '').toLowerCase();
-    const isVerified = userData?.verificationStatus === 'verified';
+    const isVerified = userData?.verificationStatus === 'verified' || userData?.verificationStatus === 'approved';
     const isMasterAdmin = ['founder', 'admin', 'management', 'manager'].includes(role) || 
                           ['urkio@urkio.com', 'sameralhalaki@gmail.com', 'banason150@gmail.com'].includes(user?.email?.toLowerCase() || '');
     
@@ -106,31 +113,51 @@ export function SpecialistDashboard({ user, userData }: any) {
     const qCases = isAdmin
       ? query(collection(db, 'cases'), orderBy('createdAt', 'desc'))
       : query(collection(db, 'cases'), where('authorId', '==', user.uid), orderBy('createdAt', 'desc'));
-    const unsubCases = onSnapshot(qCases, snap => setCases(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
+    
+    const unsubCases = onSnapshot(qCases, snap => setCases(snap.docs.map(d => ({ id: d.id, ...d.data() }))), err => {
+      console.error("Cases listener error:", err);
+      if (err.message.includes('requires an index')) {
+        setError("Database indexing in progress. Please wait a few minutes.");
+      } else {
+        setError("Failed to sync cases. Please refresh.");
+      }
+    });
 
     const qAppts = isAdmin
       ? query(collection(db, 'appointments'))
       : query(collection(db, 'appointments'), where('expertId', '==', user.uid));
+    
     const unsubAppts = onSnapshot(qAppts, snap => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       data.sort((a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime());
       setAppointments(data);
+    }, err => {
+      console.error("Appointments listener error:", err);
+      setError("Failed to sync appointments.");
     });
 
     const qReps = isAdmin
       ? query(collection(db, 'confidential_reports'))
       : query(collection(db, 'confidential_reports'), where('authorId', '==', user.uid));
+    
     const unsubReps = onSnapshot(qReps, snap => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       data.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
       setReports(data);
+    }, err => {
+      console.error("Reports listener error:", err);
+      setError("Failed to sync clinical reports.");
     });
 
     const qCourses = isAdmin
       ? query(collection(db, 'events'), where('type', '==', 'course'))
       : query(collection(db, 'events'), where('type', '==', 'course'), where('expertId', '==', user.uid));
+    
     const unsubCourses = onSnapshot(qCourses, snap => {
       setCourses(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, err => {
+      console.error("Courses listener error:", err);
+      setError("Failed to sync courses.");
     });
 
     return () => { unsubCases(); unsubAppts(); unsubReps(); unsubCourses(); };
@@ -228,6 +255,21 @@ export function SpecialistDashboard({ user, userData }: any) {
     toast.success(`${type} link copied!`);
   };
 
+  const handleGenerateKey = async () => {
+    const newCode = `URK-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const updatedCodes = [...accessCodes, newCode];
+    setAccessCodes(updatedCodes);
+    try {
+      await updateDoc(doc(db, 'users', user.uid), {
+        clinicalKeys: updatedCodes
+      });
+      toast.success("New clinical key generated");
+    } catch (err) {
+      console.error("Failed to persist clinical key:", err);
+      toast.error("Generated locally but failed to save to cloud");
+    }
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedCode(text);
@@ -239,7 +281,7 @@ export function SpecialistDashboard({ user, userData }: any) {
     <div className="space-y-12 pb-12">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
         <div className="min-w-0">
-          <h1 className="text-3xl md:text-4xl font-headline font-black text-zinc-900 dark:text-zinc-100 tracking-tighter mb-2">{t('specialistDashboard.title')}</h1>
+          <h1 className="text-3xl md:text-4xl font-headline font-black text-zinc-900 dark:text-zinc-100 tracking-tighter mb-2">{t('specialistDashboard.title', 'Gold Clinical Command Center')}</h1>
           <p className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest truncate">{t('specialistDashboard.manageSubtitle')}</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">

@@ -95,6 +95,32 @@ html {
 
   --color-outline: #757778;
   --color-outline-variant: #abadae;
+
+  /* Urkio New Design System Tokens */
+  --ur-deep-navy: #050A0F;
+  --ur-ivory: #EDE8E4;
+  --ur-cyan: #30B0D0;
+  --ur-gold: #C8A96E;
+  --ur-sage: #6B8E7D;
+  --ur-rose: #D4A5A5;
+  --ur-bg-light: #F7F5F2;
+  --ur-surface: #FFFFFF;
+  --ur-text-primary: #1A1A1A;
+  --ur-text-secondary: #6B6B6B;
+  --ur-border: #E5E5E5;
+  --ur-online: #30B0D0;
+  --ur-offline: #9CA3AF;
+
+  /* Map to Executive Design Internal Variables (Light Defaults) */
+  --ur-primary: var(--ur-cyan);
+  --ur-secondary: var(--ur-sage);
+  --ur-tertiary: var(--ur-gold);
+  --ur-background: var(--ur-bg-light);
+  --ur-surface-base: var(--ur-surface);
+  --ur-on-surface: var(--ur-text-primary);
+  --ur-on-surface-variant: var(--ur-text-secondary);
+  --ur-outline: var(--ur-border);
+  --ur-outline-variant: var(--ur-border);
 }
 
 .dark {
@@ -135,9 +161,9 @@ html {
   --color-outline-variant: #43474e;
 
   /* Executive Design Dark Overrides */
-  --ur-background: #0a0e14;
-  --ur-surface: #161d27;
-  --ur-on-surface: #f1f5f9;
+  --ur-background: var(--ur-deep-navy);
+  --ur-surface-base: #0a0e14;
+  --ur-on-surface: var(--ur-ivory);
   --ur-on-surface-variant: #94a3b8;
   --ur-outline: #8e9199;
   --ur-outline-variant: #43474e;
@@ -217,22 +243,34 @@ html {
   --ur-outline: #727783;
   --ur-outline-variant: #c1c6d4;
 
-  /* Executive Design Tailwind Mapping */
+  --z-index-200: 200;
+  --z-index-300: 300;
+
+  /* Urkio New Design System Tailwind Mapping */
+  --color-ur-deep-navy: var(--ur-deep-navy);
+  --color-ur-ivory: var(--ur-ivory);
+  --color-ur-cyan: var(--ur-cyan);
+  --color-ur-gold: var(--ur-gold);
+  --color-ur-sage: var(--ur-sage);
+  --color-ur-rose: var(--ur-rose);
+  --color-ur-bg-light: var(--ur-bg-light);
+  --color-ur-surface: var(--ur-surface);
+  --color-ur-text-primary: var(--ur-text-primary);
+  --color-ur-text-secondary: var(--ur-text-secondary);
+  --color-ur-border: var(--ur-border);
+  --color-ur-online: var(--ur-online);
+  --color-ur-offline: var(--ur-offline);
+
+  /* Legacy Mapping Sync */
   --color-ur-primary: var(--ur-primary);
   --color-ur-secondary: var(--ur-secondary);
   --color-ur-tertiary: var(--ur-tertiary);
   --color-ur-background: var(--ur-background);
-  --color-ur-surface: var(--ur-surface);
+  --color-ur-surface-base: var(--ur-surface-base);
   --color-ur-on-surface: var(--ur-on-surface);
   --color-ur-on-surface-variant: var(--ur-on-surface-variant);
   --color-ur-outline: var(--ur-outline);
   --color-ur-outline-variant: var(--ur-outline-variant);
-
-  --font-headline: "Manrope", sans-serif;
-  --font-body: "Inter", sans-serif;
-
-  --z-index-200: 200;
-  --z-index-300: 300;
 }
 
 /* Material Symbols configuration */

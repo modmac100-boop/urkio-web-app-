@@ -83,7 +83,7 @@ export function PublicProfile({
     !!profileData?.isExpert ||
     !!profileData?.isVerifiedExpert || 
     !!profileData?.isSpecialist ||
-    (profileData?.verificationStatus === 'approved') ||
+    (profileData?.verificationStatus === 'approved' || profileData?.verificationStatus === 'verified') ||
     ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(profileData?.email?.toLowerCase()) ||
     ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(currentUser?.email?.toLowerCase());
   const showAgendaTab = isOwnProfile && isExpert;

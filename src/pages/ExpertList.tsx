@@ -115,7 +115,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
             <div className="md:col-span-4 h-full">
               <button 
                 onClick={() => searchQuery ? setSelectedCategory('All') : null}
-                className="w-full h-full bg-linear-to-tr from-[#a8c8ff] to-msgr-primary-container text-[#003062] rounded-xl font-black uppercase tracking-[0.1em] text-[7px] shadow-lg hover:scale-[1.02] active:scale-95 transition-all py-2 md:py-0 flex items-center justify-center gap-1.5"
+                className="w-full h-full bg-linear-to-tr from-[#a8c8ff] to-msgr-primary-container text-[#003062] rounded-xl font-black uppercase tracking-widest text-[7px] shadow-lg hover:scale-[1.02] active:scale-95 transition-all py-2 md:py-0 flex items-center justify-center gap-1.5"
               >
                 <Zap className="size-2.5 fill-current" />
                 Execute Filter
@@ -235,7 +235,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                )}
 
                {/* Elite Application Banner */}
-               <div className="bg-[#161920] border border-white/10 rounded-[2rem] p-6 overflow-hidden relative group shadow-2xl mt-8">
+               <div className="bg-[#161920] border border-white/10 rounded-4xl p-6 overflow-hidden relative group shadow-2xl mt-8">
                   <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-2">
                      <div className="max-w-xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#c3c0ff]/10 border border-[#c3c0ff]/20 text-[#c3c0ff] text-[8px] font-black uppercase tracking-[0.25em] mb-2">
@@ -254,7 +254,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                      </div>
                      <div className="relative">
                         <div className="absolute inset-0 bg-[#a8c8ff]/20 rounded-full blur-3xl scale-110 group-hover:scale-150 transition-transform duration-1000" />
-                        <div className="size-40 rounded-[2rem] bg-linear-to-tr from-[#a8c8ff] to-msgr-primary-container flex items-center justify-center rotate-6 group-hover:rotate-0 transition-transform duration-700 relative z-10 shadow-3xl">
+                        <div className="size-40 rounded-4xl bg-linear-to-tr from-[#a8c8ff] to-msgr-primary-container flex items-center justify-center rotate-6 group-hover:rotate-0 transition-transform duration-700 relative z-10 shadow-3xl">
                            <Award className="size-20 text-white/90" />
                         </div>
                      </div>

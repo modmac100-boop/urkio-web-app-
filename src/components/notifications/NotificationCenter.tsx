@@ -200,7 +200,7 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
         onClick={onClose}
       />
       
-      <div className="fixed top-16 inset-e-0 sm:inset-e-4 w-full sm:w-96 max-h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 rounded-none sm:rounded-2xl shadow-2xl border-b sm:border border-zinc-100 dark:border-zinc-800 z-1001 overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-4 duration-200">
+      <div className="fixed top-16 inset-e-0 sm:inset-e-4 w-full sm:w-96 max-h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 rounded-none sm:rounded-2xl shadow-2xl border-b sm:border border-zinc-100 dark:border-zinc-800 z-[1001] overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-4 duration-200">
       <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-950/30">
         <h3 className="font-headline font-black text-zinc-900 dark:text-white flex items-center gap-2 tracking-tight">
           <Bell className="w-5 h-5 text-ur-primary dark:text-blue-400" />

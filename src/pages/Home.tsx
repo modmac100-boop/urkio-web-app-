@@ -454,7 +454,7 @@ export function Home({ user, userData }: { user: any, userData: any }) {
         {spotlightEvent ? (
           <div 
             onClick={() => setSelectedEvent(spotlightEvent)}
-            className="relative h-[300px] md:h-[360px] rounded-2xl md:rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl transition-all duration-700 hover:shadow-ur-primary/20"
+            className="relative h-[300px] md:h-[360px] rounded-2xl md:rounded-4xl overflow-hidden group cursor-pointer shadow-xl transition-all duration-700 hover:shadow-ur-primary/20"
           >
             {spotlightEvent.mediaUrl && (spotlightEvent.mediaUrl.includes('.webm') || spotlightEvent.mediaUrl.includes('.mp4')) ? (
               <video 
