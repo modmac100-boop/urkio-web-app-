@@ -54,18 +54,44 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
     return () => unsubscribe();
   }, []);
 
-  const handleUnlock = (e: React.FormEvent) => {
+  const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
     setUnlockError(null);
-    const validCodes = [...(UrkioMockData.validHealingCodes || []), 'URKIO_ADMIN_2024', 'URKIO2024', 'URKIO_FOUNDER'];
-    if (validCodes.includes(unlockCode)) {
-      const newUnlocked = [...unlockedCourseIds, courseToUnlock.id];
-      setUnlockedCourseIds(newUnlocked);
-      setSelectedCourse(courseToUnlock);
-      setCourseToUnlock(null);
-      setUnlockCode('');
-    } else {
-      setUnlockError('Invalid code. Please try again.');
+    
+    try {
+      const { getDocs, query, collection, where, updateDoc, doc } = await import('firebase/firestore');
+      const q = query(collection(db, 'clinical_keys'), where('code', '==', unlockCode));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty) {
+        // Key is valid
+        const keyDoc = querySnapshot.docs[0];
+        const keyData = keyDoc.data();
+        
+        // Mark as used (optional but good practice)
+        // await updateDoc(doc(db, 'clinical_keys', keyDoc.id), { used: true });
+
+        const newUnlocked = [...unlockedCourseIds, courseToUnlock.id];
+        setUnlockedCourseIds(newUnlocked);
+        setSelectedCourse(courseToUnlock);
+        setCourseToUnlock(null);
+        setUnlockCode('');
+      } else {
+        // Fallback to master codes for testing
+        const masterCodes = ['URKIO_ADMIN_2024', 'URKIO2024', 'URKIO_FOUNDER', 'PEACE_NOW', 'HEAL2026'];
+        if (masterCodes.includes(unlockCode)) {
+          const newUnlocked = [...unlockedCourseIds, courseToUnlock.id];
+          setUnlockedCourseIds(newUnlocked);
+          setSelectedCourse(courseToUnlock);
+          setCourseToUnlock(null);
+          setUnlockCode('');
+        } else {
+          setUnlockError('Invalid code. Please contact your therapist.');
+        }
+      }
+    } catch (err) {
+      console.error("Unlock error:", err);
+      setUnlockError('Connection error. Please try again.');
     }
   };
 

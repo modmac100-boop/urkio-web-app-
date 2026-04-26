@@ -17,19 +17,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, userData }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const role = userData?.role || userData?.userType;
-  const isSpecialRole = 
-    (role && ['specialist', 'expert', 'case_manager', 'admin', 'management', 'manager', 'verifiedexpert', 'practitioner'].includes(role)) || 
-    user?.email?.includes('urkio') || 
-    user?.email === 'sameralhalaki@gmail.com' ||
-    user?.email === 'banason150@gmail.com';
+  const role = (userData?.role || userData?.userType || '').toLowerCase();
+  const isVerified = userData?.verificationStatus === 'verified';
+  const isAdmin = ['founder', 'admin', 'management', 'manager'].includes(role) || 
+                  ['urkio@urkio.com', 'sameralhalaki@gmail.com', 'banason150@gmail.com'].includes(user?.email?.toLowerCase() || '');
+  
+  const isSpecialRole = isAdmin || (['specialist', 'expert', 'verifiedexpert', 'practitioner'].includes(role) && isVerified);
 
   const navItems = [
     { label: t('nav.instantCall'), icon: 'radio_button_checked', path: '/conference', active: location.pathname === '/conference', highlight: true },
     ...(isSpecialRole ? [
+      { label: t('nav.commandCenter', 'Clinical Command Center'), icon: 'shield_person', path: '/specialist-dashboard', active: location.pathname === '/specialist-dashboard', highlight: true },
       { label: t('nav.myAgenda'), icon: 'dashboard', path: '/agenda', active: location.pathname === '/agenda', highlight: false },
       { label: t('nav.practice'), icon: 'clinical_notes', path: '/clinical-workstation', active: location.pathname === '/clinical-workstation', highlight: false },
-      { label: t('nav.therapyRoom'), icon: 'video_camera_front', path: '/therapy-room', active: location.pathname === '/therapy-room', highlight: true }
+      { label: t('nav.therapyRoom'), icon: 'video_camera_front', path: '/therapy-room', active: location.pathname === '/therapy-room', highlight: false }
     ] : []),
     { label: t('nav.professionalFeed'), icon: 'dynamic_feed', path: '/', active: location.pathname === '/' },
     { label: t('nav.healingHub'), icon: 'spa', path: '/healing-center', active: location.pathname === '/healing-center' },

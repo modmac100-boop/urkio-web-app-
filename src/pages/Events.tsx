@@ -199,21 +199,30 @@ export function Events({ user, userData }: { user: any, userData: any }) {
     setSelectedEvent(event);
   };
 
-  const handleUnlock = (e: React.FormEvent) => {
+  const handleUnlock = async (e: React.FormEvent) => {
     e.preventDefault();
     setUnlockError(null);
     console.log("Attempting to unlock course:", courseToUnlock?.id, "with code:", unlockCode);
-    const validCodes = [...(UrkioMockData.validHealingCodes || []), 'URKIO_ADMIN_2024', 'URKIO2024', 'URKIO_FOUNDER'];
-    if (validCodes.includes(unlockCode)) {
-      console.log("Unlock successful!");
-      const newUnlocked = [...unlockedCourseIds, courseToUnlock.id];
-      setUnlockedCourseIds(newUnlocked);
-      setSelectedEvent(courseToUnlock);
-      setCourseToUnlock(null);
-      setUnlockCode('');
-    } else {
-      console.log("Invalid unlock code.");
-      setUnlockError('Invalid code. Please try again.');
+    
+    try {
+      const { getDocs, query, collection, where } = await import('firebase/firestore');
+      const q = query(collection(db, 'clinical_keys'), where('code', '==', unlockCode));
+      const querySnapshot = await getDocs(q);
+
+      if (!querySnapshot.empty || ['URKIO_ADMIN_2024', 'URKIO2024', 'URKIO_FOUNDER', 'HEAL2026', 'PEACE_NOW'].includes(unlockCode)) {
+        console.log("Unlock successful!");
+        const newUnlocked = [...unlockedCourseIds, courseToUnlock.id];
+        setUnlockedCourseIds(newUnlocked);
+        setSelectedEvent(courseToUnlock);
+        setCourseToUnlock(null);
+        setUnlockCode('');
+      } else {
+        console.log("Invalid unlock code.");
+        setUnlockError('Invalid code. Please contact your therapist.');
+      }
+    } catch (err) {
+      console.error("Unlock error:", err);
+      setUnlockError('Connection error. Please try again.');
     }
   };
 

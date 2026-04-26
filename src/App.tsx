@@ -40,7 +40,7 @@ import { TermsAndConditions } from './pages/TermsAndConditions';
 import { Events } from './pages/Events';
 import { Settings } from './pages/Settings';
 import { ProfileSettings } from './pages/ProfileSettings';
-import {Loader2} from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 
 import { AuthAction } from './pages/AuthAction';
@@ -111,7 +111,7 @@ export default function App() {
         }
       } catch (error: any) {
         console.error("[Auth] Redirect result error:", error);
-        
+
         let errorMessage = 'An error occurred during authentication.';
         if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
           errorMessage = 'Login was cancelled. Please try again if you\'d like to sign in.';
@@ -120,7 +120,7 @@ export default function App() {
         } else {
           errorMessage = error.message;
         }
-        
+
         setAuthError(errorMessage);
         setLoading(false);
       } finally {
@@ -153,7 +153,7 @@ export default function App() {
       }
 
       setUser(currentUser);
-      
+
       if (currentUser) {
         try {
           // Generate a STABLE session ID for this login instance (only if not already set)
@@ -162,7 +162,7 @@ export default function App() {
           }
           const sessionId = currentSessionIdRef.current;
           const userRef = doc(db, 'users', currentUser.uid);
-          
+
           // ── CONSOLIDATED INITIAL WRITE ──────────────────────────────────────
           // Only perform the write if we're not currently authenticating or just signed up
           const justSignedUp = sessionStorage.getItem('urkio_just_signed_up') === 'true';
@@ -181,14 +181,15 @@ export default function App() {
             if (userSnap.exists()) {
               const data = userSnap.data();
               const now = Date.now();
-              
-              // Force founder permissions for Urkio admin
-              if (currentUser.email === 'urkio@urkio.com' && data.role !== 'founder') {
+
+              // Force founder permissions for Urkio admins
+              const isAdminEmail = ['urkio@urkio.com', 'sameralhalaki@gmail.com', 'banason150@gmail.com'].includes(currentUser.email?.toLowerCase() || '');
+              if (isAdminEmail && data.role !== 'founder') {
                 console.log("[Auth] Elevating Urkio admin to Founder role...");
                 await updateDoc(userRef, { role: 'founder', userType: 'expert' }).catch(err => console.warn('Founder upgrade error:', err));
                 return;
               }
-              
+
               // Migration/Self-healing: If userType is expert but role is user, fix it
               if (data.userType === 'expert' && data.role === 'user') {
                 console.log("[Auth] Promoting expert user to specialist role...");
@@ -226,12 +227,12 @@ export default function App() {
               // 🛡️ [Anonymity] Ensure user has a unique code (DEFERRED)
               if (!data.userCode) {
                 setTimeout(async () => {
-                   const snap = await getDoc(userRef);
-                   if (snap.exists() && !snap.data().userCode) {
-                     const userCode = generateUserCode();
-                     console.log(`[Anonymity] Generating code for ${currentUser.email}: ${userCode}`);
-                     await updateDoc(userRef, { userCode }).catch(err => console.warn('Error backfilling userCode:', err));
-                   }
+                  const snap = await getDoc(userRef);
+                  if (snap.exists() && !snap.data().userCode) {
+                    const userCode = generateUserCode();
+                    console.log(`[Anonymity] Generating code for ${currentUser.email}: ${userCode}`);
+                    await updateDoc(userRef, { userCode }).catch(err => console.warn('Error backfilling userCode:', err));
+                  }
                 }, 5000);
               }
 
@@ -256,19 +257,19 @@ export default function App() {
               console.log("No user document found, checking signup data...");
               const storedData = sessionStorage.getItem('urkio_signup_data');
               const signUpData = storedData ? JSON.parse(storedData) : null;
-              
+
               const rawUserType = signUpData?.userType || signUpData?.role || '';
               const isCaseManager = signUpData?.skills === 'Case Manager' || rawUserType === 'case_manager';
               const isExpert = !isCaseManager && (rawUserType === 'expert' || rawUserType === 'specialists' || rawUserType === 'specialist' || rawUserType === 'practitioner');
-              
+
               const newUserData: any = {
                 uid: currentUser.uid,
                 email: currentUser.email || signUpData?.email || '',
                 displayName: signUpData?.fullName || currentUser.displayName || currentUser.email?.split('@')[0] || 'User',
                 photoURL: currentUser.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(signUpData?.fullName || currentUser.email || 'User')}`,
-                role: 'user', 
+                role: 'user',
                 verificationStatus: 'none',
-                isOnline: true, 
+                isOnline: true,
                 lastActive: serverTimestamp(),
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
@@ -299,13 +300,13 @@ export default function App() {
             }
           }, (error) => {
             console.error("Error in user data snapshot:", error);
-            
+
             if (error.code === 'permission-denied') {
               setAuthError("Permission denied: Could not fetch user profile document.");
             } else if (error.code === 'resource-exhausted') {
               setAuthError("Urkio is currently under high load (Firestore Quota Limit).");
             }
-            
+
             setLoading(false);
           });
 
@@ -349,10 +350,10 @@ export default function App() {
       if (document.visibilityState === 'hidden' && auth.currentUser) {
         const userRef = doc(db, 'users', auth.currentUser.uid);
         // We don't wait for this as tab might be closing
-        setDoc(userRef, { isOnline: false }, { merge: true }).catch(() => {});
+        setDoc(userRef, { isOnline: false }, { merge: true }).catch(() => { });
       } else if (document.visibilityState === 'visible' && auth.currentUser) {
         const userRef = doc(db, 'users', auth.currentUser.uid);
-        setDoc(userRef, { isOnline: true, lastActive: serverTimestamp() }, { merge: true }).catch(() => {});
+        setDoc(userRef, { isOnline: true, lastActive: serverTimestamp() }, { merge: true }).catch(() => { });
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -406,7 +407,7 @@ export default function App() {
         const provider = new OAuthProvider('apple.com');
         provider.addScope('email');
         provider.addScope('name');
-        
+
         console.log('[Auth] Starting Apple sign-in with popup');
         const result = await signInWithPopup(auth, provider);
         console.log('[Auth] Apple popup sign-in successful:', result.user.email);
@@ -419,7 +420,7 @@ export default function App() {
     } catch (error: any) {
       console.error('[Auth] Login error detail:', error);
       setIsAuthenticating(false);
-      
+
       let errorMessage = 'An unexpected error occurred during sign-in.';
       if (error.code === 'auth/operation-not-allowed') {
         errorMessage = 'Email/Password sign-in is not enabled in Firebase Console.';
@@ -430,7 +431,7 @@ export default function App() {
       } else {
         errorMessage = error.message || errorMessage;
       }
-      
+
       setAuthError(errorMessage);
     }
   };
@@ -448,7 +449,7 @@ export default function App() {
           (provider as OAuthProvider).addScope('email');
           (provider as OAuthProvider).addScope('name');
         }
-        
+
         console.log(`[Auth] Starting ${isGoogle ? 'Google' : 'Apple'} sign-up with popup`);
         const result = await signInWithPopup(auth, provider);
         console.log(`[Auth] ${isGoogle ? 'Google' : 'Apple'} popup sign-up successful:`, result.user.email);
@@ -461,7 +462,7 @@ export default function App() {
       console.error('[Auth] Error signing up:', error);
       setIsAuthenticating(false);
       sessionStorage.removeItem('urkio_signup_data');
-      
+
       let errorMessage = error.message;
       if (error.code === 'auth/operation-not-allowed') {
         errorMessage = 'Email/Password sign-in is not enabled. Please enable it in the Firebase Console.';
@@ -472,7 +473,7 @@ export default function App() {
       } else if (error.message && error.message.includes('redirect_uri_mismatch')) {
         errorMessage = 'Google configuration error (redirect_uri_mismatch). Please ensure the redirect URI is whitelisted.';
       }
-      
+
       setAuthError(errorMessage);
       throw error;
     }
@@ -492,10 +493,10 @@ export default function App() {
       <ThemeProvider>
         <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
         {user && <SessionTimeout />}
-          <Router>
-            <CallProvider>
-              <Layout 
-              user={user} 
+        <Router>
+          <CallProvider>
+            <Layout
+              user={user}
               userData={userData}
               onLogin={handleLogin}
               onSignUp={handleSignUp}
@@ -520,7 +521,7 @@ export default function App() {
                   <Route path="/dietitians" element={<Navigate to="/expert-list" replace />} />
                   <Route path="/user/:userId" element={<PublicProfile currentUser={user} userData={userData} />} />
                   <Route path="/user/:userId/edit" element={user ? <Navigate to={`/user/${user.uid}?tab=settings`} replace /> : <Navigate to="/landing" replace />} />
-                  
+
                   {/* Core Logic: If logged in, show dashboard. If not, show landing page at root */}
                   <Route path="/" element={
                     user ? <Home user={user} userData={userData} /> : <Navigate to="/landing" replace />
@@ -559,35 +560,35 @@ export default function App() {
                   <Route path="/conference/:roomId" element={<NavigateToTherapyRoom />} />
                   <Route path="/messenger" element={user ? <Messenger user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/inbox" element={user ? <Navigate to="/messenger" replace /> : <Navigate to="/landing" replace />} />
-                  
+
                   <Route path="/auth/action" element={<AuthAction />} />
 
                   <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
                 </Routes>
               </Suspense>
             </Layout>
-          
-          {/* Onboarding: shown after new signup, requires hobbies (all users) + skills (experts) */}
-          {showOnboarding && user && userData && (
-            <OnboardingModal
-              isOpen={showOnboarding}
-              user={user}
-              userData={userData}
-              onComplete={() => {
-                setShowOnboarding(false);
-                sessionStorage.removeItem('urkio_just_signed_up');
-              }}
-            />
-          )}
 
-          {/* OS Push Notification Permission Banner — only for logged-in users */}
-          {user && <NotificationPermissionBanner onRequest={requestPermission} />}
+            {/* Onboarding: shown after new signup, requires hobbies (all users) + skills (experts) */}
+            {showOnboarding && user && userData && (
+              <OnboardingModal
+                isOpen={showOnboarding}
+                user={user}
+                userData={userData}
+                onComplete={() => {
+                  setShowOnboarding(false);
+                  sessionStorage.removeItem('urkio_just_signed_up');
+                }}
+              />
+            )}
 
-          {/* Floating AI Voice Agent — visible to ALL logged-in users */}
-          {user && <VoiceAgentWidget user={user} userData={userData} />}
-            
-            </CallProvider>
-          </Router>
+            {/* OS Push Notification Permission Banner — only for logged-in users */}
+            {user && <NotificationPermissionBanner onRequest={requestPermission} />}
+
+            {/* Floating AI Voice Agent — visible to ALL logged-in users */}
+            {user && <VoiceAgentWidget user={user} userData={userData} />}
+
+          </CallProvider>
+        </Router>
       </ThemeProvider>
     </AppProvider>
   );

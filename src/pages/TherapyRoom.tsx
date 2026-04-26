@@ -14,6 +14,8 @@ import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { SessionInviteModal } from '../components/messaging/SessionInviteModal';
 
+export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
+  const navigate = useNavigate();
   const { roomId: urlRoomId } = useParams();
   const [roomId, setRoomId] = useState<string>(urlRoomId || '');
   const [sessionNotes, setSessionNotes] = useState('');

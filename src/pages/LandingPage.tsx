@@ -584,7 +584,7 @@ export function LandingPage({
                 )}
 
                 <button
-                  onClick={() => openSignUp('user')}
+                  onClick={() => openSignUp(activePricingCategory === 'pros' ? 'expert' : 'user')}
                   className={clsx(
                     'w-full py-4 rounded-xl font-bold transition-all active:scale-95',
                     tier.highlighted

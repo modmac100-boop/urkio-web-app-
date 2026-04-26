@@ -31,7 +31,7 @@ function UploadAnnounceModal({ user, userData, onClose }: any) {
             <X className="w-5 h-5" />
           </button>
         </div>
-        
+
         <div className="p-8">
           <div className="border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl p-12 text-center hover:border-pink-500/50 transition-colors cursor-pointer group">
             <div className="size-16 bg-pink-100 dark:bg-pink-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -40,7 +40,7 @@ function UploadAnnounceModal({ user, userData, onClose }: any) {
             <p className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-widest mb-1">{t('specialistDashboard.clickToUploadVideo') || 'Click to upload video'}</p>
             <p className="text-xs text-slate-500 font-medium">MP4, MOV or WebM (Max 50MB)</p>
           </div>
-          
+
           <div className="mt-8 flex gap-3">
             <button
               onClick={onClose}
@@ -75,9 +75,9 @@ export function SpecialistDashboard({ user, userData }: any) {
   const [isWritingReport, setIsWritingReport] = useState(false);
   const [isAddingCourse, setIsAddingCourse] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [newCase, setNewCase] = useState({ title: '', description: '', tags: '' });
-  const [newAppointment, setNewAppointment] = useState({ 
+  const [newAppointment, setNewAppointment] = useState({
     clientName: '', clientPhone: '', clientAge: '', date: '', time: '', notes: '',
     estimation: '', caseCode: '', tier: '1', category: 'General Anxiety', assignedExpert: '',
     symptoms: '', medicalHistory: ''
@@ -86,15 +86,18 @@ export function SpecialistDashboard({ user, userData }: any) {
   const [searchTerm, setSearchTerm] = useState('');
   const [newReport, setNewReport] = useState({ title: '', content: '', patientId: '', apptId: '' });
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  
+
   const navigate = useNavigate();
   const isAdmin = userData?.role === 'admin' || userData?.role === 'management' || userData?.role === 'founder' || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(userData?.email?.toLowerCase()) || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(user?.email?.toLowerCase());
 
   useEffect(() => {
-    const role = userData?.role?.toLowerCase();
-    const allowedRoles = ['specialist', 'expert', 'case_manager', 'admin', 'management', 'manager', 'verifiedexpert', 'practitioner'];
-    const isSpecial = (role && allowedRoles.includes(role)) || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(userData?.email?.toLowerCase()) || ['urkio@urkio.com', 'sameralhalaki@gmail.com'].includes(user?.email?.toLowerCase());
+    const role = (userData?.role || userData?.userType || '').toLowerCase();
+    const isVerified = userData?.verificationStatus === 'verified';
+    const isMasterAdmin = ['founder', 'admin', 'management', 'manager'].includes(role) || 
+                          ['urkio@urkio.com', 'sameralhalaki@gmail.com', 'banason150@gmail.com'].includes(user?.email?.toLowerCase() || '');
     
+    const isSpecial = isMasterAdmin || (['specialist', 'expert', 'verifiedexpert', 'practitioner'].includes(role) && isVerified);
+
     if (!isSpecial) {
       navigate('/');
       return;
@@ -105,7 +108,7 @@ export function SpecialistDashboard({ user, userData }: any) {
       : query(collection(db, 'cases'), where('authorId', '==', user.uid), orderBy('createdAt', 'desc'));
     const unsubCases = onSnapshot(qCases, snap => setCases(snap.docs.map(d => ({ id: d.id, ...d.data() }))));
 
-    const qAppts = isAdmin 
+    const qAppts = isAdmin
       ? query(collection(db, 'appointments'))
       : query(collection(db, 'appointments'), where('expertId', '==', user.uid));
     const unsubAppts = onSnapshot(qAppts, snap => {
@@ -278,11 +281,11 @@ export function SpecialistDashboard({ user, userData }: any) {
               </div>
               <span className="text-xs font-black uppercase tracking-widest opacity-80">Virtual Healing Suite</span>
             </div>
-            <h2 className="text-3xl font-headline font-black mb-4 leading-tight">Launch Your <br/>Private Sanctuary</h2>
+            <h2 className="text-3xl font-headline font-black mb-4 leading-tight">Launch Your <br />Private Sanctuary</h2>
             <p className="text-sm font-medium opacity-70 mb-8 max-w-xs leading-relaxed">Start an HD-encrypted healing session with your client in a premium, distraction-free environment.</p>
-            
+
             <div className="mt-auto flex flex-wrap gap-4">
-              <button 
+              <button
                 onClick={() => {
                   navigate(`/therapy-room`);
                 }}
@@ -290,7 +293,7 @@ export function SpecialistDashboard({ user, userData }: any) {
               >
                 Start Session
               </button>
-              <button 
+              <button
                 onClick={() => {
                   const id = Math.floor(1000 + Math.random() * 9000);
                   const link = `${window.location.origin}/therapy-room/XRQ-${id}`;
@@ -307,21 +310,35 @@ export function SpecialistDashboard({ user, userData }: any) {
 
         {/* Access Codes Card */}
         <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden group">
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-ur-primary/10 flex items-center justify-center">
                 <span className="material-symbols-outlined text-ur-primary">key</span>
               </div>
               <div>
                 <h2 className="text-xl font-headline font-black text-on-surface dark:text-zinc-100 uppercase tracking-widest">{t('specialistDashboard.accessCodes')}</h2>
               </div>
+            </div>
+            <button 
+              onClick={handleGenerateKey}
+              className="px-6 py-3 bg-ur-primary text-white rounded-2xl font-headline font-black text-[10px] uppercase tracking-widest hover:bg-ur-primary/90 transition-all shadow-lg shadow-ur-primary/20"
+            >
+              Generate New Code
+            </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {UrkioMockData.validHealingCodes.map(code => (
-              <div key={code} onClick={() => copyToClipboard(code)} className="flex items-center justify-between p-6 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 rounded-4xl cursor-pointer hover:shadow-xl transition-all">
-                <span className="font-headline font-black text-lg text-ur-primary tracking-widest">{code}</span>
-                {copiedCode === code ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-zinc-400" />}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+            {accessCodes.length > 0 ? (
+              accessCodes.map(code => (
+                <div key={code} onClick={() => copyToClipboard(code)} className="flex items-center justify-between p-6 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-100 rounded-4xl cursor-pointer hover:shadow-xl transition-all">
+                  <span className="font-headline font-black text-lg text-ur-primary tracking-widest">{code}</span>
+                  {copiedCode === code ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4 text-zinc-400" />}
+                </div>
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-10 text-zinc-400 font-headline font-black text-[10px] uppercase tracking-widest">
+                No active codes. Click generate to create one.
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -343,9 +360,9 @@ export function SpecialistDashboard({ user, userData }: any) {
         <div className="grid gap-6">
           {isAddingCase && (
             <form onSubmit={handleAddCase} className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
-              <input type="text" placeholder="Case Title" className="w-full bg-slate-50 border rounded-xl px-4 py-2" value={newCase.title} onChange={e => setNewCase({...newCase, title: e.target.value})} />
-              <textarea placeholder="Description" className="w-full bg-slate-50 border rounded-xl px-4 py-2 h-32" value={newCase.description} onChange={e => setNewCase({...newCase, description: e.target.value})} />
-              <input type="text" placeholder="Tags (comma separated)" className="w-full bg-slate-50 border rounded-xl px-4 py-2" value={newCase.tags} onChange={e => setNewCase({...newCase, tags: e.target.value})} />
+              <input type="text" placeholder="Case Title" className="w-full bg-slate-50 border rounded-xl px-4 py-2" value={newCase.title} onChange={e => setNewCase({ ...newCase, title: e.target.value })} />
+              <textarea placeholder="Description" className="w-full bg-slate-50 border rounded-xl px-4 py-2 h-32" value={newCase.description} onChange={e => setNewCase({ ...newCase, description: e.target.value })} />
+              <input type="text" placeholder="Tags (comma separated)" className="w-full bg-slate-50 border rounded-xl px-4 py-2" value={newCase.tags} onChange={e => setNewCase({ ...newCase, tags: e.target.value })} />
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={() => setIsAddingCase(false)} className="px-4 py-2 text-zinc-500">Cancel</button>
                 <button type="submit" className="px-6 py-2 bg-zinc-900 text-white rounded-xl">Publish Case</button>
@@ -367,17 +384,17 @@ export function SpecialistDashboard({ user, userData }: any) {
           {isAddingAppointment && (
             <form onSubmit={handleAddAppointment} className="bg-white rounded-2xl p-8 border border-zinc-200 shadow-xl space-y-6">
               <div className="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="Client Name" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.clientName} onChange={e => setNewAppointment({...newAppointment, clientName: e.target.value})} />
-                <input type="tel" placeholder="Phone" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.clientPhone} onChange={e => setNewAppointment({...newAppointment, clientPhone: e.target.value})} />
-                <input type="date" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.date} onChange={e => setNewAppointment({...newAppointment, date: e.target.value})} />
-                <input type="time" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.time} onChange={e => setNewAppointment({...newAppointment, time: e.target.value})} />
-                <input type="text" placeholder="Case Code (e.g. UK-99)" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.caseCode} onChange={e => setNewAppointment({...newAppointment, caseCode: e.target.value})} />
-                <select className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.category} onChange={e => setNewAppointment({...newAppointment, category: e.target.value})}>
-                    {['General Anxiety', 'Depression', 'PTSD', 'ADHD', 'Relationships'].map(c => <option key={c}>{c}</option>)}
+                <input type="text" placeholder="Client Name" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.clientName} onChange={e => setNewAppointment({ ...newAppointment, clientName: e.target.value })} />
+                <input type="tel" placeholder="Phone" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.clientPhone} onChange={e => setNewAppointment({ ...newAppointment, clientPhone: e.target.value })} />
+                <input type="date" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.date} onChange={e => setNewAppointment({ ...newAppointment, date: e.target.value })} />
+                <input type="time" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.time} onChange={e => setNewAppointment({ ...newAppointment, time: e.target.value })} />
+                <input type="text" placeholder="Case Code (e.g. UK-99)" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.caseCode} onChange={e => setNewAppointment({ ...newAppointment, caseCode: e.target.value })} />
+                <select className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newAppointment.category} onChange={e => setNewAppointment({ ...newAppointment, category: e.target.value })}>
+                  {['General Anxiety', 'Depression', 'PTSD', 'ADHD', 'Relationships'].map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
-              <textarea placeholder="Key Symptoms" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-24" value={newAppointment.symptoms} onChange={e => setNewAppointment({...newAppointment, symptoms: e.target.value})} />
-              <textarea placeholder="Medical History" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-24" value={newAppointment.medicalHistory} onChange={e => setNewAppointment({...newAppointment, medicalHistory: e.target.value})} />
+              <textarea placeholder="Key Symptoms" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-24" value={newAppointment.symptoms} onChange={e => setNewAppointment({ ...newAppointment, symptoms: e.target.value })} />
+              <textarea placeholder="Medical History" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-24" value={newAppointment.medicalHistory} onChange={e => setNewAppointment({ ...newAppointment, medicalHistory: e.target.value })} />
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={() => setIsAddingAppointment(false)} className="px-6 py-2">Cancel</button>
                 <button type="submit" className="px-8 py-3 bg-zinc-900 text-white rounded-2xl font-bold">Save Clinical Entry</button>
@@ -395,14 +412,14 @@ export function SpecialistDashboard({ user, userData }: any) {
                     <p className="text-zinc-500 text-sm font-semibold">{appt.category} • {format(new Date(appt.date), 'MMM d, h:mm a')}</p>
                   </div>
                   <div className="flex gap-2">
-                     <button onClick={() => { setActiveTab('reports'); setIsWritingReport(true); setNewReport({ ...newReport, title: `Clinical Report: ${appt.clientName}`, apptId: appt.id }); }} className="p-2 bg-ur-primary/10 text-ur-primary rounded-xl"><FileText className="w-5 h-5"/></button>
-                     <button onClick={() => handleDeleteAppointment(appt.id)} className="p-2 text-zinc-300 hover:text-red-500"><Trash2 className="w-5 h-5"/></button>
+                    <button onClick={() => { setActiveTab('reports'); setIsWritingReport(true); setNewReport({ ...newReport, title: `Clinical Report: ${appt.clientName}`, apptId: appt.id }); }} className="p-2 bg-ur-primary/10 text-ur-primary rounded-xl"><FileText className="w-5 h-5" /></button>
+                    <button onClick={() => handleDeleteAppointment(appt.id)} className="p-2 text-zinc-300 hover:text-red-500"><Trash2 className="w-5 h-5" /></button>
                   </div>
                 </div>
                 {(appt.symptoms || appt.medicalHistory) && (
                   <div className="grid grid-cols-2 gap-4 mt-4 bg-zinc-50 p-4 rounded-2xl">
-                     {appt.symptoms && <div><p className="text-[10px] font-black uppercase text-zinc-400">Symptoms</p><p className="text-xs">{appt.symptoms}</p></div>}
-                     {appt.medicalHistory && <div><p className="text-[10px] font-black uppercase text-zinc-400">History</p><p className="text-xs">{appt.medicalHistory}</p></div>}
+                    {appt.symptoms && <div><p className="text-[10px] font-black uppercase text-zinc-400">Symptoms</p><p className="text-xs">{appt.symptoms}</p></div>}
+                    {appt.medicalHistory && <div><p className="text-[10px] font-black uppercase text-zinc-400">History</p><p className="text-xs">{appt.medicalHistory}</p></div>}
                   </div>
                 )}
               </div>
@@ -416,16 +433,16 @@ export function SpecialistDashboard({ user, userData }: any) {
             <form onSubmit={handleAddCourse} className="bg-white rounded-[2rem] p-8 border border-zinc-200 shadow-xl space-y-6">
               <h2 className="text-xl font-headline font-black uppercase tracking-widest text-ur-primary">Create Healing Course</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" placeholder="Course Title" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.title} onChange={e => setNewCourseItem({...newCourseItem, title: e.target.value})} required />
-                <input type="date" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.date} onChange={e => setNewCourseItem({...newCourseItem, date: e.target.value})} required />
-                <select className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.sessionType} onChange={e => setNewCourseItem({...newCourseItem, sessionType: e.target.value})}>
-                    <option>Healing Course</option>
-                    <option>Workshop</option>
-                    <option>Masterclass</option>
-                    <option>Group Therapy</option>
+                <input type="text" placeholder="Course Title" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.title} onChange={e => setNewCourseItem({ ...newCourseItem, title: e.target.value })} required />
+                <input type="date" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.date} onChange={e => setNewCourseItem({ ...newCourseItem, date: e.target.value })} required />
+                <select className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.sessionType} onChange={e => setNewCourseItem({ ...newCourseItem, sessionType: e.target.value })}>
+                  <option>Healing Course</option>
+                  <option>Workshop</option>
+                  <option>Masterclass</option>
+                  <option>Group Therapy</option>
                 </select>
               </div>
-              <textarea placeholder="Course Description & Learning Outcomes" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-32" value={newCourseItem.description} onChange={e => setNewCourseItem({...newCourseItem, description: e.target.value})} required />
+              <textarea placeholder="Course Description & Learning Outcomes" className="w-full bg-zinc-50 border rounded-xl px-4 py-3 h-32" value={newCourseItem.description} onChange={e => setNewCourseItem({ ...newCourseItem, description: e.target.value })} required />
               <div className="flex justify-end gap-3">
                 <button type="button" onClick={() => setIsAddingCourse(false)} className="px-6 py-2">Cancel</button>
                 <button type="submit" className="px-8 py-3 bg-ur-primary text-white rounded-2xl font-bold">Publish to My Place</button>
@@ -438,7 +455,7 @@ export function SpecialistDashboard({ user, userData }: any) {
               <div key={course.id} className="bg-white p-8 rounded-[2rem] border border-zinc-100 shadow-sm group hover:shadow-xl transition-all">
                 <div className="flex justify-between items-start mb-6">
                   <span className="text-[9px] font-black uppercase tracking-[0.2em] text-ur-primary bg-ur-primary/10 px-3 py-1.5 rounded-full">{course.sessionType}</span>
-                  <button onClick={() => handleDeleteCourse(course.id)} className="text-zinc-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4"/></button>
+                  <button onClick={() => handleDeleteCourse(course.id)} className="text-zinc-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
                 <h3 className="text-xl font-headline font-black mb-3">{course.title}</h3>
                 <p className="text-zinc-500 text-sm leading-relaxed line-clamp-3 mb-6">{course.description}</p>
@@ -461,21 +478,21 @@ export function SpecialistDashboard({ user, userData }: any) {
         <div className="grid gap-6">
           {isWritingReport && (
             <form onSubmit={(e) => handleAddReport(e, false)} className="bg-white p-8 rounded-3xl border-t-4 border-t-red-500 shadow-xl space-y-4">
-              <h2 className="text-xl font-black mb-4 flex items-center gap-2"><ShieldCheck className="text-red-500"/> Clinical Report</h2>
-              <input type="text" placeholder="Title" className="w-full border rounded-xl px-4 py-3" value={newReport.title} onChange={e => setNewReport({...newReport, title: e.target.value})} />
-              <textarea placeholder="Confidential clinical notes..." className="w-full border rounded-xl px-4 py-3 h-64 shadow-inner" value={newReport.content} onChange={e => setNewReport({...newReport, content: e.target.value})} />
+              <h2 className="text-xl font-black mb-4 flex items-center gap-2"><ShieldCheck className="text-red-500" /> Clinical Report</h2>
+              <input type="text" placeholder="Title" className="w-full border rounded-xl px-4 py-3" value={newReport.title} onChange={e => setNewReport({ ...newReport, title: e.target.value })} />
+              <textarea placeholder="Confidential clinical notes..." className="w-full border rounded-xl px-4 py-3 h-64 shadow-inner" value={newReport.content} onChange={e => setNewReport({ ...newReport, content: e.target.value })} />
               <div className="flex justify-end gap-3 pt-4 border-t">
-                 <button type="button" onClick={() => setIsWritingReport(false)} className="px-4">Cancel</button>
-                 <button type="submit" className="px-6 py-2 bg-zinc-900 text-white rounded-xl">Save Secretly</button>
-                 <button type="button" onClick={(e) => handleAddReport(e as any, true)} className="px-6 py-2 bg-red-600 text-white rounded-xl">Escalate</button>
+                <button type="button" onClick={() => setIsWritingReport(false)} className="px-4">Cancel</button>
+                <button type="submit" className="px-6 py-2 bg-zinc-900 text-white rounded-xl">Save Secretly</button>
+                <button type="button" onClick={(e) => handleAddReport(e as any, true)} className="px-6 py-2 bg-red-600 text-white rounded-xl">Escalate</button>
               </div>
             </form>
           )}
           {reports.map(rep => (
             <div key={rep.id} className={clsx("p-6 rounded-3xl border", rep.escalated ? "bg-red-50/50 border-red-100" : "bg-white border-zinc-100")}>
-               <h4 className="font-bold flex items-center gap-2">{rep.escalated && <span className="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full">Escalated</span>} {rep.title}</h4>
-               <p className="text-xs text-zinc-500 my-2">{rep.authorName} • {formatDistanceToNow(new Date(rep.createdAt), { addSuffix: true })}</p>
-               <div className="bg-zinc-50/50 p-4 rounded-2xl text-sm whitespace-pre-wrap mt-4">{rep.content}</div>
+              <h4 className="font-bold flex items-center gap-2">{rep.escalated && <span className="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded-full">Escalated</span>} {rep.title}</h4>
+              <p className="text-xs text-zinc-500 my-2">{rep.authorName} • {formatDistanceToNow(new Date(rep.createdAt), { addSuffix: true })}</p>
+              <div className="bg-zinc-50/50 p-4 rounded-2xl text-sm whitespace-pre-wrap mt-4">{rep.content}</div>
             </div>
           ))}
         </div>

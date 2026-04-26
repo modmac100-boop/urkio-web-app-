@@ -4,7 +4,6 @@ import App from './App.tsx';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './index.css';
 import './i18n';
-import '@stream-io/video-react-sdk/dist/css/styles.css';
 
 // Register Service Worker for Firebase Cloud Messaging
 if ('serviceWorker' in navigator) {

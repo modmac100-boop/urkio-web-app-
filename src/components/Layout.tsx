@@ -104,6 +104,7 @@ export function Layout({
       setUnreadMessages(snapshot.size);
     }, (err) => console.error("Msg snapshot error:", err));
 
+    return () => {
       unsubNotif();
       unsubMsg();
     };
@@ -431,6 +432,7 @@ export function Layout({
           onComplete={onSignUp}
           error={authError}
           isAuthenticating={isAuthenticating}
+          initialType={signupType}
           onSwitchToSignIn={() => {
             setIsSignUpModalOpen(false);
             setIsSignInModalOpen(true);

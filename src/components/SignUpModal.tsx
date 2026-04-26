@@ -8,7 +8,8 @@ export function SignUpModal({
   onComplete, 
   onSwitchToSignIn,
   error,
-  isAuthenticating = false
+  isAuthenticating = false,
+  initialType = 'user'
 }: { 
   isOpen: boolean; 
   onClose: () => void; 
@@ -16,6 +17,7 @@ export function SignUpModal({
   onSwitchToSignIn?: () => void;
   error?: string | null;
   isAuthenticating?: boolean;
+  initialType?: 'user' | 'expert';
 }) {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
@@ -31,6 +33,7 @@ export function SignUpModal({
     fullName: '',
     age: '',
     gender: '',
+    userType: 'user', // Default to patient/user
     termsAccepted: false,
   });
 
@@ -43,6 +46,12 @@ export function SignUpModal({
   useEffect(() => {
     setIsLoading(false);
   }, [error, isOpen]);
+
+  useEffect(() => {
+    if (isOpen && initialType) {
+      setFormData(prev => ({ ...prev, userType: initialType }));
+    }
+  }, [isOpen, initialType]);
 
   if (!isOpen) return null;
 
@@ -65,13 +74,13 @@ export function SignUpModal({
     setIsLoading(true);
     try {
       await onComplete({
-        userType: 'user',
+        userType: formData.userType,
         email: formData.email,
         password: formData.password,
         fullName: formData.fullName,
         age: formData.age,
         gender: formData.gender,
-        role: 'user', // Explicitly set role
+        role: formData.userType === 'expert' ? 'specialist' : 'user', 
       }, isGoogle, isApple);
       
       setIsSuccess(true);
