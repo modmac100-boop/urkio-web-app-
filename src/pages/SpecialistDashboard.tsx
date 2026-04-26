@@ -430,7 +430,7 @@ export function SpecialistDashboard({ user, userData }: any) {
       {activeTab === 'courses' && (
         <div className="grid gap-6">
           {isAddingCourse && (
-            <form onSubmit={handleAddCourse} className="bg-white rounded-[2rem] p-8 border border-zinc-200 shadow-xl space-y-6">
+            <form onSubmit={handleAddCourse} className="bg-white rounded-4xl p-8 border border-zinc-200 shadow-xl space-y-6">
               <h2 className="text-xl font-headline font-black uppercase tracking-widest text-ur-primary">Create Healing Course</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input type="text" placeholder="Course Title" className="w-full bg-zinc-50 border rounded-xl px-4 py-3" value={newCourseItem.title} onChange={e => setNewCourseItem({ ...newCourseItem, title: e.target.value })} required />
@@ -452,7 +452,7 @@ export function SpecialistDashboard({ user, userData }: any) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courses.map(course => (
-              <div key={course.id} className="bg-white p-8 rounded-[2rem] border border-zinc-100 shadow-sm group hover:shadow-xl transition-all">
+              <div key={course.id} className="bg-white p-8 rounded-4xl border border-zinc-100 shadow-sm group hover:shadow-xl transition-all">
                 <div className="flex justify-between items-start mb-6">
                   <span className="text-[9px] font-black uppercase tracking-[0.2em] text-ur-primary bg-ur-primary/10 px-3 py-1.5 rounded-full">{course.sessionType}</span>
                   <button onClick={() => handleDeleteCourse(course.id)} className="text-zinc-300 hover:text-red-500 transition-colors"><Trash2 className="w-4 h-4" /></button>

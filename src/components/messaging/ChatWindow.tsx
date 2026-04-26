@@ -978,7 +978,7 @@ export function ChatWindow({
                    <div className="relative group/bubble flex flex-col">
                       <div 
                         className={clsx(
-                          "p-4 px-5 text-[14px] leading-relaxed shadow-sm transition-all duration-300 relative z-[1]",
+                          "p-4 px-5 text-[14px] leading-relaxed shadow-sm transition-all duration-300 relative z-1",
                           isOwn 
                             ? "bg-linear-to-br from-[#004e99] to-msgr-primary-container text-white rounded-[24px] rounded-tr-sm" 
                             : "bg-msgr-surface-container-high text-[#1b1c1a] rounded-[24px] rounded-tl-sm"
@@ -1065,7 +1065,7 @@ export function ChatWindow({
                              {!isOwn && (
                                <button
                                  onClick={() => navigate(`/healing-room?roomId=${msg.liveData!.roomId}&code=${msg.liveData!.accessCode}&live=true`)}
-                                 className='w-full py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-500/30 flex items-center justify-center gap-2'
+                                 className='w-full py-3 bg-linear-to-r from-red-500 to-orange-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-500/30 flex items-center justify-center gap-2'
                                >
                                  <span className='material-symbols-outlined text-[16px] fill-1'>radio_button_checked</span>
                                  Join Live Broadcast

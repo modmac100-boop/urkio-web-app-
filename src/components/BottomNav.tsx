@@ -36,11 +36,11 @@ export function BottomNav({ isSpecialRole }: BottomNavProps) {
   const navItems = isSpecialRole ? expertItems : baseItems;
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-[9999] xl:hidden">
+    <nav className="fixed bottom-0 inset-x-0 z-9999 xl:hidden">
       {/* Glass Decoration */}
       <div className="absolute inset-x-0 bottom-0 h-24 bg-linear-to-t from-black/60 to-transparent pointer-events-none" />
       
-      <div className="relative mx-3 mb-4 px-3 py-2.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-3xl border border-zinc-200 dark:border-zinc-800 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.25)] flex items-center justify-between" style={{ paddingBottom: 'calc(0.625rem + env(safe-area-inset-bottom, 0px))' }}>
+      <div className="relative mx-3 mb-4 px-3 py-2.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-3xl border border-zinc-200 dark:border-zinc-800 rounded-4xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] flex items-center justify-between" style={{ paddingBottom: 'calc(0.625rem + env(safe-area-inset-bottom, 0px))' }}>
         {navItems.map((item) => {
           const isActive = location.pathname === item.path || (item.id === 'home' && location.pathname === '/');
           const Icon = item.icon;

@@ -133,7 +133,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       dir={isRTL ? 'rtl' : 'ltr'} 
       className={clsx(
         "flex h-[calc(100vh-140px)] md:h-[calc(100vh-64px)] w-full bg-[#101319] text-[#e1e2ea] font-['Manrope'] overflow-hidden selection:bg-msgr-primary-container/30 relative rounded-2xl md:rounded-none transition-all duration-500",
-        isZenMode && "zen-mode-container scale-25 fixed top-6 right-6 w-[100vw] h-[100vh] border-2 border-white/20 shadow-2xl z-[1000] pointer-events-auto"
+        isZenMode && "zen-mode-container scale-25 fixed top-6 right-6 w-screen h-screen border-2 border-white/20 shadow-2xl z-1000 pointer-events-auto"
       )}
     >
 
