@@ -76,7 +76,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
               />
             </div>
             <div className="h-10 w-px bg-[#c0c8c7]/50 dark:bg-[#6B8E7D]/50 hidden md:block"></div>
-            <div className="flex gap-2 p-1 overflow-x-auto custom-scrollbar">
+            <div className="flex gap-2 p-1 overflow-x-auto">
               <button 
                 onClick={() => setSelectedCategory('Specialty')}
                 className={clsx("flex items-center gap-2 px-4 py-2 rounded-full border transition-colors whitespace-nowrap", selectedCategory === 'Specialty' ? 'bg-[#1b4d4b] text-[#8cbdba] border-transparent dark:bg-[#1b6a7e] dark:text-[#EDE8E4]' : 'border-[#c0c8c7] hover:bg-[#e4e2de]/50 dark:border-[#6B8E7D]/50 dark:hover:bg-[#161d27]/50')}
@@ -103,7 +103,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
         </section>
 
         {loading ? (
-          <div className="py-20 text-center text-[#404848] dark:text-[#6B8E7D]"><span className="animate-pulse">Loading experts...</span></div>
+          <div className="py-20 text-center"><span className="animate-pulse">Loading experts...</span></div>
         ) : (
           <>
             {recommendedExperts.length > 0 && (
@@ -182,7 +182,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
 
               <div className="grid grid-cols-1 gap-6">
                 {filteredExperts.map((expert, idx) => (
-                  <div key={expert.id} className="flex flex-col md:flex-row bg-[#eae8e4]/40 dark:bg-[#161d27]/40 rounded-2xl border border-[#c0c8c7]/10 dark:border-[#6B8E7D]/10 p-6 gap-8 hover:bg-[#eae8e4] dark:hover:bg-[#161d27] transition-colors shadow-sm">
+                  <div key={expert.id} className="flex flex-col md:flex-row bg-[#eae8e4]/40 dark:bg-[#161d27]/40 rounded-2xl border border-[#c0c8c7]/10 dark:border-[#6B8E7D]/10 p-6 gap-8 hover:bg-[#eae8e4] dark:hover:bg-[#161d27] transition-colors">
                     <div className="w-full md:w-48 h-48 rounded-xl overflow-hidden flex-shrink-0 bg-[#e4e2de] dark:bg-[#050A0F]">
                       <img 
                         alt={expert.displayName} 
@@ -214,12 +214,12 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                             )}
                           </div>
                         </div>
-                        <p className="font-body text-[#404848] dark:text-[#6B8E7D] mt-4 max-w-2xl line-clamp-3 leading-relaxed">
+                        <p className="font-body text-[#404848] dark:text-[#6B8E7D] mt-4 max-w-2xl line-clamp-3">
                           {expert.bio || expert.about || "Provides evidence-based therapy for individuals navigating life transitions and anxiety disorders. Maintains a focus on intersectional identities and cultural care."}
                         </p>
                       </div>
                       
-                      <div className="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-[#c0c8c7]/30 dark:border-[#6B8E7D]/30">
+                      <div className="flex flex-wrap items-center justify-between gap-4 mt-8 pt-6 border-t border-[#c0c8c7]/20 dark:border-[#6B8E7D]/20">
                         <div className="flex gap-8">
                           <div>
                             <p className="text-[10px] font-bold text-[#707978] dark:text-[#6B8E7D] uppercase tracking-widest mb-1">Session Price</p>
@@ -243,7 +243,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                           </button>
                           <button 
                             onClick={() => navigate(`/user/${expert.id}?action=book`)}
-                            className="px-6 py-2.5 bg-[#003634] dark:bg-[#30B0D0] text-[#ffffff] dark:text-[#050A0F] rounded-full font-semibold text-sm active:scale-95 transition-transform shadow-lg"
+                            className="px-6 py-2.5 bg-[#003634] dark:bg-[#30B0D0] text-[#ffffff] dark:text-[#050A0F] rounded-full font-semibold text-sm active:scale-95 transition-transform"
                           >
                             Book Consultation
                           </button>
@@ -254,7 +254,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                 ))}
 
                 {filteredExperts.length === 0 && (
-                  <div className="py-20 text-center text-[#404848] dark:text-[#6B8E7D] font-semibold border-2 border-dashed border-[#c0c8c7]/30 dark:border-[#6B8E7D]/30 rounded-3xl">
+                  <div className="py-20 text-center text-[#404848] dark:text-[#6B8E7D] font-semibold">
                     No specialists found matching your search.
                   </div>
                 )}
@@ -262,7 +262,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
 
               {filteredExperts.length > 3 && (
                 <div className="mt-12 flex justify-center">
-                  <button className="px-8 py-3 bg-[#eae8e4] dark:bg-[#161d27] text-[#003634] dark:text-[#30B0D0] font-semibold text-sm rounded-full hover:bg-[#e4e2de] dark:hover:bg-[#0A111A] transition-colors flex items-center gap-2 shadow-sm">
+                  <button className="px-8 py-3 bg-[#eae8e4] dark:bg-[#161d27] text-[#003634] dark:text-[#30B0D0] font-semibold text-sm rounded-full hover:bg-[#e4e2de] dark:hover:bg-[#0A111A] transition-colors flex items-center gap-2">
                     Show more specialists
                     <ChevronDown className="w-4 h-4" />
                   </button>

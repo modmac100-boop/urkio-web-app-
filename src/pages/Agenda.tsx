@@ -86,10 +86,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<'agenda' | 'records' | 'vault' | 'plans'>('agenda');
   const [patientHistory, setPatientHistory] = useState<any[]>([]);
-  const [isLocked, setIsLocked] = useState(true);
-  const [inputPin, setInputPin] = useState('');
-  const [newPin, setNewPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
+
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [bookingDetails, setBookingDetails] = useState({ clientName: '', category: 'Healing', message: '' });
 
@@ -117,25 +114,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
     getDocs(qHist).then(snap => setPatientHistory(snap.docs.map(d => d.data())));
   }, [selectedSessionId, appointments]);
 
-  const handleUnlock = () => {
-    if (inputPin === userData?.clinicalPin || (isAdmin && inputPin === 'ADMIN_BYPASS')) {
-      setIsLocked(false);
-      toast.success('Terminal Access Granted');
-    } else {
-      toast.error('Authentication Error');
-      setInputPin('');
-    }
-  };
 
-  const handleSetupPin = async () => {
-    if (!newPin || newPin.length < 4 || newPin !== confirmPin) {
-      toast.error('Invalid PIN setup');
-      return;
-    }
-    await updateDoc(doc(db, 'users', user.uid), { clinicalPin: newPin });
-    setIsLocked(false);
-    toast.success('Terminal Secured');
-  };
 
   const handleAcceptSession = async (id: string) => {
     const caseCode = `#${Math.random().toString(36).substring(2, 7).toUpperCase()}-${Math.floor(Math.random() * 100)}`;
@@ -191,55 +170,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
 
   const selectedSession = appointments.find(a => a.id === selectedSessionId);
 
-  if (isLocked && !isAdmin) {
-    const hasPin = !!userData?.clinicalPin;
-    return (
-      <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("fixed inset-0 bg-[#080a0f] flex items-center justify-center p-6 z-200 font-['Manrope']")}>
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-msgr-primary-container/10 blur-[180px] animate-pulse" />
-          <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-[#a8c8ff]/5 blur-[150px]" />
-          <div className="absolute inset-0 backdrop-blur-[20px]" />
-        </div>
-        <div className="w-full max-w-xl relative bg-[#11141b]/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-16 shadow-2xl">
-          <div className="mb-14 text-center">
-            <div className="relative inline-block mb-10">
-              <div className="relative size-28 bg-white/5 border border-white/10 rounded-4xl flex items-center justify-center text-[#a8c8ff]">
-                {hasPin ? <Scan className="size-12 animate-pulse" /> : <ShieldCheck className="size-12" />}
-              </div>
-            </div>
-            <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4">
-              {hasPin ? t('agenda.securityTerminal') : t('agenda.protocolSetup')}
-            </h2>
-            <p className="text-white/30 text-sm italic">{hasPin ? t('agenda.authRequired') : t('agenda.setupDesc')}</p>
-          </div>
-          <div className="space-y-6">
-            {hasPin ? (
-              <div className="space-y-6">
-                <input
-                  type="password"
-                  value={inputPin}
-                  onChange={(e) => setInputPin(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
-                  placeholder={t('agenda.clinicalKey')}
-                  className="w-full py-7 bg-white/5 border border-white/10 rounded-4xl text-center text-3xl font-black tracking-[0.4em] text-white outline-none"
-                />
-                <button onClick={handleUnlock} className="w-full py-7 bg-[#a8c8ff] text-[#003062] rounded-4xl font-black uppercase text-[11px] tracking-[0.3em]">{t('agenda.verifyIdentity')}</button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <input type="password" value={newPin} onChange={(e) => setNewPin(e.target.value)} placeholder={t('agenda.newKey')} className="w-full py-6 bg-white/5 border border-white/10 rounded-4xl text-center text-white" />
-                <input type="password" value={confirmPin} onChange={(e) => setConfirmPin(e.target.value)} placeholder={t('agenda.confirmKey')} className="w-full py-6 bg-white/5 border border-white/10 rounded-4xl text-center text-white" />
-                <button onClick={handleSetupPin} className="w-full py-7 bg-white text-[#080a0f] rounded-4xl font-black uppercase text-[11px] tracking-[0.3em]">{t('agenda.secureTerminalBtn')}</button>
-              </div>
-            )}
-            <div className="pt-8 text-center">
-              <button onClick={() => navigate('/')} className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] hover:text-[#a8c8ff]">{t('agenda.egressPortal')}</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("flex h-screen bg-[#080a0f] text-white/90 font-['Manrope'] overflow-hidden selection:bg-[#a8c8ff]/30")}>

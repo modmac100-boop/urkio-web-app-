@@ -453,51 +453,15 @@ export function PublicProfile({
     );
   }
 
-  // ─── Sidebar nav ──────────────────────────────────────────────────────────
-  const sidebarNav = (
-    <div className="flex flex-wrap items-center gap-3 py-6 px-4">
-      {[
-        { id: 'feed',     icon: LayoutGrid, label: t('profile.feed') },
-        { id: 'media',    icon: Image,      label: t('profile.gallery') },
-        { id: 'articles', icon: BookOpen,   label: t('profile.editorial') },
-        { id: 'events',   icon: Star,       label: t('profile.highlights') },
-        ...(isOwnProfile && isExpert ? [{ id: 'therapy-room', icon: Video, label: 'Clinical Studio' }] : []),
-        ...(showAgendaTab ? [{ id: 'agenda', icon: Calendar, label: t('profile.expertAgenda') }] : []),
-        ...(isOwnProfile ? [{ id: 'settings', icon: Settings, label: t('profile.pageSetup', 'Page Setup') }] : []),
-      ].map((item) => (
-        <button
-          key={item.id}
-          onClick={() => {
-            if (item.id === 'settings') {
-              navigate('/settings');
-            } else if (item.id === 'therapy-room') {
-              navigate('/therapy-room');
-            } else {
-              setActiveTab(item.id as any);
-            }
-          }}
-          className={clsx(
-            'flex items-center gap-3 px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative group overflow-hidden border border-transparent',
-            activeTab === item.id
-              ? 'bg-primary text-white shadow-xl shadow-primary/20 scale-105 border-white/10'
-              : 'bg-surface dark:bg-zinc-900 text-on-surface-variant hover:bg-white dark:hover:bg-zinc-800 border-border-light shadow-sm'
-          )}
-        >
-          <item.icon className={clsx('w-4 h-4 transition-transform group-hover:scale-110', activeTab === item.id ? 'opacity-100' : 'opacity-60')} />
-          <span>{item.label}</span>
-          
-          {activeTab === item.id && (
-             <div className="absolute bottom-0 inset-x-0 h-1 bg-white/20"></div>
-          )}
-        </button>
-      ))}
-
-      {/* Safety / Standard link as a pill */}
-      <button className="flex items-center gap-2 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant bg-surface dark:bg-zinc-900 border border-border-light hover:border-primary/30 transition-all ml-auto">
-        <Shield className="w-4 h-4 opacity-60" /> {t('profile.safety')}
-      </button>
-    </div>
-  );
+  const navigationTabs = [
+    { id: 'feed',     icon: LayoutGrid, label: t('profile.feed') || 'Journey Log' },
+    { id: 'media',    icon: Image,      label: t('profile.gallery') || 'Media' },
+    { id: 'articles', icon: BookOpen,   label: t('profile.editorial') || 'Editorial' },
+    { id: 'events',   icon: Star,       label: t('profile.highlights') || 'Highlights' },
+    ...(isOwnProfile && isExpert ? [{ id: 'therapy-room', icon: Video, label: 'Clinical Studio' }] : []),
+    ...(showAgendaTab ? [{ id: 'agenda', icon: Calendar, label: t('profile.expertAgenda') || 'Agenda' }] : []),
+    ...(isOwnProfile ? [{ id: 'settings', icon: Settings, label: t('profile.pageSetup', 'Page Setup') }] : []),
+  ];
 
   // ─── Main render ──────────────────────────────────────────────────────────
   return (
@@ -505,7 +469,6 @@ export function PublicProfile({
       <ProfileLayout
         userData={profileData}
         isOwnProfile={isOwnProfile}
-        sidebar={sidebarNav}
       >
         <div className="space-y-8 animate-fade-in-up">
 
@@ -539,28 +502,60 @@ export function PublicProfile({
             onAudioCallClick={!isOwnProfile ? handleAudioCall : undefined}
           />
 
-          {/* Stories Bar */}
-          <div className="bento-card bg-surface/50 border border-border-light p-6 backdrop-blur-sm">
-            <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant/70 mb-6">
-              {t('profile.trendingMoments')}
-            </h3>
-            <StoryBar currentUserId={currentUser?.uid} />
-          </div>
+          <div className="mt-8 flex flex-col md:flex-row gap-8">
+            {/* Left Sidebar Navigation */}
+            <div className="w-full md:w-1/4 shrink-0">
+              <nav className="flex md:flex-col gap-1 overflow-x-auto pb-2 md:pb-0 sticky top-24">
+                {navigationTabs.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      if (item.id === 'settings') {
+                        navigate('/settings');
+                      } else if (item.id === 'therapy-room') {
+                        navigate('/therapy-room');
+                      } else {
+                        setActiveTab(item.id as any);
+                      }
+                    }}
+                    className={clsx(
+                      'flex items-center gap-3 px-4 py-3 rounded-xl font-label-md w-full whitespace-nowrap transition-colors',
+                      activeTab === item.id
+                        ? 'bg-primary-container text-on-primary-container font-semibold'
+                        : 'text-on-surface-variant hover:bg-surface-container'
+                    )}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+            </div>
 
-          {/* Post Creator (own profile only) */}
-          {isOwnProfile && (
-            <PostCreator
-              userAvatar={profileData.photoURL}
-              userData={profileData}
-              onPostCreated={(newPost) => setUserPosts(prev => [newPost, ...prev])}
-              onEventClick={() => setIsEventModalOpen(true)}
-              onArticleClick={() => setIsArticleModalOpen(true)}
-            />
-          )}
+            {/* Right Main Content */}
+            <div className="flex-1 space-y-6 min-w-0">
+              {/* Stories Bar */}
+              <div className="bento-card bg-surface/50 border border-border-light p-6 backdrop-blur-sm">
+                <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant/70 mb-6">
+                  {t('profile.trendingMoments') || 'Trending Moments'}
+                </h3>
+                <StoryBar currentUserId={currentUser?.uid} />
+              </div>
 
-          {/* ── Tab Panels ───────────────────────────────────────────── */}
+              {/* Post Creator (own profile only) */}
+              {isOwnProfile && (
+                <PostCreator
+                  userAvatar={profileData.photoURL}
+                  userData={profileData}
+                  onPostCreated={(newPost) => setUserPosts(prev => [newPost, ...prev])}
+                  onEventClick={() => setIsEventModalOpen(true)}
+                  onArticleClick={() => setIsArticleModalOpen(true)}
+                />
+              )}
 
-          {/* FEED */}
+              {/* ── Tab Panels ───────────────────────────────────────────── */}
+
+              {/* FEED */}
           {activeTab === 'feed' && (
             <div className="grid grid-cols-1 gap-8">
               {userPosts.map((post) => (
@@ -963,6 +958,8 @@ export function PublicProfile({
               }}
             />
           )}
+            </div>
+          </div>
         </div>
       </ProfileLayout>
 

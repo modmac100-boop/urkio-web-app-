@@ -104,6 +104,11 @@ service cloud.firestore {
     }
 
     // 4. OPERATIONAL COLLECTIONS
+    match /cases/{caseId} {
+      allow read: if request.auth != null && (resource.data.authorId == request.auth.uid || isExpert());
+      allow write: if request.auth != null && isExpert();
+      allow list: if withinQueryLimit();
+    }
     match /appointments/{appointmentId} {
       allow read: if request.auth != null && (resource.data.userId == request.auth.uid || isExpert());
       allow write: if request.auth != null || isSimUser();

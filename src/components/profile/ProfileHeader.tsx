@@ -313,17 +313,16 @@ export function ProfileHeader({
 
   return (
     <>
-      <div className="bento-card overflow-hidden border border-border-light shadow-sm bg-surface dark:bg-surface group/header">
-
+      <div className="rounded-xl overflow-hidden shadow-[0px_10px_30px_rgba(27,77,75,0.05)] bg-surface-container group/header">
         {/* ── Cover Image ─────────────────────────────────────────────────── */}
-        <div className="relative h-48 sm:h-64 md:h-80 w-full overflow-hidden bg-bg-main">
+        <div className="aspect-[21/9] md:aspect-[16/6] relative bg-bg-main">
           <img
             src={displayCover || 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80'}
             alt="Cover"
             className="w-full h-full object-cover transition-transform duration-1000 group-hover/header:scale-105 cursor-zoom-in"
             onClick={() => setSelectedFullImage(displayCover || 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80')}
           />
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-surface to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
           {isOwnProfile && (
             <>
@@ -340,7 +339,7 @@ export function ProfileHeader({
                 type="button"
                 onClick={() => coverInputRef.current?.click()}
                 disabled={uploadingCover}
-                className="absolute top-6 inset-e-6 flex items-center gap-2 px-4 py-2.5 bg-surface/80 backdrop-blur-md rounded-xl border border-border-light text-on-surface-variant hover:bg-surface hover:scale-110 transition-all shadow-xl text-xs font-black uppercase tracking-widest"
+                className="absolute top-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-md rounded-full border border-white/20 text-on-surface-variant hover:bg-white transition-all shadow-md text-[10px] font-bold uppercase tracking-wider"
               >
                 {uploadingCover
                   ? <Loader2 className="w-4 h-4 animate-spin" />
@@ -352,337 +351,165 @@ export function ProfileHeader({
         </div>
 
         {/* ── Profile Info ─────────────────────────────────────────────────── */}
-        <div className="px-6 sm:px-10 pb-10">
-          <div className="relative flex flex-col sm:flex-row sm:items-end justify-between -mt-20 sm:-mt-24 gap-6">
-
-            {/* Avatar */}
-            <div className="relative inline-block group/avatar cursor-pointer" onClick={handleAvatarClick}>
-              <div className={`size-32 sm:size-44 rounded-[42px] p-1.5 transition-all duration-700 transform group-hover/header:rotate-2 ${
-                hasActiveStories 
-                  ? 'bg-linear-to-tr from-[#136dec] via-[#8b5cf6] to-[#ec4899] animate-gradient-xy shadow-xl shadow-primary/20' 
-                  : 'bg-surface dark:bg-zinc-800 border border-border-light shadow-2xl'
-              }`}>
-                <div className="w-full h-full rounded-[34px] bg-bg-main overflow-hidden p-0.5">
-                  <img
-                    src={displayAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}`}
-                    alt={displayName}
-                    className="w-full h-full object-cover rounded-[32px] transition-transform duration-700 group-hover/avatar:scale-110"
-                  />
-                </div>
+        <div className="px-6 pb-6 relative">
+          
+          {/* Avatar & Identity */}
+          <div className="flex flex-col md:flex-row md:items-end -mt-12 md:-mt-16 gap-4 mb-6">
+            <div className="relative inline-block cursor-pointer group/avatar" onClick={handleAvatarClick}>
+              <div className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-surface bg-surface overflow-hidden shadow-lg transition-transform duration-700 group-hover/avatar:scale-105 ${hasActiveStories ? 'ring-4 ring-primary ring-offset-2 ring-offset-surface' : ''}`}>
+                <img
+                  src={displayAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}`}
+                  alt={displayName}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="absolute bottom-1 right-1 bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                {roleBadge.label}
               </div>
               
               {isOwnProfile && !hasActiveStories && (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover/avatar:opacity-100 transition-all duration-500 bg-black/40 backdrop-blur-md size-16 rounded-full flex items-center justify-center text-white border border-white/20">
-                  <Plus className="size-8" />
-                </div>
-              )}
-
-              {isVerified && (
-                <div className="absolute bottom-4 right-4 bg-primary text-white p-1.5 rounded-xl border-4 border-surface shadow-xl z-10 transition-transform hover:scale-110">
-                  <CheckCircle2 className="w-4 h-4 fill-primary" />
+                <div className="absolute inset-0 m-auto opacity-0 group-hover/avatar:opacity-100 transition-all duration-500 bg-black/40 backdrop-blur-sm size-12 rounded-full flex items-center justify-center text-white">
+                  <Plus className="w-6 h-6" />
                 </div>
               )}
             </div>
             
-            {/* Modal components at end of return */}
-            {viewerOpen && (
-              <StoryViewer
-                groups={[{ uid: userData?.uid, displayName, photoURL: avatarImage, stories: activeStories }]}
-                initialGroupIdx={0}
-                currentUserId={userData?.uid}
-                onClose={() => setViewerOpen(false)}
-              />
-            )}
-
-            {uploadModalOpen && isOwnProfile && (
-              <StoryUploadModal
-                user={userData}
-                currentUserId={userData?.uid}
-                onClose={() => setUploadModalOpen(false)}
-                onSuccess={() => {
-                  setUploadModalOpen(false);
-                  window.location.reload(); // Simple way to refresh status
-                }}
-              />
-            )}
+            <div className="flex-1">
+              <h1 className="font-headline-md text-on-background leading-tight text-3xl md:text-4xl">{displayName}</h1>
+              <div className="flex items-center gap-2 text-on-surface-variant font-label-sm mt-1">
+                <MapPin className="w-4 h-4" />
+                {location || 'Global Network'}
+                {website && (
+                  <>
+                    <span className="mx-2 text-outline-variant">•</span>
+                    <a href={website.startsWith('http') ? website : `https://${website}`} target="_blank" rel="noopener noreferrer" className="hover:text-primary flex items-center gap-1">
+                      <LinkIcon className="w-3 h-3" /> Website
+                    </a>
+                  </>
+                )}
+              </div>
+            </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3 pb-2">
+            <div className="flex flex-wrap gap-3">
               {isOwnProfile ? (
                 <>
-                  <GlassButton
-                    onClick={() => setUploadModalOpen(true)}
-                    variant="colorful"
-                    className="px-8! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                    style={{ background: 'linear-gradient(135deg, #136dec, #8b5cf6)' }}
-                  >
-                    <Plus className="w-4 h-4 me-2" />
-                    BROADCAST STATUS
-                  </GlassButton>
-                  <GlassButton
-                    onClick={() => navigate('/therapy-room')}
-                    variant="colorful"
-                    className="px-8! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs shadow-xl shadow-indigo-500/20 scale-105"
-                    style={{ background: 'linear-gradient(135deg, #4f46e5, #0ea5e9)' }}
-                  >
-                    <Video className="w-4 h-4 me-2" />
-                    Launch Clinical Sanctuary
-                  </GlassButton>
-                  <GlassButton
-                    onClick={onEditClick}
-                    variant="light"
-                    className="px-8! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                  >
-                    Edit Studio
-                  </GlassButton>
-                  <button
-                    onClick={handleShare}
-                    title={copied ? 'Copied!' : 'Share profile'}
-                    className="p-3 bg-bg-main rounded-2xl border border-border-light text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm"
-                  >
-                    <Share2 className="w-5 h-5" />
+                  <button onClick={() => setUploadModalOpen(true)} className="px-4 py-2 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-opacity text-sm flex items-center gap-2">
+                    <Plus className="w-4 h-4" /> Broadcast
                   </button>
-                  <button className="p-3 bg-bg-main rounded-2xl border border-border-light text-on-surface hover:bg-white transition-all shadow-sm">
-                    <MoreHorizontal className="w-5 h-5" />
+                  <button onClick={() => navigate('/therapy-room')} className="px-4 py-2 border border-primary text-primary rounded-full font-label-md hover:bg-primary/5 transition-colors text-sm flex items-center gap-2">
+                    <Video className="w-4 h-4" /> Studio
+                  </button>
+                  <button onClick={onEditClick} className="px-4 py-2 border border-outline-variant text-on-surface-variant rounded-full font-label-md hover:bg-surface transition-colors text-sm">
+                    Edit Profile
+                  </button>
+                  <button onClick={handleShare} className="p-2 border border-outline-variant text-on-surface-variant rounded-full hover:bg-surface transition-colors">
+                    <Share2 className="w-4 h-4" />
                   </button>
                 </>
               ) : (
                 <>
-                  <GlassButton
-                    onClick={onFollowClick}
-                    variant={isFollowing ? 'light' : 'colorful'}
-                    className="px-8! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                  >
-                    {isFollowing ? 'CONNECTED' : 'CONNECT'}
-                  </GlassButton>
-                  <GlassButton
-                    onClick={onMessageClick}
-                    variant="light"
-                    className="px-6! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                  >
-                    <MessageSquare className="w-4 h-4 me-2" />
-                    MESSAGE
-                  </GlassButton>
+                  <button onClick={onFollowClick} className={`px-6 py-2 rounded-full font-label-md transition-colors text-sm ${isFollowing ? 'border border-primary text-primary hover:bg-primary/5' : 'bg-primary text-on-primary hover:opacity-90'}`}>
+                    {isFollowing ? 'Following' : 'Follow'}
+                  </button>
+                  <button onClick={onMessageClick} className="px-6 py-2 border border-primary text-primary rounded-full font-label-md hover:bg-primary/5 transition-colors text-sm flex items-center gap-2">
+                    <MessageSquare className="w-4 h-4" /> Message
+                  </button>
                   {isExpert && onVideoCallClick && (
-                    <button
-                      onClick={onVideoCallClick}
-                      title="Start Video Call"
-                      className="flex items-center gap-2 px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-lg shadow-emerald-500/30"
-                    >
-                      <Video className="w-4 h-4" />
-                      VIDEO
+                    <button onClick={onVideoCallClick} className="px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full font-label-md hover:bg-secondary-container/80 transition-colors text-sm flex items-center gap-2">
+                      <Video className="w-4 h-4" /> Call
                     </button>
                   )}
-                  {isExpert && onAudioCallClick && (
-                    <button
-                      onClick={onAudioCallClick}
-                      title="Start Audio Call"
-                      className="flex items-center gap-2 px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-black uppercase tracking-widest text-xs transition-all hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30"
-                    >
-                      <Phone className="w-4 h-4" />
-                      CALL
+                  {isExpert && onBookClick && (
+                    <button onClick={onBookClick} className="px-4 py-2 bg-primary text-on-primary rounded-full font-label-md hover:opacity-90 transition-opacity text-sm flex items-center gap-2">
+                      <Calendar className="w-4 h-4" /> Book
                     </button>
                   )}
-                  {isExpert && (
-                    <GlassButton
-                      onClick={() => {
-                        console.log('Book Clicked');
-                        onBookClick();
-                      }}
-                      variant="colorful"
-                      className="px-6! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs shadow-lg shadow-primary/20 scale-105"
-                      style={{ background: 'linear-gradient(135deg, #136dec, #8b5cf6)', opacity: 1, visibility: 'visible' }}
-                    >
-                      <Calendar className="w-4 h-4 me-2" />
-                      BOOK APPOINTMENT
-                    </GlassButton>
-                  )}
-                  {isExpert && onShowResume && (
-                    <GlassButton
-                      onClick={onShowResume}
-                      variant="colorful"
-                      className="px-6! py-3! rounded-2xl! font-black uppercase tracking-widest text-xs"
-                      style={{ background: 'linear-gradient(135deg, #a8c8ff, #0a66c2)', color: '#fff' }}
-                    >
-                      <Award className="w-4 h-4 me-2" />
-                      SHOW MY RESUME
-                    </GlassButton>
-                  )}
-                  {/* Contact / Social button */}
-                  <button
-                    onClick={() => setContactOpen(true)}
-                    title="Contact Info & Social Links"
-                    className="p-3 bg-bg-main rounded-2xl border border-border-light text-on-surface hover:bg-green-500 hover:text-white hover:border-green-500 transition-all shadow-sm"
-                  >
-                    <Phone className="w-5 h-5" />
+                  <button onClick={() => setContactOpen(true)} className="p-2 border border-outline-variant text-on-surface-variant rounded-full hover:bg-surface transition-colors">
+                    <Phone className="w-4 h-4" />
                   </button>
-                  <button
-                    onClick={handleShare}
-                    title={copied ? 'Copied!' : 'Share profile'}
-                    className="p-3 bg-bg-main rounded-2xl border border-border-light text-on-surface hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm"
-                  >
-                    <Share2 className="w-5 h-5" />
-                  </button>
-                  <button className="p-3 bg-bg-main rounded-2xl border border-border-light text-on-surface hover:bg-white transition-all shadow-sm">
-                    <MoreHorizontal className="w-5 h-5" />
+                  <button onClick={handleShare} className="p-2 border border-outline-variant text-on-surface-variant rounded-full hover:bg-surface transition-colors">
+                    <Share2 className="w-4 h-4" />
                   </button>
                 </>
               )}
             </div>
           </div>
 
-          {/* ── Name / Bio / Meta ─────────────────────────────────────────── */}
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-            <div className="lg:col-span-8">
-              <h1 className="text-3xl sm:text-4xl font-headline font-black text-on-surface mb-2 flex items-center gap-3 flex-wrap">
-                {displayName}
-                <span className={`flex items-center gap-1.5 text-xs font-black px-3 py-1 rounded-lg tracking-widest uppercase align-middle ${roleBadge.color}`}>
-                  {(userData?.verificationStatus === 'approved' || userData?.isSpecialist) && (
-                    <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fillRule="evenodd" clipRule="evenodd" /></svg>
-                  )}
-                  {roleBadge.label}
-                </span>
-              </h1>
-              <p className="text-base text-on-surface-variant font-semibold tracking-tight max-w-2xl leading-relaxed">
-                {bio || 'Curating professional experiences and editorial excellence at the intersection of design and technology.'}
-              </p>
-
-            {/* Stats Row (Moved here) */}
-              <div className="flex flex-wrap gap-4 mt-8">
-                <div 
-                  className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 rounded-2xl border border-border-light shadow-sm group transition-all hover:scale-105"
-                >
-                  <span className="text-xs font-black text-white bg-linear-to-tr from-blue-600 to-primary px-3 py-1.5 rounded-lg shadow-md">{profileViews}</span>
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest leading-none">
-                    Profile Views
-                  </p>
-                </div>
-                <div 
-                  className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 rounded-2xl border border-border-light shadow-sm group transition-all hover:scale-105"
-                >
-                  <span className="text-xs font-black text-white bg-linear-to-tr from-purple-600 to-accent px-3 py-1.5 rounded-lg shadow-md">{connections}</span>
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest leading-none">
-                    Connections
-                  </p>
-                </div>
-                <div 
-                  className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 rounded-2xl border border-border-light shadow-sm group transition-all hover:scale-105"
-                >
-                  <span className="text-xs font-black text-on-surface bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-lg">{postsCount}</span>
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest leading-none">
-                    Posts
-                  </p>
-                </div>
-                <div 
-                  onClick={onFollowersClick}
-                  className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 rounded-2xl border border-border-light shadow-sm group cursor-pointer transition-all hover:scale-105"
-                >
-                  <span className="text-xs font-black text-white bg-emerald-500 px-3 py-1.5 rounded-lg shadow-md">{followersCount}</span>
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest leading-none group-hover:text-primary transition-colors">
-                    Followers
-                  </p>
-                </div>
-                <div 
-                  onClick={onFollowingClick}
-                  className="flex items-center gap-3 px-5 py-3 bg-white dark:bg-zinc-900 rounded-2xl border border-border-light shadow-sm group cursor-pointer transition-all hover:scale-105"
-                >
-                  <span className="text-xs font-black text-white bg-zinc-900 dark:bg-zinc-100 dark:text-zinc-900 px-3 py-1.5 rounded-lg shadow-md">{followingCount}</span>
-                  <p className="text-[10px] font-black text-on-surface-variant uppercase tracking-widest leading-none group-hover:text-purple-500 transition-colors">
-                    Following
-                  </p>
-                </div>
-              </div>
-
-              {/* Meta row */}
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-6 text-sm font-bold text-on-surface-variant/80 uppercase tracking-widest">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  {location || 'Global Editor'}
-                </div>
-                {website && (
-                  <a
-                    href={website.startsWith('http') ? website : `https://${website}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-primary hover:underline"
-                  >
-                    <LinkIcon className="w-4 h-4" />
-                    Website
-                  </a>
-                )}
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-accent" />
-                  {joinedDate || 'Joined 2023'}
-                </div>
-              </div>
-
-              {/* ── Social Icons Row ────────────────────────────────────────── */}
-              {socialIcons.length > 0 && (
-                <div className="flex flex-wrap items-center gap-3 mt-6">
-                  {socialIcons.map(({ key, Icon, label, color, href }) => (
-                    <a
-                      key={key}
-                      href={href!}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title={label}
-                      className="group relative size-10 rounded-2xl flex items-center justify-center border border-border-light bg-bg-main hover:scale-110 hover:border-transparent hover:shadow-lg transition-all duration-200"
-                      style={{ '--icon-color': color } as React.CSSProperties}
-                    >
-                      <Icon
-                        className="w-5 h-5 text-on-surface-variant group-hover:text-white transition-colors"
-                        style={{ color: 'inherit' }}
-                      />
-                      {/* colour fill on hover via inline style overlay */}
-                      <span
-                        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity -z-10"
-                        style={{ backgroundColor: color }}
-                      />
-                      {/* Tooltip */}
-                      <span className="absolute -top-8 inset-s-1/2 -translate-x-1/2 bg-on-surface text-surface text-[10px] font-black px-2 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                        {label}
-                      </span>
-                    </a>
-                  ))}
-
-                  {/* "View All" opens ContactInfoModal */}
-                  {!isOwnProfile && (
-                    <button
-                      onClick={() => setContactOpen(true)}
-                      className="h-10 px-4 rounded-2xl bg-bg-main border border-border-light text-[11px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-all"
-                    >
-                      All Contacts
-                    </button>
-                  )}
-                </div>
-              )}
-
-              {/* Show contact button even if no social icons set (guest profile) */}
-              {socialIcons.length === 0 && !isOwnProfile && (
-                <button
-                  onClick={() => setContactOpen(true)}
-                  className="mt-6 flex items-center gap-2 h-10 px-5 rounded-2xl bg-bg-main border border-border-light text-[11px] font-black uppercase tracking-widest text-on-surface-variant hover:bg-primary hover:text-white hover:border-primary transition-all"
-                >
-                  <Phone className="w-4 h-4" /> Contact Info
-                </button>
-              )}
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-y border-outline-variant/30">
+            <div className="text-center md:text-left cursor-pointer hover:bg-surface-container-highest/50 rounded-lg p-2 transition-colors" onClick={onFollowersClick}>
+              <p className="font-headline-sm text-primary">{followersCount}</p>
+              <p className="font-label-sm text-on-surface-variant">Followers</p>
             </div>
+            <div className="text-center md:text-left cursor-pointer hover:bg-surface-container-highest/50 rounded-lg p-2 transition-colors" onClick={onFollowingClick}>
+              <p className="font-headline-sm text-primary">{followingCount}</p>
+              <p className="font-label-sm text-on-surface-variant">Following</p>
+            </div>
+            <div className="text-center md:text-left">
+              <p className="font-headline-sm text-primary">{postsCount}</p>
+              <p className="font-label-sm text-on-surface-variant">Posts & Highlights</p>
+            </div>
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-1">
+                <p className="font-headline-sm text-primary">{isExpert ? 'Expert' : '4'}</p>
+                <span className="material-symbols-outlined text-primary text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>auto_awesome</span>
+              </div>
+              <p className="font-label-sm text-on-surface-variant">{isExpert ? 'Status Level' : 'Journeyer Level'}</p>
+            </div>
+          </div>
 
-            <div className="lg:col-span-4 flex flex-col justify-center">
-              {/* Stats moved to name section */}
+          {/* Bio Section */}
+          <div className="mt-6 max-w-2xl">
+            <p className="font-body-lg text-on-surface mb-4">
+              {bio || 'Seeking harmony between professional ambition and internal stillness.'}
+            </p>
+            {socialIcons.length > 0 && (
+              <div className="flex flex-wrap gap-2 mb-4">
+                {socialIcons.map(({ key, Icon, label, color, href }) => (
+                  <a key={key} href={href!} target="_blank" rel="noopener noreferrer" title={label} className="p-2 bg-surface-container-highest text-on-surface-variant rounded-full hover:bg-primary/10 hover:text-primary transition-colors">
+                    <Icon className="w-4 h-4" />
+                  </a>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2">
+              <span className="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm">#Growth</span>
+              <span className="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm">#Network</span>
+              {isExpert && <span className="px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full text-label-sm">#Expert</span>}
             </div>
           </div>
         </div>
       </div>
 
-      {/* ── Contact Info Modal ──────────────────────────────────────────────── */}
+      {viewerOpen && (
+        <StoryViewer
+          groups={[{ uid: userData?.uid, displayName, photoURL: avatarImage, stories: activeStories }]}
+          initialGroupIdx={0}
+          currentUserId={userData?.uid}
+          onClose={() => setViewerOpen(false)}
+        />
+      )}
+
+      {uploadModalOpen && isOwnProfile && (
+        <StoryUploadModal
+          user={userData}
+          currentUserId={userData?.uid}
+          onClose={() => setUploadModalOpen(false)}
+          onSuccess={() => {
+            setUploadModalOpen(false);
+            window.location.reload(); 
+          }}
+        />
+      )}
+
       <ContactInfoModal
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         userData={userData || { displayName }}
       />
 
-      {/* ── Fullscreen Image Viewer ─────────────────────────────────────── */}
+      {/* Fullscreen Image Viewer */}
       {selectedFullImage && (
         <div 
           className="fixed inset-0 z-200 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-in fade-in duration-300"

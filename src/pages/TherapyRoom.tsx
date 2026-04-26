@@ -280,34 +280,63 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
               {connectionState === 'CONNECTED' ? (
                 <>
-                  {/* Background Track - Prioritize Remote Participant */}
-                  {remoteUsers.length > 0 ? (
-                    <VideoTile
-                      videoTrack={remoteUsers[0].videoTrack}
-                      name={t('therapyRoom.patient')}
-                      className="w-full h-full absolute inset-0 rounded-none border-none"
-                    />
+                  {remoteUsers.length > 1 ? (
+                    <div className={clsx(
+                      "absolute inset-0 grid gap-2 p-2 bg-[#101319]",
+                      remoteUsers.length + 1 <= 2 ? "grid-cols-2" : 
+                      remoteUsers.length + 1 <= 4 ? "grid-cols-2 grid-rows-2" : 
+                      remoteUsers.length + 1 <= 6 ? "grid-cols-3 grid-rows-2" : 
+                      "grid-cols-3 grid-rows-3"
+                    )}>
+                      {/* Local User */}
+                      <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black">
+                        <VideoTile
+                          videoTrack={localVideoTrack || undefined}
+                          isLocal
+                          name={t('therapyRoom.you')}
+                          isOff={isCameraOff}
+                          className="w-full h-full absolute inset-0 rounded-none border-none"
+                        />
+                      </div>
+                      {/* Remote Users */}
+                      {remoteUsers.map((remoteUser, idx) => (
+                        <div key={remoteUser.uid} className="relative rounded-xl overflow-hidden border border-white/10 shadow-lg bg-black">
+                          <VideoTile
+                            videoTrack={remoteUser.videoTrack}
+                            name={`Participant ${idx + 1}`}
+                            className="w-full h-full absolute inset-0 rounded-none border-none"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : remoteUsers.length === 1 ? (
+                    <>
+                      {/* Background Track - 1 on 1 Mode */}
+                      <VideoTile
+                        videoTrack={remoteUsers[0].videoTrack}
+                        name={t('therapyRoom.patient') || "Guest"}
+                        className="w-full h-full absolute inset-0 rounded-none border-none"
+                      />
+                      {/* Picture-in-Picture Track */}
+                      <div className="absolute top-6 right-6 w-48 h-32 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20 z-20 group hover:w-64 hover:h-40 transition-all duration-300">
+                        <VideoTile
+                          videoTrack={localVideoTrack || undefined}
+                          isLocal
+                          name={t('therapyRoom.you')}
+                          isOff={isCameraOff}
+                          className="w-full h-full rounded-none border-none"
+                        />
+                      </div>
+                    </>
                   ) : (
+                    /* Solo Mode */
                     <VideoTile
                       videoTrack={localVideoTrack || undefined}
                       isLocal
-                      name={t('therapyRoom.youHost')}
+                      name={t('therapyRoom.youHost') || "You"}
                       isOff={isCameraOff}
                       className="w-full h-full absolute inset-0 rounded-none border-none"
                     />
-                  )}
-
-                  {/* Picture-in-Picture Track */}
-                  {remoteUsers.length > 0 && (
-                    <div className="absolute top-6 right-6 w-48 h-32 rounded-xl overflow-hidden shadow-2xl border-2 border-white/20 z-20 group hover:w-64 hover:h-40 transition-all duration-300">
-                      <VideoTile
-                        videoTrack={localVideoTrack || undefined}
-                        isLocal
-                        name={t('therapyRoom.you')}
-                        isOff={isCameraOff}
-                        className="w-full h-full rounded-none border-none"
-                      />
-                    </div>
                   )}
                 </>
               ) : (
