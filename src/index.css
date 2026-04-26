@@ -67,15 +67,15 @@ html {
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --color-primary: #136dec;
-  --color-primary-glow: rgba(19, 109, 236, 0.2);
-  --color-accent: #8b5cf6;
-  --color-accent-glow: rgba(139, 92, 246, 0.2);
-  --color-bg-main: #f6f7f8;
+  --color-primary: #30B0D0;
+  --color-primary-glow: rgba(48, 176, 208, 0.2);
+  --color-accent: #C8A96E;
+  --color-accent-glow: rgba(200, 169, 110, 0.2);
+  --color-bg-main: #EDE8E4;
   --color-surface: #ffffff;
-  --color-on-surface: #1e293b;
-  --color-on-surface-variant: #64748b;
-  --color-border-light: rgba(0, 0, 0, 0.05);
+  --color-on-surface: #050A0F;
+  --color-on-surface-variant: #6B8E7D;
+  --color-border-light: rgba(5, 10, 15, 0.08);
   
   --color-primary-container: #9695ff;
   --color-on-primary-container: #10007f;
@@ -124,16 +124,16 @@ html {
 }
 
 .dark {
-  --color-primary: #9695ff;
-  --color-on-primary: #10007f;
-  --color-primary-container: #3d38c5;
-  --color-on-primary-container: #f4f1ff;
+  --color-primary: #30B0D0;
+  --color-on-primary: #050A0F;
+  --color-primary-container: #1b6a7e;
+  --color-on-primary-container: #EDE8E4;
 
-  --color-bg-main: #0a0e14;
-  --color-surface: #161d27;
-  --color-on-surface: #f1f5f9;
-  --color-on-surface-variant: #94a3b8;
-  --color-border-light: rgba(255, 255, 255, 0.05);
+  --color-bg-main: #050A0F;
+  --color-surface: #0a111a;
+  --color-on-surface: #EDE8E4;
+  --color-on-surface-variant: #D4A5A5;
+  --color-border-light: rgba(237, 232, 228, 0.05);
   /* Urkio Healing Design System */
   --urkio-primary: #a8c8ff;
   --urkio-on-primary: #003062;
@@ -161,13 +161,13 @@ html {
   --color-outline-variant: #43474e;
 
   /* Executive Design Dark Overrides */
-  --ur-background: var(--ur-deep-navy);
-  --ur-surface-base: #0a0e14;
-  --ur-on-surface: var(--ur-ivory);
-  --ur-on-surface-variant: #94a3b8;
-  --ur-outline: #8e9199;
-  --ur-outline-variant: #43474e;
-  --ur-primary: #3b82f6; /* Modern blue for dark mode */
+  --ur-background: #050A0F;
+  --ur-surface-base: #0a111a;
+  --ur-on-surface: #EDE8E4;
+  --ur-on-surface-variant: #D4A5A5;
+  --ur-outline: rgba(237, 232, 228, 0.2);
+  --ur-outline-variant: rgba(237, 232, 228, 0.1);
+  --ur-primary: #30B0D0; /* Cyan Teal Accent */
   /* Hmoii Ethereal System */
   --hmoii-surface: #101319;
   --hmoii-surface-container: #1d2026;
@@ -233,15 +233,15 @@ html {
   --color-msgr-on-surface-variant: #414752;
 
   /* Executive Design Internal Variables (Light Defaults) */
-  --ur-primary: #004e99;
-  --ur-secondary: #006d3c;
-  --ur-tertiary: #4f4f4f;
-  --ur-background: #faf9f6;
-  --ur-surface: #faf9f6;
-  --ur-on-surface: #1b1c1a;
-  --ur-on-surface-variant: #414752;
-  --ur-outline: #727783;
-  --ur-outline-variant: #c1c6d4;
+  --ur-primary: #30B0D0;
+  --ur-secondary: #6B8E7D;
+  --ur-tertiary: #C8A96E;
+  --ur-background: #EDE8E4;
+  --ur-surface: #ffffff;
+  --ur-on-surface: #050A0F;
+  --ur-on-surface-variant: #6B8E7D;
+  --ur-outline: #D4A5A5;
+  --ur-outline-variant: #C8A96E;
 
   --z-index-200: 200;
   --z-index-300: 300;
