@@ -986,7 +986,7 @@ export function ChatWindow({
                         onDoubleClick={() => toggleReaction(msg.id, '❤️')}
                       >
                          {msg.type === 'text' && <p className="whitespace-pre-wrap">{msg.text}</p>}
-                         {msg.type === 'session_invite' && msg.sessionData && (
+                         {msg.type === 'session_invite' && (msg.sessionData || msg.roomId) && (
                            <div className="min-w-[260px] space-y-4">
                              <div className="flex items-center gap-3 mb-3">
                                <div className={clsx("w-10 h-10 rounded-2xl flex items-center justify-center shrink-0", isOwn ? "bg-white/20" : "bg-[#004e99]/10")}>
@@ -994,22 +994,24 @@ export function ChatWindow({
                                </div>
                                <div>
                                  <p className={clsx("text-[10px] font-black uppercase tracking-widest", isOwn ? "text-white/70" : "text-[#004e99]/70")}>Secure Healing Session</p>
-                                 <p className={clsx("text-[13px] font-black", isOwn ? "text-white" : "text-zinc-900")}>{msg.sessionData.title || 'Expert Healing Invitation'}</p>
+                                 <p className={clsx("text-[13px] font-black", isOwn ? "text-white" : "text-zinc-900")}>{msg.sessionData?.title || 'Expert Healing Invitation'}</p>
                                </div>
                              </div>
                              <div className={clsx("rounded-2xl p-3 space-y-2", isOwn ? "bg-white/10" : "bg-[#004e99]/5 border border-[#004e99]/10")}>
                                <div className="flex justify-between items-center">
                                  <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOwn ? "text-white/50" : "text-zinc-400")}>Room ID</span>
-                                 <span className={clsx("text-xs font-black font-mono", isOwn ? "text-white" : "text-zinc-800")}>{msg.sessionData.roomId?.slice(-8).toUpperCase()}</span>
+                                 <span className={clsx("text-xs font-black font-mono", isOwn ? "text-white" : "text-zinc-800")}>{(msg.sessionData?.roomId || msg.roomId)?.slice(-8).toUpperCase()}</span>
                                </div>
-                               <div className="flex justify-between items-center">
-                                 <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOwn ? "text-white/50" : "text-zinc-400")}>Access Code</span>
-                                 <span className={clsx("text-[14px] font-black tracking-[0.3em] font-mono", isOwn ? "text-white" : "text-[#004e99]")}>{msg.sessionData.accessCode}</span>
-                               </div>
+                               {(msg.sessionData?.accessCode) && (
+                                 <div className="flex justify-between items-center">
+                                   <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOwn ? "text-white/50" : "text-zinc-400")}>Access Code</span>
+                                   <span className={clsx("text-[14px] font-black tracking-[0.3em] font-mono", isOwn ? "text-white" : "text-[#004e99]")}>{msg.sessionData.accessCode}</span>
+                                 </div>
+                               )}
                              </div>
                              {!isOwn && (
                                <button
-                                 onClick={() => navigate(`/healing-room?roomId=${msg.sessionData!.roomId}&code=${msg.sessionData!.accessCode}`)}
+                                 onClick={() => navigate(`/therapy-room/${msg.sessionData?.roomId || msg.roomId}`)}
                                  className="w-full py-3 bg-[#004e99] hover:bg-[#003d7a] text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-[#004e99]/30 flex items-center justify-center gap-2"
                                >
                                  <span className="material-symbols-outlined text-[16px] fill-1">self_improvement</span>
@@ -1064,7 +1066,7 @@ export function ChatWindow({
                              </div>
                              {!isOwn && (
                                <button
-                                 onClick={() => navigate(`/healing-room?roomId=${msg.liveData!.roomId}&code=${msg.liveData!.accessCode}&live=true`)}
+                                 onClick={() => navigate(`/therapy-room/${msg.liveData!.roomId}?live=true`)}
                                  className='w-full py-3 bg-linear-to-r from-red-500 to-orange-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-red-500/30 flex items-center justify-center gap-2'
                                >
                                  <span className='material-symbols-outlined text-[16px] fill-1'>radio_button_checked</span>
