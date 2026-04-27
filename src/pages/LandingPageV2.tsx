@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Menu, X, ArrowRight, Shield, Activity, Star } from 'lucide-react';
+import { Globe, Menu, X, ArrowRight, Shield, Activity, Star, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,6 +25,7 @@ export function LandingPageV2({
   const isRTL = i18n.language === 'ar';
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activePricingCategory, setActivePricingCategory] = useState<'users' | 'pros'>('users');
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
