@@ -3,6 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
@@ -123,6 +124,16 @@ html {
   --ur-on-surface-variant: var(--ur-text-secondary);
   --ur-outline: var(--ur-border);
   --ur-outline-variant: var(--ur-border);
+
+  /* Clinical Nexus Theme Tokens */
+  --nexus-primary: #003634;
+  --nexus-primary-container: #1b4d4b;
+  --nexus-on-primary-container: #8cbdba;
+  --nexus-secondary: #52634d;
+  --nexus-surface: #fbf9f5;
+  --nexus-surface-container: #efeeea;
+  --nexus-surface-container-low: #f5f3ef;
+  --nexus-outline: #707978;
 }
 
 .dark {
@@ -278,6 +289,16 @@ html {
   --color-ur-on-surface-variant: var(--ur-on-surface-variant);
   --color-ur-outline: var(--ur-outline);
   --color-ur-outline-variant: var(--ur-outline-variant);
+
+  /* Nexus Theme Mapping */
+  --color-nexus-primary: var(--nexus-primary);
+  --color-nexus-primary-container: var(--nexus-primary-container);
+  --color-nexus-on-primary-container: var(--nexus-on-primary-container);
+  --color-nexus-secondary: var(--nexus-secondary);
+  --color-nexus-surface: var(--nexus-surface);
+  --color-nexus-surface-container: var(--nexus-surface-container);
+  --color-nexus-surface-container-low: var(--nexus-surface-container-low);
+  --color-nexus-outline: var(--nexus-outline);
 }
 
 /* Material Symbols configuration */

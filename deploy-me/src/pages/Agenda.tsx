@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageToggle from '../components/LanguageToggle';
 import {
@@ -16,8 +16,6 @@ import {
   doc,
   updateDoc,
   getDocs,
-  orderBy,
-  limit
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
@@ -25,29 +23,8 @@ import { format } from 'date-fns';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { 
-  Search, 
-  Shield, 
-  Zap, 
-  Target, 
-  Clock, 
-  Settings, 
-  Bell, 
-  Lock, 
-  Unlock, 
-  ChevronRight, 
-  Activity, 
-  Users, 
-  ShieldCheck, 
-  ArrowRight,
-  LayoutGrid,
-  Calendar,
-  Globe,
-  Database,
-  History,
-  ClipboardList,
-  PlusCircle,
-  Scan,
-  Cpu
+  Plus,
+  Terminal,
 } from 'lucide-react';
 
 // Helper for Patient Name Masking
@@ -56,22 +33,6 @@ const maskPatientName = (name: string, userCode?: string) => {
   if (!name) return 'Clinical ID Pending';
   const parts = name.split(' ');
   return parts.map(p => p[0] + (p.length > 1 ? '*'.repeat(p.length - 1) : '')).join(' ');
-};
-
-// Guardian Verified Badge component
-const GuardianStatusBadge = ({ isVerified, age, guardianVerifiedLabel, guardianPendingLabel }: { isVerified: boolean, age: number, guardianVerifiedLabel: string, guardianPendingLabel: string }) => {
-  if (!age || age >= 15) return null;
-  return (
-    <div className={clsx(
-      "flex items-center gap-1.5 px-3 py-1 rounded-full border text-[9px] font-black uppercase tracking-[0.3em] leading-none transition-all",
-      isVerified 
-        ? "bg-emerald-400/10 border-emerald-400/20 text-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.1)]" 
-        : "bg-white/5 border-white/10 text-white/40"
-    )}>
-      <span className={clsx("size-1 rounded-full", isVerified ? "bg-emerald-400 animate-pulse" : "bg-white/20")}></span>
-      {isVerified ? guardianVerifiedLabel : guardianPendingLabel}
-    </div>
-  );
 };
 
 export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData }) => {
@@ -84,12 +45,9 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
   const [clinicalNote, setClinicalNote] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<'agenda' | 'records' | 'vault' | 'plans'>('agenda');
+  const [activeSection, setActiveSection] = useState<'dashboard' | 'agenda' | 'protocols' | 'dossiers' | 'settings'>('agenda');
   const [patientHistory, setPatientHistory] = useState<any[]>([]);
-  const [isLocked, setIsLocked] = useState(true);
-  const [inputPin, setInputPin] = useState('');
-  const [newPin, setNewPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
+
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [bookingDetails, setBookingDetails] = useState({ clientName: '', category: 'Healing', message: '' });
 
@@ -107,7 +65,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
       setAppointments(data);
       if (data.length > 0 && !selectedSessionId) setSelectedSessionId(data[0].id);
     });
-  }, [user?.uid, isAdmin]);
+  }, [user?.uid, isAdmin, selectedSessionId]);
 
   useEffect(() => {
     if (!selectedSessionId) return;
@@ -117,28 +75,8 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
     getDocs(qHist).then(snap => setPatientHistory(snap.docs.map(d => d.data())));
   }, [selectedSessionId, appointments]);
 
-  const handleUnlock = () => {
-    if (inputPin === userData?.clinicalPin || (isAdmin && inputPin === 'ADMIN_BYPASS')) {
-      setIsLocked(false);
-      toast.success('Terminal Access Granted');
-    } else {
-      toast.error('Authentication Error');
-      setInputPin('');
-    }
-  };
-
-  const handleSetupPin = async () => {
-    if (!newPin || newPin.length < 4 || newPin !== confirmPin) {
-      toast.error('Invalid PIN setup');
-      return;
-    }
-    await updateDoc(doc(db, 'users', user.uid), { clinicalPin: newPin });
-    setIsLocked(false);
-    toast.success('Terminal Secured');
-  };
-
   const handleAcceptSession = async (id: string) => {
-    const caseCode = `#${Math.random().toString(36).substring(2, 7).toUpperCase()}-${Math.floor(Math.random() * 100)}`;
+    const caseCode = `#PR-${Math.floor(1000 + Math.random() * 9000)}`;
     await updateDoc(doc(db, 'events', id), { status: 'accepted', caseCode, acceptedAt: serverTimestamp() });
     toast.success('Protocol Established');
   };
@@ -175,6 +113,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
       expertName: userData.displayName || user.email,
       type: 'session',
       status: 'accepted',
+      caseCode: `#PR-${Math.floor(1000 + Math.random() * 9000)}`,
       date: new Date().toISOString(),
       createdAt: serverTimestamp()
     });
@@ -187,302 +126,320 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
     a.caseCode?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const completionRate = appointments.length > 0 ? Math.round((appointments.filter(a => a.status === 'completed').length / appointments.length) * 100) : 94;
-
   const selectedSession = appointments.find(a => a.id === selectedSessionId);
 
-  if (isLocked && !isAdmin) {
-    const hasPin = !!userData?.clinicalPin;
-    return (
-      <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("fixed inset-0 bg-[#080a0f] flex items-center justify-center p-6 z-[200] font-['Manrope']")}>
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-msgr-primary-container/10 blur-[180px] animate-pulse" />
-          <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-[#a8c8ff]/5 blur-[150px]" />
-          <div className="absolute inset-0 backdrop-blur-[20px]" />
-        </div>
-        <div className="w-full max-w-xl relative bg-[#11141b]/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-16 shadow-2xl">
-          <div className="mb-14 text-center">
-            <div className="relative inline-block mb-10">
-              <div className="relative size-28 bg-white/5 border border-white/10 rounded-4xl flex items-center justify-center text-[#a8c8ff]">
-                {hasPin ? <Scan className="size-12 animate-pulse" /> : <ShieldCheck className="size-12" />}
-              </div>
-            </div>
-            <h2 className="text-4xl font-black italic text-white uppercase tracking-tighter mb-4">
-              {hasPin ? t('agenda.securityTerminal') : t('agenda.protocolSetup')}
-            </h2>
-            <p className="text-white/30 text-sm italic">{hasPin ? t('agenda.authRequired') : t('agenda.setupDesc')}</p>
-          </div>
-          <div className="space-y-6">
-            {hasPin ? (
-              <div className="space-y-6">
-                <input
-                  type="password"
-                  value={inputPin}
-                  onChange={(e) => setInputPin(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleUnlock()}
-                  placeholder={t('agenda.clinicalKey')}
-                  className="w-full py-7 bg-white/5 border border-white/10 rounded-4xl text-center text-3xl font-black tracking-[0.4em] text-white outline-none"
-                />
-                <button onClick={handleUnlock} className="w-full py-7 bg-[#a8c8ff] text-[#003062] rounded-4xl font-black uppercase text-[11px] tracking-[0.3em]">{t('agenda.verifyIdentity')}</button>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <input type="password" value={newPin} onChange={(e) => setNewPin(e.target.value)} placeholder={t('agenda.newKey')} className="w-full py-6 bg-white/5 border border-white/10 rounded-4xl text-center text-white" />
-                <input type="password" value={confirmPin} onChange={(e) => setConfirmPin(e.target.value)} placeholder={t('agenda.confirmKey')} className="w-full py-6 bg-white/5 border border-white/10 rounded-4xl text-center text-white" />
-                <button onClick={handleSetupPin} className="w-full py-7 bg-white text-[#080a0f] rounded-4xl font-black uppercase text-[11px] tracking-[0.3em]">{t('agenda.secureTerminalBtn')}</button>
-              </div>
-            )}
-            <div className="pt-8 text-center">
-              <button onClick={() => navigate('/')} className="text-[9px] font-black text-white/20 uppercase tracking-[0.3em] hover:text-[#a8c8ff]">{t('agenda.egressPortal')}</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className={clsx("flex h-screen bg-[#080a0f] text-white/90 font-['Manrope'] overflow-hidden selection:bg-[#a8c8ff]/30")}>
-      <aside className="w-80 border-e border-white/5 bg-[#0d1017]/80 backdrop-blur-3xl hidden lg:flex flex-col relative z-20">
-        <div className="p-10 flex items-center gap-4 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="relative size-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-[#a8c8ff]">
-            <Cpu className="size-6 animate-pulse" />
-          </div>
-          <h1 className="font-black text-xl tracking-tighter text-white uppercase italic">Urkio<span className="text-[#a8c8ff]/60">{t('clinical.clinical')}</span></h1>
-        </div>
-        <nav className="flex-1 px-6 space-y-2 overflow-y-auto custom-scrollbar">
-          {[
-                      { id: 'agenda', label: t('agenda.clinicalAgenda'), icon: Calendar },
-            { id: 'records', label: t('agenda.patientRecords'), icon: Users },
-            { id: 'vault', label: t('agenda.diagnosticVault'), icon: Database },
-            { id: 'plans', label: t('agenda.treatmentPlans'), icon: ClipboardList }
-          ].map(item => (
-            <div
-              key={item.id}
-              onClick={() => setActiveSection(item.id as any)}
-              className={clsx(
-                "group flex items-center gap-4 px-6 py-4 rounded-2xl cursor-pointer transition-all relative overflow-hidden",
-                activeSection === item.id ? "bg-white/5 text-[#a8c8ff]" : "text-white/40 hover:text-white/70"
-              )}
-            >
-              <item.icon className="size-5" />
-              <span className="text-sm font-bold tracking-tight">{item.label}</span>
-            </div>
-          ))}
-        </nav>
-        <div className="p-8">
-          <div className="bg-white/5 border border-white/10 p-6 rounded-4xl">
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-[10px] font-black text-white/30 uppercase">{t('agenda.efficiency')}</span>
-              <span className="text-[10px] font-black text-[#a8c8ff]">{completionRate}%</span>
-            </div>
-            <div className="w-full bg-white/5 h-1.5 rounded-full overflow-hidden border border-white/5">
-              <div className="bg-[#a8c8ff] h-full rounded-full" style={{ width: `${completionRate}%` }} />
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="bg-nexus-surface font-['Manrope'] text-on-surface min-h-screen flex selection:bg-nexus-primary/10">
+      {/* SideNavBar */}
+      <aside className={clsx(
+        "fixed top-0 h-full z-40 flex flex-col w-64 border-slate-200 bg-slate-50 transition-all",
+        isRTL ? "right-0 border-l" : "left-0 border-r"
+      )}>
+        <div className="p-6 flex flex-col h-full">
+          <div className="mb-8">
+            <span className="text-xl font-bold text-nexus-primary font-['Newsreader']">Clinical Portal</span>
+            <div className="mt-4 flex items-center gap-3">
+              <img 
+                alt="Professional profile" 
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-nexus-primary/10" 
+                src={userData?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData?.displayName || 'Dr')}`}
+              />
+              <div className="overflow-hidden">
+                <p className="text-sm font-bold text-nexus-primary truncate">{userData?.displayName || 'Expert'}</p>
+                <p className="text-xs text-slate-500">{userData?.role || 'Practitioner'}</p>
+              </div>
             </div>
           </div>
+          
+          <nav className="flex-1 space-y-1">
+            {[
+              { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
+              { id: 'agenda', label: t('agenda.clinicalAgenda'), icon: 'calendar_today' },
+              { id: 'protocols', label: 'Protocols', icon: 'description' },
+              { id: 'dossiers', label: 'Case Dossiers', icon: 'folder_shared' },
+              { id: 'settings', label: 'Settings', icon: 'settings' },
+            ].map(item => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id as any)}
+                className={clsx(
+                  "w-full flex items-center gap-3 px-4 py-3 transition-all",
+                  activeSection === item.id 
+                    ? "text-nexus-primary font-semibold bg-teal-50/50" 
+                    : "text-slate-500 hover:text-nexus-primary hover:bg-slate-100",
+                  activeSection === item.id && (isRTL ? "border-l-4 border-nexus-primary" : "border-r-4 border-nexus-primary")
+                )}
+              >
+                <span className="material-symbols-outlined">{item.icon}</span>
+                <span className="text-sm">{item.label}</span>
+              </button>
+            ))}
+          </nav>
+
+          <button 
+            onClick={() => setShowBookingModal(true)}
+            className="mt-auto bg-nexus-primary-container text-nexus-on-primary-container px-4 py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+          >
+            <span className="material-symbols-outlined">add</span>
+            New Protocol
+          </button>
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-        <header className="h-24 flex items-center justify-between px-12 bg-[#080a0f]/40 backdrop-blur-2xl border-b border-white/5">
-          <div className="flex items-center gap-8 w-1/2">
-            <div className="relative w-full max-w-lg group">
-              <Search className="absolute inset-s-5 top-1/2 -translate-y-1/2 text-white/20 size-5" />
-              <input
-                className="w-full ps-14 py-3.5 bg-white/5 border border-white/5 rounded-2xl text-sm text-white focus:bg-white/8 outline-none placeholder:text-white/20"
-                placeholder={t('agenda.searching')}
+      {/* Main Content */}
+      <div className={clsx("flex-1 transition-all", isRTL ? "mr-64" : "ml-64")}>
+        {/* TopAppBar */}
+        <header className="flex justify-between items-center h-16 px-8 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+          <div className="flex items-center gap-8 flex-1">
+            <span className="text-2xl font-serif text-nexus-primary font-['Newsreader']">Clinical Nexus</span>
+            <div className="relative w-96">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+              <input 
+                className="w-full pl-10 pr-4 py-1.5 bg-slate-50 border-none rounded-full text-sm focus:ring-1 focus:ring-nexus-primary font-['Manrope']" 
+                placeholder="Search clinical records..." 
+                type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4">
             <LanguageToggle />
-            <button className="p-3 text-white/40 hover:bg-white/5 rounded-xl group relative">
-              <Bell className="size-5 group-hover:text-[#a8c8ff]" />
-              <span className="absolute top-3 right-3 size-2 bg-[#a8c8ff] rounded-full" />
-            </button>
-            <div className="h-12 w-12 rounded-2xl bg-white/5 border border-white/10 overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all cursor-pointer">
-              <img src={userData?.photoURL || "https://ui-avatars.com/api/?name=" + (userData?.displayName || 'D')} className="w-full h-full object-cover" />
-            </div>
+            <button className="text-slate-400 hover:opacity-80 transition-opacity"><span className="material-symbols-outlined">notifications</span></button>
+            <button className="text-slate-400 hover:opacity-80 transition-opacity"><span className="material-symbols-outlined">help_outline</span></button>
+            <div className="h-6 w-px bg-slate-200 mx-2"></div>
+            <button className="bg-nexus-primary text-white px-4 py-1.5 rounded-full text-sm font-bold hover:opacity-90 transition-opacity">Live Terminal</button>
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto p-12 space-y-12 custom-scrollbar">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="px-3 py-1 bg-[#a8c8ff]/10 border border-[#a8c8ff]/20 rounded-lg text-[10px] font-black text-[#a8c8ff] uppercase tracking-widest">Live Terminal</div>
-                <div className="size-1.5 rounded-full bg-[#a8c8ff] animate-pulse" />
-              </div>
-              <h2 className="text-6xl font-black tracking-tighter text-white italic uppercase">{t('agenda.clinicalAgenda')}</h2>
-              <div className="flex items-center gap-3 text-white/30 font-bold text-[11px] uppercase tracking-widest">
-                <Calendar className="size-3.5 text-[#a8c8ff]" />
-                <p>{format(new Date(), 'EEEE, MMMM do, yyyy')}</p>
-              </div>
+        {/* Canvas */}
+        <main className="p-8 grid grid-cols-12 gap-8">
+          {/* Page Header */}
+          <div className="col-span-12 flex justify-between items-end mb-4">
+            <div>
+              <h1 className="font-['Newsreader'] text-4xl font-semibold text-nexus-primary">Clinical Agenda</h1>
+              <p className="text-nexus-secondary text-sm font-medium mt-1 uppercase tracking-wide">{format(new Date(), 'EEEE, dd MMMM yyyy')}</p>
             </div>
-            <div className="flex gap-4">
-              <button onClick={() => setShowBookingModal(true)} className="px-8 py-4 bg-white/5 border border-white/10 text-white/70 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em]">{t('agenda.manualLog')}</button>
-              <button 
-                onClick={() => toast.success(t('clinical.initializeCase'))}
-                className="px-8 py-4 bg-[#a8c8ff] text-[#003062] rounded-2xl font-black flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-[#a8c8ff]/10"
-              >
-                <PlusCircle className="size-4" /> {t('agenda.initiateProtocol')}
-              </button>
+            <div className="flex gap-2">
+              <span className="bg-nexus-surface-container text-nexus-primary px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                <span className="material-symbols-outlined text-sm fill-1">verified</span>
+                Expert Verified
+              </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Metrics Bento Grid */}
+          <div className="col-span-12 grid grid-cols-4 gap-8">
             {[
-                            { label: t('agenda.activeEntities'), value: appointments.length, icon: Target, color: "#a8c8ff" },
-              { label: t('agenda.pendingAnalysis'), value: "07", icon: History, color: "#facc15" },
-              { label: t('agenda.successProtocol'), value: `${completionRate}%`, icon: ShieldCheck, color: "#4ade80" },
-              { label: t('agenda.vaultDensity'), value: "14", icon: Database, color: "#c084fc" }
+              { label: t('agenda.activeEntities'), value: appointments.length, icon: 'group', color: 'teal', trend: '+12%' },
+              { label: t('agenda.pendingAnalysis'), value: appointments.filter(a => a.status === 'pending').length || 42, icon: 'analytics', color: 'amber', trend: 'Pending' },
+              { label: t('agenda.successProtocol'), value: 'Optimum', icon: 'verified_user', color: 'blue', trend: '98%' },
+              { label: t('agenda.vaultDensity'), value: 'High', icon: 'database', color: 'purple', trend: '8.4 TB' }
             ].map((stat, i) => (
-              <div key={i} className="bg-white/3 border border-white/5 p-8 rounded-4xl relative overflow-hidden group hover:bg-white/5 transition-all">
-                <div className="absolute top-0 right-0 p-8 text-white/5 group-hover:text-white/10"><stat.icon className="size-16" /></div>
-                <div className="relative z-10">
-                  <div className="size-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center mb-6 text-white/50"><stat.icon className="size-5" /></div>
-                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-2">{stat.label}</p>
-                  <h3 className="text-4xl font-black text-white tracking-tighter italic">{stat.value.toString().padStart(2, '0')}</h3>
+              <div key={i} className="bg-white p-6 rounded-xl shadow-[0px_10px_30px_rgba(27,77,75,0.05)] border border-slate-50 transition-transform hover:-translate-y-1">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={clsx("p-2 rounded-lg", 
+                    stat.color === 'teal' ? "bg-teal-50 text-nexus-primary" :
+                    stat.color === 'amber' ? "bg-amber-50 text-amber-700" :
+                    stat.color === 'blue' ? "bg-blue-50 text-blue-700" :
+                    "bg-purple-50 text-purple-700"
+                  )}>
+                    <span className="material-symbols-outlined">{stat.icon}</span>
+                  </div>
+                  <span className={clsx("text-xs font-bold px-2 py-0.5 rounded",
+                    stat.trend.includes('+') ? "text-emerald-600 bg-emerald-50" : "text-slate-400 bg-slate-50"
+                  )}>{stat.trend}</span>
                 </div>
+                <p className="text-sm text-slate-500 font-bold mb-1">{stat.label}</p>
+                <p className="text-3xl font-['Newsreader'] text-nexus-primary">{stat.value}</p>
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-12 gap-16">
-            <div className="xl:col-span-8 space-y-10">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                                  <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white/90">{t('agenda.upcomingQueue')}</h2>
-                <div className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-black text-white/40 uppercase tracking-[0.2em] animate-pulse">{t('agenda.scanning')}</div>
+          {/* Incoming Protocols */}
+          <div className="col-span-8 bg-white rounded-xl shadow-[0px_10px_30px_rgba(27,77,75,0.05)] border border-slate-50 overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center">
+              <h2 className="font-['Newsreader'] text-2xl text-nexus-primary">Incoming Protocols</h2>
+              <button className="text-sm text-nexus-primary font-bold flex items-center gap-1 hover:underline">
+                View Archive <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
+            <div className="divide-y divide-slate-50 overflow-y-auto max-h-[600px] custom-scrollbar">
+              {filteredAppointments.map((appt) => (
+                <div 
+                  key={appt.id} 
+                  onClick={() => setSelectedSessionId(appt.id)}
+                  className={clsx(
+                    "p-6 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer",
+                    selectedSessionId === appt.id && "bg-teal-50/30"
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 ring-1 ring-slate-200">
+                      <img 
+                        src={appt.clientPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(appt.clientName || 'P')}&background=f1f5f9&color=0f172a`} 
+                        className="w-full h-full object-cover" 
+                        alt="Patient"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{appt.caseCode || '#PENDING'}</p>
+                      <p className="font-['Newsreader'] text-xl text-nexus-primary">
+                        {selectedSessionId === appt.id || appt.status === 'accepted' ? (appt.userCode || appt.clientName) : maskPatientName(appt.clientName, appt.userCode)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-8">
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-nexus-primary">{appt.category || 'Clinical Trial'}</p>
+                      <p className="text-xs text-slate-400">{appt.date ? format(new Date(appt.date), 'p') : 'Pending'}</p>
+                    </div>
+                    {appt.status === 'pending' || !appt.status ? (
+                      <button 
+                        onClick={(e) => { e.stopPropagation(); handleAcceptSession(appt.id); }}
+                        className="bg-nexus-primary text-white px-4 py-1.5 rounded-full text-xs font-bold hover:opacity-90 transition-all"
+                      >
+                        INITIATE
+                      </button>
+                    ) : (
+                      <span className={clsx(
+                        "px-4 py-1.5 rounded-full text-[10px] font-bold border",
+                        appt.status === 'completed' ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-teal-50 text-nexus-primary border-teal-100"
+                      )}>
+                        {appt.status === 'completed' ? 'ARCHIVED' : 'ACTIVE'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+              {filteredAppointments.length === 0 && (
+                <div className="p-20 text-center text-slate-400 italic">No incoming protocols detected in this sector.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Dossier Side Panel */}
+          <div className="col-span-4 flex flex-col gap-8">
+            {selectedSession ? (
+              <div className="bg-white p-6 rounded-xl shadow-[0px_10px_30px_rgba(27,77,75,0.05)] border border-slate-50 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="font-['Newsreader'] text-2xl text-nexus-primary">Dossier: <span className="font-normal italic">urkio</span></h2>
+                  <span className="material-symbols-outlined text-slate-300">more_vert</span>
+                </div>
+                <div className="space-y-6 flex-1 flex flex-col">
+                  {/* Biometric Sync Status */}
+                  <div className="bg-slate-50 rounded-lg p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Biometric Sync Status</span>
+                      <span className="text-[10px] font-black text-emerald-600">ONLINE</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-nexus-primary h-full w-[82%] animate-[shimmer_2s_infinite]"></div>
+                    </div>
+                    <p className="mt-2 text-[10px] text-slate-400 text-right">82% Signal Strength</p>
+                  </div>
+
+                  {/* Observations */}
+                  <div className="flex-1 flex flex-col">
+                    <label className="block text-sm font-bold text-nexus-primary mb-2">Clinical Observations</label>
+                    <textarea 
+                      className="flex-1 w-full bg-slate-50 border-slate-100 rounded-xl text-sm font-['Manrope'] focus:ring-nexus-primary focus:border-nexus-primary p-4 resize-none" 
+                      placeholder={`Enter findings for ${selectedSession.clientName}...`}
+                      value={clinicalNote}
+                      onChange={(e) => setClinicalNote(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Actions */}
+                  <div className="space-y-3 pt-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={() => handleSaveQuickNote(false)}
+                        disabled={isSaving || !clinicalNote}
+                        className="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-lg text-nexus-primary hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-lg">lock</span>
+                        <span className="text-sm font-bold">Vault</span>
+                      </button>
+                      <button 
+                        onClick={() => handleSaveQuickNote(true)}
+                        disabled={isSaving || !clinicalNote}
+                        className="flex items-center justify-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-lg text-nexus-primary hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-lg">send</span>
+                        <span className="text-sm font-bold">Dispatch</span>
+                      </button>
+                    </div>
+                    <button 
+                      onClick={() => navigate(`/room/session-${selectedSession.caseCode}`)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-nexus-primary text-white rounded-lg font-bold hover:opacity-90 transition-opacity shadow-lg shadow-teal-900/10"
+                    >
+                      <span className="material-symbols-outlined">terminal</span>
+                      Secure Terminal
+                    </button>
+                  </div>
                 </div>
               </div>
-              <div className="space-y-6">
-                {filteredAppointments.length > 0 ? filteredAppointments.map((appt) => (
-                  <div
-                    key={appt.id}
-                    onClick={() => setSelectedSessionId(appt.id)}
-                    className={clsx(
-                      "p-10 rounded-[3.5rem] border transition-all cursor-pointer relative overflow-hidden group",
-                      selectedSessionId === appt.id ? "bg-white/[0.07] border-[#a8c8ff]/30 shadow-2xl" : "bg-[#11141b]/40 border-transparent hover:border-white/10"
-                    )}
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
-                      <div className="flex items-center gap-10">
-                        <div className="relative shrink-0">
-                          <img src={appt.clientPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(appt.clientName || 'P')}&background=11141b&color=fff&size=200`} className="size-24 rounded-4xl object-cover border border-white/10 grayscale group-hover:grayscale-0 transition-all" />
-                          <div className={clsx("absolute -bottom-1 -right-1 size-8 rounded-2xl border-4 border-[#11141b] flex items-center justify-center", appt.status === 'completed' ? "bg-emerald-500" : "bg-amber-500")}>
-                            {appt.status === 'completed' ? <ShieldCheck className="size-4 text-white" /> : <Clock className="size-4 text-white" />}
-                          </div>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-4">
-                            <span className="text-[10px] font-black text-[#a8c8ff] uppercase tracking-[0.3em] bg-[#a8c8ff]/10 px-3 py-1 rounded-lg border border-[#a8c8ff]/10">{t('agenda.protocol')}: {appt.caseCode || 'UNC-7'}</span>
-                                                        <GuardianStatusBadge 
-                              isVerified={appt.isGuardianVerified} 
-                              age={appt.clientAge || appt.age} 
-                              guardianVerifiedLabel={t('agenda.guardianVerified')}
-                              guardianPendingLabel={t('agenda.guardianPending')}
-                            />
-                          </div>
-                          <h4 className={clsx("text-3xl font-black tracking-tighter italic uppercase", selectedSessionId === appt.id ? "text-white" : "text-white/40 group-hover:text-white/70")}>
-                            {selectedSessionId === appt.id || appt.status === 'accepted' ? (appt.userCode || appt.clientName) : maskPatientName(appt.clientName, appt.userCode)}
-                          </h4>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        {appt.status === 'pending' || !appt.status ? (
-                          <button onClick={(e) => { e.stopPropagation(); handleAcceptSession(appt.id); }} className="px-8 py-4 bg-[#a8c8ff] text-[#003062] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all">{t('agenda.accept')}</button>
-                        ) : (
-                          <div className="flex items-center gap-3">
-                            <div className="px-6 py-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl text-emerald-400 text-[10px] font-black uppercase">{t('agenda.accepted')}</div>
-                            <div className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white/20 group-hover:text-[#a8c8ff]"><ChevronRight className="size-6" /></div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )) : (
-                                  <div className="py-32 text-center bg-white/2 border border-white/5 rounded-[4rem] text-white/20 font-black uppercase tracking-[0.3em] text-xs">{t('agenda.perimeterClear')}</div>
-                )}
+            ) : (
+              <div className="bg-slate-50 p-12 rounded-xl border border-dashed border-slate-200 flex flex-col items-center justify-center text-center">
+                <span className="material-symbols-outlined text-6xl text-slate-200 mb-4">clinical_notes</span>
+                <p className="text-slate-400 text-sm font-medium">Select a protocol to view dossier details.</p>
+              </div>
+            )}
+
+            {/* Context Card */}
+            <div className="bg-nexus-primary text-white p-6 rounded-xl relative overflow-hidden shrink-0">
+              <div className="relative z-10">
+                <p className="font-['Newsreader'] text-xl mb-2">Protocol Insight</p>
+                <p className="text-xs opacity-80 mb-4">Integrate the new bio-rhythmic markers for more accurate analysis of the Urkio stream.</p>
+                <button className="text-xs font-bold underline underline-offset-4 text-white">Review Guidelines</button>
+              </div>
+              <div className="absolute -right-4 -bottom-4 opacity-10">
+                <span className="material-symbols-outlined text-9xl">psychology</span>
               </div>
             </div>
+          </div>
+        </main>
+      </div>
 
-            <div className="xl:col-span-4">
-              <div className="sticky top-12 space-y-10">
-                {selectedSession ? (
-                  <div className="bg-[#11141b]/60 backdrop-blur-3xl border border-white/5 rounded-[4rem] p-12 shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-12 text-[#a8c8ff]/5"><Cpu className="size-32" /></div>
-                    <div className="relative z-10 space-y-12">
-                      <h3 className="text-2xl font-black italic text-white uppercase tracking-tighter">{t('agenda.dossier')}</h3>
-                      <div className="space-y-10">
-                        <div className="flex gap-8">
-                          <img src={selectedSession.clientPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedSession.clientName || 'P')}&background=a8c8ff&color=003062&size=200`} className="size-32 rounded-4xl border border-[#a8c8ff]/20 p-1 shadow-2xl" />
-                          <div className="space-y-4 pt-4">
-                            <p className="text-white text-3xl font-black tracking-tight">{selectedSession.userCode || selectedSession.clientName || 'Anonymous'}</p>
-                            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em] flex items-center gap-2"><Scan className="size-4 text-[#a8c8ff]" /> {t('agenda.biometricSync')}</p>
-                          </div>
-                        </div>
-                        <div className="space-y-4">
-                          <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] ml-2">{t('agenda.observations')}</p>
-                          <textarea
-                            value={clinicalNote}
-                            onChange={(e) => setClinicalNote(e.target.value)}
-                            placeholder={t('agenda.observationsPlaceholder')}
-                            className="w-full h-48 bg-white/5 border border-white/10 rounded-4xl p-8 text-white/80 text-sm outline-none transition-all placeholder:text-white/10 resize-none font-medium italic"
-                          />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <button onClick={() => handleSaveQuickNote(false)} disabled={isSaving || !clinicalNote} className="py-6 bg-white/5 border border-white/10 rounded-4xl text-white/40 hover:text-white transition-all text-[9px] font-black uppercase tracking-[0.2em] group">
-                            <Database className="size-4 mx-auto mb-2 opacity-50 group-hover:opacity-100" /> {t('agenda.vault')}
-                          </button>
-                          <button onClick={() => handleSaveQuickNote(true)} disabled={isSaving || !clinicalNote} className="py-6 bg-[#a8c8ff] text-[#003062] rounded-4xl shadow-xl hover:scale-105 active:scale-95 transition-all text-[9px] font-black uppercase tracking-[0.2em]">
-                            <ArrowRight className="size-4 mx-auto mb-2" /> {t('agenda.dispatch')}
-                          </button>
-                        </div>
-                        <button onClick={() => navigate(`/room/session-${selectedSession.caseCode}`)} className="w-full py-8 bg-linear-to-r from-msgr-primary-container to-[#004e99] text-white rounded-4xl font-black text-[13px] uppercase tracking-[0.4em] shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group">
-                          <Zap className="size-5 animate-pulse text-[#a8c8ff]" /> {t('agenda.secureTerminal')}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="h-[600px] flex items-center justify-center border border-dashed border-white/10 rounded-[4rem]">
-                    <div className="text-center space-y-4">
-                      <Scan className="size-16 text-white/5 mx-auto" />
-                                            <p className="text-[10px] font-black text-white/10 uppercase tracking-[0.3em]">{t('agenda.selectionRequired')}</p>
-                    </div>
-                  </div>
-                )}
+      {/* Booking Modal (Simplified) */}
+      {showBookingModal && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+          <div className="absolute inset-0" onClick={() => setShowBookingModal(false)} />
+          <div className="w-full max-w-md relative bg-white rounded-3xl p-8 shadow-2xl animate-in zoom-in-95 duration-200">
+            <h3 className="text-2xl font-['Newsreader'] text-nexus-primary mb-6">Initialize New Protocol</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Entity Identifier</label>
+                <input 
+                  type="text" 
+                  value={bookingDetails.clientName} 
+                  onChange={(e) => setBookingDetails({ ...bookingDetails, clientName: e.target.value })} 
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-nexus-primary outline-none mt-1" 
+                  placeholder="Patient Name or ID" 
+                />
               </div>
+              <div>
+                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Classification</label>
+                <select 
+                  value={bookingDetails.category} 
+                  onChange={(e) => setBookingDetails({ ...bookingDetails, category: e.target.value })} 
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-nexus-primary outline-none mt-1"
+                >
+                  <option value="Healing">Healing</option>
+                  <option value="Consultant">Specialist</option>
+                </select>
+              </div>
+              <button 
+                onClick={handleManualBook} 
+                className="w-full py-3.5 bg-nexus-primary text-white rounded-xl font-bold mt-4 shadow-lg shadow-nexus-primary/20"
+              >
+                Confirm Protocol Entry
+              </button>
             </div>
           </div>
         </div>
-
-        {showBookingModal && (
-          <div className="fixed inset-0 flex items-center justify-center p-6 z-[300] font-['Manrope']">
-            <div className="absolute inset-0 bg-[#080a0f]/90 backdrop-blur-xl" onClick={() => setShowBookingModal(false)} />
-            <div className="w-full max-w-2xl relative bg-[#11141b] border border-white/10 rounded-[3.5rem] p-16 shadow-2xl overflow-hidden">
-              <div className="mb-12 flex items-center gap-6">
-                <div className="size-16 bg-white/5 border border-white/10 rounded-3xl flex items-center justify-center text-[#a8c8ff]"><PlusCircle className="size-8" /></div>
-                <div>
-                  <h3 className="text-3xl font-black italic text-white uppercase tracking-tighter">{t('agenda.manualLog')}</h3>
-                  <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em] mt-1">{t('agenda.manualProtocol')}</p>
-                </div>
-              </div>
-              <div className="space-y-8">
-                                <input type="text" value={bookingDetails.clientName} onChange={(e) => setBookingDetails({ ...bookingDetails, clientName: e.target.value })} className="w-full px-10 py-6 bg-white/5 border border-white/10 rounded-4xl text-white outline-none" placeholder={t('agenda.entityIdentifier')} />
-                <select value={bookingDetails.category} onChange={(e) => setBookingDetails({ ...bookingDetails, category: e.target.value })} className="w-full px-10 py-6 bg-white/5 border border-white/10 rounded-4xl text-white outline-none appearance-none cursor-pointer">
-                  <option value="Healing">{t('agenda.protocolHealing')}</option>
-                  <option value="Consultant">{t('agenda.protocolSpecialist')}</option>
-                </select>
-                <button onClick={handleManualBook} className="w-full py-8 bg-[#a8c8ff] text-[#003062] rounded-4xl font-black text-[13px] uppercase tracking-[0.4em] shadow-2xl">{t('agenda.confirmEntry')}</button>
-              </div>
-            </div>
-          </div>
-        )}
-      </main>
+      )}
     </div>
   );
 };
