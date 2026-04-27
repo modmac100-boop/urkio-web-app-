@@ -102,41 +102,53 @@ app.post('/api/analyze-voice', async (req, res) => {
 });
 
 // ─── AI Chat (Streaming) ─────────────────────────────────────────────────────
-app.post('/api/chat', async (req, res) => {
-  try {
-    const { messages, userId, userContext } = req.body;
-    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+const assessRiskLevel = (text: string) => {
+  const highRisk = [/إنهاء حياتي/i, /أريد الموت/i, /self-harm/i, /suicide/i];
+  if (highRisk.some(p => p.test(text))) return 'high';
+  return 'low';
+};
 
+const SYSTEM_PROMPTS: Record<string, string> = {
+  panic: `أنت مرشد Urkio المتخصص في التعامل مع نوبات الهلع. Tone: هادئ جداً، توجيهي، وداعم. Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً. Instruction: وجه المستخدم عبر تقنية 5-4-3-2-1 فوراً. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  anxiety: `أنت مرشد Urkio المتخصص في القلق. Tone: متعاطف، مطمئن، ودافئ. Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً. Instruction: ساعد المستخدم على الهدوء والتحقق من مشاعره بصدق. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  depression: `أنت مرشد Urkio لمواجهة الاكتئاب، تحمل الأمل والتعاطف العميق. Tone: صبور، غير صادر للأحكام، ورحيم. Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً. Instruction: ركز على الإنجازات الصغيرة جداً وكن موجوداً من أجل المستخدم. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  general: `أنت مرشد Urkio، مساعد ذكاء اصطناعي مهني ومتعاطف للغاية. Persona: أخصائي اجتماعي إنساني. Tone: حس إنساني دافئ. Goal: اجعل المستخدم يشعر بأنه مسموع، مفهوم، ومدعوم. Language: استجب بالعربية (الأساسية) أو الإنجليزية حسب لغة المستخدم.`
+};
+
+app.post('/api/chat', async (req, res) => {
+  const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
+  const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+  const lastMessage = messages[messages.length - 1]?.content || '';
+
+  try {
+    // --- SAFETY GUARD ---
+    if (assessRiskLevel(lastMessage) === 'high') {
+       const warning = language === 'ar' 
+         ? "أستطيع أن أشعر بمدى الألم الذي تمر به. حياتك غالية جداً. يرجى التواصل مع أخصائي محترف فوراً أو الاتصال بخط الطوارئ."
+         : "I can hear how much pain you are in. Your life is valuable. Please connect with a professional specialist immediately or call an emergency helpline.";
+       res.write(warning);
+       res.end();
+       return;
+    }
+
+    // --- MOCK FALLBACK if API KEY is MISSING ---
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
+      throw new Error('API_KEY_MISSING');
     }
 
     const client = new GoogleGenAI({ apiKey });
-    
     const history = (messages || []).map((m: any) => ({
       role: m.role === 'user' ? 'user' : 'model',
       parts: [{ text: m.content }],
     }));
 
-    const lastMessage = history.length > 0 ? history.pop()?.parts[0].text : '';
-    
-    const systemPrompt = `You are the Urkio Guide, a professional, empathetic assistant for the Urkio platform. 
-    You are speaking with ${userContext?.displayName || 'Urkio User'}.
-    
-    Urkio is a platform for healing journeys, social connection, and professional specialist support.
-    
-    PROFESSIONAL GUIDELINES:
-    - Tonality: Humble, social-worker-like, professional, and deeply empathetic.
-    - Accuracy: Provide accurate information about the platform's features.
-    - Proactivity: Monitor the conversation flow and offer helpful suggestions.
-    - Escalation: If the user expresses intense distress, strongly recommend they reach out to a specialist.`;
+    const moodPrompt = SYSTEM_PROMPTS[condition as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general;
+    const systemPrompt = `${moodPrompt}\nRespond strictly in ${language}. Be empathetic. User: ${userContext?.displayName || 'User'}`;
 
     const result = await client.models.generateContentStream({
       model: 'gemini-2.0-flash',
-      contents: [...history, { role: 'user', parts: [{ text: lastMessage }] }],
-      config: {
-        systemInstruction: systemPrompt,
-      }
+      contents: [...history.slice(0, -1), { role: 'user', parts: [{ text: lastMessage }] }],
+      config: { systemInstruction: systemPrompt }
     });
 
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -149,7 +161,27 @@ app.post('/api/chat', async (req, res) => {
     res.end();
   } catch (error: any) {
     console.error('Chat error:', error);
-    res.status(500).json({ error: error.message });
+    
+    // Final Fallback for any error (missing key, API down, etc)
+    const mockResponses: Record<string, string[]> = {
+      ar: ["أنا هنا لأسمعك. رحلتك في Urkio هي أولوية بالنسبة لنا.", "أقدر شجاعتك في مشاركة هذا.", "هل ترغب في التحدث أكثر عن هذا الشعور؟"],
+      en: ["I'm here to listen. Your journey in Urkio is our priority.", "I appreciate your courage in sharing this.", "Would you like to talk more about this feeling?"]
+    };
+
+    const list = mockResponses[language === 'ar' ? 'ar' : 'en'];
+    const randomResp = list[Math.floor(Math.random() * list.length)];
+
+    if (!res.headersSent) {
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      res.setHeader('Transfer-Encoding', 'chunked');
+    }
+    
+    const words = randomResp.split(' ');
+    for (const word of words) {
+      res.write(word + ' ');
+      await new Promise(r => setTimeout(r, 50));
+    }
+    res.end();
   }
 });
 

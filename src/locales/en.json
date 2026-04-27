@@ -706,5 +706,24 @@
     "caseDocuments": "Case Documents",
     "sendToManager": "Send to Manager",
     "moveToArchive": "Move to Archive"
+  },
+  "agent": {
+    "header": "Urkio AI Expert Guide",
+    "welcome": "Hello, I am your Urkio AI guide. How are you feeling today?",
+    "inputPlaceholder": "Describe your feelings...",
+    "send": "Send",
+    "stop": "Stop",
+    "thinking": "Thinking...",
+    "error": "I encountered an issue. Please try again.",
+    "voiceReady": "Voice Agent Ready",
+    "listening": "Listening...",
+    "speak": "Speak",
+    "close": "Close",
+    "developerNotice": "Developer Notice: Using Mock Fallback Mode (API Key Missing)",
+    "moods": {
+      "calm": "Calm",
+      "stressed": "Stressed",
+      "celebration": "Celebration"
+    }
   }
 }

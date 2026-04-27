@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
 interface Message {
@@ -15,6 +16,7 @@ interface UrkioChatProps {
 }
 
 export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
+  const { t, i18n } = useTranslation();
   const [mood, setMood] = useState<'calm' | 'stressed' | 'celebration'>('calm');
   const [condition, setCondition] = useState<'panic' | 'anxiety' | 'depression' | 'general'>('general');
   const [messages, setMessages] = useState<Message[]>([]);
@@ -62,6 +64,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         body: JSON.stringify({
           userId: user?.uid,
           condition,
+          language: i18n.language,
           userContext: {
             displayName: userData?.displayName,
             bio: userData?.bio,
@@ -98,12 +101,12 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
       // Detect mood and escalation from response
       const lower = accumulated.toLowerCase();
-      if (lower.includes('connect with a professional') || lower.includes('emergency helpline')) {
+      if (lower.includes('connect with a professional') || lower.includes('emergency helpline') || lower.includes('أخصائي محترف') || lower.includes('خط الطوارئ')) {
         setMood('stressed');
         setIsEscalating(true);
-      } else if (lower.includes('stress') || lower.includes('crisis') || lower.includes('overwhelm')) {
+      } else if (lower.includes('stress') || lower.includes('crisis') || lower.includes('overwhelm') || lower.includes('ضغط') || lower.includes('أزمة')) {
         setMood('stressed');
-      } else if (lower.includes('celebrat') || lower.includes('amazing') || lower.includes('congrat') || lower.includes('proud')) {
+      } else if (lower.includes('celebrat') || lower.includes('amazing') || lower.includes('congrat') || lower.includes('proud') || lower.includes('فخور') || lower.includes('رائع')) {
         setMood('celebration');
       } else {
         setMood('calm');
@@ -113,7 +116,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       if (error.name === 'AbortError') {
         setMessages(prev =>
           prev.map(m => m.id === assistantId
-            ? { ...m, content: 'Request timed out. Please try again or check your connection.' }
+            ? { ...m, content: t('agent.error') }
             : m
           )
         );
@@ -121,7 +124,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         console.error('Chat error:', error);
         setMessages(prev =>
           prev.map(m => m.id === assistantId
-            ? { ...m, content: 'عذراً، واجهت مشكلة في الاتصال. يرجى المحاولة مرة أخرى.\n(Sorry, I encountered a connection issue. Please try again.)' }
+            ? { ...m, content: t('agent.error') }
             : m
           )
         );
@@ -130,7 +133,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, user, userData, condition]);
+  }, [input, isLoading, messages, user, userData, condition, i18n.language, t]);
 
   // Vibe-Driven UI: determine color scheme based on mood
   const moodColors = {
@@ -173,10 +176,10 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   };
 
   const conditions = [
-    { id: 'general', label: 'General', icon: Sparkles },
-    { id: 'panic', label: 'Panic', icon: Zap },
-    { id: 'anxiety', label: 'Anxiety', icon: ShieldCheck },
-    { id: 'depression', label: 'Depression', icon: Heart }
+    { id: 'general', label: t('agent.moods.calm'), icon: Sparkles },
+    { id: 'panic', label: t('agent.moods.stressed'), icon: Zap },
+    { id: 'anxiety', label: t('agent.moods.stressed'), icon: ShieldCheck },
+    { id: 'depression', label: t('agent.moods.calm'), icon: Heart }
   ];
 
   return (
@@ -188,7 +191,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
             <Bot className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Urkio Guide</h2>
+            <h2 className="text-xl font-bold tracking-tight">{t('agent.header')}</h2>
             <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-green-500 shadow-lg shadow-green-500/20" />
                 <p className="text-xs font-medium opacity-60">Empathetic AI · Always here</p>
@@ -226,8 +229,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-40"
                 >
                     <Bot className="w-16 h-16" />
-                    <p className="max-w-xs text-sm" dir="auto">أنا مرشدك في Urkio. أنا هنا للاستماع إليك بصدق ودعم رحلتك العلاجية. ما الذي يشغل قلبك اليوم؟</p>
-                    <p className="max-w-xs text-xs opacity-60">I'm your Urkio Guide. I'm here to listen and support your healing journey. What's on your heart today?</p>
+                    <p className="max-w-xs text-sm" dir="auto">{t('agent.welcome')}</p>
                 </motion.div>
             )}
             {messages.map((m) => (
@@ -280,20 +282,22 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   </div>
                 </div>
                 <p className="text-sm">
-                  It sounds like you're going through a lot. I've flagged this so you can quickly connect with a professional specialist who can provide more tailored support.
+                  {i18n.language === 'ar' 
+                    ? "يبدو أنك تمر بفترة صعبة. لقد قمت بتمييز هذه المحادثة حتى تتمكن من التواصل بسرعة مع أخصائي محترف يمكنه تقديم دعم أكثر تخصصاً."
+                    : "It sounds like you're going through a lot. I've flagged this so you can quickly connect with a professional specialist who can provide more tailored support."}
                 </p>
                 <div className="flex gap-2 pt-2">
                   <button 
-                    onClick={() => window.location.href = '/specialists'}
+                    onClick={() => window.location.href = '/expert-list'}
                     className="flex-1 bg-white text-indigo-600 py-3 rounded-2xl font-bold text-sm hover:bg-indigo-50 transition-colors shadow-lg"
                   >
-                    Find a Specialist
+                    {i18n.language === 'ar' ? 'البحث عن خبير' : 'Find a Specialist'}
                   </button>
                   <button 
                     onClick={() => setIsEscalating(false)}
                     className="px-4 py-3 rounded-2xl font-medium text-sm hover:bg-white/10 transition-colors"
                   >
-                    Not now
+                    {i18n.language === 'ar' ? 'ليس الآن' : 'Not now'}
                   </button>
                 </div>
               </motion.div>
@@ -327,7 +331,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
               value={input}
               onChange={e => setInput(e.target.value)}
               rows={1}
-              placeholder="ما الذي يشغل قلبك؟ (What's on your heart?)..."
+              placeholder={t('agent.inputPlaceholder')}
               className={clsx(
                 "w-full bg-white/80 border border-inherit rounded-2xl ps-12 pe-24 py-4 focus:outline-none focus:ring-4 text-sm resize-none transition-all group-hover:bg-white text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500",
                 theme.ring
@@ -351,7 +355,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                 <button 
                   type="button" 
                   className="p-2 hover:bg-black/5 rounded-xl transition-colors text-inherit/50 hover:text-inherit"
-                  title="Voice input"
+                  title={t('agent.speak')}
                 >
                     <Mic className="w-5 h-5" />
                 </button>
@@ -368,9 +372,18 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
             </div>
           </div>
           
-          <p className="text-[10px] text-center opacity-40">
-             Powered by Google Search grounding · Important concerns are shared with specialists if you're in crisis.
-          </p>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-[10px] text-center opacity-40">
+               Powered by Google Search grounding · Important concerns are shared with specialists if you're in crisis.
+            </p>
+            {/* Developer Notice for Mock Mode */}
+            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-100 dark:bg-amber-900/30 rounded-full border border-amber-200 dark:border-amber-800/30">
+              <AlertCircle className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+              <span className="text-[9px] font-medium text-amber-700 dark:text-amber-300 uppercase tracking-tighter">
+                {t('agent.developerNotice')}
+              </span>
+            </div>
+          </div>
         </form>
       </div>
     </div>

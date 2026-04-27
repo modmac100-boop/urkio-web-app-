@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Sparkles, X, Mic, Loader2, Phone, Calendar, AlertTriangle, VolumeX } from 'lucide-react';
+import { Send, Bot, User, Sparkles, X, Mic, Loader2, Phone, Calendar, AlertTriangle, VolumeX, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 
@@ -15,7 +15,7 @@ interface VoiceAgentWidgetProps {
 }
 
 export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -56,6 +56,12 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       setTimeout(() => inputRef.current?.focus(), 300);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-urkio-agent', handleOpen);
+    return () => window.removeEventListener('open-urkio-agent', handleOpen);
+  }, []);
 
   const stopSpeaking = useCallback(() => {
     window.speechSynthesis.cancel();
@@ -111,9 +117,9 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
   }, [stopSpeaking]);
 
   const quickActions = [
-    { label: 'Book a Session', icon: Calendar, intent: 'I want to book a session with a specialist' },
-    { label: 'Talk to Someone', icon: Phone, intent: 'I need to talk to a professional about something personal' },
-    { label: 'Emergency Help', icon: AlertTriangle, intent: 'I am in crisis and need help immediately' },
+    { label: i18n.language === 'ar' ? 'حجز جلسة' : 'Book a Session', icon: Calendar, intent: 'I want to book a session with a specialist' },
+    { label: i18n.language === 'ar' ? 'التحدث مع شخص ما' : 'Talk to Someone', icon: Phone, intent: 'I need to talk to a professional about something personal' },
+    { label: i18n.language === 'ar' ? 'مساعدة طارئة' : 'Emergency Help', icon: AlertTriangle, intent: 'I am in crisis and need help immediately' },
   ];
 
   const sendMessage = useCallback(async (text?: string) => {
@@ -145,6 +151,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
         signal: abortRef.current.signal,
         body: JSON.stringify({
           userId: user?.uid,
+          language: i18n.language,
           userContext: {
             displayName: userData?.displayName,
             bio: userData?.bio,
@@ -182,14 +189,14 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
 
     } catch (error: any) {
       if (error.name === 'AbortError') {
-        const errContent = 'Request timed out. Please try again.';
+        const errContent = t('agent.error');
         setMessages(prev =>
           prev.map(m => (m.id === assistantId ? { ...m, content: errContent } : m))
         );
         speakResponse(errContent);
       } else {
         console.error('Voice Agent error:', error);
-        const errContent = "I'm here but experiencing a connection issue. Please try again in a moment.";
+        const errContent = t('agent.error');
         setMessages(prev =>
           prev.map(m => (m.id === assistantId ? { ...m, content: errContent } : m))
         );
@@ -199,7 +206,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, user, userData, speakResponse, stopSpeaking]);
+  }, [input, isLoading, messages, user, userData, speakResponse, stopSpeaking, i18n.language, t]);
 
   const toggleRecording = useCallback(() => {
     if (isRecording) {
@@ -247,8 +254,6 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
     sendMessage();
   };
 
-  if (!user) return null;
-
   return (
     <>
       {!isOpen && (
@@ -261,7 +266,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
             <Sparkles className="w-7 h-7 text-white" />
           </div>
           <div className="absolute -top-10 inset-e-0 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            Talk to Urkio AI ✨
+            {t('agent.header')} ✨
           </div>
         </button>
       )}
@@ -276,7 +281,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-white font-black text-sm">Urkio Journey Guide</h3>
+                <h3 className="text-white font-black text-sm">{t('agent.header')}</h3>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
                   <span className="text-slate-400 text-[10px] font-semibold">Always here for you</span>
@@ -291,7 +296,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                   className="px-3 py-1.5 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30 text-[10px] font-bold flex items-center gap-1.5 hover:bg-red-500/30 transition-all animate-in fade-in zoom-in"
                 >
                   <VolumeX className="w-3 h-3" />
-                  STOP VOICE
+                  {t('agent.stop')}
                 </button>
               )}
               <button
@@ -313,12 +318,12 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                   <Bot className="w-10 h-10 text-indigo-400" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-base mb-2">
-                    Hi {userData?.displayName?.split(' ')[0] || 'there'} 👋
-                  </p>
-                  <p className="text-slate-400 text-sm max-w-[260px] leading-relaxed">
-                    I'm your Urkio Journey Guide — here to help you book sessions, find specialists, or just listen.
-                  </p>
+                   <p className="text-white font-bold text-base mb-2">
+                     {i18n.language === 'ar' ? 'مرحباً' : 'Hi'} {userData?.displayName?.split(' ')[0] || user?.displayName?.split(' ')[0] || (i18n.language === 'ar' ? 'بك' : 'there')} 👋
+                   </p>
+                   <p className="text-slate-400 text-sm max-w-[260px] leading-relaxed">
+                     {t('agent.welcome')}
+                   </p>
                 </div>
 
                 <div className="w-full space-y-2 px-2">
@@ -383,7 +388,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 rows={1}
-                placeholder={isRecording ? (audioLanguage === 'ar' ? 'أنا أستمع...' : 'Listening...') : (audioLanguage === 'ar' ? 'ماذا يدور في خاطرك؟...' : "What's on your heart?...")}
+                placeholder={isRecording ? t('agent.listening') : t('agent.inputPlaceholder')}
                 className={clsx(
                   "w-full bg-white/10 border border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 resize-none transition-all",
                   isRecording && "border-red-500/50 ring-2 ring-red-500/20",
@@ -412,6 +417,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                     "p-2 rounded-xl transition-all relative group",
                     isRecording ? "text-red-500 bg-red-500/10" : "text-slate-500 hover:text-indigo-400 hover:bg-white/10"
                   )}
+                  title={t('agent.speak')}
                 >
                   {isRecording && <span className="absolute inset-0 rounded-xl bg-red-500 animate-ping opacity-20" />}
                   <Mic className={clsx("w-4 h-4", isRecording && "relative z-10")} />
@@ -425,6 +431,14 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 </button>
               </div>
             </form>
+            <div className="mt-2 flex justify-center">
+                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-500/10 rounded-full border border-amber-500/20">
+                  <AlertCircle className="w-3 h-3 text-amber-500" />
+                  <span className="text-[9px] font-medium text-amber-500 uppercase tracking-tighter">
+                    {t('agent.developerNotice')}
+                  </span>
+                </div>
+            </div>
           </div>
         </div>
       )}
