@@ -366,5 +366,27 @@
     "retry": "Retry",
     "roleCategory": "Role Category",
     "specialtyFocus": "Specialty Focus"
+  },
+  "agent": {
+    "title": "Urkio Guide",
+    "subtitle": "Your Intelligent Companion",
+    "placeholder": "Talk to me... I'm listening",
+    "typing": "Urkio is thinking...",
+    "error": "I'm sorry, I'm having trouble connecting right now. But I'm still here for you. How else can I help?",
+    "voiceReady": "I'm listening...",
+    "voiceRecording": "Recording... I'll respond when you stop",
+    "autoSend": "Auto-sending in 500ms after speech ends",
+    "moods": {
+      "general": "General",
+      "panic": "Panic",
+      "anxiety": "Anxiety",
+      "depression": "Depression"
+    },
+    "mockResponses": {
+      "general": "I hear you clearly. Your journey matters to me, and I'm here to support you every step of the way.",
+      "panic": "Take a deep breath... you are safe now. I am with you, let's focus on the calm of the present moment.",
+      "anxiety": "It's natural to feel anxious sometimes. Let's talk about what's on your mind, and I'll try to help ease the weight.",
+      "depression": "I appreciate your courage in sharing how you feel. Remember that you are not alone, and light always finds its way back."
+    }
   }
 }
