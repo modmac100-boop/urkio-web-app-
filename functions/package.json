@@ -17,9 +17,12 @@
   "dependencies": {
     "@ai-sdk/google": "^0.0.51",
     "@google/genai": "^1.45.0",
+    "@google/generative-ai": "^0.24.1",
     "@stream-io/node-sdk": "^0.7.45",
+    "@types/crypto-js": "^4.2.2",
     "agora-token": "^2.0.5",
     "ai": "^3.4.33",
+    "crypto-js": "^4.2.0",
     "firebase-admin": "^13.7.0",
     "firebase-functions": "^7.2.5",
     "stream-chat": "^9.38.0",

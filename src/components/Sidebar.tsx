@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, userData }) => {
     { label: t('nav.healingHub'), icon: 'spa', path: '/healing-center', active: location.pathname === '/healing-center' },
     { label: t('nav.courses'), icon: 'menu_book', path: '/healing-courses', active: location.pathname === '/healing-courses' },
     { label: t('nav.inbox'), icon: 'chat', path: '/messenger', active: location.pathname === '/messenger' },
-    { label: t('nav.homii'), icon: 'neurology', path: '/homii', active: location.pathname === '/homii' },
+    { label: t('nav.guide', 'Urkio Guide'), icon: 'auto_awesome', path: '/guide', active: location.pathname === '/guide' },
     { label: t('nav.upcomingEvents'), icon: 'calendar_month', path: '/events', active: location.pathname === '/events' },
     { label: t('nav.myProfile'), icon: 'account_circle', path: user ? `/user/${user.uid}` : '/landing', active: user && location.pathname === `/user/${user.uid}` },
   ];

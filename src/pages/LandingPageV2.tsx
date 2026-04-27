@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Menu, X, ArrowRight, Shield, Activity, Star, Check } from 'lucide-react';
+import { Globe, Menu, X, ArrowRight, Shield, Activity, Star, Check, Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -142,6 +142,13 @@ export function LandingPageV2({
                 {isRTL ? 'EN' : 'AR'}
               </button>
               <button
+                onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
+                className="hidden lg:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-[#30B0D0] transition-colors"
+              >
+                <Sparkles className="size-4" />
+                Urkio Agent
+              </button>
+              <button
                 onClick={openSignIn}
                 className="hidden sm:block text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-white transition-colors"
               >
@@ -184,6 +191,16 @@ export function LandingPageV2({
                   {link.label}
                 </a>
               ))}
+              <button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('open-urkio-agent'));
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center gap-3 text-xl font-black tracking-tight text-[#30B0D0] py-2"
+              >
+                <Sparkles className="size-6" />
+                Urkio Agent
+              </button>
               <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
                 <button onClick={openSignIn} className="text-sm font-black uppercase tracking-widest text-white/80 py-2 text-start">
                   {t('common.login', 'Sign In')}
@@ -262,6 +279,16 @@ export function LandingPageV2({
               >
                 View Manifesto
                 <ArrowRight className={clsx('size-4', isRTL && 'rotate-180')} />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05, backgroundColor: "rgba(48,176,208,0.1)" }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
+                className="w-full sm:w-auto border border-[#30B0D0]/30 text-[#30B0D0] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
+              >
+                <Sparkles className="size-4" />
+                Talk to Urkio Agent
               </motion.button>
             </motion.div>
 

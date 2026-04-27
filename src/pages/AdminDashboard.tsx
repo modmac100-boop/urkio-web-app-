@@ -13,6 +13,8 @@ import { signOut } from 'firebase/auth';
 import { Logo } from '../components/Logo';
 import { CreateEventModal } from '../components/CreateEventModal';
 import toast from 'react-hot-toast';
+import UserGrowthChart from '../components/UserGrowthChart';
+import { fetchUserGrowthData } from '../services/statsService';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 function timeAgo(ts: any): string {
@@ -54,6 +56,12 @@ export function AdminDashboard({ user, userData }: any) {
   const [approvedExperts, setApprovedExperts] = useState<any[]>([]);
   const [approvalSubTab, setApprovalSubTab] = useState<'pending' | 'history'>('pending');
   const [simulationProgress, setSimulationProgress] = useState<number | null>(null);
+  const [userGrowthStats, setUserGrowthStats] = useState<{month: string, users: number}[]>([]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    fetchUserGrowthData().then(data => setUserGrowthStats(data));
+  }, [isAdmin]);
 
   // Clock
   useEffect(() => {
@@ -365,6 +373,9 @@ export function AdminDashboard({ user, userData }: any) {
                   </div>
                 ))}
               </div>
+
+              {/* User Growth Analytics */}
+              <UserGrowthChart data={userGrowthStats} />
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Who's Online Right Now */}

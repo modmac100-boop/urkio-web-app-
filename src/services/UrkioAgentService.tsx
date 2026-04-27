@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
 
@@ -16,6 +16,7 @@ interface UrkioChatProps {
 
 export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   const [mood, setMood] = useState<'calm' | 'stressed' | 'celebration'>('calm');
+  const [condition, setCondition] = useState<'panic' | 'anxiety' | 'depression' | 'general'>('general');
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +61,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         signal: abortRef.current.signal,
         body: JSON.stringify({
           userId: user?.uid,
+          condition,
           userContext: {
             displayName: userData?.displayName,
             bio: userData?.bio,
@@ -96,7 +98,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
       // Detect mood and escalation from response
       const lower = accumulated.toLowerCase();
-      if (lower.includes('escalate_to_specialist')) {
+      if (lower.includes('connect with a professional') || lower.includes('emergency helpline')) {
         setMood('stressed');
         setIsEscalating(true);
       } else if (lower.includes('stress') || lower.includes('crisis') || lower.includes('overwhelm')) {
@@ -119,7 +121,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         console.error('Chat error:', error);
         setMessages(prev =>
           prev.map(m => m.id === assistantId
-            ? { ...m, content: 'Sorry, I encountered an issue. Please try again.' }
+            ? { ...m, content: 'عذراً، واجهت مشكلة في الاتصال. يرجى المحاولة مرة أخرى.\n(Sorry, I encountered a connection issue. Please try again.)' }
             : m
           )
         );
@@ -128,33 +130,33 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       setIsLoading(false);
       abortRef.current = null;
     }
-  }, [input, isLoading, messages, user, userData]);
+  }, [input, isLoading, messages, user, userData, condition]);
 
   // Vibe-Driven UI: determine color scheme based on mood
   const moodColors = {
     calm: {
-       bg: 'bg-teal-50',
-       bubble: 'bg-white',
-       text: 'text-teal-900',
-       accent: 'bg-teal-600',
-       border: 'border-teal-100',
-       ring: 'focus:ring-teal-200',
+       bg: 'bg-slate-50 dark:bg-slate-950',
+       bubble: 'bg-white dark:bg-slate-900',
+       text: 'text-slate-900 dark:text-slate-100',
+       accent: 'bg-cyan-600',
+       border: 'border-slate-200 dark:border-slate-800',
+       ring: 'focus:ring-cyan-500/20',
     },
     stressed: {
-       bg: 'bg-indigo-50',
-       bubble: 'bg-white',
-       text: 'text-indigo-900',
-       accent: 'bg-indigo-600',
-       border: 'border-indigo-100',
-       ring: 'focus:ring-indigo-200',
+       bg: 'bg-rose-50 dark:bg-rose-950/20',
+       bubble: 'bg-white dark:bg-slate-900',
+       text: 'text-rose-900 dark:text-rose-100',
+       accent: 'bg-rose-600',
+       border: 'border-rose-100 dark:border-rose-900/30',
+       ring: 'focus:ring-rose-500/20',
     },
     celebration: {
-       bg: 'bg-orange-50',
-       bubble: 'bg-white',
-       text: 'text-orange-900',
-       accent: 'bg-orange-600',
-       border: 'border-orange-100',
-       ring: 'focus:ring-orange-200',
+       bg: 'bg-amber-50 dark:bg-amber-950/20',
+       bubble: 'bg-white dark:bg-slate-900',
+       text: 'text-amber-900 dark:text-amber-100',
+       accent: 'bg-amber-600',
+       border: 'border-amber-100 dark:border-amber-900/30',
+       ring: 'focus:ring-amber-500/20',
     }
   };
 
@@ -170,32 +172,45 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
+  const conditions = [
+    { id: 'general', label: 'General', icon: Sparkles },
+    { id: 'panic', label: 'Panic', icon: Zap },
+    { id: 'anxiety', label: 'Anxiety', icon: ShieldCheck },
+    { id: 'depression', label: 'Depression', icon: Heart }
+  ];
+
   return (
-    <div className={clsx("flex flex-col h-full rounded-3xl overflow-hidden shadow-xl border transition-colors duration-500", theme.bg, theme.border, theme.text)}>
+    <div className={clsx("flex flex-col h-full rounded-3xl overflow-hidden shadow-2xl border transition-all duration-700", theme.bg, theme.border, theme.text)}>
       {/* Header */}
-      <div className="p-6 bg-white/50 backdrop-blur-md border-b border-inherit flex items-center justify-between">
+      <div className="p-6 bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl border-b border-inherit flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className={clsx("w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg", theme.accent)}>
-            <Sparkles className="w-6 h-6" />
+          <div className={clsx("w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-xl", theme.accent)}>
+            <Bot className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-xl font-bold">Urkio Guide</h2>
+            <h2 className="text-xl font-bold tracking-tight">Urkio Guide</h2>
             <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <p className="text-xs opacity-70">Always with you · Search-powered</p>
+                <span className="w-2 h-2 rounded-full bg-green-500 shadow-lg shadow-green-500/20" />
+                <p className="text-xs font-medium opacity-60">Empathetic AI · Always here</p>
             </div>
           </div>
         </div>
         
-        {/* Mood Selector */}
-        <div className="flex gap-1 p-1 bg-white/50 rounded-lg border border-inherit scale-90">
-            {(Object.keys(moodColors) as Array<keyof typeof moodColors>).map((m) => (
+        {/* Condition Selector Tabs */}
+        <div className="hidden sm:flex gap-1 p-1 bg-black/5 dark:bg-white/5 rounded-xl border border-inherit">
+            {conditions.map((c) => (
                 <button 
-                  key={m}
-                  onClick={() => setMood(m)}
-                  className={clsx("px-2 py-1 rounded text-[10px] capitalize transition-all", mood === m ? theme.accent + " text-white" : "hover:bg-white")}
+                  key={c.id}
+                  onClick={() => setCondition(c.id as any)}
+                  className={clsx(
+                    "px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5", 
+                    condition === c.id 
+                      ? "bg-white dark:bg-slate-800 shadow-sm " + (condition === 'panic' ? 'text-rose-600' : 'text-cyan-600')
+                      : "opacity-40 hover:opacity-100"
+                  )}
                 >
-                    {m}
+                    <c.icon className="w-3 h-3" />
+                    {c.label}
                 </button>
             ))}
         </div>
@@ -211,7 +226,8 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-40"
                 >
                     <Bot className="w-16 h-16" />
-                    <p className="max-w-xs">I'm your empathetic journey guide — powered by real-time search. How can I support you today?</p>
+                    <p className="max-w-xs text-sm" dir="auto">أنا مرشدك في Urkio. أنا هنا للاستماع إليك بصدق ودعم رحلتك العلاجية. ما الذي يشغل قلبك اليوم؟</p>
+                    <p className="max-w-xs text-xs opacity-60">I'm your Urkio Guide. I'm here to listen and support your healing journey. What's on your heart today?</p>
                 </motion.div>
             )}
             {messages.map((m) => (
@@ -236,7 +252,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   )}
                 >
                   {m.content ? (
-                    <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{m.content}</p>
+                    <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap" dir="auto">{m.content}</p>
                   ) : (
                     <span className="flex items-center gap-1">
                       <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce [animation-delay:-0.3s]" />
@@ -311,7 +327,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
               value={input}
               onChange={e => setInput(e.target.value)}
               rows={1}
-              placeholder="What's on your heart?..."
+              placeholder="ما الذي يشغل قلبك؟ (What's on your heart?)..."
               className={clsx(
                 "w-full bg-white/80 border border-inherit rounded-2xl ps-12 pe-24 py-4 focus:outline-none focus:ring-4 text-sm resize-none transition-all group-hover:bg-white text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500",
                 theme.ring

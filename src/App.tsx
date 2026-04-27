@@ -584,8 +584,8 @@ export default function App() {
             {/* OS Push Notification Permission Banner — only for logged-in users */}
             {user && <NotificationPermissionBanner onRequest={requestPermission} />}
 
-            {/* Floating AI Voice Agent — visible to ALL logged-in users */}
-            {user && <VoiceAgentWidget user={user} userData={userData} />}
+            {/* Floating AI Voice Agent — visible to ALL users including guests */}
+            <VoiceAgentWidget user={user} userData={userData} />
 
           </CallProvider>
         </Router>

@@ -7,6 +7,33 @@ import { RtcTokenBuilder, RtcRole } from 'agora-access-token';
 
 dotenv.config();
 
+const assessRiskLevel = (text: string) => {
+  const highRisk = [/إنهاء حياتي/i, /أريد الموت/i, /self-harm/i, /suicide/i];
+  if (highRisk.some(p => p.test(text))) return 'high';
+  return 'low';
+};
+
+const SYSTEM_PROMPTS: Record<string, string> = {
+  panic: `أنت مرشد Urkio المتخصص في التعامل مع نوبات الهلع. 
+  Tone: هادئ جداً، توجيهي، وداعم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Response Style: جمل قصيرة، تركيز على التنفس والتأريض (Grounding).
+  Instruction: وجه المستخدم عبر تقنية 5-4-3-2-1 فوراً. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  anxiety: `أنت مرشد Urkio المتخصص في القلق.
+  Tone: متعاطف، مطمئن، ودافئ.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ساعد المستخدم على الهدوء والتحقق من مشاعره بصدق. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  depression: `أنت مرشد Urkio لمواجهة الاكتئاب، تحمل الأمل والتعاطف العميق.
+  Tone: صبور، غير صادر للأحكام، ورحيم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ركز على الإنجازات الصغيرة جداً وكن موجوداً من أجل المستخدم. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  general: `أنت مرشد Urkio، مساعد ذكاء اصطناعي مهني ومتعاطف للغاية.
+  Persona: أخصائي اجتماعي إنساني (Humble, social-worker-like, deeply empathetic).
+  Tone: حس إنساني دافئ (Empathetic, human feel).
+  Goal: اجعل المستخدم يشعر بأنه مسموع، مفهوم، ومدعوم في رحلة شفائه.
+  Language: استجب بالعربية (الأساسية) أو الإنجليزية حسب لغة المستخدم.`
+};
+
 async function startServer() {
   const app = express();
   const PORT = 5174;
@@ -69,11 +96,20 @@ async function startServer() {
   // AI Chat endpoint for local development
   app.post('/api/chat', async (req, res) => {
     try {
-      const { messages, userId, userContext } = req.body;
+      const { messages, userId, userContext, condition = "general" } = req.body;
       const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
 
       if (!apiKey) {
-        return res.status(500).json({ error: 'GEMINI_API_KEY or GOOGLE_GENERATIVE_AI_API_KEY not configured in .env' });
+        return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
+      }
+
+      const lastMessage = messages[messages.length - 1]?.content || '';
+      
+      // --- SAFETY GUARD ---
+      if (assessRiskLevel(lastMessage) === 'high') {
+         res.write("I can hear how much pain you are in. Your life is valuable. Please connect with a professional specialist immediately or call an emergency helpline.");
+         res.end();
+         return;
       }
 
       const client = new GoogleGenAI({ apiKey });
@@ -83,28 +119,18 @@ async function startServer() {
         parts: [{ text: m.content }],
       }));
 
-      const lastMessage = history.length > 0 ? history.pop()?.parts[0].text : '';
+      const moodPrompt = SYSTEM_PROMPTS[condition as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general;
       
-      // Build personalized context
-      const userDisplayName = userContext?.displayName || 'Urkio User';
-      const userBio = userContext?.bio ? ` User bio: ${userContext.bio}.` : '';
-      const userRole = userContext?.role ? ` User role: ${userContext.role}.` : '';
+      const systemPrompt = `${moodPrompt}
+      اسم المستخدم: ${userContext?.displayName || 'مستخدم Urkio'}.
       
-      const systemPrompt = `You are the Urkio Guide, a professional, empathetic assistant for the Urkio platform. 
-      You are speaking with ${userDisplayName}.${userBio}${userRole}
-      
-      Urkio is a platform for healing journeys, social connection, and professional specialist support.
-      
-      PROFESSIONAL GUIDELINES:
-      - Tonality: Humble, social-worker-like, professional, and deeply empathetic.
-      - Accuracy: Provide accurate information about the platform's features (Social Journey, Healing Code/Clinical Mode, Secret Vault, Specialist Hub).
-      - Proactivity: Monitor the conversation flow and offer helpful suggestions.
-      - Escalation: If the user expresses intense distress, crisis, or mentions self-harm, immediately provide an empathetic response and STRONGLY recommend they reach out to a verified Urkio Specialist or a local emergency service.
-      - Boundaries: Do not provide medical diagnoses or legal advice. Always frame advice as "supportive guidance."`;
+      إرشادات مهنية:
+      - كن متعاطفاً جداً بلمسة إنسانية دافئة.
+      - إذا عبّر المستخدم عن ضيق شديد، قدم استجابة متعاطفة وانصحه بالتحدث مع أخصائي.`;
 
       const result = await client.models.generateContentStream({
         model: 'gemini-2.0-flash',
-        contents: [...history, { role: 'user', parts: [{ text: lastMessage }] }],
+        contents: [...history.slice(0, -1), { role: 'user', parts: [{ text: lastMessage }] }],
         config: {
           systemInstruction: systemPrompt,
         }

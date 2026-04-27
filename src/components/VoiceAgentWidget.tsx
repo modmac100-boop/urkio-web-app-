@@ -57,6 +57,12 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-urkio-agent', handleOpen);
+    return () => window.removeEventListener('open-urkio-agent', handleOpen);
+  }, []);
+
   const stopSpeaking = useCallback(() => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
@@ -247,7 +253,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
     sendMessage();
   };
 
-  if (!user) return null;
+  // Widget is visible to everyone — logged-in users get personalized context, guests get the public experience
 
   return (
     <>
@@ -313,12 +319,12 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                   <Bot className="w-10 h-10 text-indigo-400" />
                 </div>
                 <div>
-                  <p className="text-white font-bold text-base mb-2">
-                    Hi {userData?.displayName?.split(' ')[0] || 'there'} 👋
-                  </p>
-                  <p className="text-slate-400 text-sm max-w-[260px] leading-relaxed">
-                    I'm your Urkio Journey Guide — here to help you book sessions, find specialists, or just listen.
-                  </p>
+                   <p className="text-white font-bold text-base mb-2">
+                     Hi {userData?.displayName?.split(' ')[0] || user?.displayName?.split(' ')[0] || 'there'} 👋
+                   </p>
+                   <p className="text-slate-400 text-sm max-w-[260px] leading-relaxed">
+                     I'm your Urkio Journey Guide — here to help you book sessions, find specialists, or just listen.
+                   </p>
                 </div>
 
                 <div className="w-full space-y-2 px-2">

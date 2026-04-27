@@ -126,9 +126,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
       </div>
     </div>
   );
-}
-
-// ---------- Main Page ----------
+}// ---------- Main Page ----------
 export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: any }) {
   const { expertId } = useParams<{ expertId: string }>();
   const navigate = useNavigate();
@@ -136,12 +134,11 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showBooking, setShowBooking] = useState(false);
-  const [activeTab, setActiveTab] = useState('Journey');
+  const [activeTab, setActiveTab] = useState('Posts');
 
   useEffect(() => {
-    // Inject fonts just for this component if needed, though Tailwind might pick them up
     const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;500;600;700&family=Manrope:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap';
+    link.href = 'https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
     return () => { document.head.removeChild(link); };
@@ -178,33 +175,42 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
   const coverUrl = expert.coverURL || "https://images.unsplash.com/photo-1542204165-65bf26472b9b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80";
   const avatarUrl = expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'E')}&background=003634&color=fff&size=300`;
 
+  const tabs = ['Posts', 'Media', 'Live Replays', 'Reviews', 'Services'];
+
   return (
-    <div className="bg-[#fbf9f5] text-[#1b1c1a] font-['Manrope'] min-h-screen">
+    <div className="bg-[#fbf9f5] text-[#1b1c1a] font-['Manrope'] min-h-screen selection:bg-[#9ed0cd]/30">
       
       {/* Top Navigation Shell */}
-      <nav className="bg-[#fbf9f5] md:bg-[#FDFCFB] border-b border-[#e4e2de] shadow-[0px_4px_20px_rgba(27,77,75,0.02)] fixed top-0 w-full z-50">
+      <nav className="bg-[#FDFCFB] dark:bg-[#121414] border-b border-[#E6E2DE] dark:border-[#2A2D2D] shadow-[0px_4px_20px_rgba(27,77,75,0.02)] fixed top-0 w-full z-50">
         <div className="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
-          <button onClick={() => navigate('/')} className="font-['Newsreader'] font-bold text-2xl text-[#1b4d4b]">URKIO</button>
-          <div className="hidden md:flex items-center space-x-8 font-['Newsreader'] text-lg">
-            <button className="text-[#1b4d4b]/60 hover:text-[#1b4d4b] transition-colors duration-200">Feed</button>
-            <button className="text-[#1b4d4b] border-b-2 border-[#1b4d4b] pb-1">Experts</button>
-            <button className="text-[#1b4d4b]/60 hover:text-[#1b4d4b] transition-colors duration-200">Journey</button>
+          <span onClick={() => navigate('/')} className="cursor-pointer font-['Newsreader'] font-bold text-2xl text-[#1B4D4B] dark:text-[#3D8C89]">URKIO</span>
+          <div className="hidden md:flex items-center space-x-8 font-['Newsreader'] serif tracking-tight text-lg">
+            <button className="text-[#1B4D4B]/60 dark:text-[#3D8C89]/60 hover:text-[#1B4D4B] transition-colors duration-200">Feed</button>
+            <button className="text-[#1B4D4B] dark:text-[#3D8C89] border-b-2 border-[#1B4D4B] dark:border-[#3D8C89] pb-1">Experts</button>
+            <button onClick={() => navigate('/guide')} className="text-[#1B4D4B]/60 dark:text-[#3D8C89]/60 hover:text-[#1B4D4B] transition-colors duration-200">Journey</button>
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
+              className="flex items-center gap-1.5 text-[#30B0D0] font-bold hover:opacity-80 transition-opacity duration-200"
+            >
+              <span className="material-symbols-outlined text-[20px]">sparkles</span>
+              Urkio Agent
+            </button>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="material-symbols-outlined text-[#1b4d4b]">notifications</button>
+            <button className="material-symbols-outlined text-[#1B4D4B]">notifications</button>
             <div className="w-8 h-8 rounded-full overflow-hidden border border-[#c0c8c7]">
-              <img alt="User profile" className="w-full h-full object-cover" src={user?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.displayName || 'U')}&background=1b4d4b&color=fff`} />
+              <img alt="User profile" className="w-full h-full object-cover" src={user?.photoURL || avatarUrl} />
             </div>
           </div>
         </div>
       </nav>
 
       {/* Main Content Canvas */}
-      <main className="pt-20 md:pt-24 pb-24 max-w-7xl mx-auto px-4 md:px-6">
+      <main className="pt-16 pb-24 max-w-7xl mx-auto px-4 md:px-6">
         {/* Header Section */}
         <header className="relative mt-4">
           <div className="aspect-[16/9] md:aspect-[3/1] w-full rounded-2xl overflow-hidden bg-[#efeeea] shadow-sm">
-            <img alt="Cover" className="w-full h-full object-cover opacity-90" src={coverUrl} />
+            <img alt="Serene landscape" className="w-full h-full object-cover opacity-90" src={coverUrl} />
           </div>
           <div className="absolute -bottom-12 left-6 md:left-12 flex items-end space-x-4 md:space-x-6">
             <div className="relative">
@@ -219,21 +225,21 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
             </div>
             <div className="mb-4 hidden md:block">
               <div className="flex items-center space-x-2">
-                <h1 className="font-['Newsreader'] text-[40px] leading-tight font-medium text-[#003634]">{expert.displayName}</h1>
+                <h1 className="font-['Newsreader'] text-[40px] leading-tight font-semibold text-[#003634]">{expert.displayName}</h1>
                 <span className="px-3 py-0.5 bg-[#1b4d4b] text-[#8cbdba] rounded-full text-[12px] font-semibold tracking-wider uppercase">{displaySpecialty}</span>
               </div>
-              <p className="text-[14px] font-semibold text-[#707978]">{expert.location || 'Global Practice'}</p>
+              <p className="font-['Manrope'] text-[14px] font-semibold text-[#707978]">{expert.location || 'San Francisco, CA'}</p>
             </div>
           </div>
         </header>
 
         {/* Mobile Title/Location (Visible only on mobile) */}
         <div className="mt-16 md:hidden px-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <h1 className="font-['Newsreader'] text-3xl font-medium text-[#003634]">{expert.displayName}</h1>
+          <div className="flex items-center space-x-2">
+            <h1 className="font-['Newsreader'] text-3xl font-semibold text-[#003634]">{expert.displayName}</h1>
             <span className="px-2 py-0.5 bg-[#1b4d4b] text-[#8cbdba] rounded-full text-[10px] font-bold uppercase">{displaySpecialty}</span>
           </div>
-          <p className="text-[12px] font-medium text-[#707978] mt-1">{expert.location || 'Global Practice'}</p>
+          <p className="font-['Manrope'] text-[12px] font-semibold text-[#707978]">{expert.location || 'San Francisco, CA'}</p>
         </div>
 
         {/* Layout Grid */}
@@ -242,10 +248,10 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
           {/* Sidebar (Left) */}
           <aside className="lg:col-span-4 space-y-6">
             {/* Bio Card */}
-            <div className="bg-[#ffffff] p-6 rounded-2xl shadow-[0px_4px_20px_rgba(27,77,75,0.03)] border border-[#e4e2de]/50">
+            <div className="bg-[#ffffff] p-6 rounded-2xl shadow-[0px_4px_20px_rgba(27,77,75,0.03)] border border-[#e4e2de]/30">
               <h2 className="font-['Newsreader'] text-2xl font-medium text-[#003634] mb-3">About</h2>
-              <p className="text-[#404848] text-[16px] leading-relaxed italic mb-4">
-                "{expert.bio || 'Dedicated to facilitating deep, transformative healing and growth.'}"
+              <p className="text-[#404848] font-['Manrope'] text-[16px] leading-relaxed italic mb-4">
+                "{expert.bio || 'Specializing in neuro-plasticity and sustainable habit architecture.'}"
               </p>
               <div className="flex flex-wrap gap-2 mb-6">
                 {(expert.tags || ['#CognitiveBehavioral', '#Wellness', '#Leadership']).map((tag: string, i: number) => (
@@ -257,13 +263,13 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
               <div className="space-y-3">
                 <button 
                   onClick={() => setShowBooking(true)}
-                  className="w-full py-3 bg-[#003634] text-[#ffffff] rounded-xl text-[14px] font-semibold tracking-wide shadow-lg shadow-[#003634]/10 transition-transform active:scale-95"
+                  className="w-full py-3 bg-[#003634] text-[#ffffff] rounded-xl font-['Manrope'] font-semibold shadow-lg shadow-[#003634]/10 transition-transform active:scale-95"
                 >
                   Book Appointment
                 </button>
                 <div className="flex gap-3">
-                  <button className="flex-1 py-3 border border-[#52634d] text-[#52634d] rounded-xl text-[14px] font-semibold hover:bg-[#52634d]/5 transition-colors">Follow</button>
-                  <button className="flex-1 py-3 border border-[#52634d] text-[#52634d] rounded-xl text-[14px] font-semibold hover:bg-[#52634d]/5 transition-colors">Message</button>
+                  <button className="flex-1 py-3 border border-[#52634d] text-[#52634d] rounded-xl font-['Manrope'] font-semibold hover:bg-[#52634d]/5 transition-colors">Follow</button>
+                  <button className="flex-1 py-3 border border-[#52634d] text-[#52634d] rounded-xl font-['Manrope'] font-semibold hover:bg-[#52634d]/5 transition-colors">Message</button>
                 </div>
               </div>
             </div>
@@ -272,19 +278,19 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-[#f5f3ef] p-4 rounded-xl flex flex-col justify-center items-center text-center">
                 <span className="font-['Newsreader'] text-2xl font-medium text-[#003634]">{expert.followersCount || '12.4k'}</span>
-                <span className="text-[12px] font-medium text-[#c0c8c7]">Followers</span>
+                <span className="text-[12px] font-medium text-[#c0c8c7] font-['Manrope']">Followers</span>
               </div>
               <div className="bg-[#f5f3ef] p-4 rounded-xl flex flex-col justify-center items-center text-center">
                 <span className="font-['Newsreader'] text-2xl font-medium text-[#003634]">{expert.followingCount || '842'}</span>
-                <span className="text-[12px] font-medium text-[#c0c8c7]">Following</span>
+                <span className="text-[12px] font-medium text-[#c0c8c7] font-['Manrope']">Following</span>
               </div>
               <div className="bg-[#f5f3ef] p-4 rounded-xl flex flex-col justify-center items-center text-center">
                 <span className="font-['Newsreader'] text-2xl font-medium text-[#003634]">{expert.sessionCount || '1,200+'}</span>
-                <span className="text-[12px] font-medium text-[#c0c8c7]">Sessions</span>
+                <span className="text-[12px] font-medium text-[#c0c8c7] font-['Manrope']">Sessions</span>
               </div>
               <div className="bg-[#f5f3ef] p-4 rounded-xl flex flex-col justify-center items-center text-center">
                 <span className="font-['Newsreader'] text-2xl font-medium text-[#003634]">{expert.livesCount || '45'}</span>
-                <span className="text-[12px] font-medium text-[#c0c8c7]">Lives Hosted</span>
+                <span className="text-[12px] font-medium text-[#c0c8c7] font-['Manrope']">Lives Hosted</span>
               </div>
             </div>
           </aside>
@@ -292,127 +298,124 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
           {/* Main Feed (Right) */}
           <div className="lg:col-span-8 space-y-6">
             {/* Tabs */}
-            <div className="flex items-center space-x-8 border-b border-[#e4e2de] overflow-x-auto pb-px scrollbar-hide">
-              {['Posts', 'Media', 'Live Replays', 'Reviews', 'Journey'].map((tab) => (
+            <div className="flex items-center space-x-8 border-b border-[#e4e2de] overflow-x-auto pb-px custom-scrollbar">
+              {tabs.map((tab) => (
                 <button 
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={clsx(
-                    "pb-4 text-[14px] font-semibold whitespace-nowrap transition-colors",
-                    activeTab === tab ? "text-[#003634] border-b-2 border-[#003634]" : "text-[#707978] hover:text-[#003634]"
+                    "pb-4 text-[14px] font-semibold font-['Manrope'] whitespace-nowrap transition-colors relative",
+                    activeTab === tab ? "text-[#003634]" : "text-[#707978] hover:text-[#003634]"
                   )}
                 >
                   {tab}
+                  {activeTab === tab && <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#003634]" />}
                 </button>
               ))}
             </div>
 
-            {activeTab === 'Journey' && (
-              <section className="bg-[#ffffff] p-8 rounded-2xl border border-[#e4e2de]/50">
-                <h3 className="font-['Newsreader'] text-2xl font-medium text-[#003634] mb-8">Professional Journey</h3>
-                <div className="relative pl-8 border-l-2 border-[#d2e5c9] space-y-12">
-                  
-                  {courses.length > 0 ? courses.map((course, i) => (
-                    <div key={course.id} className="relative">
-                      <div className={clsx(
-                        "absolute -left-[41px] top-0 w-4 h-4 rounded-full border-4 border-[#fbf9f5]",
-                        i % 3 === 0 ? "bg-[#003634]" : i % 3 === 1 ? "bg-[#52634d]" : "bg-[#c0c8c7]"
-                      )} />
+            {/* Journey Timeline Section */}
+            <section className="bg-[#ffffff] p-8 rounded-2xl border border-[#e4e2de]/30">
+              <h3 className="font-['Newsreader'] text-2xl font-medium text-[#003634] mb-8">Professional Journey</h3>
+              <div className="relative pl-8 border-l-2 border-[#d2e5c9] space-y-12">
+                
+                {courses.length > 0 ? courses.map((course, i) => (
+                  <div key={course.id} className="relative">
+                    <div className={clsx(
+                      "absolute -left-[41px] top-0 w-4 h-4 rounded-full border-4 border-[#fbf9f5]",
+                      i % 3 === 0 ? "bg-[#003634]" : i % 3 === 1 ? "bg-[#52634d]" : "bg-[#c0c8c7]"
+                    )} />
+                    <div>
+                      <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest font-['Manrope']">
+                        {new Date(course.date || Date.now()).getFullYear()} • {course.sessionType || 'HEALING COURSE'}
+                      </span>
+                      <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">{course.title}</h4>
+                      <p className="text-[#404848] font-['Manrope'] text-[16px] mt-2 max-w-xl">{course.description}</p>
+                      {course.coverURL && (
+                        <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
+                          <img alt={course.title} className="w-full h-full object-cover" src={course.coverURL} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )) : (
+                  <>
+                    <div className="relative">
+                      <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[#003634] border-4 border-[#fbf9f5]"></div>
                       <div>
-                        <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest">
-                          {new Date(course.date || Date.now()).getFullYear()} • {course.sessionType || 'HEALING COURSE'}
-                        </span>
-                        <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">{course.title}</h4>
-                        <p className="text-[#404848] text-[16px] mt-2 max-w-xl">{course.description}</p>
-                        {course.coverURL && (
-                          <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
-                            <img alt={course.title} className="w-full h-full object-cover" src={course.coverURL} />
-                          </div>
-                        )}
+                        <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest font-['Manrope']">2023 • Major Release</span>
+                        <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">Book Publication: "The Malleable Mind"</h4>
+                        <p className="text-[#404848] font-['Manrope'] text-[16px] mt-2 max-w-xl">Deep dive into sustainable neuro-habit architecture for modern high-performers.</p>
+                        <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
+                          <img alt="Book Launch" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1455390582262-044cdead2708?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
+                        </div>
                       </div>
                     </div>
-                  )) : (
-                    <>
-                      {/* Fallback milestones if no courses */}
-                      <div className="relative">
-                        <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[#003634] border-4 border-[#fbf9f5]"></div>
-                        <div>
-                          <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest">2023 • Major Release</span>
-                          <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">Book Publication: "The Malleable Mind"</h4>
-                          <p className="text-[#404848] text-[16px] mt-2 max-w-xl">Deep dive into sustainable neuro-habit architecture for modern high-performers.</p>
-                          <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
-                            <img alt="Book Launch" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1455390582262-044cdead2708?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
-                          </div>
-                        </div>
+                    <div className="relative">
+                      <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[#52634d] border-4 border-[#fbf9f5]"></div>
+                      <div>
+                        <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest font-['Manrope']">2020 • Entrepreneurship</span>
+                        <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">Neuro-Architecture Clinic Launch</h4>
+                        <p className="text-[#404848] font-['Manrope'] text-[16px] mt-2 max-w-xl">Founded a holistic clinical space in San Francisco focusing on evidence-based habit formation.</p>
                       </div>
-                      <div className="relative">
-                        <div className="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-[#52634d] border-4 border-[#fbf9f5]"></div>
-                        <div>
-                          <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest">2020 • Entrepreneurship</span>
-                          <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">Neuro-Architecture Clinic Launch</h4>
-                          <p className="text-[#404848] text-[16px] mt-2 max-w-xl">Founded a holistic clinical space focusing on evidence-based habit formation.</p>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  </>
+                )}
+              </div>
+            </section>
 
+            {/* Post Teaser Card */}
+            <article className="bg-[#ffffff] p-6 rounded-2xl border border-[#e4e2de]/30 group">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-10 h-10 rounded-full overflow-hidden">
+                  <img alt={expert.displayName} className="w-full h-full object-cover" src={avatarUrl} />
                 </div>
-              </section>
-            )}
-
-            {activeTab !== 'Journey' && (
-              <article className="bg-[#ffffff] p-6 rounded-2xl border border-[#e4e2de]/50 group">
-                <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <img alt={expert.displayName} className="w-full h-full object-cover" src={avatarUrl} />
-                  </div>
-                  <div>
-                    <p className="text-[14px] font-semibold text-[#003634]">{expert.displayName}</p>
-                    <p className="text-[12px] font-medium text-[#707978]">2 hours ago</p>
-                  </div>
+                <div>
+                  <p className="text-[14px] font-semibold text-[#003634] font-['Manrope']">{expert.displayName}</p>
+                  <p className="text-[12px] font-medium text-[#707978] font-['Manrope']">2 hours ago</p>
                 </div>
-                <p className="text-[16px] text-[#404848] mb-6">
-                  The science of "micro-wins" is often underestimated. Small, dopamine-fuelled shifts create the structural integrity required for permanent habit change...
-                </p>
-                <div className="flex items-center space-x-6">
-                  <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
-                    <span className="material-symbols-outlined text-xl">favorite</span>
-                    <span className="text-[12px] font-medium">4.2k</span>
-                  </button>
-                  <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
-                    <span className="material-symbols-outlined text-xl">chat_bubble</span>
-                    <span className="text-[12px] font-medium">128</span>
-                  </button>
-                  <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
-                    <span className="material-symbols-outlined text-xl">share</span>
-                    <span className="text-[12px] font-medium">Share</span>
-                  </button>
-                </div>
-              </article>
-            )}
+              </div>
+              <p className="font-['Manrope'] text-[16px] text-[#404848] mb-6">
+                The science of "micro-wins" is often underestimated. Small, dopamine-fuelled shifts create the structural integrity required for permanent habit change...
+              </p>
+              <div className="flex items-center space-x-6">
+                <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
+                  <span className="material-symbols-outlined text-xl">favorite</span>
+                  <span className="text-[12px] font-medium">4.2k</span>
+                </button>
+                <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
+                  <span className="material-symbols-outlined text-xl">chat_bubble</span>
+                  <span className="text-[12px] font-medium">128</span>
+                </button>
+                <button className="flex items-center space-x-2 text-[#003634]/60 hover:text-[#003634] transition-colors">
+                  <span className="material-symbols-outlined text-xl">share</span>
+                  <span className="text-[12px] font-medium">Share</span>
+                </button>
+              </div>
+            </article>
           </div>
         </div>
       </main>
 
       {/* Bottom Navigation (Mobile Only) */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-[#FDFCFB]/90 backdrop-blur-md z-50 border-t border-[#e4e2de] rounded-t-2xl shadow-[0px_-10px_30px_rgba(27,77,75,0.05)]">
-        <button className="flex flex-col items-center justify-center text-[#1b4d4b]/50 px-3 py-1">
+      <div className="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 pb-safe bg-[#FDFCFB]/90 backdrop-blur-md z-50 border-t border-[#E6E2DE] rounded-t-2xl shadow-[0px_-10px_30px_rgba(27,77,75,0.05)]">
+        <button onClick={() => navigate('/')} className="flex flex-col items-center justify-center text-[#1B4D4B]/50 px-3 py-1">
           <span className="material-symbols-outlined">home</span>
           <span className="font-['Newsreader'] font-medium text-[10px]">Home</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#1b4d4b]/50 px-3 py-1">
+        <button className="flex flex-col items-center justify-center text-[#1B4D4B]/50 px-3 py-1">
           <span className="material-symbols-outlined">search</span>
           <span className="font-['Newsreader'] font-medium text-[10px]">Explore</span>
         </button>
-        <button onClick={() => setActiveTab('Journey')} className="flex flex-col items-center justify-center text-[#1b4d4b]/50 px-3 py-1">
+        <button className="flex flex-col items-center justify-center text-[#1B4D4B]/50 px-3 py-1">
           <span className="material-symbols-outlined">timeline</span>
           <span className="font-['Newsreader'] font-medium text-[10px]">Journey</span>
         </button>
-        <button className="flex flex-col items-center justify-center text-[#1b4d4b]/50 px-3 py-1">
+        <button className="flex flex-col items-center justify-center text-[#1B4D4B]/50 px-3 py-1">
           <span className="material-symbols-outlined">chat_bubble</span>
           <span className="font-['Newsreader'] font-medium text-[10px]">Connect</span>
         </button>
-        <button className="flex flex-col items-center justify-center bg-[#1b4d4b]/10 text-[#1b4d4b] rounded-xl px-3 py-1 scale-95 duration-150">
+        <button className="flex flex-col items-center justify-center bg-[#1B4D4B]/10 text-[#1B4D4B] rounded-xl px-3 py-1 scale-95 duration-150">
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
           <span className="font-['Newsreader'] font-medium text-[10px]">Profile</span>
         </button>

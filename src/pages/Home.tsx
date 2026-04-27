@@ -527,7 +527,7 @@ export function Home({ user, userData }: { user: any, userData: any }) {
         )}
 
         {/* Instant Action Bar */}
-        <div className="grid grid-cols-1 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <Link
             to="/therapy-room"
             className="flex-1 group relative overflow-hidden bg-zinc-950 dark:bg-zinc-100 p-4 rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.98] shadow-xl border border-zinc-800 dark:border-white/20"
@@ -545,6 +545,27 @@ export function Home({ user, userData }: { user: any, userData: any }) {
               </div>
               <div className="w-10 h-10 rounded-full bg-white/5 dark:bg-black/5 flex items-center justify-center group-hover:bg-ur-primary/20 transition-colors">
                 <ChevronRight className={clsx("w-5 h-5 text-zinc-500 group-hover:text-ur-primary transition-transform", isRTL ? "rotate-180" : "")} />
+              </div>
+            </div>
+          </Link>
+
+          <Link
+            to="/guide"
+            className="flex-1 group relative overflow-hidden bg-white dark:bg-zinc-900 p-4 rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.98] shadow-xl border border-zinc-200 dark:border-zinc-800"
+          >
+            <div className="absolute top-0 inset-e-0 w-32 h-32 bg-blue-500/10 blur-3xl rounded-full" />
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                  <span className="material-symbols-outlined text-blue-500 text-3xl">auto_awesome</span>
+                </div>
+                <div>
+                  <h3 className="text-zinc-900 dark:text-white font-headline font-black text-lg tracking-tight">Urkio AI Guide</h3>
+                  <p className="text-zinc-500 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em] mt-1">Start Your Journey</p>
+                </div>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                <ChevronRight className={clsx("w-5 h-5 text-zinc-500 group-hover:text-blue-500 transition-transform", isRTL ? "rotate-180" : "")} />
               </div>
             </div>
           </Link>
