@@ -33,6 +33,62 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     }
   }, [messages, isLoading]);
 
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleRecording = useCallback(() => {
+    if (isRecording) {
+      recognitionRef.current?.stop();
+      setIsRecording(false);
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Voice recording is not supported in this browser. Please try Chrome or Safari.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.lang = i18n.language === 'ar' ? 'ar-SA' : 'en-US';
+
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onresult = (event: any) => {
+      const transcript = Array.from(event.results)
+        .map((result: any) => result[0])
+        .map((result: any) => result.transcript)
+        .join('');
+      setInput(transcript);
+    };
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error', event.error);
+      setIsRecording(false);
+    };
+    recognition.onend = () => {
+      setIsRecording(false);
+      // Auto-send if there is content after a short delay to let state catch up
+      setTimeout(() => {
+        const currentInput = (document.querySelector('textarea') as HTMLTextAreaElement)?.value;
+        if (currentInput?.trim()) {
+          sendMessage();
+        }
+      }, 500);
+    };
+
+    recognitionRef.current = recognition;
+    recognition.start();
+  }, [isRecording, i18n.language]);
+
   const getMockResponse = useCallback((text: string) => {
     const isAr = i18n.language === 'ar';
     const lower = text.toLowerCase();
@@ -382,10 +438,15 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
             <div className="absolute inset-e-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
                 <button 
                   type="button" 
-                  className="p-2 hover:bg-black/5 rounded-xl transition-colors text-inherit/50 hover:text-inherit"
+                  onClick={toggleRecording}
+                  className={clsx(
+                    "p-2 rounded-xl transition-all relative group",
+                    isRecording ? "text-red-500 bg-red-500/10" : "text-inherit/50 hover:text-inherit hover:bg-black/5"
+                  )}
                   title={t('agent.speak')}
                 >
-                    <Mic className="w-5 h-5" />
+                    {isRecording && <span className="absolute inset-0 rounded-xl bg-red-500 animate-ping opacity-20" />}
+                    <Mic className={clsx("w-5 h-5", isRecording && "relative z-10")} />
                 </button>
                 <button
                   type="submit"
