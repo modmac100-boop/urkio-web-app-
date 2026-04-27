@@ -21,7 +21,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard').then(m => ({ 
 const AdminPortal = lazy(() => import('./pages/AdminPortal').then(m => ({ default: m.AdminPortal })));
 const AdminBetaInsights = lazy(() => import('./pages/AdminBetaInsights').then(m => ({ default: m.AdminBetaInsights })));
 const ExpertDashboard = lazy(() => import('./pages/ExpertDashboard').then(m => ({ default: m.ExpertDashboard })));
-const LandingPage = lazy(() => import('./pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const LandingPage = lazy(() => import('./pages/LandingPageV2').then(m => ({ default: m.LandingPageV2 })));
 const Messenger = lazy(() => import('./pages/Messenger'));
 const PublicProfile = lazy(() => import('./pages/PublicProfile').then(m => ({ default: m.PublicProfile })));
 const Homii = lazy(() => import('./pages/Homii').then(m => ({ default: m.Homii })));
