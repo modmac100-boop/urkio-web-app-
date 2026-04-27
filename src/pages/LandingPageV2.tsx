@@ -51,6 +51,24 @@ export function LandingPageV2({
     { label: t('landing.navInvestment', 'Investment'), href: '#investment' },
   ];
 
+  const pillars = [
+    {
+      icon: 'psychology',
+      title: t('landing.pillar1Title', 'Self-Development'),
+      desc: t('landing.pillar1Desc', 'Cultivate the internal resilience and cognitive agility required to lead in volatile markets.'),
+    },
+    {
+      icon: 'military_tech',
+      title: t('landing.pillar2Title', 'Executive Mentorship'),
+      desc: t('landing.pillar2Desc', 'Direct access to legacy builders who have navigated the challenges you face today.'),
+    },
+    {
+      icon: 'trending_up',
+      title: t('landing.pillar3Title', 'Professional Growth'),
+      desc: t('landing.pillar3Desc', 'Strategic positioning and network mobilization to ensure your upward trajectory remains consistent.'),
+    },
+  ];
+
   return (
     <div
       className={clsx(
