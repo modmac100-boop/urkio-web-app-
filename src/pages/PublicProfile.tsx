@@ -549,26 +549,7 @@ export function PublicProfile({
 
             {/* Right Main Content */}
             <div className="flex-1 space-y-6 min-w-0">
-              {/* Stories Bar */}
-              <div className="bento-card bg-surface/50 border border-border-light p-6 backdrop-blur-sm">
-                <h3 className="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant/70 mb-6">
-                  {t('profile.trendingMoments') || 'Trending Moments'}
-                </h3>
-                <StoryBar currentUserId={currentUser?.uid} />
-              </div>
-
-              {/* Post Creator (own profile only) */}
-              {isOwnProfile && (
-                <PostCreator
-                  userAvatar={profileData.photoURL}
-                  userData={profileData}
-                  onPostCreated={(newPost) => setUserPosts(prev => [newPost, ...prev])}
-                  onEventClick={() => setIsEventModalOpen(true)}
-                  onArticleClick={() => setIsArticleModalOpen(true)}
-                />
-              )}
-
-              {/* ── Tab Panels ───────────────────────────────────────────── */}
+                       {/* ── Tab Panels ───────────────────────────────────────────── */}
 
               {/* FEED */}
               {activeTab === 'feed' && (
@@ -620,310 +601,323 @@ export function PublicProfile({
                 </div>
               )}
 
-          {/* REVIEWS */}
-          {activeTab === 'reviews' && (
-            <div className="space-y-8 animate-fade-in-up">
-              <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-                  <div>
-                    <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic">Specialist Reviews</h3>
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex text-amber-400">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={clsx("w-5 h-5", i < Math.floor(averageRating) ? "fill-current" : "text-zinc-200")} />
-                        ))}
+              {/* GALLERY */}
+              {activeTab === 'media' && (
+                <div className="bento-card bg-surface border border-border-light shadow-sm overflow-hidden animate-fade-in-up">
+                  <div className="p-6 border-b border-border-light flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <Camera className="w-5 h-5 text-primary" />
                       </div>
-                      <span className="text-lg font-black text-zinc-900 dark:text-zinc-100">{averageRating}</span>
-                      <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">({reviews.length} Verified Reviews)</span>
-                    </div>
-                  </div>
-                  {!isOwnProfile && currentUser && (
-                    <button 
-                      onClick={() => setIsReviewModalOpen(true)}
-                      className="px-8 py-4 bg-teal-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-teal-600/20 hover:scale-105 active:scale-95 transition-all"
-                    >
-                      Write Experience
-                    </button>
-                  )}
-                </div>
-
-                <div className="grid grid-cols-1 gap-6">
-                  {reviews.length > 0 ? reviews.map((review) => (
-                    <div key={review.id} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 group hover:border-teal-500/30 transition-all">
-                      <div className="flex justify-between items-start mb-6">
-                        <div className="flex items-center gap-4">
-                          <div className="size-12 rounded-2xl overflow-hidden bg-zinc-200 border-2 border-white dark:border-zinc-700 shadow-sm">
-                            <img src={review.authorPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.authorName || 'User')}`} className="w-full h-full object-cover" alt="" />
-                          </div>
-                          <div>
-                            <p className="font-black text-zinc-900 dark:text-zinc-100 text-base">{review.authorName}</p>
-                            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
-                              {review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently Verified'}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex text-amber-400 bg-amber-50 dark:bg-amber-400/10 px-3 py-1 rounded-full">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className={clsx("w-3 h-3", i < review.rating ? "fill-current" : "text-amber-200")} />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed italic text-base">
-                        "{review.content}"
-                      </p>
-                    </div>
-                  )) : (
-                    <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/30 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-zinc-800">
-                      <div className="size-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-4">
-                        <Star className="w-8 h-8 text-zinc-300" />
-                      </div>
-                      <h4 className="text-zinc-900 dark:text-zinc-100 font-black italic">Awaiting Feedback</h4>
-                      <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-2">Be the first to share your experience with this specialist.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* SERVICES */}
-          {activeTab === 'services' && (
-            <div className="animate-fade-in-up">
-               <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
-                <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic mb-10">Specialized Protocols</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {(profileData.services || [
-                    { title: 'Cognitive Behavioral Therapy', price: '$150/hr', desc: 'Targeted sessions for anxiety, depression, and trauma management.' },
-                    { title: 'Strategic Habit Design', price: '$120/hr', desc: 'Architecting sustainable daily rituals for high-performance individuals.' },
-                    { title: 'Neuro-Plasticity Assessment', price: '$200', desc: 'Comprehensive clinical evaluation of cognitive flexibility and brain health.' },
-                    { title: 'Guided Mindfulness Intensive', price: '$80/hr', desc: 'Advanced meditation and breathwork for nervous system regulation.' }
-                  ]).map((s: any, i: number) => (
-                    <div key={i} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-teal-500/20 transition-all group">
-                      <div className="flex justify-between items-start mb-4">
-                        <h4 className="font-black text-zinc-900 dark:text-zinc-100 text-lg group-hover:text-teal-600 transition-colors">{s.title}</h4>
-                        <span className="text-teal-600 font-black text-sm bg-teal-50 dark:bg-teal-900/20 px-3 py-1 rounded-full">{s.price}</span>
-                      </div>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed mb-8">{s.desc}</p>
-                      <button 
-                        onClick={() => setIsBookingModalOpen(true)}
-                        className="w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
-                      >
-                        Initiate Booking
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-ght p-5 flex items-start gap-4 hover:shadow-lg transition-all duration-300">
-                      <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <Star className="w-5 h-5 text-amber-500" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-on-surface leading-7 line-clamp-3">{post.content}</p>
-                        <div className="flex items-center gap-3 mt-3 text-[11px] font-black text-on-surface-variant uppercase tracking-widest">
-                          <span>❤ {post.likesCount || 0}</span>
-                          <span>💬 {post.commentsCount || 0}</span>
-                          <span>🔁 {post.repostsCount || 0}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* EXPERT AGENDA */}
-          {activeTab === 'agenda' && showAgendaTab && (
-            <div className="space-y-8 animate-fade-in">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div>
-                  <h2 className="text-3xl font-headline font-black text-on-surface">Expert Agenda</h2>
-                  <p className="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mt-2">Clinical Case Management & Private Reports</p>
-                </div>
-                <button
-                  onClick={() => setIsAddingAppointment(true)}
-                  className="bg-primary text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 hover:bg-primary/90 transition-all"
-                >
-                  New Case Entry
-                </button>
-              </div>
-
-              {isAddingAppointment && (
-                <div className="bento-card bg-surface border-2 border-primary/20 p-8 shadow-2xl relative animate-in slide-in-from-top-4 duration-500">
-                  <h3 className="text-xl font-headline font-black mb-6">Create Private Case Note</h3>
-                  <form onSubmit={handleAddAppointment} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Case Code Name (Private)</label>
-                        <input
-                          required
-                          value={newAppointment.caseCode}
-                          onChange={e => setNewAppointment({ ...newAppointment, caseCode: e.target.value })}
-                          className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none"
-                          placeholder="e.g. ALPHA-99"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Expert Hub Tier</label>
-                        <select
-                          value={newAppointment.tier}
-                          onChange={e => setNewAppointment({ ...newAppointment, tier: e.target.value })}
-                          className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
-                        >
-                          <option value="1">Tier 1: Junior</option>
-                          <option value="2">Tier 2: Senior</option>
-                          <option value="3">Tier 3: Executive</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Psychological Issue Category</label>
-                        <select
-                          value={newAppointment.category}
-                          onChange={e => setNewAppointment({ ...newAppointment, category: e.target.value })}
-                          className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
-                        >
-                           {[
-                            'General Anxiety', 'Clinical Depression', 'PTSD (Trauma)', 
-                            'Bipolar Disorder', 'OCD / Obsessive', 'ADHD / Focus',
-                            'Relationship Issues', 'Substance Abuse', 'Grief & Loss',
-                            'Work Stress', 'Self Esteem', 'Family Dynamics', 'Panic Attacks'
-                          ].map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Session Date & Time</label>
-                        <div className="flex gap-2">
-                          <input type="date" required value={newAppointment.date} onChange={e => setNewAppointment({ ...newAppointment, date: e.target.value })} className="flex-1 bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-4 py-4 text-sm font-bold" />
-                          <input type="time" required value={newAppointment.time} onChange={e => setNewAppointment({ ...newAppointment, time: e.target.value })} className="w-32 bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-4 py-4 text-sm font-bold" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-2 col-span-full">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Case Estimation & Clinical Assessment</label>
-                      <textarea
-                        required
-                        value={newAppointment.estimation}
-                        onChange={e => setNewAppointment({ ...newAppointment, estimation: e.target.value })}
-                        className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none h-24 resize-none"
-                        placeholder="Define severity, potential diagnosis range, and required intervention level..."
-                      />
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Refer to Expert</label>
-                         <input
-                           value={newAppointment.assignedExpert}
-                           onChange={e => setNewAppointment({ ...newAppointment, assignedExpert: e.target.value })}
-                           className="w-full bg-bg-main/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
-                           placeholder="Expert name or UID (optional)..."
-                         />
-                      </div>
-                      <div className="space-y-2">
-                         <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Patient Age / Group</label>
-                         <input
-                           value={newAppointment.clientAge}
-                           onChange={e => setNewAppointment({ ...newAppointment, clientAge: e.target.value })}
-                           className="w-full bg-bg-main/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
-                           placeholder="e.g. 28 / Adult"
-                         />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Confidential Clinical Notes</label>
-                      <textarea
-                        required
-                        value={newAppointment.notes}
-                        onChange={e => setNewAppointment({ ...newAppointment, notes: e.target.value })}
-                        className="w-full bg-bg-main/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none h-32 resize-none"
-                        placeholder="Detail observations, symptoms, and plan..."
-                      />
-                    </div>
-                    <div className="flex justify-end gap-4">
-                      <button type="button" onClick={() => setIsAddingAppointment(false)} className="px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-on-surface-variant hover:bg-bg-main">Cancel</button>
-                      <button type="submit" className="bg-primary text-white px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl">Secure Save</button>
-                    </div>
-                  </form>
-                </div>
-              )}
-
-              <div className="grid gap-6">
-                {appointments.length === 0 ? (
-                  <div className="bento-card border border-dashed border-border-light p-20 text-center bg-bg-main/30 backdrop-blur-sm rounded-[3rem]">
-                    <div className="size-20 rounded-4xl bg-surface flex items-center justify-center mx-auto mb-6 shadow-xl border border-border-light">
-                      <Calendar className="w-8 h-8 text-primary" />
-                    </div>
-                    <h3 className="text-xl font-headline font-black text-on-surface">Archive Empty</h3>
-                    <p className="text-xs font-black text-on-surface-variant uppercase tracking-widest mt-2">No active cases recorded in your expert agenda.</p>
-                  </div>
-                ) : (
-                  appointments.map((appt, i) => (
-                    <div key={appt.id || i} className="bento-card bg-surface border border-border-light p-8 flex flex-col md:flex-row gap-8 items-start group hover:border-primary/30 transition-all shadow-sm">
-                      <div className="size-16 rounded-3xl bg-bg-main flex flex-col items-center justify-center shrink-0 border border-border-light">
-                        <span className="text-[10px] font-black uppercase text-on-surface-variant">{new Date(appt.date).toLocaleString('en', { month: 'short' })}</span>
-                        <span className="text-xl font-black text-primary leading-none">{new Date(appt.date).getDate()}</span>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h4 className="text-xl font-headline font-black text-on-surface">Case #{appt.caseCode}</h4>
-                          <span className="bg-ur-primary/10 text-ur-primary px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">
-                            {appt.category}
-                          </span>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                           <div className="bg-bg-main/50 p-3 rounded-xl border border-border-light">
-                              <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest mb-1">Clinical Estimation</p>
-                              <p className="text-[11px] font-bold text-on-surface line-clamp-2">{appt.estimation || 'No estimation provided.'}</p>
-                           </div>
-                           <div className="bg-primary/5 p-3 rounded-xl border border-primary/10">
-                              <p className="text-[9px] font-black text-primary uppercase tracking-widest mb-1">Assigned Specialist</p>
-                              <p className="text-[11px] font-bold text-on-surface">{appt.assignedExpert || 'Awaiting assignment'}</p>
-                           </div>
-                        </div>
-                        <p className="text-xs font-semibold text-on-surface-variant mb-6 leading-relaxed italic border-s-2 border-border-light ps-4">
-                          {appt.notes}
+                      <div>
+                        <h3 className="font-headline font-black text-on-surface text-base">Photo Gallery</h3>
+                        <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-widest">
+                          {profileData.displayName}'s visual story
                         </p>
-                        <div className="flex flex-wrap gap-4 text-[10px] font-black uppercase tracking-widest text-on-surface-variant/70">
-                           <div className="flex items-center gap-2 bg-bg-main px-3 py-1.5 rounded-xl"><Sparkles className="w-3 h-3"/> Tier {appt.tier} Expert</div>
-                           <div className="flex items-center gap-2 bg-bg-main px-3 py-1.5 rounded-xl"><span className="material-symbols-outlined text-[14px]">schedule</span> {appt.time}</div>
-                        </div>
-                      </div>
-                      <div className="flex flex-row md:flex-col gap-2 shrink-0 w-full md:w-auto">
-                        <button 
-                          onClick={() => handleEscalate(appt)}
-                          className="flex-1 md:w-full px-6 py-3 rounded-xl bg-orange-500/10 text-orange-600 text-[10px] font-black uppercase tracking-widest hover:bg-orange-500/20 transition-all border border-orange-500/20"
-                        >
-                          Escalate Entry
-                        </button>
-                        <button 
-                          onClick={() => toast('Private reports are only visible to you.')}
-                          className="flex-1 md:w-full px-6 py-3 rounded-xl bg-bg-main text-on-surface-variant text-[10px] font-black uppercase tracking-widest hover:bg-border-light transition-all"
-                        >
-                          View Full Case
-                        </button>
                       </div>
                     </div>
-                  ))
-                )}
-              </div>
-            </div>
-          )}
+                  </div>
+                  {userPosts.filter(p => p.mediaUrl).length > 0 ? (
+                    <div className="grid grid-cols-3 gap-1 p-1 bg-bg-main/20">
+                      {userPosts
+                        .filter(p => p.mediaUrl)
+                        .map((post, idx) => (
+                          <div
+                            key={idx}
+                            className={clsx(
+                              'relative overflow-hidden bg-bg-main group cursor-pointer aspect-square',
+                              idx % 7 === 0 ? 'col-span-2 row-span-2' : ''
+                            )}
+                          >
+                            {post.mediaType === 'video' ? (
+                              <div className="w-full h-full relative">
+                                <video
+                                  src={post.mediaUrl}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute top-2 inset-e-2 size-6 rounded-lg bg-black/40 backdrop-blur-sm flex items-center justify-center">
+                                  <span className="material-symbols-outlined text-[14px] text-white">videocam</span>
+                                </div>
+                              </div>
+                            ) : (
+                              <img
+                                src={post.mediaUrl}
+                                alt="Gallery"
+                                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                              />
+                            )}
+                          </div>
+                        ))
+                      }
+                    </div>
+                  ) : (
+                    <div className="p-20 text-center">
+                      <div className="size-16 rounded-3xl bg-surface flex items-center justify-center mx-auto mb-5 shadow-xl border border-border-light">
+                        <Camera className="w-7 h-7 text-on-surface-variant/50" />
+                      </div>
+                      <h4 className="font-headline font-black text-on-surface">No Photos Yet</h4>
+                    </div>
+                  )}
+                </div>
+              )}
 
-          {/* SETTINGS / PAGE SETUP */}
-          {activeTab === 'settings' && isOwnProfile && (
-            <UserProfileEditor 
-              user={currentUser} 
-              userData={profileData} 
-              onSave={() => {
-                // Optionally refresh profile data here
-                getDoc(doc(db, 'users', userId!)).then(snap => {
-                  if (snap.exists()) setProfileData(snap.data());
-                });
-              }}
-            />
-          )}
+              {/* EDITORIAL */}
+              {activeTab === 'articles' && (
+                <div className="space-y-6 animate-fade-in-up">
+                  {userPosts.filter(p => p.type === 'article' || (p.content && p.content.length > 300)).length > 0 ? (
+                    userPosts
+                      .filter(p => p.type === 'article' || (p.content && p.content.length > 300))
+                      .map((post, idx) => (
+                        <article key={idx} className="bento-card bg-surface border border-border-light shadow-sm overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer">
+                          <div className="p-6">
+                            <div className="flex items-center gap-2 mb-3">
+                              <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-black uppercase tracking-widest">Editorial</span>
+                            </div>
+                            <p className="text-sm text-on-surface font-medium leading-8 line-clamp-4">{post.content}</p>
+                          </div>
+                        </article>
+                      ))
+                  ) : (
+                    <div className="bento-card border border-dashed border-border-light p-20 text-center bg-msgr-surface-container-low/30 backdrop-blur-sm rounded-[3rem]">
+                      <h4 className="font-headline font-black text-on-surface">No Articles Yet</h4>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* HIGHLIGHTS */}
+              {activeTab === 'events' && (
+                <div className="space-y-6 animate-fade-in-up">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {[
+                      { icon: Flame,  color: 'rose',   label: 'Top Creator',   sublabel: 'Ranked in top 5% this month',  stat: '#3' },
+                      { icon: Star,   color: 'amber',  label: 'Rising Star',   sublabel: 'Fastest growing profile',       stat: '+340%' },
+                    ].map((badge, i) => (
+                      <div key={i} className="bento-card bg-surface border border-border-light p-6 flex items-center gap-4 hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                        <div className={`size-14 rounded-2xl bg-${badge.color}-500/10 flex items-center justify-center shrink-0`}>
+                          <badge.icon className={`w-7 h-7 text-${badge.color}-500`} />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-headline font-black text-on-surface text-sm">{badge.label}</p>
+                          <p className="text-[11px] font-semibold text-on-surface-variant mt-0.5">{badge.sublabel}</p>
+                        </div>
+                        <span className={`text-lg font-black text-${badge.color}-500`}>{badge.stat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* REVIEWS */}
+              {activeTab === 'reviews' && (
+                <div className="space-y-8 animate-fade-in-up">
+                  <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                      <div>
+                        <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic">Specialist Reviews</h3>
+                        <div className="flex items-center gap-3 mt-2">
+                          <div className="flex text-amber-400">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className={clsx("w-5 h-5", i < Math.floor(averageRating) ? "fill-current" : "text-zinc-200")} />
+                            ))}
+                          </div>
+                          <span className="text-lg font-black text-zinc-900 dark:text-zinc-100">{averageRating}</span>
+                          <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">({reviews.length} Verified Reviews)</span>
+                        </div>
+                      </div>
+                      {!isOwnProfile && currentUser && (
+                        <button 
+                          onClick={() => setIsReviewModalOpen(true)}
+                          className="px-8 py-4 bg-teal-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-teal-600/20 hover:scale-105 active:scale-95 transition-all"
+                        >
+                          Write Experience
+                        </button>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-6">
+                      {reviews.length > 0 ? reviews.map((review) => (
+                        <div key={review.id} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 group hover:border-teal-500/30 transition-all">
+                          <div className="flex justify-between items-start mb-6">
+                            <div className="flex items-center gap-4">
+                              <div className="size-12 rounded-2xl overflow-hidden bg-zinc-200 border-2 border-white dark:border-zinc-700 shadow-sm">
+                                <img src={review.authorPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.authorName || 'User')}`} className="w-full h-full object-cover" alt="" />
+                              </div>
+                              <div>
+                                <p className="font-black text-zinc-900 dark:text-zinc-100 text-base">{review.authorName}</p>
+                                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
+                                  {review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently Verified'}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex text-amber-400 bg-amber-50 dark:bg-amber-400/10 px-3 py-1 rounded-full">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} className={clsx("w-3 h-3", i < review.rating ? "fill-current" : "text-amber-200")} />
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed italic text-base">
+                            "{review.content}"
+                          </p>
+                        </div>
+                      )) : (
+                        <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/30 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-zinc-800">
+                          <h4 className="text-zinc-900 dark:text-zinc-100 font-black italic">Awaiting Feedback</h4>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SERVICES */}
+              {activeTab === 'services' && (
+                <div className="animate-fade-in-up">
+                   <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                    <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic mb-10">Specialized Protocols</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {(profileData.services || [
+                        { title: 'Cognitive Behavioral Therapy', price: '$150/hr', desc: 'Targeted sessions for anxiety, depression, and trauma management.' },
+                        { title: 'Strategic Habit Design', price: '$120/hr', desc: 'Architecting sustainable daily rituals for high-performance individuals.' }
+                      ]).map((s: any, i: number) => (
+                        <div key={i} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-teal-500/20 transition-all group">
+                          <div className="flex justify-between items-start mb-4">
+                            <h4 className="font-black text-zinc-900 dark:text-zinc-100 text-lg group-hover:text-teal-600 transition-colors">{s.title}</h4>
+                            <span className="text-teal-600 font-black text-sm bg-teal-50 dark:bg-teal-900/20 px-3 py-1 rounded-full">{s.price}</span>
+                          </div>
+                          <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed mb-8">{s.desc}</p>
+                          <button 
+                            onClick={() => setIsBookingModalOpen(true)}
+                            className="w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+                          >
+                            Initiate Booking
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* EXPERT AGENDA */}
+              {activeTab === 'agenda' && showAgendaTab && (
+                <div className="space-y-8 animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                    <div>
+                      <h2 className="text-3xl font-headline font-black text-on-surface">Expert Agenda</h2>
+                      <p className="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mt-2">Clinical Case Management & Private Reports</p>
+                    </div>
+                    <button
+                      onClick={() => setIsAddingAppointment(true)}
+                      className="bg-primary text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-105 hover:bg-primary/90 transition-all"
+                    >
+                      New Case Entry
+                    </button>
+                  </div>
+
+                  {isAddingAppointment && (
+                    <div className="bento-card bg-surface border-2 border-primary/20 p-8 shadow-2xl relative animate-in slide-in-from-top-4 duration-500">
+                      <h3 className="text-xl font-headline font-black mb-6">Create Private Case Note</h3>
+                      <form onSubmit={handleAddAppointment} className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Case Code Name (Private)</label>
+                            <input
+                              required
+                              value={newAppointment.caseCode}
+                              onChange={e => setNewAppointment({ ...newAppointment, caseCode: e.target.value })}
+                              className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none"
+                              placeholder="e.g. ALPHA-99"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Expert Hub Tier</label>
+                            <select
+                              value={newAppointment.tier}
+                              onChange={e => setNewAppointment({ ...newAppointment, tier: e.target.value })}
+                              className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
+                            >
+                              <option value="1">Tier 1: Junior</option>
+                              <option value="2">Tier 2: Senior</option>
+                              <option value="3">Tier 3: Executive</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Psychological Issue Category</label>
+                            <select
+                              value={newAppointment.category}
+                              onChange={e => setNewAppointment({ ...newAppointment, category: e.target.value })}
+                              className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold outline-none"
+                            >
+                               {[
+                                'General Anxiety', 'Clinical Depression', 'PTSD (Trauma)', 
+                                'Bipolar Disorder', 'OCD / Obsessive', 'ADHD / Focus',
+                                'Relationship Issues', 'Substance Abuse', 'Grief & Loss',
+                                'Work Stress', 'Self Esteem', 'Family Dynamics', 'Panic Attacks'
+                              ].map(cat => <option key={cat} value={cat}>{cat}</option>)}
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Session Date & Time</label>
+                            <div className="flex gap-2">
+                              <input type="date" required value={newAppointment.date} onChange={e => setNewAppointment({ ...newAppointment, date: e.target.value })} className="flex-1 bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-4 py-4 text-sm font-bold" />
+                              <input type="time" required value={newAppointment.time} onChange={e => setNewAppointment({ ...newAppointment, time: e.target.value })} className="w-32 bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-4 py-4 text-sm font-bold" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="space-y-2 col-span-full">
+                          <label className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant ms-1">Case Estimation & Clinical Assessment</label>
+                          <textarea
+                            required
+                            value={newAppointment.estimation}
+                            onChange={e => setNewAppointment({ ...newAppointment, estimation: e.target.value })}
+                            className="w-full bg-msgr-surface-container-low/50 border border-border-light rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none h-24 resize-none"
+                            placeholder="Define severity, potential diagnosis range, and required intervention level..."
+                          />
+                        </div>
+                        <div className="flex justify-end gap-4">
+                          <button type="button" onClick={() => setIsAddingAppointment(false)} className="px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest text-on-surface-variant hover:bg-bg-main">Cancel</button>
+                          <button type="submit" className="bg-primary text-white px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest shadow-xl">Secure Save</button>
+                        </div>
+                      </form>
+                    </div>
+                  )}
+
+                  <div className="grid gap-6">
+                    {appointments.length === 0 ? (
+                      <div className="bento-card border border-dashed border-border-light p-20 text-center bg-bg-main/30 backdrop-blur-sm rounded-[3rem]">
+                        <h3 className="text-xl font-headline font-black text-on-surface">Archive Empty</h3>
+                      </div>
+                    ) : (
+                      appointments.map((appt, i) => (
+                        <div key={appt.id || i} className="bento-card bg-surface border border-border-light p-8 flex flex-col md:flex-row gap-8 items-start group hover:border-primary/30 transition-all shadow-sm">
+                          <div className="size-16 rounded-3xl bg-bg-main flex flex-col items-center justify-center shrink-0 border border-border-light">
+                            <span className="text-[10px] font-black uppercase text-on-surface-variant">{new Date(appt.date).toLocaleString('en', { month: 'short' })}</span>
+                            <span className="text-xl font-black text-primary leading-none">{new Date(appt.date).getDate()}</span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-xl font-headline font-black text-on-surface">Case #{appt.caseCode}</h4>
+                            <p className="text-xs font-semibold text-on-surface-variant mt-2">{appt.notes}</p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* SETTINGS / PAGE SETUP */}
+              {activeTab === 'settings' && isOwnProfile && (
+                <UserProfileEditor 
+                  user={currentUser} 
+                  userData={profileData} 
+                  onSave={() => {
+                    getDoc(doc(db, 'users', userId!)).then(snap => {
+                      if (snap.exists()) setProfileData(snap.data());
+                    });
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
