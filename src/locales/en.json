@@ -717,7 +717,7 @@
     "typing": "Urkio is thinking...",
     "speak": "Use Voice",
     "developerNotice": "AI Intelligence active · Professional grounding enabled",
-    "error": "I'm sorry, I'm having trouble connecting right now. But I'm still here for you. How else can I help?",
+    "error": "Sorry, a small connection hiccup. We are still with you, please try again.",
     "voiceReady": "I'm listening...",
     "voiceRecording": "Recording... I'll respond when you stop",
     "autoSend": "Auto-sending in 500ms after speech ends",

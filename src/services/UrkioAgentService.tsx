@@ -358,7 +358,8 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       console.warn('[UrkioAgent] Neural Bridge offline, initializing local empathetic engine:', error);
       toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
       
-      const mockText = getMockResponse(text);
+      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+      const mockText = `${errorPrefix}\n\n${getMockResponse(text)}`;
       // Wait a bit to simulate thinking
       setTimeout(async () => {
         try {

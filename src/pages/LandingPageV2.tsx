@@ -281,12 +281,12 @@ export function LandingPageV2({
               )}
             >
               {isRTL ? (
-                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
+                <>أوركيو: حيث يبدأ <span className="text-[#30B0D0] italic">السلام</span> من الداخل</>
               ) : (
-                <>Urkio: Your Journey Toward <br />
+                <>Urkio: Where your <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] italic pr-4">
-                  Healing
-                </span> and Self-Elevation</>
+                  inner peace
+                </span> begins</>
               )}
             </motion.h1>
 
@@ -294,11 +294,11 @@ export function LandingPageV2({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-base md:text-lg text-white/60 mb-12 max-w-2xl leading-relaxed font-medium"
+              className="text-base md:text-xl text-white/80 mb-12 max-w-2xl leading-relaxed font-medium tracking-wide"
             >
               {isRTL
-                ? 'مساحة آمنة، تشفير تام، ومرشدون يفهمونك. طوّر ذاتك، ابنِ مجتمعك، واكتشف قوتك الكامنة في رحلة تعافي استثنائية.'
-                : 'Safe space, full encryption, and guides who truly understand. Develop yourself, build your community, and discover your potential.'}
+                ? 'مساحتك الخاصة للتنفس، التعافي، والنمو. لا تحمل عبء مشاعرك وحدك.. نحن نؤمن بك.'
+                : 'A sanctuary for healing, breathing, and becoming. You don\'t have to carry it all alone. We hear you.'}
             </motion.p>
 
             <motion.div 
@@ -308,12 +308,12 @@ export function LandingPageV2({
               className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-8"
             >
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(48,176,208,0.3)" }}
+                whileHover={{ scale: 1.05, boxShadow: "0px 10px 40px rgba(48,176,208,0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-[#30B0D0] text-[#050A0F] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all"
+                className="w-full sm:w-auto bg-[#30B0D0] text-[#050A0F] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-[#30B0D0]/20"
               >
-                {isRTL ? 'ابدأ رحلتك' : 'Start Your Journey'}
+                {isRTL ? 'ابدأ رحلة العودة لذاتك' : 'Begin Your Return to Self'}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
@@ -451,10 +451,12 @@ export function LandingPageV2({
           >
             <div>
               <h2 className="font-headline text-3xl lg:text-4xl font-black mb-6">
-                {t('landing.socialGraphTitle', 'The Social Graph')}
+                {isRTL ? 'دوائر الأمان: نصلك بمن يفهم لغتك الصامتة' : 'Circles of Safety: Connecting you to those who speak your silence'}
               </h2>
-              <p className="text-white/60 text-lg mb-8 leading-relaxed">
-                {t('landing.socialGraphDesc', 'Urkio maps your professional landscape beyond simple connections. We visualize your 1st, 2nd, and 3rd-degree professional proximity, uncovering hidden nodes of influence that define your career trajectory.')}
+              <p className="text-white/80 text-lg mb-8 leading-relaxed tracking-wide">
+                {isRTL 
+                  ? 'خريطة إنسان: لأن كل اتصال هو خطوة نحو التشافي والعودة لوحدتك النفسية.'
+                  : 'A Map of Hope: Because every connection is a step toward wholeness.'}
               </p>
               <ul className="space-y-6">
                 <li className="flex gap-4">
