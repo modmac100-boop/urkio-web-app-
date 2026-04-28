@@ -142,7 +142,7 @@ app.post('/api/chat', async (req, res) => {
     - Language: Respond strictly in ${language === 'ar' ? 'Arabic' : 'English'}.`;
 
     const result = await client.models.generateContentStream({
-      model: 'gemini-1.5-flash',
+      model: 'gemini-2.5-flash',
       contents: [...history, { role: 'user', parts: [{ text: lastMessage }] }],
       config: {
         systemInstruction: systemPrompt,
