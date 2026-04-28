@@ -79,6 +79,12 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
     }
   }, [roomId]);
 
+  // Convert string UID to numeric for Agora if possible, else 0 for auto-assign
+  const numericUid = React.useMemo(() => {
+    const val = parseInt(user?.uid?.substring(0, 8), 16) || 0;
+    return val > 0 ? val : Math.floor(Math.random() * 1000000);
+  }, [user?.uid]);
+
   const {
     connectionState,
     remoteUsers,
@@ -93,7 +99,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
     toggleCamera,
     startRecording,
     stopRecording
-  } = useHealingSession(roomId, 'private', 0, 'host');
+  } = useHealingSession(roomId, 'private', numericUid, 'host');
 
   const isAdminOrExpert = user && (
     ['admin', 'management', 'founder'].includes(userData?.role) || 
