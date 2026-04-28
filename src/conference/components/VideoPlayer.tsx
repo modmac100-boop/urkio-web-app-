@@ -222,10 +222,18 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
             {/* Extra Tools */}
             <div className="flex flex-col gap-3">
-               <button className="p-4 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all shadow-2xl">
+               <button 
+                 onClick={onInvite}
+                 title="Share Session Link"
+                 className="p-4 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all shadow-2xl"
+               >
                   <Share2 className="w-5 h-5 text-white" />
                </button>
-               <button className="p-4 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all shadow-2xl">
+               <button 
+                 onClick={() => toast.success('Clinical Suite Settings v4.0.0')}
+                 title="Studio Settings"
+                 className="p-4 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 hover:bg-white/10 transition-all shadow-2xl"
+               >
                   <Settings className="w-5 h-5 text-white" />
                </button>
             </div>

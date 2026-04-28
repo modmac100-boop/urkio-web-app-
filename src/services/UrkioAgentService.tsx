@@ -65,9 +65,35 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   }, [messages, isLoading, scrollToBottom]);
 
   // 1. Subscribe to history with robust sorting
+  const syncHistory = useCallback(() => {
+    if (!user?.uid) return;
+    toast.loading('Syncing Neural Bridge...', { id: 'ai-sync' });
+    const unsub = subscribeToMessages(conversationId, (newMessages: any[]) => {
+      const formatted = newMessages.map(msg => {
+        let dateVal = 0;
+        if (msg.createdAt?.seconds) dateVal = msg.createdAt.seconds * 1000;
+        else if (msg.createdAt instanceof Date) dateVal = msg.createdAt.getTime();
+        else if (typeof msg.createdAt === 'number') dateVal = msg.createdAt;
+        else if (typeof msg.createdAt === 'string') dateVal = new Date(msg.createdAt).getTime();
+        else dateVal = Date.now();
+
+        return {
+          id: msg._id || msg.id,
+          role: msg.role || (msg.user?._id === 2 ? 'assistant' : 'user'),
+          content: msg.text || msg.content,
+          audioUrl: msg.audioUrl,
+          createdAt: dateVal
+        };
+      }).sort((a, b) => a.createdAt - b.createdAt);
+      setMessages(formatted as Message[]);
+      toast.success('Neural History Restored', { id: 'ai-sync' });
+    });
+    setTimeout(unsub, 2000);
+  }, [conversationId, user?.uid]);
+
   useEffect(() => {
     if (!user?.uid) return;
-    
+
     setIsLoading(true);
     const unsubscribe = subscribeToMessages(conversationId, (newMessages: any[]) => {
       if (newMessages.length > 0) {
@@ -403,6 +429,25 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
       {/* Header */}
       <div className="p-8 bg-white/40 dark:bg-[#10161D]/40 backdrop-blur-3xl border-b border-inherit flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="size-10 rounded-xl bg-[#30B0D0]/10 flex items-center justify-center">
+            <Bot className="size-6 text-[#30B0D0]" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold tracking-tight">Neural Assistant</h3>
+            <p className="text-[9px] font-black uppercase tracking-widest text-[#30B0D0]">v4.2 Encryption Active</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={syncHistory}
+            className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-[#30B0D0] transition-colors"
+            title="Sync History"
+          >
+            <RefreshCcw className="size-4" />
+          </button>
+          <div className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
+        </div>
         <div className="flex items-center gap-5">
           <div className={clsx("w-14 h-14 rounded-[1.5rem] flex items-center justify-center text-white shadow-2xl animate-float", theme.accent)}>
             <Bot className="w-8 h-8" />
