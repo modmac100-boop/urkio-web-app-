@@ -159,9 +159,13 @@ app.post('/api/chat', async (req, res) => {
     res.end();
   } catch (error: any) {
     console.error('[Urkio API] Chat error:', error);
-    // If headers haven't been sent, we can still use the mock fallback
-    if (!res.headersSent) {
-      return handleMockResponse(res, language);
+    try {
+      const fallbackText = language === 'ar' 
+        ? "عذراً، يبدو أن هناك تعثراً بسيطاً في الاتصال. أنا هنا لمساعدتك."
+        : "Sorry, a small connection hiccup. I'm still here to support you.";
+      res.write(fallbackText);
+    } catch (e) {
+      // Stream might be broken
     }
     res.end();
   }

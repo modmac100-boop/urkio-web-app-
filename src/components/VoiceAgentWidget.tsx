@@ -202,11 +202,16 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
         );
       }
 
+      if (!accumulated.trim()) {
+        throw new Error("Empty response from backend bridge");
+      }
+
       speakResponse(accumulated);
 
     } catch (error: any) {
       console.warn('Voice API failed, using empathetic fallback:', error);
-      const mockText = getMockResponse(msgText);
+      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+      const mockText = `${errorPrefix}\n\n${getMockResponse(msgText)}`;
       
       // Simulate typing/streaming for assistant
       let currentAccumulated = '';

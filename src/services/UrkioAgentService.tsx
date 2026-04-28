@@ -333,6 +333,10 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         throw new Error("No reader");
       }
 
+      if (!accumulated.trim()) {
+        throw new Error("Empty response from Neural Bridge");
+      }
+
       // Save AI message to Firestore
       await sendEncryptedMessage(conversationId, {
         text: accumulated,
