@@ -25,7 +25,8 @@ import {
   Maximize2,
   Minimize2,
   Zap,
-  Award
+  Award,
+  Bot
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
@@ -54,9 +55,18 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
           const name = (u.displayName || '').toLowerCase();
           if (user && u.id === user.uid) return true;
           if (allowedNames.some(n => name.includes(n))) return true;
-          return u.verificationStatus === 'approved' || u.role === 'specialist' || u.role === 'expert';
+          
+          const role = (u.role || u.primaryRole || u.userType || '').toLowerCase();
+          const isExpertRole = ['expert', 'specialist', 'practitioner', 'therapist', 'coach', 'doctor', 'psychologist', 'founder'].some(r => role.includes(r));
+          
+          return u.verificationStatus === 'approved' || isExpertRole;
         });
-        setExperts(filtered);
+
+        if (filtered.length === 0) {
+          setExperts(all.filter((u: any) => !u.isDeleted));
+        } else {
+          setExperts(filtered);
+        }
       } catch (err) {
         console.error("Error fetching experts:", err);
       } finally {

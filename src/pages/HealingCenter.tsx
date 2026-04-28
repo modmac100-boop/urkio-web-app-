@@ -24,14 +24,28 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const qSpecialists = query(collection(db, 'users'), where('role', '==', 'specialist'), limit(100));
-        const qVerified = query(collection(db, 'users'), where('verificationStatus', '==', 'approved'), limit(100));
-        const [specSnap, verSnap] = await Promise.all([getDocs(qSpecialists), getDocs(qVerified)]);
-        const resultMap = new Map();
-        specSnap.docs.forEach(d => resultMap.set(d.id, { id: d.id, ...d.data() }));
-        verSnap.docs.forEach(d => resultMap.set(d.id, { id: d.id, ...d.data() }));
-        const expertsArray = Array.from(resultMap.values()).filter((e: any) => !e.isDeleted);
-        setExperts(expertsArray);
+        const q = query(collection(db, 'users'), limit(500));
+        const snap = await getDocs(q);
+        const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        const allowedNames = ['ayat', 'alma', 'abed', 'judy'];
+        const filtered = all.filter((u: any) => {
+          if (u.isDeleted) return false;
+          const name = (u.displayName || '').toLowerCase();
+          if (user && u.id === user.uid) return true;
+          if (allowedNames.some(n => name.includes(n))) return true;
+          
+          const role = (u.role || u.primaryRole || u.userType || '').toLowerCase();
+          const isExpertRole = ['expert', 'specialist', 'practitioner', 'therapist', 'coach', 'doctor', 'psychologist', 'founder'].some(r => role.includes(r));
+          
+          return u.verificationStatus === 'approved' || isExpertRole;
+        });
+
+        if (filtered.length === 0) {
+          setExperts(all.filter((u: any) => !u.isDeleted));
+        } else {
+          setExperts(filtered);
+        }
       } catch (err) {
         console.error("Error fetching experts:", err);
       } finally {
@@ -39,7 +53,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
       }
     };
     fetchExperts();
-  }, []);
+  }, [user]);
 
   const filteredExperts = experts.filter(e => {
     const roleContent = (e.specialty || e.primaryRole || '').toLowerCase();
