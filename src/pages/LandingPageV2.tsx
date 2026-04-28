@@ -519,7 +519,7 @@ export function LandingPageV2({
       </section>
 
       {/* ── Pillars ── */}
-      <section id="pillars" className="py-24 relative z-10 bg-[#050A0F]">
+      <section id="pillars" className="py-24 relative z-10 bg-gradient-to-b from-[#050A0F] to-[#012330]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
@@ -564,7 +564,7 @@ export function LandingPageV2({
       </section>
 
       {/* ── Investment / Pricing ── */}
-      <section id="investment" className="py-24 relative z-10 bg-[#020406]">
+      <section id="investment" className="py-24 relative z-10 bg-gradient-to-b from-[#012330] to-[#001220]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
