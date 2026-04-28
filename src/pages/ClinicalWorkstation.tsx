@@ -68,8 +68,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
   const [isSynced, setIsSynced] = useState(true);
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDictating, setIsDictating] = useState(false);
-  const [activeTab, setActiveTab] = useState<'agenda' | 'records' | 'notes' | 'plans'>(initialTab);
+  const [activeTab, setActiveTab] = useState<'agenda' | 'records' | 'notes' | 'plans' | 'dashboard'>(initialTab);
   const [completedSession, setCompletedSession] = useState<any>(null);
   const [showDebrief, setShowDebrief] = useState(false);
   const [confidentialReports, setConfidentialReports] = useState<any[]>([]);
@@ -77,31 +76,30 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
   const lastSavedNotes = useRef('');
   const lastSavedOrientation = useRef('');
 
-  // Sync tab with URL/Prop changes
   useEffect(() => {
     setActiveTab(initialTab);
   }, [initialTab]);
 
   const isAdmin = userData?.role === 'admin' || userData?.role === 'management' || userData?.email === 'urkio@urkio.com';
-  const isExpert = ['specialist', 'expert', 'verifiedexpert', 'psychologist', 'practitioner'].includes(userData?.role || '');
 
-  // Live Queue Listener
   useEffect(() => {
     if (!user?.uid) return;
     const q = isAdmin 
-      ? query(collection(db, 'appointments'), orderBy('date', 'asc'))
-      : query(collection(db, 'appointments'), where('expertId', '==', user.uid), orderBy('date', 'asc'));
+      ? query(collection(db, 'appointments'), orderBy('date', 'desc'))
+      : query(collection(db, 'appointments'), where('expertId', '==', user.uid), orderBy('date', 'desc'));
     
     const unsub = onSnapshot(q, snap => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       setAppointments(data);
       setIsSynced(true);
+      if (data.length > 0 && !selectedCaseId) {
+        setSelectedCaseId(data[0].id);
+      }
     }, () => setIsSynced(false));
 
     return () => unsub();
   }, [user?.uid, isAdmin]);
 
-  // Confidential Reports Listener
   useEffect(() => {
     if (!user?.uid || activeTab !== 'records') return;
     setIsLoadingReports(true);
@@ -122,7 +120,6 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
     return () => unsub();
   }, [user?.uid, activeTab]);
 
-  // Sync edited fields when Case changes
   const selectedCase = appointments.find(a => a.id === selectedCaseId);
   useEffect(() => {
     if (selectedCase) {
@@ -131,7 +128,6 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
     }
   }, [selectedCaseId, selectedCase]);
 
-  // Auto-Save Logic (Notes & Orientation)
   useEffect(() => {
     const timer = setInterval(async () => {
       const notesChanged = sessionNotes && sessionNotes !== lastSavedNotes.current;
@@ -153,7 +149,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
           setIsAutoSaving(false);
         }
       }
-    }, 15000); // Faster 15s pulse for "Control" feel
+    }, 15000);
 
     return () => clearInterval(timer);
   }, [sessionNotes, aiOrientation, selectedCaseId]);
@@ -180,7 +176,6 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
       }
     } catch (err) {
       console.error("AI Synthesis Error:", err);
-      // Fallback premium mock if function fails or is not yet deployed
       const mockInsight = "Strategic assessment indicates a shift towards cognitive resilience. Patient demonstrates improved emotional regulation and is responding well to current therapeutic framework.";
       setAiOrientation(mockInsight);
       toast.error("AI Synthesis Failed - Using local engine", { id });
@@ -189,23 +184,13 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
     }
   };
 
-  // Auto-Trigger AI Insight on selection
-  useEffect(() => {
-    if (selectedCaseId && !aiOrientation && !isSaving) {
-      handleGenerateAI();
-    }
-  }, [selectedCaseId]);
-
   const handleJoinCall = async (patient: any) => {
     try {
-      // Initialize the session perimeter for the patient
       const sessionRef = doc(db, 'appointments', patient.id);
       await updateDoc(sessionRef, {
         sessionStatus: 'active',
         sessionStartedAt: serverTimestamp()
       });
-      // We set this here so that when they come back to this page, 
-      // they have the option to complete the debrief
       setCompletedSession(patient);
       navigate(`/call/${patient.id}`);
       toast.success(t('clinical.bridgeOpened'));
@@ -214,88 +199,10 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
     }
   };
 
-  const handleEndSession = async () => {
-    if (!completedSession) return;
-    try {
-      const sessionRef = doc(db, 'appointments', completedSession.id);
-      await updateDoc(sessionRef, { 
-        status: 'completed',
-        sessionStatus: 'completed',
-        completedAt: serverTimestamp()
-      });
-      setShowDebrief(true);
-    } catch (err) {
-       toast.error(t('clinical.closeSessionError'));
-    }
-  };
-
-  const handleExportData = () => {
-    if (!selectedCase) return toast.error('No case selected for export');
-    const data = {
-      case: selectedCase,
-      notes: sessionNotes,
-      aiOrientation: aiOrientation,
-      exportDate: new Date().toISOString()
-    };
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `urkio_clinical_export_${selectedCase.caseCode || 'case'}.json`;
-    a.click();
-    toast.success('Clinical data exported successfully');
-  };
-
-  const handleCreatePrescription = () => {
-    toast.success('Prescription module initialized. Generating secure token...');
-    // Real logic would open a modal here
-  };
-
-  const handleGenerateSummary = () => {
-    toast.loading('AI generating session summary...', { duration: 2000 });
-    setTimeout(() => {
-      setSessionNotes(prev => prev + "\n\n[SESSION SUMMARY]: Patient displayed positive cognitive response. Recommended follow-up in 7 days.");
-      toast.success('Summary integrated into notes.');
-    }, 2500);
-  };
-
-  const handleVoiceDictation = () => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      return toast.error(t('clinical.voiceNotSupported'));
-    }
-
-    if (isDictating) {
-      setIsDictating(false);
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-
-    recognition.onstart = () => setIsDictating(true);
-    recognition.onresult = (event: any) => {
-      let transcript = '';
-      for (let i = event.resultIndex; i < event.results.length; ++i) {
-        transcript += event.results[i][0].transcript;
-      }
-      setSessionNotes(prev => prev + ' ' + transcript);
-    };
-    recognition.onerror = () => setIsDictating(false);
-    recognition.onend = () => setIsDictating(false);
-
-    recognition.start();
-  };
-
-  const efficiencyRate = appointments.length > 0 
-    ? Math.round((appointments.filter(a => a.status === 'completed').length / appointments.length) * 100) 
-    : 0;
-
   const handleArchiveToVault = async () => {
     if (!selectedCase) return toast.error(t('clinical.vaultError'));
     setIsSaving(true);
+    const id = toast.loading("Archiving to vault...");
     try {
       await addDoc(collection(db, 'confidential_reports'), {
         authorId: user.uid,
@@ -308,7 +215,6 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
         createdAt: serverTimestamp(),
       });
 
-      // 🛡️ [Security] Audit Log for Write Action
       await addDoc(collection(db, 'audit_logs'), {
         userId: user.uid,
         userName: userData.displayName || user.email,
@@ -318,11 +224,11 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
         detail: `Expert archived clinical notes for patient ${selectedCase.userId}`
       });
       await updateDoc(doc(db, 'appointments', selectedCase.id), { status: 'completed' });
-      toast.success(t('clinical.vaultSuccess'));
+      toast.success(t('clinical.vaultSuccess'), { id });
       setSessionNotes('');
       setAiOrientation('');
     } catch (err) {
-      toast.error(t('clinical.vaultError'));
+      toast.error(t('clinical.vaultError'), { id });
     } finally {
       setIsSaving(false);
     }
@@ -334,352 +240,297 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
   );
 
   return (
-    <div className="fixed inset-0 bg-[#faf9f6] text-[#1b1c1a] font-body flex flex-col z-100 overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
-      {/* TopNavBar: Mobile-Responsive */}
-      <nav className="h-16 md:h-20 w-full bg-white border-b border-zinc-100 flex justify-between items-center px-4 md:px-10 shrink-0">
-        <div className="flex items-center gap-4 md:gap-12">
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-             <span className="text-xl font-black tracking-tighter text-[#004e99] dark:text-blue-400">URKIO</span>
-             <span className="hidden md:inline text-zinc-400 font-light uppercase text-[10px] tracking-widest ms-1">{t('clinical.clinical')}</span>
-          </div>
-          <div className="hidden lg:flex items-center bg-zinc-100/60 dark:bg-zinc-800/20 px-6 py-3 rounded-2xl border border-zinc-200/50 dark:border-zinc-700/30 transition-all focus-within:border-[#004e99] focus-within:ring-4 focus-within:ring-[#004e99]/5 group">
-            <SearchIcon className="text-zinc-400 group-focus-within:text-[#004e99] transition-colors size-4" />
-            <input 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-transparent border-none focus:ring-0 text-sm w-60 xl:w-80 font-bold outline-none ms-3 placeholder-zinc-400" 
-              placeholder="Search active cases, names, or codes..." 
-              type="text"
-            />
-            {searchQuery && (
-              <button 
-                onClick={() => setSearchQuery('')}
-                className="size-5 rounded-full bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center ms-2 hover:bg-zinc-300 transition-colors"
-              >
-                <X size={10} className="text-zinc-500" />
-              </button>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center gap-3 md:gap-6">
-          {selectedCase && (
-            <button 
-              onClick={() => handleJoinCall(selectedCase)}
-              className="p-3 bg-[#004e99]/5 hover:bg-[#004e99] hover:text-white text-[#004e99] rounded-2xl transition-all group"
-              title="Initiate Bridge"
-            >
-              <MaterialIcon name="video_call" className="group-hover:scale-110 transition-transform" />
-            </button>
-          )}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-amber-50 rounded-xl border border-amber-100">
-             <MaterialIcon name="verified_user" className="text-amber-600 text-xs!" />
-             <span className="text-[8px] font-black uppercase tracking-widest text-amber-700">{t('clinical.healerMode')}</span>
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-             <div className="hidden md:block text-end">
-                <p className="text-xs font-black">{userData?.displayName || t('home.healer')}</p>
-                <p className="text-[9px] text-[#004e99] uppercase tracking-widest font-black mt-1">{t('clinical.clinicalLead')}</p>
-             </div>
-             <img alt="" className="size-10 md:size-12 rounded-2xl" src={userData?.photoURL || "https://ui-avatars.com/api/?name=U"} />
-          </div>
-        </div>
-      </nav>
-
-      <div className="flex flex-1 flex-col-reverse md:flex-row overflow-hidden">
-        {/* Navigation: Sidebar (Desktop) / Bottom Bar (Mobile) */}
-        <aside className="w-full md:w-80 bg-white border-t md:border-t-0 md:border-e border-zinc-100 flex md:flex-col pt-2 md:pt-10 pb-4 md:pb-8 px-4 md:px-6 gap-2 md:gap-y-1.5 shrink-0 z-110 justify-around md:justify-start">
-          <h3 className="hidden md:block text-[10px] font-black text-zinc-400 uppercase tracking-widest px-4 mb-6">{t('clinical.operations')}</h3>
-          {[
-            { id: 'agenda', label: t('clinical.agenda'), icon: 'calendar_today', path: '/agenda' },
-            { id: 'records', label: t('clinical.vault'), icon: 'folder_shared', path: '/records' },
-            { id: 'notes', label: t('clinical.notes'), icon: 'edit_note', path: '/notes' },
-            { id: 'plans', label: t('clinical.plans'), icon: 'assignment', path: '/plans' }
-          ].map(item => (
-            <div 
-              key={item.id}
-              onClick={() => { setActiveTab(item.id as any); navigate(item.path); }}
-              className={clsx(
-                "flex items-center justify-center md:justify-start gap-3 md:gap-4 px-3 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl cursor-pointer transition-all flex-1 md:flex-none",
-                activeTab === item.id ? "bg-[#004e99] text-white shadow-lg" : "text-zinc-500 hover:bg-zinc-50"
-              )}
-            >
-              <MaterialIcon name={item.icon} className="text-xl!" />
-              <span className="hidden md:inline text-[13px] font-black uppercase tracking-wider">{item.label}</span>
-            </div>
-          ))}
-          <div className="hidden md:block mt-auto">
-            <div className="p-6 bg-zinc-900 rounded-[2.5rem] text-white">
-               <p className="text-[10px] font-black uppercase tracking-widest text-[#00aaff] mb-4">{t('clinical.efficiency')}</p>
-               <h4 className="text-4xl font-black italic mb-2 tracking-tighter">{efficiencyRate}%</h4>
-               <div className="w-full bg-white/10 h-1.5 rounded-full mt-6"><div className="bg-[#00aaff] h-full" style={{ width: `${efficiencyRate}%` }} /></div>
+    <div className="bg-[#fbf9f5] font-['Manrope'] text-[#1b1c1a] min-h-screen flex selection:bg-teal-100">
+      <aside className="fixed left-0 top-0 h-full z-40 flex flex-col h-screen w-64 border-r border-slate-200 bg-slate-50">
+        <div className="p-6 flex flex-col h-full">
+          <div className="mb-8">
+            <span className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">Clinical Portal</span>
+            <div className="mt-4 flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200/50">
+              <img 
+                alt="Profile" 
+                className="w-10 h-10 rounded-full object-cover ring-2 ring-teal-50" 
+                src={userData?.photoURL || "https://ui-avatars.com/api/?name=Admin"} 
+              />
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-[#1B4D4B] truncate">{userData?.displayName || 'Dr. Wellness'}</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">{userData?.role || 'Practitioner'}</p>
+              </div>
             </div>
           </div>
-        </aside>
-
-        {/* Main Canvas */}
-        <main className="flex-1 p-4 md:p-12 overflow-y-auto bg-[#faf9f6]">
-          <div className="max-w-6xl mx-auto">
-            <header className="mb-8 md:mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 sm:gap-0">
-              <div>
-                <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic text-zinc-900 leading-none">
-                  {activeTab === 'agenda' && t('clinical.commandHub')}
-                  {activeTab === 'records' && 'Patient Repository'}
-                  {activeTab === 'notes' && 'Diagnostic Vault'}
-                  {activeTab === 'plans' && 'Treatment Orchestration'}
-                </h1>
-                <p className="text-zinc-500 font-medium mt-2 md:mt-4 text-sm md:text-lg">
-                  {activeTab === 'agenda' && t('clinical.commandHubDesc')}
-                  {activeTab === 'records' && 'Complete index of patient assets and clinical history.'}
-                  {activeTab === 'notes' && 'Secure archive of session debriefs and confidential reports.'}
-                  {activeTab === 'plans' && 'Active treatment pathways and cognitive milestones.'}
-                </p>
-              </div>
-              <div className="flex gap-2 md:gap-4 w-full sm:w-auto">
-                <button 
-                  onClick={() => navigate('/clinical/new')}
-                  className="flex-1 sm:flex-none bg-white border border-zinc-200 text-zinc-900 px-4 md:px-8 py-3 md:py-5 rounded-2xl md:rounded-4xl font-black uppercase text-[10px] md:text-xs tracking-widest flex items-center justify-center gap-2 md:gap-3 transition-all hover:bg-zinc-50 active:scale-95"
-                >
-                  <UserPlus size={16} /> {t('clinical.addPatient')}
-                </button>
-                <button 
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex-1 sm:flex-none bg-zinc-900 text-white px-4 md:px-8 py-3 md:py-5 rounded-2xl md:rounded-4xl font-black uppercase text-[10px] md:text-xs tracking-widest flex items-center justify-center gap-2 md:gap-3 shadow-xl transition-all hover:bg-black active:scale-95"
-                >
-                  <Plus size={16} /> {t('clinical.addBooking')}
-                </button>
-              </div>
-            </header>
-
-            {/* TAB CONTENT SWITCHER */}
-            {activeTab === 'agenda' && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                {/* Tactical Sidebar */}
-                <div className="col-span-1 md:col-span-1 flex md:flex-col gap-4 py-4">
-                   {[
-                     { icon: 'share', label: 'Invite', action: () => {
-                       const link = `${window.location.origin}/call/${selectedCaseId || 'lobby'}`;
-                       navigator.clipboard.writeText(link);
-                       toast.success('Patient Invitation link copied.');
-                     }},
-                     { icon: 'download', label: 'Export', action: handleExportData },
-                     { icon: 'summarize', label: 'Summary', action: handleGenerateSummary },
-                     { icon: 'sync', label: 'Sync', action: () => {
-                       setIsAutoSaving(true);
-                       setTimeout(() => {
-                         setIsAutoSaving(false);
-                         toast.success('Clinical vault synchronized.');
-                       }, 1500);
-                     }},
-                     { icon: 'medication', label: 'Prescription', action: handleCreatePrescription },
-                     { icon: 'forward_to_inbox', label: 'Handover', action: () => {
-                       toast.promise(
-                         new Promise((resolve) => setTimeout(resolve, 2000)),
-                         {
-                           loading: 'Preparing handover package...',
-                           success: 'Handover package secure and dispatched.',
-                           error: 'Failed to prepare handover.',
-                         }
-                       );
-                     }}
-                   ].map(btn => (
-                     <button 
-                        key={btn.label}
-                        onClick={btn.action}
-                        className="p-4 bg-white border border-zinc-100 rounded-3xl flex flex-col items-center gap-2 hover:bg-[#004e99] hover:text-white hover:shadow-xl transition-all group"
-                        title={btn.label}
-                     >
-                       <MaterialIcon name={btn.icon} className="group-hover:scale-110 transition-transform" />
-                       <span className="text-[8px] font-black uppercase tracking-widest">{btn.label}</span>
-                     </button>
-                   ))}
-                </div>
-
-                {/* Patient Queue */}
-                <div className="col-span-1 md:col-span-6 space-y-4 md:space-y-6">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 px-4">{t('clinical.activeQueue')}</h3>
-                  <div className="flex md:flex-col overflow-x-auto md:overflow-x-visible pb-4 md:pb-0 gap-4 md:gap-6 snap-x no-scrollbar">
-                    {filteredAppointments.length > 0 ? filteredAppointments.map((appt) => (
-                        <div 
-                          key={appt.id}
-                          onClick={() => setSelectedCaseId(appt.id)}
-                          className={clsx(
-                            "min-w-[280px] md:min-w-0 p-6 rounded-[2.5rem] border transition-all cursor-pointer relative snap-center",
-                            selectedCaseId === appt.id ? "bg-white border-[#004e99] shadow-2xl scale-[1.02]" : "bg-white/50 border-zinc-100"
-                          )}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 md:gap-6">
-                              <div className="size-12 md:size-16 rounded-2xl bg-zinc-100 overflow-hidden shrink-0">
-                                  <img src={`https://ui-avatars.com/api/?name=${appt.clientName}&background=random`} className="w-full h-full" alt="" />
-                              </div>
-                              <div>
-                                  <h4 className="text-xl md:text-2xl font-black italic text-zinc-900 leading-none mb-2 wrap-break-word">{appt.clientName}</h4>
-                                  <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-[#004e99]">{appt.category || 'Clinical'}</span>
-                              </div>
-                            </div>
-                            <div className="text-end shrink-0">
-                               <div className="flex gap-2 mb-2">
-                                  {appt.priority === 'High' && <span className="size-2 bg-red-500 rounded-full animate-ping" />}
-                               </div>
-                              <p className="text-[8px] md:text-[9px] font-black text-zinc-400 uppercase tracking-widest hover:text-[#004e99] transition-all">{t('clinical.launch')} <ChevronRight className={clsx("inline-block", isRTL && "rotate-180")} size={10} /></p>
-                              <p className="text-xs md:text-sm font-black mt-1">{appt.date ? format(new Date(appt.date), 'HH:mm') : '--:--'}</p>
-                            </div>
-                          </div>
-                        </div>
-                    )) : (
-                        <div onClick={() => setIsModalOpen(true)} className="w-full p-12 md:p-20 text-center border-4 border-dashed border-zinc-200 rounded-[3rem] md:rounded-[4rem] cursor-pointer hover:bg-zinc-50 transition-all">
-                          <p className="text-zinc-400 font-black uppercase text-xs">No entries found for today.</p>
-                        </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Interaction Panel */}
-                <div className="col-span-1 md:col-span-5 space-y-6 md:space-y-8 pb-32 md:pb-0">
-                  <div className="bg-white p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] border border-zinc-100 shadow-xl md:shadow-2xl">
-                      <div className="flex items-center justify-between mb-6 md:mb-8">
-                        <h3 className="text-lg md:text-xl font-black italic flex items-center gap-2 md:gap-3">
-                            <Zap className="text-[#004e99]" size={18} /> {t('clinical.clinicalAI')}
-                        </h3>
-                        <button onClick={handleGenerateAI} className="text-[8px] md:text-[9px] font-black text-[#004e99] uppercase tracking-widest">{t('clinical.regen')}</button>
-                      </div>
-                      <textarea 
-                        value={aiOrientation}
-                        onChange={(e) => setAiOrientation(e.target.value)}
-                        disabled={!selectedCaseId || isSaving}
-                        className="w-full bg-msgr-surface-container-low p-4 md:p-6 rounded-2xl md:rounded-4xl border-none text-xs md:text-sm font-medium text-zinc-700 leading-relaxed italic resize-none min-h-[120px] md:min-h-[160px] focus:ring-1 focus:ring-[#004e99]/30 outline-none"
-                        placeholder={t('clinical.aiPlaceholder')}
-                      />
-                  </div>
-
-                  <div className="bg-zinc-900 p-6 md:p-10 rounded-[2.5rem] md:rounded-[3.5rem] text-white relative shadow-2xl">
-                      <div className="flex justify-between items-center mb-6 md:mb-8">
-                        <h3 className="text-[9px] font-black uppercase tracking-[0.4em] text-[#00aaff]">{t('clinical.liveDiagnostic')}</h3>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={handleVoiceDictation}
-                            className={clsx(
-                              "p-3 rounded-2xl transition-all",
-                              isDictating ? "bg-red-500 animate-pulse" : "bg-white/10 hover:bg-white/20"
-                            )}
-                          >
-                            {isDictating ? <MicOff size={16} /> : <Mic size={16} />}
-                          </button>
-                        </div>
-                      </div>
-                      <textarea 
-                        value={sessionNotes}
-                        onChange={(e) => setSessionNotes(e.target.value)}
-                        disabled={!selectedCaseId}
-                        className="w-full bg-transparent border-none focus:ring-0 text-zinc-200 font-medium text-sm min-h-[250px] md:min-h-[300px] resize-none px-0 custom-scrollbar"
-                        placeholder={t('clinical.notesPlaceholder')}
-                      />
-                      <div className="flex flex-col gap-3 mt-6 md:mt-8">
-                        <button 
-                          onClick={handleArchiveToVault}
-                          disabled={isSaving || !sessionNotes}
-                          className="w-full bg-white text-zinc-900 py-4 md:py-5 rounded-2xl md:rounded-4xl font-black uppercase text-[11px] tracking-widest flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95"
-                        >
-                            <Save size={16} /> {t('clinical.archiveDiagnostics')}
-                        </button>
-                        {completedSession && (
-                          <button 
-                            onClick={handleEndSession}
-                            className="w-full bg-[#00aaff] text-white py-4 md:py-5 rounded-2xl md:rounded-4xl font-black uppercase text-[11px] tracking-widest flex items-center justify-center gap-3 transition-all hover:bg-[#0088cc] shadow-lg shadow-[#00aaff]/20 active:scale-95"
-                          >
-                              <Zap size={16} /> {t('clinical.finalizeSession')}
-                          </button>
-                        )}
-                      </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'records' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                {isLoadingReports ? (
-                  Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="h-64 bg-white border border-zinc-100 rounded-[2.5rem] animate-pulse" />
-                  ))
-                ) : confidentialReports.length > 0 ? confidentialReports.map(report => (
-                  <div key={report.id} className="bg-white border border-zinc-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all group">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="size-14 rounded-2xl bg-zinc-50 flex items-center justify-center border border-zinc-100">
-                        <Archive className="size-6 text-[#004e99]" />
-                      </div>
-                      <div className="min-w-0">
-                        <h4 className="text-lg font-black italic text-zinc-900 mb-1 truncate">{report.title}</h4>
-                        <p className="text-[9px] font-bold text-[#004e99] uppercase tracking-widest">{report.caseCode || 'URK-REPORT'}</p>
-                      </div>
-                    </div>
-                    <div className="space-y-3 mb-8">
-                       <p className="text-xs text-zinc-500 line-clamp-3 leading-relaxed italic">{report.content || 'No report content available.'}</p>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-zinc-400">
-                       <span>{report.createdAt?.toDate ? format(report.createdAt.toDate(), 'MMM dd, yyyy') : '--'}</span>
-                       <button 
-                         onClick={() => { setSessionNotes(report.content); setAiOrientation(report.aiOrientation || ''); setActiveTab('notes'); }}
-                         className="text-[#004e99] hover:underline"
-                       >
-                         Review Report
-                       </button>
-                    </div>
-                  </div>
-                )) : (
-                  <div className="col-span-full py-20 text-center border-4 border-dashed border-zinc-100 rounded-[3rem]">
-                    <Archive className="size-16 text-zinc-100 mx-auto mb-6" />
-                    <p className="text-zinc-400 font-black uppercase text-xs tracking-widest">No confidential reports found in your vault.</p>
-                  </div>
+          
+          <nav className="flex-1 space-y-1">
+            {[
+              { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', path: '/' },
+              { id: 'agenda', label: 'Clinical Agenda', icon: 'calendar_today' },
+              { id: 'plans', label: 'Protocols', icon: 'description' },
+              { id: 'records', label: 'Case Dossiers', icon: 'folder_shared' },
+              { id: 'settings', label: 'Settings', icon: 'settings', path: '/settings' }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  if (item.path) navigate(item.path);
+                  else setActiveTab(item.id as any);
+                }}
+                className={clsx(
+                  "w-full flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-xl group",
+                  activeTab === item.id 
+                    ? "text-[#1B4D4B] font-bold bg-teal-50 border-r-4 border-[#1B4D4B]" 
+                    : "text-slate-500 hover:text-[#1B4D4B] hover:bg-slate-100"
                 )}
-              </div>
-            )}
+              >
+                <MaterialIcon name={item.icon} className={clsx(activeTab === item.id ? "text-[#1B4D4B]" : "text-slate-400 group-hover:text-[#1B4D4B]")} />
+                <span className="text-sm">{item.label}</span>
+              </button>
+            ))}
+          </nav>
 
-            {activeTab === 'notes' && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                {/* We'll fetch from confidential_reports here in a real app, for now let's show formatted list */}
-                <div className="bg-white border border-zinc-100 p-12 rounded-[4rem] text-center">
-                  <Archive className="size-16 text-zinc-200 mx-auto mb-6" />
-                  <h3 className="text-2xl font-black italic mb-2 tracking-tight">Secure Archive Access</h3>
-                  <p className="text-zinc-400 text-sm max-w-sm mx-auto mb-10">Access your historical diagnostic reports and AI orientations securely indexed by case code.</p>
-                  <button className="bg-zinc-900 text-white px-10 py-5 rounded-4xl font-black uppercase text-xs tracking-widest shadow-xl">
-                    Sync Vault Data
-                  </button>
-                </div>
-              </div>
-            )}
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="mt-auto bg-[#1B4D4B] text-white px-4 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-teal-900/20 active:scale-95"
+          >
+            <MaterialIcon name="add" className="text-xl" />
+            New Protocol
+          </button>
+        </div>
+      </aside>
 
-            {activeTab === 'plans' && (
-              <div className="grid grid-cols-1 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div className="bg-zinc-900 text-white p-12 rounded-[4rem] flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden relative">
-                   <div className="absolute top-0 right-0 w-96 h-96 bg-[#00aaff]/10 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2" />
-                   <div className="relative z-10 text-center md:text-left">
-                      <h3 className="text-4xl font-black italic mb-4 tracking-tighter leading-none">Treatment Pathways</h3>
-                      <p className="text-zinc-400 font-medium max-w-md">Orchestrate cognitive milestones and track patient progression through customized healing modules.</p>
-                   </div>
-                   <button 
-                     onClick={() => {
-                       toast.success('Treatment pathway module initialized.');
-                       setActiveTab('agenda');
-                     }}
-                     className="relative z-10 bg-[#00aaff] text-white px-12 py-6 rounded-4xl font-black uppercase text-xs tracking-widest shadow-2xl shadow-blue-500/20 active:scale-95 transition-all"
-                   >
-                      Initialize New Plan
-                   </button>
+      <div className="flex-1 ml-64 flex flex-col">
+        <header className="h-16 px-8 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 flex justify-between items-center">
+          <div className="flex items-center gap-8 flex-1">
+            <span className="text-2xl font-['Newsreader'] text-[#1B4D4B] font-bold">Clinical Nexus</span>
+            <div className="relative w-96">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+              <input 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-full text-sm focus:ring-1 focus:ring-[#1B4D4B] outline-none transition-all focus:bg-white" 
+                placeholder="Search clinical records..." 
+                type="text"
+              />
+            </div>
+          </div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4">
+              <button className="text-slate-400 hover:text-[#1B4D4B] transition-colors relative">
+                <MaterialIcon name="notifications" />
+                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+              </button>
+              <button className="text-slate-400 hover:text-[#1B4D4B] transition-colors"><MaterialIcon name="help_outline" /></button>
+            </div>
+            <div className="h-6 w-px bg-slate-200"></div>
+            <button 
+              onClick={() => toast.success("Secure Terminal Initialized")}
+              className="bg-[#1B4D4B] text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-[#256663] transition-all shadow-md active:scale-95"
+            >
+              Live Terminal
+            </button>
+          </div>
+        </header>
+
+        <main className="p-8 grid grid-cols-12 gap-8">
+          <div className="col-span-12 flex justify-between items-end">
+            <div>
+              <h1 className="text-4xl font-['Newsreader'] font-bold text-[#1B4D4B] mb-1 capitalize">
+                {activeTab.replace('-', ' ')}
+              </h1>
+              <p className="text-slate-500 text-sm font-medium">{format(new Date(), 'EEEE, dd MMMM yyyy')}</p>
+            </div>
+            <div className="flex gap-2">
+              <span className="bg-[#d2e5c9] text-[#1B4D4B] px-4 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-2 border border-[#b9ccb1]">
+                <MaterialIcon name="verified" className="text-xs fill-1" />
+                EXPERT VERIFIED
+              </span>
+            </div>
+          </div>
+
+          <div className="col-span-12 grid grid-cols-4 gap-8">
+            {[
+              { label: 'Active Entities', val: appointments.length, icon: 'group', color: 'bg-teal-50', text: 'text-[#1B4D4B]', trend: '+12%' },
+              { label: 'Pending Analysis', val: appointments.filter(a => a.status === 'pending').length, icon: 'analytics', color: 'bg-amber-50', text: 'text-amber-700', trend: 'Pending' },
+              { label: 'Success Protocol', val: 'Optimum', icon: 'verified_user', color: 'bg-blue-50', text: 'text-blue-700', trend: '98%' },
+              { label: 'Vault Density', val: 'High', icon: 'database', color: 'bg-purple-50', text: 'text-purple-700', trend: '8.4 TB' }
+            ].map((metric, i) => (
+              <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:shadow-xl transition-all duration-500">
+                <div className="flex justify-between items-start mb-4">
+                  <div className={clsx("p-3 rounded-xl transition-transform group-hover:scale-110 duration-500", metric.color)}>
+                    <MaterialIcon name={metric.icon} className={metric.text} />
+                  </div>
+                  <span className={clsx("text-[10px] font-bold px-2 py-1 rounded-lg", 
+                    metric.trend.includes('+') ? "bg-emerald-50 text-emerald-600" : 
+                    metric.trend === 'Pending' ? "bg-amber-50 text-amber-600" : 
+                    "bg-slate-50 text-slate-500"
+                  )}>
+                    {metric.trend}
+                  </span>
                 </div>
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">{metric.label}</p>
+                <p className="text-3xl font-bold text-[#1B4D4B] font-['Newsreader']">{metric.val}</p>
               </div>
-            )}
+            ))}
+          </div>
+
+          <div className="col-span-8 bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+            <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+              <h2 className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">
+                {activeTab === 'records' ? 'Case Repository' : 'Incoming Protocols'}
+              </h2>
+              <button 
+                onClick={() => setActiveTab('records')}
+                className="text-xs text-[#1B4D4B] font-bold flex items-center gap-2 hover:underline group"
+              >
+                View Archive <MaterialIcon name="arrow_forward" className="text-sm group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
+            
+            <div className="divide-y divide-slate-50 flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
+              {(activeTab === 'records' ? confidentialReports : filteredAppointments).length > 0 ? 
+                (activeTab === 'records' ? confidentialReports : filteredAppointments).map((item: any, i) => (
+                <div 
+                  key={item.id} 
+                  onClick={() => setSelectedCaseId(item.id)}
+                  className={clsx(
+                    "p-6 flex items-center justify-between transition-all cursor-pointer group",
+                    selectedCaseId === item.id ? "bg-teal-50/50" : "hover:bg-slate-50"
+                  )}
+                >
+                  <div className="flex items-center gap-6">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm ring-1 ring-slate-100 transition-transform group-hover:scale-105">
+                      <img 
+                        alt="Imagery" 
+                        className="w-full h-full object-cover" 
+                        src={item.imageUrl || (i % 3 === 0 ? "https://lh3.googleusercontent.com/aida-public/AB6AXuDo_ljHupEXoqeW2w_d-euXBMWUK8Zrgnd-YC9mzMfbLzWjv3mWGLMXcRvN8_UL5K8Z3ULkwaKUrOWmN7edygFekue_r5ZbXhxWJ-vgiJblxqacomtIhydAeaew7ahh8l59of3-6HqdFAiWDolU4dgw9D8GKti2vV6ClHDjlqXDJLM1pDRXvUvNT4bIk7_Rfbztvk6133gg1rrKHlWR4yVZK0U-Z1Wv-rPD6AOZaFn3lnpNeubzzIDg_aBZLhTczYh8OqXQ3vVFpqel" : "https://lh3.googleusercontent.com/aida-public/AB6AXuC04F5ewk2WjeShEWA49R9WsZcb7Gwq6fjtmrZi0c1e3NVkSX8iJFRaQmu3iMJPzZUBcNFD67Cm_riS07gnz4fkyvdbbFTelUKZblVQwAZ94UFupfP8yQ8FAj-qdU--MnWjjhMPIa5Z0kvhakhZrZX_PPA0OkidkVLoTKeV2MvMQIA6BJVO9gLZFnU9dzj9d3NYUD5vlY4o3RCysk79JzPHha1SouPJ5QVKGJxVbFndVQ8ot9UOqyX7IfcIaqmw9U1I9dbHiou7o6r9")} 
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">#{item.caseCode || `PR-${item.id.substring(0,4)}`}</p>
+                      <h3 className="text-lg font-bold text-[#1B4D4B] font-['Newsreader']">{item.clientName || item.title}</h3>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-10">
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-[#1B4D4B]">{item.category || 'Clinical Trial'}</p>
+                      <p className="text-[10px] text-slate-400 font-medium">
+                        {item.createdAt?.toDate ? format(item.createdAt.toDate(), 'HH:mm') : 'Initiated 2h ago'}
+                      </p>
+                    </div>
+                    <span className={clsx(
+                      "px-4 py-2 rounded-full text-[10px] font-black tracking-widest border",
+                      item.status === 'completed' ? "bg-slate-50 text-slate-400 border-slate-100" :
+                      item.status === 'pending' ? "bg-amber-50 text-amber-700 border-amber-100" :
+                      "bg-teal-50 text-[#1B4D4B] border-teal-100"
+                    )}>
+                      {(item.status || 'active').toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+              )) : (
+                <div className="p-20 text-center">
+                  <MaterialIcon name="inventory_2" className="text-6xl text-slate-100 mb-4" />
+                  <p className="text-slate-400 font-bold uppercase text-xs tracking-widest">No active protocols detected</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="col-span-4 flex flex-col gap-8">
+            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col h-full min-h-[500px]">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">
+                  Dossier: <span className="font-normal italic">{selectedCase?.clientName?.split(' ')[0] || 'Unknown'}</span>
+                </h2>
+                <button className="p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                  <MaterialIcon name="more_vert" className="text-slate-300" />
+                </button>
+              </div>
+
+              {selectedCase ? (
+                <div className="space-y-8 flex-1 flex flex-col">
+                  <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Biometric Sync Status</span>
+                      <span className="text-[10px] font-black text-emerald-600 flex items-center gap-1">
+                         <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                         ONLINE
+                      </span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-[#1B4D4B] h-full w-[82%] transition-all duration-1000"></div>
+                    </div>
+                    <p className="mt-2 text-[9px] font-bold text-slate-400 text-right uppercase tracking-tighter">82% Signal Strength</p>
+                  </div>
+
+                  <div className="flex-1 flex flex-col">
+                    <label className="block text-xs font-bold text-[#1B4D4B] uppercase tracking-widest mb-3">Clinical Observations</label>
+                    <textarea 
+                      value={sessionNotes}
+                      onChange={(e) => setSessionNotes(e.target.value)}
+                      className="w-full flex-1 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium focus:ring-1 focus:ring-[#1B4D4B] focus:bg-white transition-all p-6 outline-none resize-none custom-scrollbar" 
+                      placeholder={`Enter findings for protocol ${selectedCase?.caseCode || 'URKIO'}...`}
+                    />
+                  </div>
+
+                  <div className="space-y-3 pt-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <button 
+                        onClick={handleArchiveToVault}
+                        className="flex items-center justify-between px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-[#1B4D4B] hover:bg-slate-50 transition-all font-bold text-xs group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <MaterialIcon name="lock" className="text-lg group-hover:scale-110 transition-transform" />
+                          <span>Vault</span>
+                        </div>
+                        <MaterialIcon name="chevron_right" className="text-sm opacity-30" />
+                      </button>
+                      <button 
+                        onClick={() => toast.success("Dispatching clinical data...")}
+                        className="flex items-center justify-between px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-[#1B4D4B] hover:bg-slate-50 transition-all font-bold text-xs group"
+                      >
+                        <div className="flex items-center gap-3">
+                          <MaterialIcon name="send" className="text-lg group-hover:scale-110 transition-transform" />
+                          <span>Dispatch</span>
+                        </div>
+                        <MaterialIcon name="chevron_right" className="text-sm opacity-30" />
+                      </button>
+                    </div>
+                    
+                    <button 
+                      onClick={() => handleJoinCall(selectedCase)}
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1B4D4B] text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-[#256663] transition-all shadow-xl shadow-teal-900/10 active:scale-95"
+                    >
+                      <MaterialIcon name="terminal" />
+                      Secure Terminal
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex-1 flex flex-col items-center justify-center text-center opacity-30">
+                  <MaterialIcon name="folder_open" className="text-6xl mb-4" />
+                  <p className="text-xs font-bold uppercase tracking-widest">Select a protocol to view dossier</p>
+                </div>
+              )}
+            </div>
+
+            <div className="bg-[#1B4D4B] text-white p-8 rounded-[2.5rem] relative overflow-hidden shadow-xl group">
+              <div className="relative z-10">
+                <p className="text-xl font-['Newsreader'] font-bold mb-3 italic">Protocol Insight</p>
+                <p className="text-sm text-teal-100/80 mb-6 leading-relaxed">
+                  {aiOrientation || "Integrate the new bio-rhythmic markers for more accurate analysis of the Urkio stream."}
+                </p>
+                <button 
+                  onClick={handleGenerateAI}
+                  className="text-xs font-bold border-b border-teal-400 pb-1 hover:text-teal-400 transition-colors uppercase tracking-widest"
+                >
+                  Review Guidelines
+                </button>
+              </div>
+              <div className="absolute -right-8 -bottom-8 opacity-10 group-hover:opacity-20 transition-opacity duration-1000 rotate-12 group-hover:rotate-0">
+                <MaterialIcon name="psychology" className="text-[160px]" />
+              </div>
+            </div>
           </div>
         </main>
       </div>
-
-      {/* FOOTER: Fixed Sync Status */}
-      <footer className="h-10 bg-white border-t border-zinc-100 hidden sm:flex items-center justify-between px-10">
-         <div className="flex items-center gap-3">
-            <div className={clsx("size-2 rounded-full", isSynced ? "bg-ur-secondary animate-pulse" : "bg-red-500")} />
-            <span className="text-[9px] font-black uppercase tracking-tighter text-zinc-400">{t('clinical.status')}: {isSynced ? t('clinical.synced') : t('clinical.offline')}</span>
-         </div>
-      </footer>
 
       <NewAppointmentModal 
         isOpen={isModalOpen}
@@ -688,7 +539,6 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
         userData={userData}
       />
 
-      {/* Debrief Modal Overlay */}
       <AnimatePresence>
         {showDebrief && completedSession && (
           <PostSessionDebrief 

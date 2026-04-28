@@ -133,29 +133,55 @@ export const UrkioAgentService: React.FC<UrkioAgentServiceProps> = ({
     setIsTyping(true);
 
     try {
-      // Simulate API Call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      const responseContent = getMockResponse(textToSend, activeMood);
-      
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
+          condition: activeMood,
+          language: i18n.language
+        })
+      });
+
+      if (!response.ok) throw new Error('API_FAILED');
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: responseContent,
+        content: '',
         timestamp: new Date()
       };
-
+      
       setMessages(prev => [...prev, assistantMessage]);
-      speak(responseContent);
+      
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let fullText = '';
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value);
+          fullText += chunk;
+          setMessages(prev => prev.map(m => 
+            m.id === assistantMessage.id ? { ...m, content: fullText } : m
+          ));
+        }
+      }
+
+      speak(fullText);
     } catch (error) {
-      const errorMessage: Message = {
+      console.error('Urkio Agent Error:', error);
+      const fallbackText = getMockResponse(textToSend, activeMood);
+      const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: t('agent.error'),
+        content: fallbackText,
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, errorMessage]);
-      speak(t('agent.error'));
+      setMessages(prev => [...prev.slice(0, -1), assistantMessage]);
+      speak(fallbackText);
     } finally {
       setIsLoading(false);
       setIsTyping(false);

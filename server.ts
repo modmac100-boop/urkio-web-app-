@@ -70,7 +70,7 @@ async function startServer() {
       Keep the tone warm, social-worker-like, and premium. Format the response in clear sections.`;
 
       const result = await client.models.generateContent({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash',
         contents: [{
           role: 'user',
           parts: [
@@ -165,7 +165,7 @@ async function startServer() {
       - Keep the tone premium and consistent with Urkio's branding.`;
 
       const result = await client.models.generateContentStream({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-1.5-flash',
         contents: [...history.slice(0, -1), { role: 'user', parts: [{ text: lastMessage }] }],
         config: {
           systemInstruction: systemPrompt,

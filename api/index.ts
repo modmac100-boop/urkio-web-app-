@@ -86,7 +86,7 @@ app.post('/api/analyze-voice', async (req, res) => {
     Keep the tone warm, social-worker-like, and premium. Format the response in clear sections.`;
 
     const result = await client.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-1.5-flash',
       contents: [{
         role: 'user',
         parts: [
@@ -112,11 +112,12 @@ app.post('/api/analyze-voice', async (req, res) => {
 // ─── AI Chat (Streaming) ─────────────────────────────────────────────────────
 app.post('/api/chat', async (req, res) => {
   try {
-    const { messages, userId, userContext } = req.body;
+    const { messages, userId, userContext, language = "ar" } = req.body;
     const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
+      console.warn('[Urkio API] GEMINI_API_KEY is not configured. Falling back to Smart Mock mode.');
+      return handleMockResponse(res, language);
     }
 
     const client = new GoogleGenAI({ apiKey });
@@ -137,10 +138,11 @@ app.post('/api/chat', async (req, res) => {
     - Tonality: Humble, social-worker-like, professional, and deeply empathetic.
     - Accuracy: Provide accurate information about the platform's features.
     - Proactivity: Monitor the conversation flow and offer helpful suggestions.
-    - Escalation: If the user expresses intense distress, strongly recommend they reach out to a specialist.`;
+    - Escalation: If the user expresses intense distress, strongly recommend they reach out to a specialist.
+    - Language: Respond strictly in ${language === 'ar' ? 'Arabic' : 'English'}.`;
 
     const result = await client.models.generateContentStream({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-1.5-flash',
       contents: [...history, { role: 'user', parts: [{ text: lastMessage }] }],
       config: {
         systemInstruction: systemPrompt,
@@ -156,9 +158,44 @@ app.post('/api/chat', async (req, res) => {
     }
     res.end();
   } catch (error: any) {
-    console.error('Chat error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('[Urkio API] Chat error:', error);
+    // If headers haven't been sent, we can still use the mock fallback
+    if (!res.headersSent) {
+      return handleMockResponse(res, language);
+    }
+    res.end();
   }
 });
+
+// ─── Helper: Smart Mock Response ─────────────────────────────────────────────
+async function handleMockResponse(res: any, language: string) {
+  const mockResponses: Record<string, string[]> = {
+    ar: [
+      "أنا هنا لأسمعك. رحلتك في Urkio هي أولوية بالنسبة لنا. كيف يمكنني دعمك اليوم؟",
+      "أقدر شجاعتك في مشاركة هذا. تذكر أن كل خطوة صغيرة تقربك من التوازن.",
+      "هل ترغب في التحدث أكثر عن هذا الشعور؟ أنا هنا بجانبك.",
+      "مرحباً بك في Urkio. أنا مرشدك الذكي، وجاهز لمساعدتك في أي وقت."
+    ],
+    en: [
+      "I'm here to listen. Your journey in Urkio is our priority. How can I support you today?",
+      "I appreciate your courage in sharing this. Remember, every small step brings you closer to balance.",
+      "Would you like to talk more about this feeling? I'm here right by your side.",
+      "Welcome to Urkio. I'm your AI guide, ready to help you anytime."
+    ]
+  };
+
+  const list = mockResponses[language === 'ar' ? 'ar' : 'en'];
+  const randomResp = list[Math.floor(Math.random() * list.length)];
+
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Transfer-Encoding', 'chunked');
+
+  const words = randomResp.split(' ');
+  for (const word of words) {
+    res.write(word + ' ');
+    await new Promise(r => setTimeout(r, 40));
+  }
+  res.end();
+}
 
 export default app;

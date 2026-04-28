@@ -1,14 +1,50 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
+exports.processUrkioChat = exports.grantPremiumAccess = exports.generateClinicalSynthesis = exports.agoraToken = exports.monitorSessionIntegrity = exports.generateClinicalOrientation = exports.seedAgentBehaviorConfig = exports.handleVoiceBooking = exports.onNotificationCreatedPushDispatcher = exports.getStreamToken = exports.eventReminderTask = exports.onMessageCreated = exports.onFollowCreated = exports.onNoteCreated = exports.analyzeVoice = exports.chat = void 0;
 const logger = require("firebase-functions/logger");
-// Removed unused V2 import
 const firestore_1 = require("firebase-functions/v2/firestore");
 const admin = require("firebase-admin");
+const generative_ai_1 = require("@google/generative-ai");
 const genai_1 = require("@google/genai");
+const functionsV1 = require("firebase-functions/v1");
+const CryptoJS = require("crypto-js");
 admin.initializeApp();
 const db = admin.firestore();
-const functionsV1 = require("firebase-functions/v1");
+// ==========================================
+// URKIO THERAPY CONFIG
+// ==========================================
+const GEMINI_API_KEY_URKIO = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+const genAI_Urkio = new generative_ai_1.GoogleGenerativeAI(GEMINI_API_KEY_URKIO);
+const ENCRYPTION_KEY = "Urkio-Private-Security-Key-2026";
+const SYSTEM_PROMPTS = {
+    panic: `أنت مرشد Urkio المتخصص في التعامل مع نوبات الهلع. 
+  Tone: هادئ جداً، توجيهي، وداعم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Response Style: جمل قصيرة، تركيز على التنفس والتأريض (Grounding).
+  Instruction: وجه المستخدم عبر تقنية 5-4-3-2-1 فوراً. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+    anxiety: `أنت مرشد Urkio المتخصص في القلق.
+  Tone: متعاطف، مطمئن، ودافئ.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ساعد المستخدم على الهدوء والتحقق من مشاعره بصدق. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+    depression: `أنت مرشد Urkio لمواجهة الاكتئاب، تحمل الأمل والتعاطف العميق.
+  Tone: صبور، غير صادر للأحكام، ورحيم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ركز على الإنجازات الصغيرة جداً وكن موجوداً من أجل المستخدم. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+    general: `أنت مرشد Urkio، مساعد ذكاء اصطناعي مهني ومتعاطف للغاية.
+  Persona: أخصائي اجتماعي إنساني (Humble, social-worker-like, deeply empathetic).
+  Tone: حس إنساني دافئ (Empathetic, human feel).
+  Goal: اجعل المستخدم يشعر بأنه مسموع، مفهوم، ومدعوم في رحلة شفائه.
+  Language: استجب بالعربية (الأساسية) أو الإنجليزية حسب لغة المستخدم.`
+};
+/**
+ * دالة لتقييم مستوى الخطر في الرسالة
+ */
+const assessRiskLevel = (text) => {
+    const highRisk = [/إنهاء حياتي/i, /أريد الموت/i, /self-harm/i, /suicide/i];
+    if (highRisk.some(p => p.test(text)))
+        return 'high';
+    return 'low';
+};
 // 1. API Route for the AI Agent (Streaming Chat)
 exports.chat = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }).https.onRequest(async (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
@@ -23,50 +59,52 @@ exports.chat = functionsV1.runWith({ secrets: ["GOOGLE_GENERATIVE_AI_API_KEY"] }
         return;
     }
     try {
-        const { messages, userId } = req.body;
-        logger.info("Chat request received", { userId, messageCount: messages?.length });
-        if (!userId) {
-            logger.error("userId is missing in request body");
-            res.status(400).json({ error: 'userId is required' });
+        const { messages, userId, condition = "general" } = req.body;
+        // [DEBUG] Log Incoming Data
+        logger.info("[DEBUG] Raw Request Body:", { body: req.body });
+        if (!userId || !messages || messages.length === 0) {
+            res.status(400).json({ error: 'userId and messages are required' });
             return;
         }
-        const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-        if (!apiKey) {
-            logger.error("GOOGLE_GENERATIVE_AI_API_KEY is not set");
-            res.status(500).json({ error: 'API key not configured' });
+        // Process messages and handle decryption
+        const processedMessages = messages.map((m) => {
+            let content = m.content;
+            try {
+                // Simple heuristic to check if it might be encrypted (base64 and long)
+                if (content && content.length > 20 && !content.includes(" ")) {
+                    const bytes = CryptoJS.AES.decrypt(content, ENCRYPTION_KEY);
+                    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                    if (originalText) {
+                        content = originalText;
+                        logger.info("[DEBUG] Decryption Success for message");
+                    }
+                }
+            }
+            catch (e) {
+                // Not encrypted or wrong key, keep as is
+            }
+            return {
+                role: m.role === 'user' ? 'user' : 'model',
+                parts: [{ text: content }]
+            };
+        });
+        const lastUserMsg = processedMessages[processedMessages.length - 1]?.parts?.[0]?.text || '';
+        logger.info("[DEBUG] Decrypted/Final last message:", { text: lastUserMsg });
+        // --- SAFETY GUARD ---
+        if (assessRiskLevel(lastUserMsg) === 'high') {
+            res.write("أنا أسمع مدى الألم الذي تشعر به. حياتك غالية جداً. يرجى التواصل مع أخصائي محترف فوراً أو الاتصال بخط الطوارئ. أنا أقوم الآن بإبلاغ أخصائي بشري لدعمك.");
+            res.end();
             return;
         }
-        // Fetch long-term memory
-        const historyDoc = await db.collection('chat_history').doc(userId).get();
-        const savedHistory = historyDoc.exists
-            ? (historyDoc.data()?.messages || [])
-            : [];
-        // Build conversation from incoming messages
-        const incomingHistory = messages.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            parts: [{ text: m.content }]
-        }));
-        // Merge saved history with new incoming, deduplicate
-        const allHistory = [...savedHistory, ...incomingHistory];
-        const lastUserMsg = allHistory[allHistory.length - 1]?.parts?.[0]?.text || '';
-        const systemInstruction = `You are the Urkio Guide, a professional, empathetic, and highly flexible AI assistant for the Urkio platform.
-You deeply search and analyze information to provide accurate, comprehensive, and professional answers.
-You are adaptable to the user's unique needs and conversational style.
-Monitor user progress and be proactive: if a user is stressed, offer help; if they succeed, celebrate with them.
-Use a humble, social-worker-like tone.
-If a question is too complex emotionally or clinically, say: "This is deep—I'm looping in one of our specialists to look at this with you."
-Always use Google Search to find the most up-to-date, accurate information when answering user questions.`;
-        const genAI = new genai_1.GoogleGenAI({ apiKey });
-        // Google Search grounding tool
-        const googleSearchTool = { googleSearch: {} };
-        // Chat history (all except the last/current user message)
-        const chatHistory = allHistory.slice(0, -1);
-        const responseStream = await genAI.models.generateContentStream({
+        const conditionInstruction = SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general;
+        const finalSystemInstruction = `You are the Urkio Guide. Always prioritize Arabic. Humble social-worker tone.\n\nSPECIFIC MODE: ${conditionInstruction}`;
+        const model = genAI_Urkio.getGenerativeModel({
             model: 'gemini-1.5-flash',
-            contents: [...chatHistory, { role: 'user', parts: [{ text: lastUserMsg }] }],
-            config: {
-                systemInstruction,
-                tools: [googleSearchTool],
+            systemInstruction: finalSystemInstruction
+        });
+        const result = await model.generateContentStream({
+            contents: processedMessages,
+            generationConfig: {
                 temperature: 0.8,
                 maxOutputTokens: 2048,
             }
@@ -74,15 +112,15 @@ Always use Google Search to find the most up-to-date, accurate information when 
         res.setHeader('Content-Type', 'text/plain; charset=utf-8');
         res.setHeader('Transfer-Encoding', 'chunked');
         let fullText = '';
-        for await (const chunk of responseStream) {
-            const chunkText = chunk.text ?? '';
+        for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
             fullText += chunkText;
             res.write(chunkText);
         }
         res.end();
         // Save updated history to Firestore (keep last 50 turns)
         const updatedHistory = [
-            ...allHistory,
+            ...processedMessages,
             { role: 'model', parts: [{ text: fullText }] }
         ].slice(-50);
         await db.collection('chat_history').doc(userId).set({
@@ -92,15 +130,15 @@ Always use Google Search to find the most up-to-date, accurate information when 
         return;
     }
     catch (error) {
-        logger.error("Error in chat route:", {
-            message: error.message,
-            stack: error.stack,
-            userId: req.body.userId
-        });
-        res.status(500).json({
-            error: "Failed to process chat request.",
-            details: error.message
-        });
+        logger.error("[CRITICAL ERROR] in chat function:", error);
+        // [DEBUG] Log more error details
+        if (error.response) {
+            logger.error("[DEBUG] Gemini API Error Response:", {
+                data: error.response.data || error.response,
+                status: error.response.status
+            });
+        }
+        res.status(500).send("Sorry, I encountered an issue (عذراً، حدث خطأ في النظام)");
     }
 });
 // 1.1 Voice Note Analysis API (Production)
@@ -938,6 +976,107 @@ exports.generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE_GENE
     catch (error) {
         logger.error("Error in generateClinicalSynthesis:", error);
         throw new functionsV1.https.HttpsError('internal', error.message);
+    }
+});
+// ==========================================
+// PREMIUM ACCESS AUTOMATION
+// ==========================================
+/**
+ * دالة سحابية لمنح العضوية الممتازة للمستخدم (Premium Access)
+ * تقوم بتعيين Custom Claim { premium: true } وتحديث وثيقة المستخدم في Firestore
+ */
+exports.grantPremiumAccess = functionsV1.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functionsV1.https.HttpsError('unauthenticated', 'يجب تسجيل الدخول لاستدعاء هذه الدالة.');
+    }
+    const { uid } = data; // معرف المستخدم المراد ترقيته
+    if (!uid) {
+        throw new functionsV1.https.HttpsError('invalid-argument', 'يجب توفير معرف المستخدم (UID)');
+    }
+    try {
+        // 1. تعيين الـ Custom Claim (الصلاحية)
+        await admin.auth().setCustomUserClaims(uid, { premium: true });
+        // 2. تحديث قاعدة البيانات لسهولة العرض في لوحة التحكم
+        await db.collection('users').doc(uid).update({
+            plan: 'premium',
+            premiumSince: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        logger.info(`Premium access granted to user ${uid}`);
+        return { success: true, message: `تم منح العضوية الممتازة للمستخدم ${uid} بنجاح.` };
+    }
+    catch (error) {
+        logger.error("Error granting premium access:", error);
+        throw new functionsV1.https.HttpsError('internal', 'حدث خطأ أثناء تحديث الصلاحيات.');
+    }
+});
+// ═══════════════════════════════════════════════════════════════════════════
+// 9. URKIO THERAPY AGENT — Firestore Trigger
+// ═══════════════════════════════════════════════════════════════════════════
+exports.processUrkioChat = (0, firestore_1.onDocumentCreated)("conversations/{conversationId}/messages/{messageId}", async (event) => {
+    const snapshot = event.data;
+    if (!snapshot)
+        return;
+    const data = snapshot.data();
+    const { conversationId } = event.params;
+    // Avoid infinite loops (don't respond to ourselves)
+    if (data.user && (data.user._id === 2 || data.user._id === '2'))
+        return;
+    try {
+        let userContent = [];
+        const condition = data.condition || "general";
+        // 1. Get User Input (Handle Encrypted Text or Audio)
+        if (data.audio) {
+            userContent.push({
+                inlineData: {
+                    mimeType: "audio/m4a",
+                    data: data.audio
+                }
+            });
+            userContent.push({ text: "Please analyze this voice message and respond empathetically." });
+        }
+        else {
+            let text = data.text;
+            // Attempt decryption if it looks encrypted
+            try {
+                if (text && text.length > 20 && !text.includes(" ")) {
+                    const bytes = CryptoJS.AES.decrypt(text, ENCRYPTION_KEY);
+                    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                    if (originalText)
+                        text = originalText;
+                }
+            }
+            catch (e) {
+                // Not encrypted
+            }
+            if (!text)
+                return;
+            userContent.push({ text });
+        }
+        // 2. Call Gemini
+        const systemPrompt = SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general;
+        const model = genAI_Urkio.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const result = await model.generateContent([systemPrompt, ...userContent]);
+        const aiResponse = result.response.text();
+        // 3. Encrypt & Save AI Response
+        const encryptedAIResponse = CryptoJS.AES.encrypt(aiResponse, ENCRYPTION_KEY).toString();
+        await db.collection("conversations").doc(conversationId).collection("messages").add({
+            text: encryptedAIResponse,
+            user: { _id: 2, name: "Urkio AI" },
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            isEncrypted: true,
+            condition: condition
+        });
+    }
+    catch (error) {
+        logger.error("[Therapy Agent] Error processing chat:", error);
+        const errorMsg = "عذراً، أواجه مشكلة في معالجة طلبك حالياً.";
+        const encryptedError = CryptoJS.AES.encrypt(errorMsg, ENCRYPTION_KEY).toString();
+        await db.collection("conversations").doc(conversationId).collection("messages").add({
+            text: encryptedError,
+            user: { _id: 2, name: "Urkio System" },
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            isEncrypted: true
+        });
     }
 });
 //# sourceMappingURL=index.js.map

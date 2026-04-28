@@ -2,6 +2,7 @@ import * as logger from "firebase-functions/logger";
 import {onDocumentCreated, onDocumentUpdated} from "firebase-functions/v2/firestore";
 import * as admin from 'firebase-admin';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import * as functionsV1 from "firebase-functions/v1";
 import * as CryptoJS from 'crypto-js';
 
@@ -1138,50 +1139,6 @@ export const generateClinicalSynthesis = functionsV1.runWith({ secrets: ["GOOGLE
   }
 });
 
-// ==========================================
-// URKIO SECURE CHAT PROCESSOR
-// ==========================================
-export const processUrkioChat = functionsV1.firestore
-    .document("conversations/{conversationId}/messages/{messageId}")
-    .onCreate(async (snapshot, context) => {
-        const data = snapshot.data();
-        const { conversationId } = context.params;
-
-        if (data.user && data.user._id === 2) return null;
-
-        try {
-            const bytes = CryptoJS.AES.decrypt(data.text, ENCRYPTION_KEY);
-            const userPlaintext = bytes.toString(CryptoJS.enc.Utf8);
-
-            if (!userPlaintext) return null;
-
-            const condition = data.condition || "general";
-            const systemPrompt = SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general;
-            
-            const model = genAI_Urkio.getGenerativeModel({ 
-                model: "gemini-pro",
-                systemInstruction: systemPrompt 
-            });
-
-            const result = await model.generateContent(userPlaintext);
-            const aiResponse = result.response.text();
-            
-            const encryptedAIResponse = CryptoJS.AES.encrypt(aiResponse, ENCRYPTION_KEY).toString();
-
-            const messagesRef = admin.firestore().collection('conversations').doc(conversationId).collection('messages');
-            await messagesRef.add({
-                text: encryptedAIResponse,
-                createdAt: admin.firestore.FieldValue.serverTimestamp(),
-                user: {
-                    _id: 2,
-                    name: 'Urkio AI',
-                },
-            });
-        } catch (error) {
-            console.error("Error in processUrkioChat:", error);
-        }
-        return null;
-    });
 
 // ==========================================
 // PREMIUM ACCESS AUTOMATION
@@ -1218,4 +1175,76 @@ export const grantPremiumAccess = functionsV1.https.onCall(async (data, context)
     logger.error("Error granting premium access:", error);
     throw new functionsV1.https.HttpsError('internal', 'حدث خطأ أثناء تحديث الصلاحيات.');
   }
+});
+// ═══════════════════════════════════════════════════════════════════════════
+// 9. URKIO THERAPY AGENT — Firestore Trigger
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const processUrkioChat = onDocumentCreated("conversations/{conversationId}/messages/{messageId}", async (event) => {
+    const snapshot = event.data;
+    if (!snapshot) return;
+
+    const data = snapshot.data();
+    const { conversationId } = event.params;
+
+    // Avoid infinite loops (don't respond to ourselves)
+    if (data.user && (data.user._id === 2 || data.user._id === '2')) return;
+
+    try {
+        let userContent: any[] = [];
+        const condition = data.condition || "general";
+        
+        // 1. Get User Input (Handle Encrypted Text or Audio)
+        if (data.audio) {
+            userContent.push({
+                inlineData: {
+                    mimeType: "audio/m4a", 
+                    data: data.audio
+                }
+            });
+            userContent.push({ text: "Please analyze this voice message and respond empathetically." });
+        } else {
+            let text = data.text;
+            // Attempt decryption if it looks encrypted
+            try {
+                if (text && text.length > 20 && !text.includes(" ")) {
+                    const bytes = CryptoJS.AES.decrypt(text, ENCRYPTION_KEY);
+                    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+                    if (originalText) text = originalText;
+                }
+            } catch (e) {
+                // Not encrypted
+            }
+            if (!text) return;
+            userContent.push({ text });
+        }
+
+        // 2. Call Gemini
+        const systemPrompt = SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general;
+        const model = genAI_Urkio.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+        const result = await model.generateContent([systemPrompt, ...userContent]);
+        const aiResponse = result.response.text();
+
+        // 3. Encrypt & Save AI Response
+        const encryptedAIResponse = CryptoJS.AES.encrypt(aiResponse, ENCRYPTION_KEY).toString();
+        await db.collection("conversations").doc(conversationId).collection("messages").add({
+            text: encryptedAIResponse,
+            user: { _id: 2, name: "Urkio AI" },
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            isEncrypted: true,
+            condition: condition
+        });
+
+    } catch (error: any) {
+        logger.error("[Therapy Agent] Error processing chat:", error);
+        const errorMsg = "عذراً، أواجه مشكلة في معالجة طلبك حالياً.";
+        const encryptedError = CryptoJS.AES.encrypt(errorMsg, ENCRYPTION_KEY).toString();
+        await db.collection("conversations").doc(conversationId).collection("messages").add({
+            text: encryptedError,
+            user: { _id: 2, name: "Urkio System" },
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            isEncrypted: true
+        });
+    }
 });

@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle, Play, RotateCcw, Trash2, Check, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { storage } from '../firebase';
+import { ref as sRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { sendEncryptedMessage, subscribeToMessages } from './chatService';
 import clsx from 'clsx';
+import { toast } from 'react-hot-toast';
 
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
+  audioUrl?: string;
+  createdAt?: any;
 }
 
 interface UrkioChatProps {
@@ -33,61 +39,120 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     }
   }, [messages, isLoading]);
 
-  const [isRecording, setIsRecording] = useState(false);
+  const [recordingState, setRecordingState] = useState<'idle' | 'recording' | 'reviewing'>('idle');
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+  const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const recognitionRef = useRef<any>(null);
+
+  const conversationId = `agent_guide_${user?.uid}`;
+
+  // 1. Subscribe to history
+  useEffect(() => {
+    if (!user?.uid) return;
+    
+    setIsLoading(true);
+    const unsubscribe = subscribeToMessages(conversationId, (newMessages: any[]) => {
+      if (newMessages.length > 0) {
+        const formatted = newMessages.map(msg => ({
+          id: msg._id || msg.id,
+          role: msg.role || (msg.user?._id === 2 ? 'assistant' : 'user'),
+          content: msg.text || msg.content,
+          audioUrl: msg.audioUrl,
+          createdAt: msg.createdAt
+        })).sort((a, b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+        
+        setMessages(formatted as Message[]);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [user?.uid, conversationId]);
 
   useEffect(() => {
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
+      if (recognitionRef.current) recognitionRef.current.stop();
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
+
+  const startRecording = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      chunksRef.current = [];
+      
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        setAudioBlob(blob);
+        setAudioUrl(url);
+        setRecordingState('reviewing');
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.lang = i18n.language === 'ar' ? 'ar-SA' : 'en-US';
+        recognition.onresult = (event: any) => {
+          const transcript = Array.from(event.results)
+            .map((result: any) => result[0])
+            .map((result: any) => result.transcript)
+            .join('');
+          setInput(transcript);
+        };
+        recognition.start();
+        recognitionRef.current = recognition;
       }
-    };
-  }, []);
 
-  const toggleRecording = useCallback(() => {
-    if (isRecording) {
-      recognitionRef.current?.stop();
-      setIsRecording(false);
-      return;
+      mediaRecorder.start();
+      mediaRecorderRef.current = mediaRecorder;
+      setRecordingState('recording');
+    } catch (err) {
+      console.error("Recording error:", err);
+      toast.error("Microphone access denied.");
     }
+  }, [i18n.language]);
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Voice recording is not supported in this browser. Please try Chrome or Safari.");
-      return;
+  const stopRecording = useCallback(() => {
+    if (mediaRecorderRef.current && recordingState === 'recording') {
+      mediaRecorderRef.current.stop();
+      if (recognitionRef.current) recognitionRef.current.stop();
     }
+  }, [recordingState]);
 
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = i18n.language === 'ar' ? 'ar-SA' : 'en-US';
+  const handleRepeat = () => {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  };
 
-    recognition.onstart = () => setIsRecording(true);
-    recognition.onresult = (event: any) => {
-      const transcript = Array.from(event.results)
-        .map((result: any) => result[0])
-        .map((result: any) => result.transcript)
-        .join('');
-      setInput(transcript);
-    };
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error', event.error);
-      setIsRecording(false);
-    };
-    recognition.onend = () => {
-      setIsRecording(false);
-      // Auto-send if there is content after a short delay to let state catch up
-      setTimeout(() => {
-        const currentInput = (document.querySelector('textarea') as HTMLTextAreaElement)?.value;
-        if (currentInput?.trim()) {
-          sendMessage();
-        }
-      }, 500);
-    };
+  const handleRecordAgain = () => {
+    setAudioBlob(null);
+    setAudioUrl(null);
+    setInput('');
+    setRecordingState('idle');
+    startRecording();
+  };
 
-    recognitionRef.current = recognition;
-    recognition.start();
-  }, [isRecording, i18n.language]);
+  const handleCancelVoice = () => {
+    setAudioBlob(null);
+    setAudioUrl(null);
+    setInput('');
+    setRecordingState('idle');
+  };
 
   const getMockResponse = useCallback((text: string) => {
     const isAr = i18n.language === 'ar';
@@ -118,33 +183,58 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     }
   }, [i18n.language]);
 
-  const sendMessage = useCallback(async (e?: React.FormEvent) => {
+  const sendMessage = useCallback(async (e?: React.FormEvent, voiceBlob?: Blob) => {
     if (e) e.preventDefault();
     const text = input.trim();
-    if (!text || isLoading) return;
+    if (!text && !voiceBlob) return;
+
+    setIsLoading(true);
+    setRecordingState('idle');
+    
+    let uploadedAudioUrl = '';
+    if (voiceBlob) {
+      setIsUploading(true);
+      try {
+        const path = `agent_voices/${user?.uid}/${Date.now()}.webm`;
+        const storageRef = sRef(storage, path);
+        await uploadBytes(storageRef, voiceBlob);
+        uploadedAudioUrl = await getDownloadURL(storageRef);
+      } catch (err) {
+        console.error("Audio upload failed:", err);
+      } finally {
+        setIsUploading(false);
+      }
+    }
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: 'user',
-      content: text
+      content: text,
+      audioUrl: uploadedAudioUrl
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    // Save user message to Firestore
+    try {
+      await sendEncryptedMessage(conversationId, {
+        text: text,
+        role: 'user',
+        audioUrl: uploadedAudioUrl,
+        user: { _id: 1, name: userData?.displayName || 'User' }
+      });
+    } catch (err) {
+      console.error("Failed to save user message:", err);
+    }
+
     setInput('');
     setAttachments([]);
-    setIsLoading(true);
+    setAudioBlob(null);
+    setAudioUrl(null);
+
+    // AI logic
     setIsEscalating(false);
-
-    const assistantId = crypto.randomUUID();
-    setMessages(prev => [...prev, { id: assistantId, role: 'assistant', content: '' }]);
-
-    let accumulated = '';
-    let isMock = false;
-
+    
     try {
       abortRef.current = new AbortController();
-      const timeoutId = setTimeout(() => abortRef.current?.abort(), 15000); // 15s timeout for snappier feel
-
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -165,59 +255,51 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         })
       });
 
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
-
-      if (!reader) throw new Error('No reader');
+      let accumulated = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        accumulated += chunk;
-        setMessages(prev =>
-          prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m)
-        );
+        accumulated += decoder.decode(value, { stream: true });
       }
 
-    } catch (error: any) {
-      console.warn('AI API failed, using empathetic fallback:', error);
-      isMock = true;
-      const mockText = getMockResponse(text);
-      
-      // Simulate typing for mock response
-      const words = mockText.split(' ');
-      for (let i = 0; i < words.length; i++) {
-        accumulated += (i === 0 ? '' : ' ') + words[i];
-        setMessages(prev =>
-          prev.map(m => m.id === assistantId ? { ...m, content: accumulated } : m)
-        );
-        await new Promise(r => setTimeout(r, 40));
-      }
-    } finally {
-      setIsLoading(false);
-      abortRef.current = null;
+      // Save AI message to Firestore
+      await sendEncryptedMessage(conversationId, {
+        text: accumulated,
+        role: 'assistant',
+        user: { _id: 2, name: 'Urkio AI' }
+      });
 
-      // Detect mood and escalation from whatever response we got
+      // Detect mood
       const lower = accumulated.toLowerCase();
-      if (lower.includes('connect with a professional') || lower.includes('emergency helpline') || lower.includes('أخصائي محترف') || lower.includes('خط الطوارئ')) {
+      if (lower.includes('connect with a professional') || lower.includes('emergency')) {
         setMood('stressed');
         setIsEscalating(true);
-      } else if (lower.includes('stress') || lower.includes('crisis') || lower.includes('overwhelm') || lower.includes('ضغط') || lower.includes('أزمة')) {
+      } else if (lower.includes('stress') || lower.includes('crisis')) {
         setMood('stressed');
-      } else if (lower.includes('celebrat') || lower.includes('amazing') || lower.includes('congrat') || lower.includes('proud') || lower.includes('فخور') || lower.includes('رائع')) {
+      } else if (lower.includes('celebrat') || lower.includes('proud')) {
         setMood('celebration');
       } else {
         setMood('calm');
       }
+
+    } catch (error: any) {
+      console.warn('AI API failed, using fallback:', error);
+      const mockText = getMockResponse(text);
+      await sendEncryptedMessage(conversationId, {
+        text: mockText,
+        role: 'assistant',
+        user: { _id: 2, name: 'Urkio AI' }
+      });
+    } finally {
+      setIsLoading(false);
+      abortRef.current = null;
     }
-  }, [input, isLoading, messages, user, userData, condition, i18n.language, t, getMockResponse]);
+  }, [input, isLoading, messages, user, userData, condition, i18n.language, conversationId, getMockResponse]);
 
   // Vibe-Driven UI: determine color scheme based on mood
   const moodColors = {
@@ -260,11 +342,12 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   };
 
   const conditions = [
-    { id: 'general', label: t('agent.moods.calm'), icon: Sparkles },
-    { id: 'panic', label: t('agent.moods.stressed'), icon: Zap },
-    { id: 'anxiety', label: t('agent.moods.stressed'), icon: ShieldCheck },
-    { id: 'depression', label: t('agent.moods.calm'), icon: Heart }
+    { id: 'general', label: t('agent.moods.general'), icon: Sparkles },
+    { id: 'panic', label: t('agent.moods.panic'), icon: Zap },
+    { id: 'anxiety', label: t('agent.moods.anxiety'), icon: ShieldCheck },
+    { id: 'depression', label: t('agent.moods.depression'), icon: Heart }
   ];
+
 
   return (
     <div className={clsx("flex flex-col h-full rounded-3xl overflow-hidden shadow-2xl border transition-all duration-700", theme.bg, theme.border, theme.text)}>
@@ -337,6 +420,18 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                     : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-ss-none border-inherit shadow-md"
                   )}
                 >
+                  {m.audioUrl && (
+                    <button 
+                      onClick={() => {
+                        const audio = new Audio(m.audioUrl);
+                        audio.play();
+                      }}
+                      className={clsx("flex items-center gap-2 mb-2 p-2 rounded-lg transition-colors", m.role === 'user' ? "bg-white/20 hover:bg-white/30" : "bg-primary/10 hover:bg-primary/20 text-primary")}
+                    >
+                      <Volume2 className="w-4 h-4" />
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Play Voice</span>
+                    </button>
+                  )}
                   {m.content ? (
                     <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap" dir="auto">{m.content}</p>
                   ) : (
@@ -411,54 +506,116 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
           )}
 
           <div className="relative group">
-            <textarea
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              rows={1}
-              placeholder={t('agent.inputPlaceholder')}
-              className={clsx(
-                "w-full bg-white/80 border border-inherit rounded-2xl ps-12 pe-24 py-4 focus:outline-none focus:ring-4 text-sm resize-none transition-all group-hover:bg-white text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500",
-                theme.ring
-              )}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-              }}
-            />
-            
-            <div className="absolute inset-s-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                <label className="p-2 hover:bg-black/5 rounded-xl cursor-pointer transition-colors text-inherit/50 hover:text-inherit">
-                    <Paperclip className="w-5 h-5" />
-                    <input type="file" multiple hidden onChange={handleFileChange} />
-                </label>
-            </div>
-
-            <div className="absolute inset-e-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            {recordingState === 'reviewing' ? (
+              <div className="flex items-center gap-2 w-full bg-white/90 dark:bg-slate-900/90 border border-inherit rounded-2xl p-2 animate-in fade-in slide-in-from-bottom-2">
                 <button 
                   type="button" 
-                  onClick={toggleRecording}
-                  className={clsx(
-                    "p-2 rounded-xl transition-all relative group",
-                    isRecording ? "text-red-500 bg-red-500/10" : "text-inherit/50 hover:text-inherit hover:bg-black/5"
-                  )}
-                  title={t('agent.speak')}
+                  onClick={handleCancelVoice}
+                  className="p-3 text-slate-400 hover:text-red-500 transition-colors"
                 >
-                    {isRecording && <span className="absolute inset-0 rounded-xl bg-red-500 animate-ping opacity-20" />}
-                    <Mic className={clsx("w-5 h-5", isRecording && "relative z-10")} />
+                  <Trash2 className="w-5 h-5" />
                 </button>
-                <button
-                  type="submit"
-                  disabled={!input?.trim() || isLoading}
-                  className={clsx(
-                    "p-2.5 rounded-xl shadow-lg transition-all transform active:scale-95 disabled:opacity-30 disabled:scale-100 text-white",
-                    theme.accent, "shadow-current/20"
-                  )}
+                <div className="flex-1 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Voice Recorded</span>
+                  <button 
+                    type="button" 
+                    onClick={handleRepeat}
+                    className="flex items-center gap-2 text-primary hover:scale-105 transition-transform"
+                  >
+                    <Play className="w-4 h-4" />
+                    <span className="text-[10px] font-black">REPLAY</span>
+                  </button>
+                </div>
+                <button 
+                  type="button" 
+                  onClick={handleRecordAgain}
+                  className="p-3 text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-xl transition-colors"
+                  title="Record Again"
                 >
-                  {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                  <RotateCcw className="w-5 h-5" />
                 </button>
-            </div>
+                <button 
+                  type="button" 
+                  onClick={() => sendMessage(undefined, audioBlob!)}
+                  disabled={isUploading}
+                  className="p-3 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2"
+                >
+                  {isUploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-5 h-5" />}
+                  <span className="text-xs font-bold uppercase tracking-wider hidden sm:inline">Send Voice</span>
+                </button>
+              </div>
+            ) : (
+              <>
+                <textarea
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  rows={1}
+                  placeholder={recordingState === 'recording' ? 'Listening...' : t('agent.inputPlaceholder')}
+                  disabled={recordingState === 'recording'}
+                  className={clsx(
+                    "w-full bg-white/80 border border-inherit rounded-2xl ps-12 pe-24 py-4 focus:outline-none focus:ring-4 text-sm resize-none transition-all group-hover:bg-white text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500",
+                    theme.ring,
+                    recordingState === 'recording' && "animate-pulse border-primary/50"
+                  )}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                  }}
+                />
+                
+                <div className="absolute inset-s-3 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                    <label className="p-2 hover:bg-black/5 rounded-xl cursor-pointer transition-colors text-inherit/50 hover:text-inherit">
+                        <Paperclip className="w-5 h-5" />
+                        <input type="file" multiple hidden onChange={handleFileChange} />
+                    </label>
+                </div>
+    
+                <div className="absolute inset-e-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                    <button 
+                      type="button" 
+                      onClick={recordingState === 'recording' ? stopRecording : startRecording}
+                      className={clsx(
+                        "p-2 rounded-xl transition-all relative group",
+                        recordingState === 'recording' ? "text-red-500 bg-red-500/10" : "text-inherit/50 hover:text-inherit hover:bg-black/5"
+                      )}
+                      title={t('agent.speak')}
+                    >
+                        {recordingState === 'recording' && <span className="absolute inset-0 rounded-xl bg-red-500 animate-ping opacity-20" />}
+                        {recordingState === 'recording' ? <Square className="w-5 h-5 relative z-10" /> : <Mic className="w-5 h-5" />}
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!input?.trim() || isLoading}
+                      className={clsx(
+                        "p-2.5 rounded-xl shadow-lg transition-all transform active:scale-95 disabled:opacity-30 disabled:scale-100 text-white",
+                        theme.accent, "shadow-current/20"
+                      )}
+                    >
+                      {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+                    </button>
+                </div>
+              </>
+            )}
+          </div>
+          
+          <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
+             {[
+               i18n.language === 'ar' ? 'كيف أبدأ؟' : 'How do I start?',
+               i18n.language === 'ar' ? 'أشعر بالقلق' : 'I feel anxious',
+               i18n.language === 'ar' ? 'ما هي خدماتكم؟' : 'What are your services?',
+               i18n.language === 'ar' ? 'أحتاج للحديث' : 'I need to talk'
+             ].map((tip, i) => (
+               <button 
+                 key={i}
+                 type="button"
+                 onClick={() => { setInput(tip); sendMessage(); }}
+                 className="px-3 py-1.5 rounded-full bg-white/40 dark:bg-slate-800/40 border border-inherit text-[10px] font-bold hover:bg-white dark:hover:bg-slate-700 transition-all"
+               >
+                 {tip}
+               </button>
+             ))}
           </div>
           
           <div className="flex flex-col items-center gap-1">

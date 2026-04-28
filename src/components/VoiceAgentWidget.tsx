@@ -117,33 +117,21 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
   }, [stopSpeaking]);
 
   const getMockResponse = useCallback((text: string) => {
-    const isAr = audioLanguage === 'ar';
     const lower = text.toLowerCase();
+    const responses = t('agent.mockResponses', { returnObjects: true }) as any;
     
-    if (isAr) {
-      if (lower.includes('قلق') || lower.includes('خوف') || lower.includes('توتر')) {
-        return "أنا هنا معك. القلق شعور صعب، لكنك لست وحدك. حاول أن تأخذ نفساً عميقاً... شهيق... زفير. هل تود إخباري بالمزيد عما يقلقك؟";
-      }
-      if (lower.includes('حزن') || lower.includes('اكتئاب') || lower.includes('تعب')) {
-        return "أسمعك جيداً وأقدر صدقك. من الطبيعي أن تشعر بالتعب أحياناً. رحلتك في أوركيو هي مساحة آمنة لك. ما هو الشيء الوحيد الذي قد يجعلك تشعر ببعض الراحة الآن؟";
-      }
-      if (lower.includes('مساعدة') || lower.includes('كيف')) {
-        return "أنا دليلك الذكي في أوركيو. يمكنني مساعدتك في فهم مشاعرك، توجيهك في المنصة، أو ببساطة الاستماع إليك. كيف يمكنني أن أكون مفيداً لك اليوم؟";
-      }
-      return "شكراً لمشاركتي هذا. أنا أسمعك بكل اهتمام. استمر في التحدث، أنا هنا لدعمك في كل خطوة من رحلتك.";
-    } else {
-      if (lower.includes('anxious') || lower.includes('fear') || lower.includes('stress')) {
-        return "I'm here with you. Anxiety is a heavy feeling, but you're not alone. Let's try to take a deep breath... inhale... exhale. Would you like to tell me more about what's on your mind?";
-      }
-      if (lower.includes('sad') || lower.includes('depressed') || lower.includes('tired')) {
-        return "I hear you, and I value your honesty. It's okay to feel tired sometimes. Your journey in Urkio is a safe space for you. What is one small thing that might bring you a bit of comfort right now?";
-      }
-      if (lower.includes('help') || lower.includes('how')) {
-        return "I am your Urkio Guide. I can help you process your feelings, navigate the platform, or simply be a listening ear. How can I be most helpful to you today?";
-      }
-      return "Thank you for sharing that with me. I'm listening closely. Please keep talking; I'm here to support you in every step of your journey.";
+    if (lower.includes('قلق') || lower.includes('خوف') || lower.includes('توتر') || lower.includes('anxious') || lower.includes('fear') || lower.includes('stress')) {
+      return responses.panic;
     }
-  }, [audioLanguage]);
+    if (lower.includes('حزن') || lower.includes('اكتئاب') || lower.includes('تعب') || lower.includes('sad') || lower.includes('depressed') || lower.includes('tired')) {
+      return responses.depression;
+    }
+    if (lower.includes('مساعدة') || lower.includes('كيف') || lower.includes('help') || lower.includes('how')) {
+      return responses.anxiety; // Using anxiety as a generic "how can I help" for now
+    }
+    return responses.general;
+  }, [t]);
+
 
   const quickActions = [
     { label: i18n.language === 'ar' ? 'حجز جلسة' : 'Book a Session', icon: Calendar, intent: 'I want to book a session with a specialist' },

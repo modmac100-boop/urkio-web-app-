@@ -34,6 +34,7 @@ const TherapyRoom = lazy(() => import('./pages/TherapyRoom').then(m => ({ defaul
 const SpecialistDashboard = lazy(() => import('./pages/SpecialistDashboard').then(m => ({ default: m.SpecialistDashboard })));
 const Agenda = lazy(() => import('./pages/Agenda').then(m => ({ default: m.Agenda })));
 const ClinicalWorkstation = lazy(() => import('./pages/ClinicalWorkstation').then(m => ({ default: m.ClinicalWorkstation })));
+const TherapyAgent = lazy(() => import('./pages/TherapyAgent').then(m => ({ default: m.TherapyAgent })));
 
 import { Tasks } from './pages/Tasks';
 import { TermsAndConditions } from './pages/TermsAndConditions';
@@ -561,6 +562,8 @@ export default function App() {
                   <Route path="/messenger" element={user ? <Messenger user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/inbox" element={user ? <Navigate to="/messenger" replace /> : <Navigate to="/landing" replace />} />
 
+                  <Route path="/therapy-agent" element={user ? <TherapyAgent user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
+                  <Route path="/therapy-agent/:condition" element={user ? <TherapyAgent user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/auth/action" element={<AuthAction />} />
 
                   <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
