@@ -532,7 +532,7 @@ export default function App() {
                   {/* Private Routes - Require authentication */}
                   <Route path="/privacy" element={<PrivacyPolicy />} />
                   <Route path="/terms" element={<TermsAndConditions user={user} />} />
-                  <Route path="/healing-center" element={<HealingCenter user={user} userData={userData} />} />
+                  <Route path="/healing-center" element={<ExpertList user={user} userData={userData} />} />
                   <Route path="/specialist-hub" element={<Navigate to="/specialist-dashboard" replace />} />
                   <Route path="/specialist-dashboard" element={user ? <SpecialistDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/expert/:expertId" element={<ExpertPublicSpaceV2 user={user} userData={userData} />} />

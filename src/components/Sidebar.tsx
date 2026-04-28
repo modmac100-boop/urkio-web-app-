@@ -33,7 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, userData }) => {
       { label: t('nav.therapyRoom'), icon: 'video_camera_front', path: '/therapy-room', active: location.pathname === '/therapy-room', highlight: false }
     ] : []),
     { label: t('nav.professionalFeed'), icon: 'dynamic_feed', path: '/', active: location.pathname === '/' },
-    { label: t('nav.healingHub'), icon: 'spa', path: '/healing-center', active: location.pathname === '/healing-center' },
+    { label: t('nav.healingHub', 'Healing Center'), icon: 'verified_user', path: '/expert-list', active: location.pathname === '/expert-list' },
     { label: t('nav.courses'), icon: 'menu_book', path: '/healing-courses', active: location.pathname === '/healing-courses' },
     { label: t('nav.inbox'), icon: 'chat', path: '/messenger', active: location.pathname === '/messenger' },
     { label: t('nav.guide', 'Urkio Guide'), icon: 'auto_awesome', path: '/guide', active: location.pathname === '/guide' },
