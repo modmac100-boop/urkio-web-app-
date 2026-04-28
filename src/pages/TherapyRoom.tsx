@@ -51,6 +51,7 @@ import { db, auth } from '../firebase';
 import { useHealingSession } from '../healing-suite/hooks/useHealingSession';
 import { VideoPlayer } from '../conference/components/VideoPlayer';
 import { useTheme } from '../contexts/ThemeContext';
+import { UrkioAgentChat } from '../services/UrkioAgentService';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { SessionInviteModal } from '../components/messaging/SessionInviteModal';
@@ -116,22 +117,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
   }, [isAdminOrExpert, navigate, urlRoomId]);
 
   const handleSendMessage = (e?: React.FormEvent) => {
-    e?.preventDefault();
-    if (!chatInput.trim()) return;
-    setChatMessages(prev => [...prev, {
-      sender: 'ME',
-      text: chatInput,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }]);
-    setChatInput('');
-    // Simulate AI for this room
-    setTimeout(() => {
-       setChatMessages(prev => [...prev, {
-          sender: 'AI',
-          text: 'Observation logged. Neural analysis ongoing.',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-       }]);
-    }, 1000);
+    // Legacy simulated chat removed. Now using real UrkioAgentChat component below.
   };
 
   return (
@@ -401,35 +387,13 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                   </button>
                </div>
 
-               <div className="flex-1 p-10 overflow-y-auto custom-scrollbar space-y-8 bg-black/5">
-                  {chatMessages.map((m, i) => (
-                     <div key={i} className={clsx("flex flex-col gap-2", m.sender === 'ME' ? "items-end" : "items-start")}>
-                        <div className={clsx(
-                           "px-8 py-5 rounded-[2rem] text-sm font-medium leading-relaxed shadow-2xl border",
-                           m.sender === 'ME' ? "bg-[#30B0D0] text-[#050A0F] rounded-tr-none border-[#30B0D0]/20" : "bg-white dark:bg-[#10161D] text-white/90 rounded-tl-none border-white/5"
-                        )}>
-                           {m.text}
-                        </div>
-                        <div className="flex items-center gap-2 px-4">
-                           <span className="text-[8px] font-black uppercase tracking-widest opacity-20">{m.time}</span>
-                           {m.sender === 'AI' && <Sparkles className="w-2.5 h-2.5 text-[#30B0D0] opacity-40" />}
-                        </div>
-                     </div>
-                  ))}
-               </div>
-
-               <div className="p-10 bg-black/20">
-                  <form onSubmit={handleSendMessage} className="relative group">
-                     <input 
-                       className="w-full bg-white/5 border border-white/10 rounded-[2rem] py-6 px-10 text-sm font-medium outline-none focus:border-[#30B0D0] transition-all group-hover:bg-white/10 pr-20 shadow-inner" 
-                       placeholder="Consult Intelligence Engine..." 
-                       value={chatInput}
-                       onChange={e => setChatInput(e.target.value)}
-                     />
-                     <button type="submit" className="absolute right-5 top-1/2 -translate-y-1/2 p-4 text-[#30B0D0] hover:scale-125 transition-transform bg-[#30B0D0]/10 rounded-2xl">
-                        <Send className="w-6 h-6" />
-                     </button>
-                  </form>
+               <div className="flex-1 overflow-hidden">
+                  <UrkioAgentChat 
+                    user={user} 
+                    userData={userData} 
+                    conversationId={`therapy_session_${roomId}`}
+                    compact={true}
+                  />
                </div>
             </motion.div>
          )}

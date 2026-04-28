@@ -186,33 +186,28 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   };
 
   const getMockResponse = useCallback((text: string) => {
-    const isAr = i18n.language === 'ar';
-    const lower = text.toLowerCase();
+    const isArabic = /[\u0600-\u06FF]/.test(text);
     
-    if (isAr) {
-      if (lower.includes('قلق') || lower.includes('خوف') || lower.includes('توتر')) {
-        return "أنا هنا معك. القلق شعور صعب، لكنك لست وحدك. حاول أن تأخذ نفساً عميقاً... شهيق... زفير. هل تود إخباري بالمزيد عما يقلقك؟";
-      }
-      if (lower.includes('حزن') || lower.includes('اكتئاب') || lower.includes('تعب')) {
-        return "أسمعك جيداً وأقدر صدقك. من الطبيعي أن تشعر بالتعب أحياناً. رحلتك في أوركيو هي مساحة آمنة لك. ما هو الشيء الوحيد الذي قد يجعلك تشعر ببعض الراحة الآن؟";
-      }
-      if (lower.includes('مساعدة') || lower.includes('كيف') || lower.includes('ساعد')) {
-        return "أنا دليلك الذكي في أوركيو. يمكنني مساعدتك في فهم مشاعرك، توجيهك في المنصة، أو ببساطة الاستماع إليك. كيف يمكنني أن أكون مفيداً لك اليوم؟";
-      }
-      return "شكراً لمشاركتي هذا. أنا أسمعك بكل اهتمام. استمر في التحدث، أنا هنا لدعمك في كل خطوة من رحلتك.";
-    } else {
-      if (lower.includes('anxious') || lower.includes('fear') || lower.includes('stress')) {
-        return "I'm here with you. Anxiety is a heavy feeling, but you're not alone. Let's try to take a deep breath... inhale... exhale. Would you like to tell me more about what's on your mind?";
-      }
-      if (lower.includes('sad') || lower.includes('depressed') || lower.includes('tired')) {
-        return "I hear you, and I value your honesty. It's okay to feel tired sometimes. Your journey in Urkio is a safe space for you. What is one small thing that might bring you a bit of comfort right now?";
-      }
-      if (lower.includes('help') || lower.includes('how') || lower.includes('hellp')) {
-        return "I am your Urkio Guide. I can help you process your feelings, navigate the platform, or simply be a listening ear. How can I be most helpful to you today?";
-      }
-      return "Thank you for sharing that with me. I'm listening closely. Please keep talking; I'm here to support you in every step of your journey.";
+    if (isArabic) {
+      const arabicResponses = [
+        "أفهم تماماً ما تمر به. أنا هنا بجانبك، دعنا نفكر معاً في الخطوة القادمة.",
+        "كلماتك تلمسني بعمق. أنت لست وحدك في هذه الرحلة، نحن نتقدم خطوة بخطوة.",
+        "هذا الشعور طبيعي جداً. من المهم أن تعطي نفسك المساحة الكافية للتعبير، أنا أسمعك.",
+        "أشعر بصدق كلماتك. دعنا نركز الآن على ما يجعلك تشعر بالأمان والهدوء.",
+        "شكراً لمشاركتي هذا. وجودك هنا هو بداية قوية للتغيير الإيجابي."
+      ];
+      return arabicResponses[Math.floor(Math.random() * arabicResponses.length)];
     }
-  }, [i18n.language]);
+
+    const responses = [
+      "I hear you deeply. This path isn't always easy, but you're showing incredible resilience just by being here.",
+      "That's a powerful observation. Let's explore that feeling further together—what does it tell you right now?",
+      "I'm sensing a lot of depth in what you're sharing. Remember, every small step is a victory in your healing journey.",
+      "Thank you for trusting me with this. I'm here to support you as we navigate these complex emotions.",
+      "I understand. It's completely valid to feel this way. How can we make this moment feel a bit more grounded for you?"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }, []);
 
   const sendMessage = useCallback(async (e?: React.FormEvent, voiceBlob?: Blob) => {
     if (e) e.preventDefault();
