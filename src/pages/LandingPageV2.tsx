@@ -70,6 +70,37 @@ export function LandingPageV2({
     },
   ];
 
+  const expertPool = [
+    { name: 'Dr. Sarah Jenkins', title: 'Executive Coach', tags: ['Leadership', 'Cognitive Agility'], image: 'https://i.pravatar.cc/150?u=jenkins', verified: true },
+    { name: 'Marcus Vance', title: 'Clinical Therapist', tags: ['Resilience', 'Stress Mgt'], image: 'https://i.pravatar.cc/150?u=vance', verified: true },
+    { name: 'Elena Rostova', title: 'Wellness Architect', tags: ['Holistic Health', 'Focus'], image: 'https://i.pravatar.cc/150?u=rostova', verified: false },
+    { name: 'Dr. Alan Curtis', title: 'Trauma Specialist', tags: ['PTSD', 'EMDR'], image: 'https://i.pravatar.cc/150?u=curtis', verified: true },
+    { name: 'Amina Khalid', title: 'Mindfulness Guide', tags: ['Meditation', 'Anxiety'], image: 'https://i.pravatar.cc/150?u=khalid', verified: false },
+    { name: 'Dr. Robert Chen', title: 'Cognitive Behavioral Expert', tags: ['CBT', 'Depression'], image: 'https://i.pravatar.cc/150?u=chen', verified: true },
+    { name: 'Sofia Martinez', title: 'Relationship Coach', tags: ['Communication', 'Conflict'], image: 'https://i.pravatar.cc/150?u=martinez', verified: false },
+    { name: 'David Kim', title: 'Career Transition Mentor', tags: ['Burnout', 'Work-Life Balance'], image: 'https://i.pravatar.cc/150?u=kim', verified: true },
+    { name: 'Layla Hassan', title: 'Child Psychologist', tags: ['Parenting', 'Child Dev'], image: 'https://i.pravatar.cc/150?u=hassan', verified: true },
+    { name: 'Dr. James Wilson', title: 'Addiction Counselor', tags: ['Recovery', 'Support'], image: 'https://i.pravatar.cc/150?u=wilson', verified: false },
+    { name: 'Yuki Tanaka', title: 'Somatic Therapist', tags: ['Mind-Body', 'Breathwork'], image: 'https://i.pravatar.cc/150?u=tanaka', verified: true },
+    { name: 'Zara Ahmed', title: 'Life Transition Specialist', tags: ['Grief', 'Empowerment'], image: 'https://i.pravatar.cc/150?u=ahmed', verified: false }
+  ];
+
+  const getWeekNumber = (d: Date) => {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    const weekNo = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+    return weekNo;
+  };
+
+  const weekNum = getWeekNumber(new Date());
+  const startIndex = (weekNum * 3) % expertPool.length;
+  const weeklyExperts = [
+    expertPool[startIndex],
+    expertPool[(startIndex + 1) % expertPool.length],
+    expertPool[(startIndex + 2) % expertPool.length]
+  ];
+
   return (
     <div
       className={clsx(
@@ -366,11 +397,7 @@ export function LandingPageV2({
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { name: 'Dr. Sarah Jenkins', title: 'Executive Coach', tags: ['Leadership', 'Cognitive Agility'] },
-              { name: 'Marcus Vance', title: 'Clinical Therapist', tags: ['Resilience', 'Stress Mgt'], verified: true },
-              { name: 'Elena Rostova', title: 'Wellness Architect', tags: ['Holistic Health', 'Focus'] }
-            ].map((expert, i) => (
+            {weeklyExperts.map((expert, i) => (
               <motion.div 
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
@@ -385,7 +412,7 @@ export function LandingPageV2({
                 
                 <div className="flex items-center gap-4 mb-6">
                   <div className="size-16 rounded-full bg-white/10 p-1">
-                    <img src={`https://i.pravatar.cc/150?u=${i+50}`} className="w-full h-full rounded-full object-cover" alt={expert.name} />
+                    <img src={expert.image} className="w-full h-full rounded-full object-cover" alt={expert.name} />
                   </div>
                   <div>
                     <h4 className="font-bold text-lg flex items-center gap-2">
