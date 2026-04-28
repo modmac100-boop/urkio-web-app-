@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Bot, User, Sparkles, Paperclip, X, Mic, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle, Play, RotateCcw, Trash2, Check, Volume2 } from 'lucide-react';
+import { Send, Bot, User, Sparkles, Paperclip, X, Mic, MicOff, Square, Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle, Play, RotateCcw, Trash2, Check, Volume2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { storage } from '../firebase';

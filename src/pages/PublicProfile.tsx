@@ -15,7 +15,7 @@ import { FollowsModal } from '../components/FollowsModal';
 import { SignInModal } from '../components/SignInModal';
 import {
   Loader2, Image, Settings, Sparkles, LayoutGrid,
-  Shield, Star, BookOpen, Camera, Award, Flame, Trophy, Calendar, Video
+  Shield, Star, BookOpen, Camera, Award, Flame, Trophy, Calendar, Video, X
 } from 'lucide-react';
 import { GlassButton } from '../components/GlassButton';
 import { StoryBar } from '../components/profile/StoryBar';

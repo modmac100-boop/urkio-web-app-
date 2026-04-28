@@ -4,10 +4,9 @@ import {
   LayoutGrid, 
   User, 
   LogOut, 
-  Search, 
-  Settings, 
+  Settings,
   HelpCircle, 
-  FolderShared, 
+  FolderOpen, 
   FileText, 
   Video, 
   Bot, 
@@ -27,15 +26,17 @@ import {
   Minimize2,
   Moon,
   Sun,
-  Home
+  Home,
+  File as FileIcon
 } from 'lucide-react';
-import { useApp } from '../contexts/AppContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { auth } from '../firebase';
 import { clsx } from 'clsx';
+import { X } from 'lucide-react';
 
 export const ClinicalStudio: React.FC = () => {
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useApp();
+  const { actualTheme: theme, toggleTheme } = useTheme();
   const [isSecureLineActive, setIsSecureLineActive] = useState(false);
   const [sessionTime, setSessionTime] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
@@ -59,7 +60,7 @@ export const ClinicalStudio: React.FC = () => {
   };
 
   const navItems = [
-    { icon: <FolderShared className="w-5 h-5" />, label: 'Patient Case' },
+    { icon: <FolderOpen className="w-5 h-5" />, label: 'Patient Case' },
     { icon: <FileText className="w-5 h-5" />, label: 'Clinical Docs' },
     { icon: <Video className="w-5 h-5" />, label: 'Session Capture', active: true },
     { icon: <Bot className="w-5 h-5" />, label: 'AI Assistant' },
@@ -413,7 +414,7 @@ export const ClinicalStudio: React.FC = () => {
                   <div key={i} className="group flex items-center justify-between p-4 rounded-2xl bg-black/5 border border-transparent hover:border-[#C8A96E]/20 transition-all cursor-pointer">
                     <div className="flex items-center gap-4">
                       <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center">
-                        {React.cloneElement(doc.icon as React.ReactElement, { className: 'w-5 h-5' })}
+                        {React.cloneElement(doc.icon as React.ReactElement<any>, { className: 'w-5 h-5' })}
                       </div>
                       <div>
                         <p className="text-xs font-bold">{doc.name}</p>
