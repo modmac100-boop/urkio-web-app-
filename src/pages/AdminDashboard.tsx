@@ -58,6 +58,8 @@ export function AdminDashboard({ user, userData }: any) {
   const [simulationProgress, setSimulationProgress] = useState<number | null>(null);
   const [userGrowthStats, setUserGrowthStats] = useState<{month: string, users: number}[]>([]);
 
+  const isAdmin = userData?.role === 'admin' || userData?.role === 'management' || userData?.role === 'founder' || userData?.email === 'urkio@urkio.com';
+
   useEffect(() => {
     if (!isAdmin) return;
     fetchUserGrowthData().then(data => setUserGrowthStats(data));
@@ -68,8 +70,6 @@ export function AdminDashboard({ user, userData }: any) {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
-
-  const isAdmin = userData?.role === 'admin' || userData?.role === 'management' || userData?.role === 'founder' || userData?.email === 'urkio@urkio.com';
 
   // Guard
   useEffect(() => {
