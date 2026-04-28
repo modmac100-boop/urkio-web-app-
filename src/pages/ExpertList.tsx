@@ -225,7 +225,6 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
               ))}
            </div>
         )}
-        )}
         
         {/* Recuitment Banner */}
         <section className={clsx(
