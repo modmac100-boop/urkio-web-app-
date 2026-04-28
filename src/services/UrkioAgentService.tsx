@@ -353,6 +353,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         setMood('calm');
       }
 
+      setIsLoading(false);
     } catch (error: any) {
       console.warn('[UrkioAgent] Neural Bridge offline, initializing local empathetic engine:', error);
       toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });

@@ -218,7 +218,13 @@ export function LandingPageV2({
       </nav>
 
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[90vh] flex items-center pt-20 pb-12 overflow-hidden z-10">
+      <section className="relative min-h-[90vh] flex items-center pt-28 pb-16 overflow-hidden z-10 bg-[#050A0F]">
+        {/* Aesthetic overlays */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-[#30B0D0]/10 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 inset-s-0 translate-y-1/2 -translate-x-1/4 w-[800px] h-[800px] bg-[#0A3D91]/10 rounded-full blur-[150px]" />
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
             
@@ -226,11 +232,11 @@ export function LandingPageV2({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#30B0D0]/10 border border-[#30B0D0]/20 mb-8 backdrop-blur-sm"
             >
-              <div className="size-2 rounded-full bg-[#C8A96E] animate-pulse" />
-              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-[#C8A96E]">
-                The Premier Care Economy Platform
+              <div className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
+              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-[#30B0D0]">
+                {isRTL ? 'تشفير تام وقنوات آمنة' : 'Secure & Fully Encrypted Channels'}
               </span>
             </motion.div>
 
@@ -238,30 +244,37 @@ export function LandingPageV2({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-              className="font-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 leading-[1.1]"
+              className={clsx(
+                "text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-8 leading-tight text-white",
+                isRTL ? "font-['Tajawal',sans-serif]" : "font-headline"
+              )}
             >
-              Your Journey <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] italic pr-4">
-                Within
-              </span>
+              {isRTL ? (
+                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
+              ) : (
+                <>Urkio: Your Journey Toward <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] italic pr-4">
+                  Healing
+                </span> and Self-Elevation</>
+              )}
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-white/60 mb-12 max-w-2xl leading-relaxed font-medium"
+              className="text-base md:text-lg text-white/60 mb-12 max-w-2xl leading-relaxed font-medium"
             >
               {isRTL
-                ? 'ارتقِ بمسارك المهني من خلال منظومة متكاملة من الإرشاد التنفيذي والتواصل عالي القرب.'
-                : 'Elevate your professional trajectory through a curated ecosystem of executive mentorship and high-proximity networking. Powered by secure, AES-256 encrypted clinical connections.'}
+                ? 'مساحة آمنة، تشفير تام، ومرشدون يفهمونك. طوّر ذاتك، ابنِ مجتمعك، واكتشف قوتك الكامنة في رحلة تعافي استثنائية.'
+                : 'Safe space, full encryption, and guides who truly understand. Develop yourself, build your community, and discover your potential.'}
             </motion.p>
 
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto"
+              className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-8"
             >
               <motion.button
                 whileHover={{ scale: 1.05, boxShadow: "0px 10px 30px rgba(48,176,208,0.3)" }}
@@ -269,7 +282,7 @@ export function LandingPageV2({
                 onClick={() => openSignUp('user')}
                 className="w-full sm:w-auto bg-[#30B0D0] text-[#050A0F] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all"
               >
-                Start Your Journey
+                {isRTL ? 'ابدأ رحلتك' : 'Start Your Journey'}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
@@ -277,7 +290,7 @@ export function LandingPageV2({
                 onClick={openSignIn}
                 className="w-full sm:w-auto border border-white/20 text-white px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
               >
-                View Manifesto
+                {t('landing.viewManifesto', 'View Manifesto')}
                 <ArrowRight className={clsx('size-4', isRTL && 'rotate-180')} />
               </motion.button>
 
@@ -288,13 +301,26 @@ export function LandingPageV2({
                 className="w-full sm:w-auto border border-[#30B0D0]/30 text-[#30B0D0] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
               >
                 <Sparkles className="size-4" />
-                Talk to Urkio Agent
+                {isRTL ? 'تحدث مع المرشد الذكي' : 'Talk to Urkio Agent'}
               </motion.button>
             </motion.div>
+
+            {/* Trust Signals */}
+            <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 w-full max-w-2xl text-sm font-medium text-white/60">
+              <span className="flex items-center gap-2">
+                <span className="text-[#30B0D0]">🔒</span>
+                {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#30B0D0]">👥</span>
+                {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
+              </span>
+            </div>
 
           </div>
         </div>
       </section>
+
 
       {/* ── Features & Encryption ── */}
       <section className="py-24 relative z-10 bg-[#050A0F]">

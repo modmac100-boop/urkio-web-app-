@@ -69,8 +69,8 @@ export const subscribeToMessages = (conversationId: string, callback: (messages:
         return {
           _id: doc.id,
           ...data,
-          // Decrypt text
-          text: decryptMessage(data.text), 
+          // Decrypt text, fallback to plaintext if decryption fails
+          text: decryptMessage(data.text) || data.text, 
           createdAt: data.createdAt?.toDate() || new Date(),
         };
       });
