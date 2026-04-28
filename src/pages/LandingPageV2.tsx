@@ -451,12 +451,17 @@ export function LandingPageV2({
           >
             <div>
               <h2 className="font-headline text-3xl lg:text-4xl font-black mb-6">
-                {isRTL ? 'دوائر الأمان: نصلك بمن يفهم لغتك الصامتة' : 'Circles of Safety: Connecting you to those who speak your silence'}
+                {isRTL ? 'الشبكة: من الاتصال الرقمي إلى الترابط الإنساني' : 'The Network: From Digital Contact to Human Connection'}
               </h2>
-              <p className="text-white/80 text-lg mb-8 leading-relaxed tracking-wide">
+              <div className="font-serif italic text-[#30B0D0] text-lg md:text-xl border-s-2 border-[#30B0D0]/40 ps-4 mb-6 leading-relaxed">
                 {isRTL 
-                  ? 'خريطة إنسان: لأن كل اتصال هو خطوة نحو التشافي والعودة لوحدتك النفسية.'
-                  : 'A Map of Hope: Because every connection is a step toward wholeness.'}
+                  ? '"ما وراء الخوارزميات: نبض الإنسانية المشترك."'
+                  : '"Beyond the Algorithm: A Pulse of Shared Humanity."'}
+              </div>
+              <p className="text-white/80 text-sm md:text-base mb-8 leading-relaxed tracking-wide font-sans">
+                {isRTL 
+                  ? 'في عالم من الضجيج الرقمي المشتت، تعيد "أوركيو" استرداد جوهر الاتصال. شبكتنا لم تُبنَ على مقاييس الغرور أو التصفح اللانهائي؛ بل هي "رسم بياني اجتماعي" حيّ صُمم لرسم مسارك نحو التعافي. نحن نجسر الفجوة بين الألم المنعزل والتشافي الجماعي، لنخلق مرفأً آمناً حيث يمثل كل اتصال مصدراً للقوة، وكل تفاعل خطوة نحو الاكتمال.'
+                  : 'In a world of fragmented digital noise, URKIO reclaims the essence of connection. Our network is not built on vanity metrics or endless scrolling; it is a living "Social Graph" designed to map your path to recovery. We bridge the gap between isolated pain and collective healing, creating a safe harbor where every node is a source of strength and every interaction is a step toward wholeness.'}
               </p>
               <ul className="space-y-6">
                 <li className="flex gap-4">
@@ -487,9 +492,21 @@ export function LandingPageV2({
                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                  className="relative w-64 h-64 border border-white/10 rounded-full flex items-center justify-center"
                >
-                 <div className="absolute top-0 -translate-y-1/2 size-8 bg-[#30B0D0] rounded-full shadow-[0_0_20px_#30B0D0]"/>
-                 <div className="absolute bottom-0 translate-y-1/2 size-6 bg-[#C8A96E] rounded-full shadow-[0_0_15px_#C8A96E]"/>
-                 <div className="absolute left-0 -translate-x-1/2 size-4 bg-white rounded-full shadow-[0_0_10px_white]"/>
+                 <motion.div 
+                   animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                   className="absolute top-0 -translate-y-1/2 size-8 bg-[#30B0D0] rounded-full shadow-[0_0_20px_#30B0D0]"
+                 />
+                 <motion.div 
+                   animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                   className="absolute bottom-0 translate-y-1/2 size-6 bg-[#C8A96E] rounded-full shadow-[0_0_15px_#C8A96E]"
+                 />
+                 <motion.div 
+                   animate={{ scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+                   transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                   className="absolute left-0 -translate-x-1/2 size-4 bg-white rounded-full shadow-[0_0_10px_white]"
+                 />
                  <div className="w-32 h-32 border border-white/20 rounded-full flex items-center justify-center">
                     <div className="size-16 bg-[#050A0F] border-2 border-[#30B0D0] rounded-full flex items-center justify-center font-headline font-black text-xl text-[#30B0D0]">
                       U
@@ -506,11 +523,19 @@ export function LandingPageV2({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
-              {t('landing.pillarsTitle', 'Pillars of Excellence')}
+              {isRTL ? 'المرتكزات: العمارة الداخلية للروح' : 'The Pillars: The Internal Architecture of the Soul'}
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] mx-auto rounded-full mb-6" />
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">
-              {t('landing.pillarsSubtitle', 'Foundational structures designed for the modern executive.')}
+            
+            <div className="font-serif italic text-[#C8A96E] text-lg md:text-xl mb-4 max-w-2xl mx-auto leading-relaxed">
+              {isRTL 
+                ? '"ركائز الهوية السيادية."'
+                : '"The Pillars of Sovereign Identity."'}
+            </div>
+            <p className="text-white/60 text-sm md:text-base max-w-3xl mx-auto leading-relaxed font-sans">
+              {isRTL 
+                ? 'تطوير الذات دون أساس هو مجرد إصلاح مؤقت. تمثل مرتكزاتنا التزاماً بـ "النزاهة الجذرية". من خلال دمج التشفير المتقدم (الخصوصية) مع البصيرة النفسية العميقة (العلم)، نخلق هيكلاً لذاتك الجديدة. نحن نضمن أن نموك ليس مجرد مرحلة عابرة، بل هو تحول بنيوي يحميك من الآثار الجانبية للتوتر الحديث وتآكل الهوية.'
+                : 'Personal development without a foundation is merely a temporary fix. Our pillars represent a commitment to "Radical Integrity." By combining Advanced Cryptography (Privacy) with Deep Psychological Insights (Science), we create a scaffold for your new self. We ensure that your growth is not just a phase, but a structural transformation that shields you from the side effects of modern stress and identity erosion.'}
             </p>
           </div>
 
@@ -542,9 +567,21 @@ export function LandingPageV2({
       <section id="investment" className="py-24 relative z-10 bg-[#020406]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="font-headline text-3xl md:text-5xl font-black mb-6">
-              {t('landing.investmentTitle', 'Investment in Excellence')}
+            <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
+              {isRTL ? 'الاستثمار: صناعة الثروة النفسية' : 'The Investment: Creating Psychological Wealth'}
             </h2>
+            
+            <div className="font-serif italic text-[#30B0D0] text-lg md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
+              {isRTL 
+                ? '"الاستثمار في هندسة الغد."'
+                : '"Investing in the Architecture of Tomorrow."'}
+            </div>
+            
+            <p className="text-white/60 text-sm md:text-base max-w-3xl mx-auto mb-8 leading-relaxed font-sans">
+              {isRTL 
+                ? 'العملة الأكثر قيمة في عام 2026 هي المرونة النفسية. الاستثمار في "أوركيو" هو استثمار في "رأس المال الاجتماعي" و"التوازن الشخصي". نحن نمكّنك من تحويل نقاط ضعفك إلى أصول من الحكمة. عندما تشفي نفسك، فإنك توازن عائلتك؛ وعندما توازن عائلتك، فإنك تقوي المجتمع. هذا هو العائد الأسمى: مجتمع من الشخصيات المبنية، المستعدة للقيادة بوضوح ورحمة.'
+                : 'The most valuable currency in 2026 is mental resilience. Investing in URKIO is an investment in "Social Capital" and "Personal Equilibrium." We empower you to turn your vulnerabilities into assets of wisdom. When you heal yourself, you stabilize your family; when you stabilize your family, you strengthen society. This is the ultimate return: a community of built personalities, ready to lead with clarity and compassion.'}
+            </p>
             
             <div className="inline-flex bg-[#050A0F] p-1.5 rounded-full border border-white/10">
               <button
