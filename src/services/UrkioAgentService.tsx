@@ -212,8 +212,15 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   };
 
   const getMockResponse = useCallback((text: string) => {
+    const lower = text.toLowerCase().trim();
     const isArabic = /[\u0600-\u06FF]/.test(text);
     
+    // Greeting handling
+    if (lower === 'hi' || lower === 'hello' || lower === 'hey' || lower === 'سلام' || lower === 'مرحبا') {
+      if (isArabic) return "مرحباً بك! أنا هنا لأسمعك وأدعمك. كيف حالك اليوم؟";
+      return "Hello! I'm here to support you. How are you feeling today?";
+    }
+
     if (isArabic) {
       const arabicResponses = [
         "أفهم تماماً ما تمر به. أنا هنا بجانبك، دعنا نفكر معاً في الخطوة القادمة.",
@@ -369,7 +376,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       return; 
     } finally {
       abortRef.current = null;
-      // We don't set isLoading(false) here if we hit the catch block's setTimeout
+      if (!isLoading) setIsLoading(false);
     }
   }, [input, messages, user, userData, condition, i18n.language, conversationId, getMockResponse]);
 
