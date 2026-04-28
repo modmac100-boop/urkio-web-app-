@@ -49,7 +49,10 @@ export function PublicProfile({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userPosts, setUserPosts] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState<'feed' | 'media' | 'articles' | 'events' | 'agenda' | 'settings'>('feed');
+  const [activeTab, setActiveTab] = useState<'feed' | 'media' | 'articles' | 'events' | 'agenda' | 'settings' | 'reviews' | 'services'>('feed');
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedExpertForBooking, setSelectedExpertForBooking] = useState<any>(null);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followingLoading, setFollowingLoading] = useState(false);
@@ -163,6 +166,16 @@ export function PublicProfile({
             return timeA - timeB;
           });
         setActiveStories(validStories);
+
+        // Fetch reviews
+        const reviewsQ = query(collection(db, 'reviews'), where('expertId', '==', userId));
+        const reviewsSnap = await getDocs(reviewsQ);
+        const reviewsData = reviewsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        setReviews(reviewsData);
+        if (reviewsData.length > 0) {
+          const avg = reviewsData.reduce((acc, curr: any) => acc + (curr.rating || 0), 0) / reviewsData.length;
+          setAverageRating(Number(avg.toFixed(1)));
+        }
 
       } catch (err: any) {
         console.error('Error fetching profile:', err);
@@ -458,6 +471,8 @@ export function PublicProfile({
     { id: 'media',    icon: Image,      label: t('profile.gallery') || 'Media' },
     { id: 'articles', icon: BookOpen,   label: t('profile.editorial') || 'Editorial' },
     { id: 'events',   icon: Star,       label: t('profile.highlights') || 'Highlights' },
+    { id: 'reviews',  icon: Star,       label: 'Reviews' },
+    { id: 'services', icon: Award,      label: 'Services' },
     ...(isOwnProfile && isExpert ? [{ id: 'therapy-room', icon: Video, label: 'Clinical Studio' }] : []),
     ...(showAgendaTab ? [{ id: 'agenda', icon: Calendar, label: t('profile.expertAgenda') || 'Agenda' }] : []),
     ...(isOwnProfile ? [{ id: 'settings', icon: Settings, label: t('profile.pageSetup', 'Page Setup') }] : []),
@@ -556,201 +571,152 @@ export function PublicProfile({
               {/* ── Tab Panels ───────────────────────────────────────────── */}
 
               {/* FEED */}
-          {activeTab === 'feed' && (
-            <div className="grid grid-cols-1 gap-8">
-              {userPosts.map((post) => (
-                <FeedPost key={post.id} post={post} user={profileData} currentUserId={currentUser?.uid} />
-              ))}
-              {userPosts.length === 0 && (
-                <div className="bento-card border border-dashed border-border-light p-20 text-center bg-msgr-surface-container-low/30 backdrop-blur-sm rounded-[3rem]">
-                  <div className="size-20 rounded-4xl bg-surface flex items-center justify-center mx-auto mb-6 shadow-xl border border-border-light">
-                    <span className="material-symbols-outlined text-3xl text-primary">draw</span>
-                  </div>
-                  <h3 className="text-xl font-headline font-black text-on-surface">Silence is Golden</h3>
-                  <p className="text-xs font-black text-on-surface-variant uppercase tracking-widest mt-2">
-                    {profileData.displayName} hasn't impacted the world yet.
-                  </p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* GALLERY */}
-          {activeTab === 'media' && (
-            <div className="bento-card bg-surface border border-border-light shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-border-light flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Camera className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-headline font-black text-on-surface text-base">Photo Gallery</h3>
-                    <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-widest">
-                      {profileData.displayName}'s visual story
-                    </p>
-                  </div>
-                </div>
-                {isOwnProfile && (
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-white text-xs font-black uppercase tracking-widest hover:bg-primary/90 transition-colors">
-                    <Camera className="w-4 h-4" /> Add Photos
-                  </button>
-                )}
-              </div>
-              {/* Photo & Video grid — uses post media */}
-              {userPosts.filter(p => p.mediaUrl).length > 0 ? (
-                <div className="grid grid-cols-3 gap-1 p-1 bg-bg-main/20">
-                  {userPosts
-                    .filter(p => p.mediaUrl)
-                    .map((post, idx) => (
-                      <div
-                        key={idx}
-                        className={clsx(
-                          'relative overflow-hidden bg-bg-main group cursor-pointer aspect-square',
-                          idx % 7 === 0 ? 'col-span-2 row-span-2' : ''
+              {activeTab === 'feed' && (
+                <div className="grid grid-cols-1 gap-8 animate-fade-in-up">
+                  {isExpert && (
+                    <section className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm mb-4">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="font-headline font-black text-primary italic text-xl">Professional Journey</h3>
+                        {isOwnProfile && (
+                          <button className="text-[10px] font-black text-primary uppercase tracking-widest hover:underline">+ Add Milestone</button>
                         )}
-                      >
-                        {post.mediaType === 'video' ? (
-                          <div className="w-full h-full relative">
-                            <video
-                              src={post.mediaUrl}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                            <div className="absolute top-2 inset-e-2 size-6 rounded-lg bg-black/40 backdrop-blur-sm flex items-center justify-center">
-                              <span className="material-symbols-outlined text-[14px] text-white">videocam</span>
+                      </div>
+                      <div className="relative pl-10 border-l-2 border-teal-100 dark:border-teal-900/30 space-y-12">
+                        {(profileData.journey || [
+                          { year: '2023', title: 'Senior Clinical Director', desc: 'Leading the neuro-plasticity division at Urkio Clinical Labs.', type: 'major' },
+                          { year: '2020', title: 'PhD in Cognitive Science', desc: 'Specialized research in behavioral habit formation.', type: 'academic' },
+                          { year: '2016', title: 'Foundation of Practice', desc: 'Initiated first clinical workspace in San Francisco.', type: 'entrepreneur' }
+                        ]).map((m: any, i: number) => (
+                          <div key={i} className="relative">
+                            <div className={clsx(
+                              "absolute -left-[49px] top-0 size-4 rounded-full border-4 border-white dark:border-zinc-900",
+                              m.type === 'major' ? "bg-teal-600" : "bg-teal-200"
+                            )}></div>
+                            <div>
+                              <span className="text-[10px] font-black text-teal-600 uppercase tracking-widest bg-teal-50 dark:bg-teal-900/20 px-3 py-1 rounded-full">{m.year} • {m.type?.toUpperCase() || 'MILESTONE'}</span>
+                              <h4 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-xl mt-3">{m.title}</h4>
+                              <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium mt-2 max-w-xl leading-relaxed">{m.desc}</p>
                             </div>
                           </div>
-                        ) : (
-                          <img
-                            src={post.mediaUrl}
-                            alt="Gallery"
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
-                        )}
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center items-center gap-4">
-                           <div className="flex items-center gap-4 text-white">
-                              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">favorite</span> {post.likesCount || 0}</div>
-                              <div className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">chat_bubble</span> {post.commentsCount || 0}</div>
-                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))
-                  }
-                </div>
-              ) : (
-                <div className="p-20 text-center">
-                  <div className="size-16 rounded-3xl bg-surface flex items-center justify-center mx-auto mb-5 shadow-xl border border-border-light">
-                    <Camera className="w-7 h-7 text-on-surface-variant/50" />
-                  </div>
-                  <h4 className="font-headline font-black text-on-surface">No Photos Yet</h4>
-                  <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-widest mt-2">
-                    Images from posts will appear here
-                  </p>
+                    </section>
+                  )}
+
+                  {userPosts.map((post) => (
+                    <FeedPost key={post.id} post={post} user={profileData} currentUserId={currentUser?.uid} />
+                  ))}
+                  {userPosts.length === 0 && (
+                    <div className="bento-card border border-dashed border-border-light p-20 text-center bg-msgr-surface-container-low/30 backdrop-blur-sm rounded-[3rem]">
+                      <div className="size-20 rounded-4xl bg-surface flex items-center justify-center mx-auto mb-6 shadow-xl border border-border-light">
+                        <span className="material-symbols-outlined text-3xl text-primary">draw</span>
+                      </div>
+                      <h3 className="text-xl font-headline font-black text-on-surface">Silence is Golden</h3>
+                      <p className="text-xs font-black text-on-surface-variant uppercase tracking-widest mt-2">
+                        {profileData.displayName} hasn't impacted the world yet.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          )}
 
-          {/* EDITORIAL */}
-          {activeTab === 'articles' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="size-10 rounded-xl bg-accent/10 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-accent" />
-                  </div>
+          {/* REVIEWS */}
+          {activeTab === 'reviews' && (
+            <div className="space-y-8 animate-fade-in-up">
+              <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                   <div>
-                    <h3 className="font-headline font-black text-on-surface text-base">Editorial</h3>
-                    <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-widest">
-                      Long-form insights & articles
-                    </p>
+                    <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic">Specialist Reviews</h3>
+                    <div className="flex items-center gap-3 mt-2">
+                      <div className="flex text-amber-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={clsx("w-5 h-5", i < Math.floor(averageRating) ? "fill-current" : "text-zinc-200")} />
+                        ))}
+                      </div>
+                      <span className="text-lg font-black text-zinc-900 dark:text-zinc-100">{averageRating}</span>
+                      <span className="text-xs font-bold text-zinc-400 uppercase tracking-widest">({reviews.length} Verified Reviews)</span>
+                    </div>
                   </div>
+                  {!isOwnProfile && currentUser && (
+                    <button 
+                      onClick={() => setIsReviewModalOpen(true)}
+                      className="px-8 py-4 bg-teal-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-teal-600/20 hover:scale-105 active:scale-95 transition-all"
+                    >
+                      Write Experience
+                    </button>
+                  )}
                 </div>
-              </div>
-              {userPosts.filter(p => p.type === 'article' || (p.content && p.content.length > 300)).length > 0 ? (
-                userPosts
-                  .filter(p => p.type === 'article' || (p.content && p.content.length > 300))
-                  .map((post, idx) => (
-                    <article key={idx} className="bento-card bg-surface border border-border-light shadow-sm overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer">
-                      {post.mediaUrl && post.mediaType !== 'video' && (
-                        <div className="h-48 overflow-hidden">
-                          <img src={post.mediaUrl} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+
+                <div className="grid grid-cols-1 gap-6">
+                  {reviews.length > 0 ? reviews.map((review) => (
+                    <div key={review.id} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 group hover:border-teal-500/30 transition-all">
+                      <div className="flex justify-between items-start mb-6">
+                        <div className="flex items-center gap-4">
+                          <div className="size-12 rounded-2xl overflow-hidden bg-zinc-200 border-2 border-white dark:border-zinc-700 shadow-sm">
+                            <img src={review.authorPhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(review.authorName || 'User')}`} className="w-full h-full object-cover" alt="" />
+                          </div>
+                          <div>
+                            <p className="font-black text-zinc-900 dark:text-zinc-100 text-base">{review.authorName}</p>
+                            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">
+                              {review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently Verified'}
+                            </p>
+                          </div>
                         </div>
-                      )}
-                      <div className="p-6">
-                        <div className="flex items-center gap-2 mb-3">
-                          <span className="px-3 py-1 rounded-full bg-accent/10 text-accent text-[10px] font-black uppercase tracking-widest">Editorial</span>
-                          <span className="text-[11px] text-on-surface-variant font-semibold">
-                            {post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently'}
-                          </span>
-                        </div>
-                        <p className="text-sm text-on-surface font-medium leading-8 line-clamp-4">{post.content}</p>
-                        <div className="mt-4 flex items-center gap-2">
-                          <img
-                            src={profileData.photoURL || `https://ui-avatars.com/api/?name=${profileData.displayName}`}
-                            alt={profileData.displayName}
-                            className="size-6 rounded-lg object-cover border border-border-light"
-                          />
-                          <span className="text-xs font-black text-on-surface">{profileData.displayName}</span>
+                        <div className="flex text-amber-400 bg-amber-50 dark:bg-amber-400/10 px-3 py-1 rounded-full">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className={clsx("w-3 h-3", i < review.rating ? "fill-current" : "text-amber-200")} />
+                          ))}
                         </div>
                       </div>
-                    </article>
-                  ))
-              ) : (
-                <div className="bento-card border border-dashed border-border-light p-20 text-center bg-msgr-surface-container-low/30 backdrop-blur-sm rounded-[3rem]">
-                  <div className="size-16 rounded-3xl bg-surface flex items-center justify-center mx-auto mb-5 shadow-xl border border-border-light">
-                    <BookOpen className="w-7 h-7 text-on-surface-variant/50" />
-                  </div>
-                  <h4 className="font-headline font-black text-on-surface">No Articles Yet</h4>
-                  <p className="text-xs font-semibold text-on-surface-variant uppercase tracking-widest mt-2">
-                    Long-form content will appear here
-                  </p>
+                      <p className="text-zinc-600 dark:text-zinc-400 font-medium leading-relaxed italic text-base">
+                        "{review.content}"
+                      </p>
+                    </div>
+                  )) : (
+                    <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/30 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-zinc-800">
+                      <div className="size-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-4">
+                        <Star className="w-8 h-8 text-zinc-300" />
+                      </div>
+                      <h4 className="text-zinc-900 dark:text-zinc-100 font-black italic">Awaiting Feedback</h4>
+                      <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest mt-2">Be the first to share your experience with this specialist.</p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           )}
 
-          {/* HIGHLIGHTS */}
-          {activeTab === 'events' && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-2">
-                <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-amber-500" />
-                </div>
-                <div>
-                  <h3 className="font-headline font-black text-on-surface text-base">Highlights</h3>
-                  <p className="text-[11px] font-semibold text-on-surface-variant uppercase tracking-widest">
-                    Pinned moments & achievements
-                  </p>
+          {/* SERVICES */}
+          {activeTab === 'services' && (
+            <div className="animate-fade-in-up">
+               <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic mb-10">Specialized Protocols</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {(profileData.services || [
+                    { title: 'Cognitive Behavioral Therapy', price: '$150/hr', desc: 'Targeted sessions for anxiety, depression, and trauma management.' },
+                    { title: 'Strategic Habit Design', price: '$120/hr', desc: 'Architecting sustainable daily rituals for high-performance individuals.' },
+                    { title: 'Neuro-Plasticity Assessment', price: '$200', desc: 'Comprehensive clinical evaluation of cognitive flexibility and brain health.' },
+                    { title: 'Guided Mindfulness Intensive', price: '$80/hr', desc: 'Advanced meditation and breathwork for nervous system regulation.' }
+                  ]).map((s: any, i: number) => (
+                    <div key={i} className="p-8 bg-zinc-50 dark:bg-zinc-800/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:border-teal-500/20 transition-all group">
+                      <div className="flex justify-between items-start mb-4">
+                        <h4 className="font-black text-zinc-900 dark:text-zinc-100 text-lg group-hover:text-teal-600 transition-colors">{s.title}</h4>
+                        <span className="text-teal-600 font-black text-sm bg-teal-50 dark:bg-teal-900/20 px-3 py-1 rounded-full">{s.price}</span>
+                      </div>
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 font-medium leading-relaxed mb-8">{s.desc}</p>
+                      <button 
+                        onClick={() => setIsBookingModalOpen(true)}
+                        className="w-full py-4 bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-[1.02] active:scale-95 transition-all shadow-xl"
+                      >
+                        Initiate Booking
+                      </button>
+                    </div>
+                  ))}
                 </div>
               </div>
-
-              {/* Achievement cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { icon: Flame,  color: 'rose',   label: 'Top Creator',   sublabel: 'Ranked in top 5% this month',  stat: '#3' },
-                  { icon: Star,   color: 'amber',  label: 'Rising Star',   sublabel: 'Fastest growing profile',       stat: '+340%' },
-                  { icon: Award,  color: 'violet', label: 'Impact Badge',  sublabel: 'High-value content creator',   stat: '12.5K' },
-                  { icon: Trophy, color: 'blue',   label: 'Verified Pro',  sublabel: 'Expert-verified specialist',   stat: '✓' },
-                ].map((badge, i) => (
-                  <div key={i} className="bento-card bg-surface border border-border-light p-6 flex items-center gap-4 hover:shadow-lg transition-all duration-300 group cursor-pointer">
-                    <div className={`size-14 rounded-2xl bg-${badge.color}-500/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
-                      <badge.icon className={`w-7 h-7 text-${badge.color}-500`} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-headline font-black text-on-surface text-sm">{badge.label}</p>
-                      <p className="text-[11px] font-semibold text-on-surface-variant mt-0.5 leading-relaxed">{badge.sublabel}</p>
-                    </div>
-                    <span className={`text-lg font-black text-${badge.color}-500 shrink-0`}>{badge.stat}</span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Pinned posts */}
-              {userPosts.length > 0 && (
-                <div className="space-y-4">
-                  <p className="text-[11px] font-black uppercase tracking-[0.2em] text-on-surface-variant px-1">— Pinned Posts —</p>
-                  {userPosts.slice(0, 2).map((post, idx) => (
-                    <div key={idx} className="bento-card bg-surface border border-border-light p-5 flex items-start gap-4 hover:shadow-lg transition-all duration-300">
+            </div>
+          )}
+ght p-5 flex items-start gap-4 hover:shadow-lg transition-all duration-300">
                       <div className="size-10 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0 mt-0.5">
                         <Star className="w-5 h-5 text-amber-500" />
                       </div>
@@ -1011,42 +977,97 @@ export function PublicProfile({
         currentUserId={currentUser?.uid}
       />
 
+      {/* Review Modal */}
+      {isReviewModalOpen && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+          <div className="bg-white dark:bg-zinc-900 rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500 border border-white/20">
+            <div className="bg-teal-600 p-10 text-white relative">
+              <button 
+                onClick={() => setIsReviewModalOpen(false)}
+                className="absolute top-6 right-6 size-10 rounded-full bg-black/10 flex items-center justify-center hover:bg-black/20 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h3 className="text-3xl font-headline font-black italic">Share your experience</h3>
+              <p className="text-teal-100 font-medium text-sm mt-2 opacity-80 uppercase tracking-widest">Rate your session with {profileData.displayName}</p>
+            </div>
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const content = formData.get('content') as string;
+              const rating = Number(formData.get('rating'));
+              
+              if (!content || !rating) return toast.error('Please provide a rating and review.');
+              
+              try {
+                await addDoc(collection(db, 'reviews'), {
+                  expertId: userId,
+                  authorId: currentUser.uid,
+                  authorName: activeUserData?.displayName || currentUser.email,
+                  authorPhoto: activeUserData?.photoURL || '',
+                  content,
+                  rating,
+                  createdAt: serverTimestamp()
+                });
+                toast.success('Review submitted successfully!');
+                setIsReviewModalOpen(false);
+                window.location.reload();
+              } catch (err) {
+                toast.error('Failed to submit review.');
+              }
+            }} className="p-10 space-y-8">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-4">Verification Score</label>
+                <div className="flex gap-4">
+                  {[1, 2, 3, 4, 5].map((num) => (
+                    <label key={num} className="cursor-pointer group">
+                      <input type="radio" name="rating" value={num} className="hidden peer" required />
+                      <Star className="size-10 text-zinc-100 dark:text-zinc-800 peer-checked:text-amber-400 peer-checked:fill-current group-hover:scale-110 transition-transform" />
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-4">Clinical / Personal Feedback</label>
+                <textarea 
+                  name="content"
+                  required
+                  rows={5}
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-[2rem] p-6 text-sm font-medium focus:ring-2 focus:ring-teal-500/20 outline-none resize-none text-zinc-900 dark:text-zinc-100"
+                  placeholder="Tell us about the impact of this session..."
+                />
+              </div>
+              <div className="flex gap-4">
+                <button 
+                  type="button" 
+                  onClick={() => setIsReviewModalOpen(false)}
+                  className="flex-1 py-5 border border-zinc-100 dark:border-zinc-800 text-zinc-400 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-zinc-50 transition-all"
+                >
+                  Discard
+                </button>
+                <button 
+                  type="submit"
+                  className="flex-1 py-5 bg-teal-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-teal-600/20 hover:scale-[1.02] active:scale-95 transition-all"
+                >
+                  Publish Experience
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* ─── FLOATING BOOK NOW BUTTON ─────────────────────────────────────────
            Always visible on the bottom-right corner when visiting an expert's
            profile. Appears ONLY for visitors (not the expert themselves).    */}
       {profileData && !isOwnProfile && isExpert && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            zIndex: 9999,
-          }}
-        >
+        <div className="fixed bottom-8 right-8 z-[100]">
           <button
             onClick={() => setIsBookingModalOpen(true)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              background: 'linear-gradient(135deg, #136dec 0%, #7c3aed 100%)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '9999px',
-              padding: '1rem 2rem',
-              fontSize: '0.85rem',
-              fontWeight: '900',
-              letterSpacing: '0.15em',
-              textTransform: 'uppercase',
-              cursor: 'pointer',
-              boxShadow: '0 20px 60px rgba(19,109,236,0.4)',
-              transition: 'transform 0.2s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
-            onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+            className="flex items-center gap-3 bg-teal-600 text-white rounded-full px-8 py-4 text-[10px] font-black uppercase tracking-widest shadow-2xl shadow-teal-600/40 hover:scale-105 active:scale-95 transition-all"
           >
-            <span style={{ fontSize: '1.4rem' }}>📅</span>
-            Book Session with {profileData.displayName || 'Expert'}
+            <Calendar className="w-4 h-4" />
+            Book Specialist Session
           </button>
         </div>
       )}

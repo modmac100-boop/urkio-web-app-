@@ -374,8 +374,11 @@ export function ProfileHeader({
               )}
             </div>
             
-            <div className="flex-1">
-              <h1 className="font-headline-md text-on-background leading-tight text-3xl md:text-4xl">{displayName}</h1>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h1 className="font-headline-md text-on-background leading-tight text-3xl md:text-4xl truncate">{displayName}</h1>
+                {isVerified && <CheckCircle2 className="size-6 text-primary shrink-0" fill="currentColor" />}
+              </div>
               <div className="flex items-center gap-2 text-on-surface-variant font-label-sm mt-1">
                 <MapPin className="w-4 h-4" />
                 {location || 'Global Network'}

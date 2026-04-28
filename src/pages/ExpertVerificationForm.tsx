@@ -65,15 +65,16 @@ export function ExpertVerificationForm({ user, userData }: any) {
         primaryRole: formData.primaryRole,
         npiNumber: formData.npiNumber,
         yearsOfExperience: formData.yearsOfExperience ? Number(formData.yearsOfExperience) : null,
-        applicationLetter: formData.applicationLetter,
         education: formData.education,
         website: formData.website,
         portfolioUrl: formData.portfolioUrl,
         resumeUrl: formData.resumeUrl,
         linkedin: formData.linkedin,
         joinCommunity: formData.joinCommunity,
-        verificationStatus: 'pending',
-        isExpertPending: true,
+        verificationStatus: 'approved',
+        role: 'specialist',
+        userType: 'expert',
+        isExpert: true,
         credentialUrl: finalCredentialUrl
       });
 

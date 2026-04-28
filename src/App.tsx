@@ -34,6 +34,7 @@ const TherapyRoom = lazy(() => import('./pages/TherapyRoom').then(m => ({ defaul
 const SpecialistDashboard = lazy(() => import('./pages/SpecialistDashboard').then(m => ({ default: m.SpecialistDashboard })));
 const Agenda = lazy(() => import('./pages/Agenda').then(m => ({ default: m.Agenda })));
 const ClinicalWorkstation = lazy(() => import('./pages/ClinicalWorkstation').then(m => ({ default: m.ClinicalWorkstation })));
+const ClinicalStudio = lazy(() => import('./pages/ClinicalStudio').then(m => ({ default: m.ClinicalStudio })));
 const TherapyAgent = lazy(() => import('./pages/TherapyAgent').then(m => ({ default: m.TherapyAgent })));
 
 import { Tasks } from './pages/Tasks';
@@ -538,6 +539,7 @@ export default function App() {
                   <Route path="/expert-dashboard" element={user ? <ExpertDashboard user={user} userData={userData} /> : <Navigate to="/landing" replace />} />
                   <Route path="/agenda" element={user ? <MFAGate user={user} userData={userData}><Agenda user={user} userData={userData} /></MFAGate> : <Navigate to="/landing" replace />} />
                   <Route path="/clinical-workstation" element={user ? <MFAGate user={user} userData={userData}><ClinicalWorkstation user={user} userData={userData} /></MFAGate> : <Navigate to="/landing" replace />} />
+                  <Route path="/clinical-studio" element={user ? <ClinicalStudio /> : <Navigate to="/landing" replace />} />
                   <Route path="/records" element={user ? <ClinicalWorkstation user={user} userData={userData} initialTab="records" /> : <Navigate to="/landing" replace />} />
                   <Route path="/notes" element={user ? <ClinicalWorkstation user={user} userData={userData} initialTab="notes" /> : <Navigate to="/landing" replace />} />
                   <Route path="/plans" element={user ? <ClinicalWorkstation user={user} userData={userData} initialTab="plans" /> : <Navigate to="/landing" replace />} />
