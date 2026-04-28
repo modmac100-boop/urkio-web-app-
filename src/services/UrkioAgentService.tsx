@@ -265,6 +265,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     setIsEscalating(false);
     
     try {
+      console.log("[UrkioAgent] Contacting Neural Bridge via /api/chat...");
       abortRef.current = new AbortController();
       const response = await fetch('/api/chat', {
         method: 'POST',
@@ -286,7 +287,9 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         })
       });
 
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      if (!response.ok) {
+        throw new Error(`Neural Bridge Unreachable (HTTP ${response.status})`);
+      }
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -323,21 +326,29 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       }
 
     } catch (error: any) {
-      console.warn('AI API failed or timed out, using intelligent fallback:', error);
+      console.warn('[UrkioAgent] Neural Bridge offline, initializing local empathetic engine:', error);
+      toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
+      
       const mockText = getMockResponse(text);
       // Wait a bit to simulate thinking
       setTimeout(async () => {
-        await sendEncryptedMessage(conversationId, {
-          text: mockText,
-          role: 'assistant',
-          user: { _id: 2, name: 'Urkio AI' }
-        });
-        setIsLoading(false);
+        try {
+          await sendEncryptedMessage(conversationId, {
+            text: mockText,
+            role: 'assistant',
+            user: { _id: 2, name: 'Urkio AI' }
+          });
+          console.log("[UrkioAgent] Local response delivered successfully.");
+        } catch (e) {
+          console.error("[UrkioAgent] Critical failure delivering local response:", e);
+        } finally {
+          setIsLoading(false);
+        }
       }, 1500);
-      return; // Return early as we handle setIsLoading inside setTimeout
+      return; 
     } finally {
-      setIsLoading(false);
       abortRef.current = null;
+      // We don't set isLoading(false) here if we hit the catch block's setTimeout
     }
   }, [input, messages, user, userData, condition, i18n.language, conversationId, getMockResponse]);
 
