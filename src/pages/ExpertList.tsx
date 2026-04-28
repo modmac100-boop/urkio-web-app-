@@ -159,7 +159,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
               <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Scanning Registry...</p>
            </div>
         ) : (
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
               {filteredExperts.map((expert) => (
                  <motion.div 
                    key={expert.id}
@@ -167,12 +167,12 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
                    className={clsx(
-                     "group rounded-[3rem] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 border",
+                     "group rounded-[2rem] md:rounded-[3rem] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 border",
                      theme === 'dark' ? "bg-[#10161D] border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
                    )}
                  >
                     {/* Visual Header */}
-                    <div className="relative h-64 overflow-hidden bg-slate-900">
+                    <div className="relative h-48 md:h-64 overflow-hidden bg-slate-900">
                        <img 
                          src={expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'Expert')}&background=random&color=fff&size=512`}
                          alt={expert.displayName}
@@ -180,78 +180,43 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                        />
                        <div className="absolute inset-0 bg-gradient-to-t from-[#10161D] via-transparent to-transparent opacity-80" />
                        
-                       <div className="absolute top-6 left-6 flex flex-col gap-2">
-                          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 backdrop-blur-xl border border-emerald-500/20 text-emerald-400">
-                             <div className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                             <span className="text-[8px] font-black uppercase tracking-widest">ACTIVE CLINICAL BRIDGE</span>
-                          </div>
-                          {expert.verificationStatus === 'approved' && (
-                             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#C8A96E]/10 backdrop-blur-xl border border-[#C8A96E]/20 text-[#C8A96E]">
-                                <Verified className="size-3 fill-current" />
-                                <span className="text-[8px] font-black uppercase tracking-widest">VERIFIED EXPERT</span>
-                             </div>
-                          )}
-                       </div>
-
-                       <div className="absolute bottom-6 right-6">
-                          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl">
-                             <Star className="size-3 text-amber-400 fill-amber-400" />
-                             <span className="text-[10px] font-black text-white">{expert.rating || '4.9'}</span>
+                       <div className="absolute top-3 md:top-6 left-3 md:left-6 flex flex-col gap-2">
+                          <div className="flex items-center gap-1.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full bg-emerald-500/10 backdrop-blur-xl border border-emerald-500/20 text-emerald-400">
+                             <div className="size-1 md:size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                             <span className="text-[6px] md:text-[8px] font-black uppercase tracking-widest">ACTIVE BRIDGE</span>
                           </div>
                        </div>
                     </div>
 
                     {/* Content Body */}
-                    <div className="p-10 flex-1 flex flex-col">
-                       <div className="flex justify-between items-start mb-2">
+                    <div className="p-4 md:p-10 flex-1 flex flex-col">
+                       <div className="flex flex-col md:flex-row justify-between items-start mb-2">
                           <div>
-                             <h3 className="text-2xl font-bold font-serif-clinical tracking-tight group-hover:text-[#30B0D0] transition-colors">{expert.displayName}</h3>
-                             <p className="text-[10px] font-black uppercase tracking-widest text-[#30B0D0] mt-1">{expert.specialty || expert.primaryRole || "Mental Performance Lead"}</p>
-                          </div>
-                          <div className="text-right">
-                             <p className="text-[9px] font-black uppercase tracking-widest opacity-40">Rate</p>
-                             <p className="text-lg font-bold font-manrope">${expert.hourlyRate || '180'}<span className="text-[10px] opacity-40">/hr</span></p>
+                             <h3 className="text-sm md:text-2xl font-bold font-serif-clinical tracking-tight group-hover:text-[#30B0D0] transition-colors line-clamp-1">{expert.displayName}</h3>
+                             <p className="text-[7px] md:text-[10px] font-black uppercase tracking-widest text-[#30B0D0] mt-1 line-clamp-1">{expert.specialty || expert.primaryRole || "Mental Lead"}</p>
                           </div>
                        </div>
 
-                       <p className="text-xs font-medium opacity-50 leading-relaxed italic mb-8 mt-4 line-clamp-3">
-                          "{expert.bio || "Dedicated to transformative clinical wellness and cognitive habit architecture."}"
-                       </p>
-
-                       <div className="flex gap-2 flex-wrap mb-10">
-                          {['Stress Zenith', 'Focus Architecture', 'Neural Rehab'].map(tag => (
-                             <span key={tag} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[8px] font-black uppercase tracking-widest opacity-40">{tag}</span>
-                          ))}
-                       </div>
-
-                       {/* FUNCTIONAL BUTTONS - AS REQUESTED */}
-                       <div className="mt-auto space-y-4">
-                          <div className="flex gap-3">
-                             <button 
-                               onClick={() => navigate(`/expert/${expert.id}?action=book`)}
-                               className="flex-[1.2] bg-[#30B0D0] text-[#050A0F] py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-between px-6 hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-[#30B0D0]/20"
-                             >
-                                BOOK NOW <ChevronRight className="w-4 h-4 stroke-[3px]" />
-                             </button>
+                       {/* FUNCTIONAL BUTTONS - COMPACT FOR MOBILE */}
+                       <div className="mt-auto space-y-2 md:space-y-4">
+                          <button 
+                            onClick={() => navigate(`/expert/${expert.id}?action=book`)}
+                            className="w-full bg-[#30B0D0] text-[#050A0F] py-2.5 md:py-4 rounded-xl md:rounded-2xl font-black text-[7px] md:text-[10px] uppercase tracking-widest flex items-center justify-between px-4 md:px-6"
+                          >
+                             BOOK <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
+                          </button>
+                          <div className="flex gap-2">
                              <button 
                                onClick={() => navigate(`/therapy-room/${expert.id}?type=video`)}
-                               className="flex-1 bg-emerald-500 text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-between px-6 hover:brightness-110 active:scale-95 transition-all shadow-xl shadow-emerald-500/20"
+                               className="flex-1 bg-emerald-500 text-white py-2 md:py-3.5 rounded-lg md:rounded-2xl font-black text-[6px] md:text-[9px] uppercase tracking-widest"
                              >
-                                INSTANT CALL <Phone className="w-4 h-4" />
-                             </button>
-                          </div>
-                          <div className="flex gap-3">
-                             <button 
-                               onClick={() => navigate(`/messenger?partnerId=${expert.id}`)}
-                               className="flex-1 bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3.5 rounded-2xl font-black text-[9px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all"
-                             >
-                                <MessageSquare className="w-4 h-4 opacity-40" /> MESSAGE
+                                CALL
                              </button>
                              <button 
                                onClick={() => navigate(`/expert/${expert.id}`)}
-                               className="flex-1 bg-white/5 border border-white/5 hover:bg-white/10 text-white py-3.5 rounded-2xl font-black text-[9px] uppercase tracking-widest transition-all"
+                               className="flex-1 bg-white/5 border border-white/5 text-white py-2 md:py-3.5 rounded-lg md:rounded-2xl font-black text-[6px] md:text-[9px] uppercase tracking-widest"
                              >
-                                FULL PROFILE
+                                VIEW
                              </button>
                           </div>
                        </div>
@@ -259,6 +224,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                  </motion.div>
               ))}
            </div>
+        )}
         )}
         
         {/* Recuitment Banner */}

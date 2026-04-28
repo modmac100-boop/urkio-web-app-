@@ -564,10 +564,59 @@ html {
 
 
 
+/* ── Laptop-Grade Mobile Experience ────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 58%; /* Slightly smaller for higher density */
+  }
+
+  .mobile-laptop-stack {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .mobile-laptop-stack > * {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: 85%; /* Shows a peek of the next card */
+  }
+
+  /* Reduce massive paddings on mobile to keep laptop-like density */
+  .p-10, .p-20, .p-32 {
+    padding: 2rem !important;
+  }
+  
+  .px-8, .px-12, .px-40 {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+
+  /* High-end Mobile Typography */
+  h1 { font-size: 3.5rem !important; }
+  h2 { font-size: 2.8rem !important; }
+  h3 { font-size: 2.2rem !important; }
+
+  /* Keep Bento-Grid side-by-side if they are small widgets */
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Glassmorphism stability on mobile */
+  .glass-panel, .glass-card {
+    backdrop-filter: blur(15px); /* Slightly less for performance */
+    -webkit-backdrop-filter: blur(15px);
+  }
+}
+
 /* ── Agora Mirroring Fixes ────────────────────────────────────────────── */
 .video-mirror-transform video {
   transform: scaleX(-1) !important;
-  -webkit-transform: scaleX(-1) !important; /* For Safari support on MacBook */
+  -webkit-transform: scaleX(-1) !important; 
 }
 
 /* ── Zen Mode / 25% Scaling ───────────────────────────────────────────── */

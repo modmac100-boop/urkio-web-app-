@@ -230,15 +230,15 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       <main className="pt-32 p-6 md:p-10 h-screen overflow-hidden flex flex-col gap-8">
          
          {/* Top Section: Immersive Video & Notes Split */}
-         <div className="flex-1 flex flex-col xl:flex-row gap-8 min-h-0">
+         <div className="flex-1 flex flex-col lg:flex-row gap-4 md:gap-8 min-h-0">
             {/* Primary Video Hub - EXPANDED */}
             <div className="flex-[3] relative min-h-0">
                {connectionState === 'CONNECTED' ? (
-                  <div className={clsx("w-full h-full grid gap-6", remoteUsers.length > 0 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1")}>
+                  <div className={clsx("w-full h-full grid gap-4 md:gap-6", remoteUsers.length > 0 ? "grid-cols-2" : "grid-cols-1")}>
                      <VideoPlayer 
                         videoTrack={localVideoTrack || undefined}
                         isLocal
-                        name="Practitioner (Me)"
+                        name="Me"
                         isOff={isCameraOff}
                         isMuted={isMuted}
                         onToggleMic={toggleMute}
