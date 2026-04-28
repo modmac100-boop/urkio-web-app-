@@ -256,64 +256,74 @@ export function LandingPage({
       </nav>
 
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="relative pt-8 pb-5 lg:pt-12 lg:pb-8 overflow-hidden">
-        <div className="absolute inset-0 nexus-gradient pointer-events-none" />
-        <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-[#0A3D91]/5 rounded-full blur-[120px] pointer-events-none" />
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-[#050A0F]">
+        {/* Aesthetic overlays */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-[#30B0D0]/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 inset-s-0 translate-y-1/2 -translate-x-1/4 w-[800px] h-[800px] bg-[#0A3D91]/10 rounded-full blur-[120px]" />
+        </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0A3D91]/10 border border-[#0A3D91]/20 mb-4">
-              <span className="size-1.5 rounded-full bg-[#0A3D91] animate-pulse" />
-              <span className="text-[10px] font-bold tracking-widest uppercase text-[#0A3D91]">
-                {t('landing.cohortBadge', 'Now Accepting Premium Cohorts')}
+            {/* Premium Badge */}
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#30B0D0]/10 border border-[#30B0D0]/20 mb-6">
+              <span className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
+              <span className="text-xs font-bold tracking-widest uppercase text-[#30B0D0]">
+                {isRTL ? 'تشفير تام وقنوات آمنة' : 'Secure & Fully Encrypted Channels'}
               </span>
             </div>
 
-            <h1 className="font-['Outfit'] text-xl md:text-3xl lg:text-2xl font-bold tracking-tight mb-4 leading-tight">
+            {/* Main Heading */}
+            <h1 className={clsx(
+              "text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6 leading-tight text-white",
+              isRTL ? "font-['Tajawal',sans-serif]" : "font-['Outfit',sans-serif]"
+            )}>
               {isRTL ? (
-                <>رحلتك <span className="text-[#0A3D91] italic">الداخلية</span></>
+                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
-                <>Your Journey <span className="text-[#0A3D91] italic">Within</span></>
+                <>Urkio: Your Journey Toward <span className="text-[#30B0D0] italic">Healing</span> and Self-Elevation</>
               )}
             </h1>
 
-            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mb-3 max-w-xl mx-auto leading-relaxed font-light">
+            {/* Subtext */}
+            <p className="text-base md:text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
               {isRTL
-                ? 'ارتقِ بمسارك المهني من خلال منظومة متكاملة من الإرشاد التنفيذي والتواصل عالي القرب.'
-                : 'Elevate your professional trajectory through a curated ecosystem of executive mentorship and high-proximity networking.'}
+                ? 'مساحة آمنة، تشفير تام، ومرشدون يفهمونك. طوّر ذاتك، ابنِ مجتمعك، واكتشف قوتك الكامنة في رحلة تعافي استثنائية.'
+                : 'Safe space, full encryption, and guides who truly understand. Develop yourself, build your community, and discover your potential.'}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-[#0A3D91] text-white px-6 py-3 rounded-xl font-semibold text-base shadow-2xl shadow-[#0A3D91]/30 hover:bg-blue-900 transition-all hover:-translate-y-1 active:scale-95"
+                className="w-full sm:w-auto bg-[#30B0D0] text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-[#30B0D0]/30 hover:bg-[#259cbd] transition-all hover:-translate-y-1 active:scale-95"
               >
-                {t('landing.joinElite', 'Join the Elite')}
+                {isRTL ? 'ابدأ رحلتك الآن' : 'Start Your Journey'}
               </button>
               <button
                 onClick={openSignIn}
-                className="w-full sm:w-auto border border-slate-300 dark:border-slate-700 hover:border-[#0A3D91] px-6 py-3 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-700 dark:text-slate-300"
+                className="w-full sm:w-auto border border-slate-700 hover:border-[#30B0D0] px-8 py-4 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white"
               >
                 {t('landing.viewManifesto', 'View Manifesto')}
-                <ArrowRight className={clsx('size-4', isRTL && 'rotate-180')} />
+                <ArrowRight className={clsx('size-5', isRTL && 'rotate-180')} />
               </button>
             </div>
 
-            {/* Social Proof */}
-            <div className="mt-8 flex items-center justify-center gap-4">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map((i) => (
-                  <img key={i} src={`https://i.pravatar.cc/100?u=${i + 20}`} className="size-8 rounded-full border-2 border-white dark:border-slate-900 shadow-sm" alt="" />
-                ))}
-              </div>
-              <p className="text-sm font-bold text-slate-500 dark:text-slate-400">
-                <span className="text-slate-900 dark:text-slate-100">12,400+</span>{' '}
-                {t('landing.verifiedExpertsOnline', 'verified experts online')}
-              </p>
+            {/* Trust Signals */}
+            <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 max-w-2xl mx-auto text-sm font-medium text-slate-400">
+              <span className="flex items-center gap-2">
+                <span className="text-[#30B0D0]">🔒</span>
+                {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-[#30B0D0]">👥</span>
+                {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
+              </span>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* ══════════════════════ THE SOCIAL GRAPH ══════════════════════ */}
       <section id="graph" className="py-6 bg-white dark:bg-[#0f172a] overflow-hidden">
