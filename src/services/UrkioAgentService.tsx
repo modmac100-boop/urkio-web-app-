@@ -4,7 +4,7 @@ import {
   Send, Bot, User, Sparkles, Paperclip, X, Mic, MicOff, Square, 
   Image as ImageIcon, Loader2, Zap, ShieldCheck, Heart, AlertCircle, 
   Play, RotateCcw, Trash2, Check, Volume2, History, MessageSquare,
-  Crown, Star, Info
+  Crown, Star, Info, RefreshCcw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
