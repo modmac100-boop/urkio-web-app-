@@ -212,7 +212,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       console.warn('Voice API failed, attempting direct Gemini fallback:', error);
       
       try {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
         if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found in frontend env");
 
         const systemPrompt = `You are the Urkio AI Guide, a deeply empathetic and professional social worker.
@@ -362,8 +362,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       )}
 
       {isOpen && (
-        <div className="fixed bottom-20 inset-e-4 z-9999 w-[380px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] flex flex-col rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 animate-in fade-in slide-in-from-bottom-4 duration-300"
-          style={{ background: 'linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%)' }}
+        <div className="fixed bottom-20 inset-e-4 z-9999 w-[380px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] flex flex-col rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 animate-in fade-in slide-in-from-bottom-4 duration-300 bg-gradient-to-b from-navy to-slate-900"
         >
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-white/5 backdrop-blur-md shrink-0">
             <div className="flex items-center gap-3">

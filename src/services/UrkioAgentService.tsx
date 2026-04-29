@@ -405,8 +405,8 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     } catch (error: any) {
       console.warn('[UrkioAgent] /api/chat failed, attempting direct Gemini API:', error);
       try {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-        console.log("Connection check...", !!apiKey);
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
+        console.log("[UrkioAgent] Direct connection check...", !!apiKey);
         if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found in frontend env");
 
         const systemPrompt = `${SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general}
@@ -518,7 +518,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   const moodColors = {
     calm: {
        bg: 'bg-[#F8F9FA] dark:bg-ur-on-surface',
-       bubble: 'bg-white dark:bg-[#10161D]',
+       bubble: 'bg-white dark:bg-slate-900',
        text: 'text-slate-900 dark:text-slate-100',
        accent: 'bg-ur-primary',
        border: 'border-slate-200 dark:border-[#C8A96E]/20',
@@ -526,7 +526,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     },
     stressed: {
        bg: 'bg-rose-50 dark:bg-rose-950/10',
-       bubble: 'bg-white dark:bg-[#10161D]',
+       bubble: 'bg-white dark:bg-slate-900',
        text: 'text-rose-900 dark:text-rose-100',
        accent: 'bg-rose-600',
        border: 'border-rose-100 dark:border-rose-900/30',
@@ -534,7 +534,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     },
     celebration: {
        bg: 'bg-amber-50 dark:bg-amber-950/10',
-       bubble: 'bg-white dark:bg-[#10161D]',
+       bubble: 'bg-white dark:bg-slate-900',
        text: 'text-amber-900 dark:text-amber-100',
        accent: 'bg-[#C8A96E]',
        border: 'border-amber-100 dark:border-[#C8A96E]/30',
@@ -727,7 +727,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       </div>
 
       {/* Input Area */}
-      <div className="p-8 bg-white/40 dark:bg-[#10161D]/40 backdrop-blur-3xl border-t border-inherit">
+      <div className="p-8 bg-white/40 dark:bg-slate-950/40 backdrop-blur-3xl border-t border-inherit">
         <form 
           onSubmit={sendMessage}
           className="space-y-6"

@@ -65,7 +65,7 @@ app.post('/api/agora/token', async (req, res) => {
 app.post('/api/analyze-voice', async (req, res) => {
   try {
     const { audioData, mimeType, userContext } = req.body;
-    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
 
     if (!apiKey) {
       return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
@@ -113,7 +113,7 @@ app.post('/api/analyze-voice', async (req, res) => {
 app.post('/api/chat', async (req, res) => {
   try {
     const { messages, userId, userContext, language = "ar" } = req.body;
-    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
 
     if (!apiKey) {
       console.warn('[Urkio API] GEMINI_API_KEY is not configured. Falling back to Smart Mock mode.');

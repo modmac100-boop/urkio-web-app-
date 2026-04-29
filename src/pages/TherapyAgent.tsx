@@ -148,6 +148,52 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
       };
       await sendEncryptedMessage(conversationId, messageWithCondition);
       setConnectionError(null);
+
+      // 3. Trigger AI Response
+      try {
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
+        const systemPrompt = `You are a deeply empathetic Urkio AI Therapist specializing in ${condition}. 
+        Provide a supportive, professional, and healing response.
+        Language: ${isRTL ? 'Arabic' : 'English'}.`;
+
+        const contents = [
+          ...messages.slice(-5).map(m => ({
+            role: m.user._id === 2 ? 'model' : 'user',
+            parts: [{ text: m.text }]
+          })),
+          { role: 'user', parts: [{ text: text }] }
+        ];
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+          })
+        });
+
+        if (!res.ok) throw new Error("AI API failed");
+        
+        const data = await res.json();
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm here for you, but I'm having trouble processing that right now.";
+
+        const aiMessage: Message = {
+          _id: Math.random().toString(),
+          text: aiText,
+          createdAt: new Date(),
+          user: { _id: 2, name: 'Urkio AI' }
+        };
+
+        await sendEncryptedMessage(conversationId, {
+          ...aiMessage,
+          condition: condition
+        });
+      } catch (aiErr) {
+        console.error("AI Response failed:", aiErr);
+      }
+
     } catch (error: any) {
       console.error("Failed to send message:", error);
       setConnectionError(`Error: ${error.code || 'unknown'} - ${error.message}`);
@@ -179,7 +225,7 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
         <div className="flex items-center gap-4">
           <button 
             onClick={() => navigate(-1)}
-            className="p-2 rounded-full hover:bg-sage/10 transition-colors"
+            className="p-2 text-sage/40 hover:text-ur-primary transition-colors shrink-0"
           >
             <ArrowLeft className={`w-6 h-6 text-ivory ${isRTL ? 'rotate-180' : ''}`} />
           </button>
@@ -229,8 +275,8 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
                 <div 
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     isAI 
-                      ? 'bg-[#1E293B] text-ur-background rounded-tl-sm' 
-                      : 'bg-ur-primary text-ur-on-surface rounded-tr-sm'
+                      ? 'bg-slate-800 text-ivory rounded-tl-sm' 
+                      : 'bg-ur-primary text-navy rounded-tr-sm'
                   }`}
                 >
                   <p className="text-[15px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
@@ -270,9 +316,10 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
           <button
             type="button"
             onClick={toggleRecording}
-            className={`p-3 rounded-full flex-shrink-0 transition-colors ${
-              isRecording ? 'bg-rose-500/20 text-rose-500 hover:bg-rose-500/30' : 'bg-sage/10 text-ur-primary hover:bg-sage/20'
-            }`}
+            className={clsx(
+              "p-4 rounded-2xl shadow-2xl transition-all transform active:scale-95 disabled:opacity-30 disabled:scale-100 text-ur-on-surface shrink-0",
+              "bg-ur-primary shadow-ur-primary/20"
+            )}
           >
             {isRecording ? <Square className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
           </button>
