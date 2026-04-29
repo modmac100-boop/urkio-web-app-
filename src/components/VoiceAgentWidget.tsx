@@ -226,17 +226,19 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
         - Keep responses concise but meaningful.`;
 
         const contents = [
-          ...messages.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            parts: [{ text: m.content }]
-          })),
+          ...messages
+            .filter(m => m.content.trim() !== '')
+            .map(m => ({
+              role: m.role === 'user' ? 'user' : 'model',
+              parts: [{ text: m.content }]
+            })),
           {
             role: 'user',
             parts: [{ text: msgText }]
           }
         ];
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -248,7 +250,10 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
           })
         });
 
-        if (!res.ok) throw new Error(`Direct API error (HTTP ${res.status})`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(`Direct API error (HTTP ${res.status}): ${JSON.stringify(errData)}`);
+        }
         const data = await res.json();
         const fallbackText = data.candidates?.[0]?.content?.parts?.[0]?.text;
         

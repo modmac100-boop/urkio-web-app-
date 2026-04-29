@@ -312,6 +312,11 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       console.error("Failed to save user message:", err);
     }
 
+    // Speculative update for guests since they don't have Firestore sync
+    if (!user?.uid) {
+      setMessages(prev => [...prev, userMessage]);
+    }
+
     setInput('');
     setAttachments([]);
     setAudioBlob(null);
@@ -370,7 +375,18 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         text: accumulated,
         role: 'assistant',
         user: { _id: 2, name: 'Urkio AI' }
-      });
+      }).catch(err => console.warn("Guest mode: AI response not saved to Firestore", err));
+
+      // Speculative update for guests
+      if (!user?.uid) {
+        const aiMessage: Message = {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: accumulated,
+          user: { _id: 2, name: 'Urkio AI' }
+        };
+        setMessages(prev => [...prev, aiMessage]);
+      }
 
       // Detect mood
       const lower = accumulated.toLowerCase();
@@ -404,17 +420,19 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         - Keep the tone premium and consistent with Urkio's branding.`;
 
         const contents = [
-          ...messages.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            parts: [{ text: m.content }]
-          })),
+          ...messages
+            .filter(m => m.content.trim() !== '')
+            .map(m => ({
+              role: m.role === 'user' ? 'user' : 'model',
+              parts: [{ text: m.content }]
+            })),
           {
             role: 'user',
             parts: [{ text: text }]
           }
         ];
 
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
         const res = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -426,7 +444,10 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
           })
         });
 
-        if (!res.ok) throw new Error(`Direct API error (HTTP ${res.status})`);
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(`Direct API error (HTTP ${res.status}): ${JSON.stringify(errData)}`);
+        }
         const data = await res.json();
         const accumulated = data.candidates?.[0]?.content?.parts?.[0]?.text;
         if (!accumulated) throw new Error("Empty response from Gemini API");
@@ -436,7 +457,18 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
           text: accumulated,
           role: 'assistant',
           user: { _id: 2, name: 'Urkio AI' }
-        });
+        }).catch(err => console.warn("Guest mode: AI response not saved to Firestore", err));
+
+        // Speculative update for guests
+        if (!user?.uid) {
+          const aiMessage: Message = {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: accumulated,
+            user: { _id: 2, name: 'Urkio AI' }
+          };
+          setMessages(prev => [...prev, aiMessage]);
+        }
 
         // Detect mood
         const lower = accumulated.toLowerCase();
