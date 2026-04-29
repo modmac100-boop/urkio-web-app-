@@ -281,12 +281,12 @@ export function LandingPageV2({
               )}
             >
               {isRTL ? (
-                <>أوركيو: حيث يبدأ <span className="text-[#30B0D0] italic">السلام</span> من الداخل</>
+                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
-                <>Urkio: Where your <br />
+                <>Urkio: Your Journey Toward <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] italic pr-4">
-                  inner peace
-                </span> begins</>
+                  Healing and Self-Elevation
+                </span></>
               )}
             </motion.h1>
 
