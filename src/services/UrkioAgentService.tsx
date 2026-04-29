@@ -326,13 +326,14 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     setIsEscalating(false);
     
     try {
-      console.log("[UrkioAgent] Contacting Neural Bridge via /api/chat...");
+      console.log("[UrkioAgent] Contacting Neural Bridge via /api/generate...");
       abortRef.current = new AbortController();
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: abortRef.current.signal,
         body: JSON.stringify({
+          prompt: text,
           userId: user?.uid,
           condition,
           language: i18n.language,
@@ -352,21 +353,10 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         throw new Error(`Neural Bridge Unreachable (HTTP ${response.status})`);
       }
 
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = '';
+      const data = await response.json();
+      const accumulated = data.text;
 
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          accumulated += decoder.decode(value, { stream: true });
-        }
-      } else {
-        throw new Error("No reader");
-      }
-
-      if (!accumulated.trim()) {
+      if (!accumulated || !accumulated.trim()) {
         throw new Error("Empty response from Neural Bridge");
       }
 
@@ -402,112 +392,28 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       }
 
       setIsLoading(false);
+      setIsLoading(false);
     } catch (error: any) {
-      console.warn('[UrkioAgent] /api/chat failed, attempting direct Gemini API:', error);
-      try {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
-        console.log("[UrkioAgent] Direct connection check...", !!apiKey);
-        if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found in frontend env");
-
-        const systemPrompt = `${SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general}
-        Current Language: ${i18n.language === 'ar' ? 'Arabic (العربية)' : 'English'}.
-        User Name: ${userData?.displayName || (i18n.language === 'ar' ? 'مستخدم Urkio' : 'Urkio User')}.
-        
-        Professional Guidelines:
-        - Respond strictly in the specified language: ${i18n.language}.
-        - Be deeply empathetic and human-like.
-        - If the user expresses distress, provide a warm response and recommend a specialist.
-        - Keep the tone premium and consistent with Urkio's branding.`;
-
-        const contents = [
-          ...messages
-            .filter(m => m.content.trim() !== '')
-            .map(m => ({
-              role: m.role === 'user' ? 'user' : 'model',
-              parts: [{ text: m.content }]
-            })),
-          {
-            role: 'user',
-            parts: [{ text: text }]
-          }
-        ];
-
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents,
-            systemInstruction: {
-              parts: [{ text: systemPrompt }]
-            }
-          })
-        });
-
-        if (!res.ok) {
-          const errData = await res.json().catch(() => ({}));
-          throw new Error(`Direct API error (HTTP ${res.status}): ${JSON.stringify(errData)}`);
-        }
-        const data = await res.json();
-        const accumulated = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!accumulated) throw new Error("Empty response from Gemini API");
-
-        // Save AI message to Firestore
-        await sendEncryptedMessage(conversationId, {
-          text: accumulated,
-          role: 'assistant',
-          user: { _id: 2, name: 'Urkio AI' }
-        }).catch(err => console.warn("Guest mode: AI response not saved to Firestore", err));
-
-        // Speculative update for guests
-        if (!user?.uid) {
-          const aiMessage: Message = {
-            id: crypto.randomUUID(),
+      console.error('[UrkioAgent] Neural Bridge failed:', error);
+      toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
+      
+      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+      const mockText = `${errorPrefix}\n\n${getMockResponse(text)}`;
+      // Wait a bit to simulate thinking
+      setTimeout(async () => {
+        try {
+          await sendEncryptedMessage(conversationId, {
+            text: mockText,
             role: 'assistant',
-            content: accumulated,
             user: { _id: 2, name: 'Urkio AI' }
-          };
-          setMessages(prev => [...prev, aiMessage]);
+          });
+          console.log("[UrkioAgent] Local response delivered successfully.");
+        } catch (e) {
+          console.error("[UrkioAgent] Critical failure delivering local response:", e);
+        } finally {
+          setIsLoading(false);
         }
-
-        // Detect mood
-        const lower = accumulated.toLowerCase();
-        if (lower.includes('connect with a professional') || lower.includes('emergency')) {
-          setMood('stressed');
-          setIsEscalating(true);
-        } else if (lower.includes('stress') || lower.includes('crisis')) {
-          setMood('stressed');
-        } else if (lower.includes('celebrat') || lower.includes('proud')) {
-          setMood('celebration');
-        } else {
-          setMood('calm');
-        }
-
-        setIsLoading(false);
-        return;
-      } catch (directError) {
-        console.error('[UrkioAgent] Direct Gemini call failed too:', directError);
-        toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
-        
-        const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
-        const mockText = `${errorPrefix}\n\n${getMockResponse(text)}`;
-        // Wait a bit to simulate thinking
-        setTimeout(async () => {
-          try {
-            await sendEncryptedMessage(conversationId, {
-              text: mockText,
-              role: 'assistant',
-              user: { _id: 2, name: 'Urkio AI' }
-            });
-            console.log("[UrkioAgent] Local response delivered successfully.");
-          } catch (e) {
-            console.error("[UrkioAgent] Critical failure delivering local response:", e);
-          } finally {
-            setIsLoading(false);
-          }
-        }, 1500);
-        return; 
-      }
+      }, 1500);
     } finally {
       abortRef.current = null;
       if (!isLoading) setIsLoading(false);

@@ -109,67 +109,7 @@ app.post('/api/analyze-voice', async (req, res) => {
   }
 });
 
-// ─── AI Chat (Streaming) ─────────────────────────────────────────────────────
-app.post('/api/chat', async (req, res) => {
-  try {
-    const { messages, userId, userContext, language = "ar" } = req.body;
-    const apiKey = process.env.VITE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
-
-    if (!apiKey) {
-      console.warn('[Urkio API] GEMINI_API_KEY is not configured. Falling back to Smart Mock mode.');
-      return handleMockResponse(res, language);
-    }
-
-    const client = new GoogleGenAI({ apiKey });
-    
-    const history = (messages || []).map((m: any) => ({
-      role: m.role === 'user' ? 'user' : 'model',
-      parts: [{ text: m.content }],
-    }));
-
-    const lastMessage = history.length > 0 ? history.pop()?.parts[0].text : '';
-    
-    const systemPrompt = `You are the Urkio Guide, a professional, empathetic assistant for the Urkio platform. 
-    You are speaking with ${userContext?.displayName || 'Urkio User'}.
-    
-    Urkio is a platform for healing journeys, social connection, and professional specialist support.
-    
-    PROFESSIONAL GUIDELINES:
-    - Tonality: Humble, social-worker-like, professional, and deeply empathetic.
-    - Accuracy: Provide accurate information about the platform's features.
-    - Proactivity: Monitor the conversation flow and offer helpful suggestions.
-    - Escalation: If the user expresses intense distress, strongly recommend they reach out to a specialist.
-    - Language: Respond strictly in ${language === 'ar' ? 'Arabic' : 'English'}.`;
-
-    const result = await client.models.generateContentStream({
-      model: 'gemini-1.5-flash',
-      contents: [...history, { role: 'user', parts: [{ text: lastMessage }] }],
-      config: {
-        systemInstruction: systemPrompt,
-      }
-    });
-
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.setHeader('Transfer-Encoding', 'chunked');
-
-    for await (const chunk of result) {
-      const text = chunk.text;
-      if (text) res.write(text);
-    }
-    res.end();
-  } catch (error: any) {
-    console.error('[Urkio API] Chat error:', error);
-    try {
-      const fallbackText = language === 'ar' 
-        ? "عذراً، يبدو أن هناك تعثراً بسيطاً في الاتصال. أنا هنا لمساعدتك."
-        : "Sorry, a small connection hiccup. I'm still here to support you.";
-      res.write(fallbackText);
-    } catch (e) {
-      // Stream might be broken
-    }
-    res.end();
-  }
-});
+// NOTE: /api/chat is now handled by api/chat.ts for Edge Runtime support.
 
 // ─── Helper: Smart Mock Response ─────────────────────────────────────────────
 async function handleMockResponse(res: any, language: string) {

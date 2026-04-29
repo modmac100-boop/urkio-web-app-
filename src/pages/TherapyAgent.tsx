@@ -149,35 +149,31 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
       await sendEncryptedMessage(conversationId, messageWithCondition);
       setConnectionError(null);
 
-      // 3. Trigger AI Response
+      // 3. Trigger AI Response via Proxy
       try {
-        const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyDLxQt-tYjj6sdNo58agfprFmefamg6mGo';
-        const systemPrompt = `You are a deeply empathetic Urkio AI Therapist specializing in ${condition}. 
-        Provide a supportive, professional, and healing response.
-        Language: ${isRTL ? 'Arabic' : 'English'}.`;
-
-        const contents = [
-          ...messages.slice(-5).map(m => ({
-            role: m.user._id === 2 ? 'model' : 'user',
-            parts: [{ text: m.text }]
-          })),
-          { role: 'user', parts: [{ text: text }] }
-        ];
-
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-        const res = await fetch(url, {
+        const response = await fetch('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents,
-            systemInstruction: { parts: [{ text: systemPrompt }] }
+            prompt: text,
+            userId: user?.uid,
+            condition,
+            language: i18n.language,
+            userContext: {
+              displayName: userData?.displayName,
+            },
+            messages: messages.slice(-5).map(m => ({
+              role: m.user._id === 2 ? 'assistant' : 'user',
+              content: m.text
+            }))
           })
         });
 
-        if (!res.ok) throw new Error("AI API failed");
+        if (!response.ok) throw new Error("AI Proxy failed");
         
-        const data = await res.json();
-        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I'm here for you, but I'm having trouble processing that right now.";
+        const data = await response.json();
+        const aiText = data.text;
+        if (!aiText || !aiText.trim()) throw new Error("Empty response from AI Proxy");
 
         const aiMessage: Message = {
           _id: Math.random().toString(),

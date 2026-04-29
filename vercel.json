@@ -1,6 +1,7 @@
 {
   "framework": "vite",
   "rewrites": [
+    { "source": "/api/generate", "destination": "/api/generate.ts" },
     { "source": "/api/:path*", "destination": "/api/index.ts" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
