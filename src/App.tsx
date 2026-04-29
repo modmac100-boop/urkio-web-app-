@@ -47,7 +47,9 @@ import { useParams } from 'react-router-dom';
 
 import { AuthAction } from './pages/AuthAction';
 import PatientJourney from './pages/PatientJourney';
-import { ExpertPublicSpaceV2 } from './pages/ExpertPublicSpaceV2';
+const ExpertPublicSpaceV2 = lazy(() => import('./pages/ExpertPublicSpaceV2').then(m => ({ default: m.ExpertPublicSpaceV2 })));
+const AshraqatProfile = lazy(() => import('./pages/AshraqatProfile').then(m => ({ default: m.AshraqatProfile })));
+
 
 
 
@@ -531,6 +533,7 @@ export default function App() {
 
                   {/* Private Routes - Require authentication */}
                   <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/ashraqat" element={<AshraqatProfile user={user} userData={userData} />} />
                   <Route path="/terms" element={<TermsAndConditions user={user} />} />
                   <Route path="/healing-center" element={<ExpertList user={user} userData={userData} />} />
                   <Route path="/specialist-hub" element={<Navigate to="/specialist-dashboard" replace />} />

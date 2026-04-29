@@ -129,6 +129,7 @@ export function Layout({
     { path: '/messenger', label: t('nav.inbox'), icon: 'chat_bubble' },
     { path: '/conference', label: t('nav.instantCall'), icon: 'videocam' },
     { path: '/expert-list', label: t('nav.expertList'), icon: 'verified_user' },
+    { path: '/ashraqat', label: t('nav.ourPartners', 'Our Partners'), icon: 'handshake' },
   ];
 
   const handleLogout = async () => {

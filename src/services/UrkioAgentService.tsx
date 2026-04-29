@@ -14,6 +14,27 @@ import { sendEncryptedMessage, subscribeToMessages } from './chatService';
 import clsx from 'clsx';
 import { toast } from 'react-hot-toast';
 
+const SYSTEM_PROMPTS: Record<string, string> = {
+  panic: `أنت مرشد Urkio المتخصص في التعامل مع نوبات الهلع. 
+  Tone: هادئ جداً، توجيهي، وداعم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Response Style: جمل قصيرة، تركيز على التنفس والتأريض (Grounding).
+  Instruction: وجه المستخدم عبر تقنية 5-4-3-2-1 فوراً. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  anxiety: `أنت مرشد Urkio المتخصص في القلق.
+  Tone: متعاطف، مطمئن، ودافئ.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ساعد المستخدم على الهدوء والتحقق من مشاعره بصدق. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  depression: `أنت مرشد Urkio لمواجهة الاكتئاب، تحمل الأمل والتعاطف العميق.
+  Tone: صبور، غير صادر للأحكام، ورحيم.
+  Persona: أخصائي اجتماعي إنساني، مهني، ومتعاطف جداً (Empathetic, human feel).
+  Instruction: ركز على الإنجازات الصغيرة جداً وكن موجوداً من أجل المستخدم. استجب باللغة التي يتحدث بها المستخدم، وفضل العربية.`,
+  general: `أنت مرشد Urkio، مساعد ذكاء اصطناعي مهني ومتعاطف للغاية.
+  Persona: أخصائي اجتماعي إنساني (Humble, social-worker-like, deeply empathetic).
+  Tone: حس إنساني دافئ (Empathetic, human feel).
+  Goal: اجعل المستخدم يشعر بأنه مسموع، مفهوم، ومدعوم في رحلة شفائه.
+  Language: استجب بالعربية (الأساسية) أو الإنجليزية حسب لغة المستخدم.`
+};
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -359,27 +380,94 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
       setIsLoading(false);
     } catch (error: any) {
-      console.warn('[UrkioAgent] Neural Bridge offline, initializing local empathetic engine:', error);
-      toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
-      
-      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
-      const mockText = `${errorPrefix}\n\n${getMockResponse(text)}`;
-      // Wait a bit to simulate thinking
-      setTimeout(async () => {
-        try {
-          await sendEncryptedMessage(conversationId, {
-            text: mockText,
-            role: 'assistant',
-            user: { _id: 2, name: 'Urkio AI' }
-          });
-          console.log("[UrkioAgent] Local response delivered successfully.");
-        } catch (e) {
-          console.error("[UrkioAgent] Critical failure delivering local response:", e);
-        } finally {
-          setIsLoading(false);
+      console.warn('[UrkioAgent] /api/chat failed, attempting direct Gemini API:', error);
+      try {
+        const apiKey = (process.env as any).GEMINI_API_KEY;
+        if (!apiKey) throw new Error("GEMINI_API_KEY not found in frontend process.env");
+
+        const systemPrompt = `${SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general}
+        Current Language: ${i18n.language === 'ar' ? 'Arabic (العربية)' : 'English'}.
+        User Name: ${userData?.displayName || (i18n.language === 'ar' ? 'مستخدم Urkio' : 'Urkio User')}.
+        
+        Professional Guidelines:
+        - Respond strictly in the specified language: ${i18n.language}.
+        - Be deeply empathetic and human-like.
+        - If the user expresses distress, provide a warm response and recommend a specialist.
+        - Keep the tone premium and consistent with Urkio's branding.`;
+
+        const contents = [
+          ...messages.map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.content }]
+          })),
+          {
+            role: 'user',
+            parts: [{ text: text }]
+          }
+        ];
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            }
+          })
+        });
+
+        if (!res.ok) throw new Error(`Direct API error (HTTP ${res.status})`);
+        const data = await res.json();
+        const accumulated = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!accumulated) throw new Error("Empty response from Gemini API");
+
+        // Save AI message to Firestore
+        await sendEncryptedMessage(conversationId, {
+          text: accumulated,
+          role: 'assistant',
+          user: { _id: 2, name: 'Urkio AI' }
+        });
+
+        // Detect mood
+        const lower = accumulated.toLowerCase();
+        if (lower.includes('connect with a professional') || lower.includes('emergency')) {
+          setMood('stressed');
+          setIsEscalating(true);
+        } else if (lower.includes('stress') || lower.includes('crisis')) {
+          setMood('stressed');
+        } else if (lower.includes('celebrat') || lower.includes('proud')) {
+          setMood('celebration');
+        } else {
+          setMood('calm');
         }
-      }, 1500);
-      return; 
+
+        setIsLoading(false);
+        return;
+      } catch (directError) {
+        console.error('[UrkioAgent] Direct Gemini call failed too:', directError);
+        toast('Syncing with local agent...', { icon: '🔄', duration: 1000 });
+        
+        const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+        const mockText = `${errorPrefix}\n\n${getMockResponse(text)}`;
+        // Wait a bit to simulate thinking
+        setTimeout(async () => {
+          try {
+            await sendEncryptedMessage(conversationId, {
+              text: mockText,
+              role: 'assistant',
+              user: { _id: 2, name: 'Urkio AI' }
+            });
+            console.log("[UrkioAgent] Local response delivered successfully.");
+          } catch (e) {
+            console.error("[UrkioAgent] Critical failure delivering local response:", e);
+          } finally {
+            setIsLoading(false);
+          }
+        }, 1500);
+        return; 
+      }
     } finally {
       abortRef.current = null;
       if (!isLoading) setIsLoading(false);

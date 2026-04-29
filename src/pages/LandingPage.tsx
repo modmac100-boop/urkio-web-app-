@@ -49,7 +49,14 @@ export function LandingPage({
     { label: t('landing.navNetwork', 'The Network'), href: '#graph' },
     { label: t('landing.navPillars', 'Pillars'), href: '#pillars' },
     { label: t('landing.navInvestment', 'Investment'), href: '#investment' },
+    { label: isRTL ? 'شركاؤنا' : 'Our Partners', href: '/ashraqat' },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) return;
+    e.preventDefault();
+    navigate(href);
+  };
 
   const pillars = [
     {
@@ -186,6 +193,7 @@ export function LandingPage({
                 <a
                   key={link.href}
                   href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className="text-slate-600 dark:text-slate-400 hover:text-[#0A3D91] dark:hover:text-blue-400 transition-colors"
                 >
                   {link.label}
@@ -231,7 +239,10 @@ export function LandingPage({
               <a
                 key={link.href}
                 href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={(e) => {
+                  setMobileMenuOpen(false);
+                  handleNavClick(e, link.href);
+                }}
                 className="block text-sm font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400 hover:text-[#0A3D91] transition-colors py-1"
               >
                 {link.label}
