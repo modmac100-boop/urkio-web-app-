@@ -810,7 +810,7 @@ export function AdminDashboard({ user, userData }: any) {
                                   }, 500);
                                 }}
                                 disabled={simulationProgress !== null}
-                                className="px-8 py-3 bg-[#004e99] text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 transition-all shadow-xl disabled:opacity-50"
+                                className="px-8 py-3 bg-msgr-primary text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl hover:scale-105 transition-all shadow-xl disabled:opacity-50"
                               >
                                 {simulationProgress !== null ? 'Simulating...' : 'Trigger Stress Simulation'}
                               </button>

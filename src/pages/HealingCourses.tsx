@@ -137,7 +137,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
           <div className="flex flex-col md:flex-row gap-4 mb-16 max-w-4xl">
             <div className="flex-1 relative group">
               <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-                <Search className="size-5 text-[#414752] group-focus-within:text-[#a8c8ff] transition-colors" />
+                <Search className="size-5 text-msgr-on-surface-variant group-focus-within:text-[#a8c8ff] transition-colors" />
               </div>
               <input 
                 type="text" 
@@ -205,7 +205,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
                         <p className="text-[10px] font-black uppercase tracking-widest text-white leading-none mb-1">
                           {course.creatorName}
                         </p>
-                        <p className="text-[9px] font-bold text-[#414752] uppercase tracking-wider">
+                        <p className="text-[9px] font-bold text-msgr-on-surface-variant uppercase tracking-wider">
                           Specialist Architect
                         </p>
                       </div>
@@ -246,7 +246,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
             >
               <button 
                 onClick={() => setCourseToUnlock(null)}
-                className="absolute top-8 right-8 p-2 text-[#414752] hover:text-white transition-colors"
+                className="absolute top-8 right-8 p-2 text-msgr-on-surface-variant hover:text-white transition-colors"
               >
                 <X className="size-6" />
               </button>
@@ -268,7 +268,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
                   value={unlockCode}
                   onChange={(e) => setUnlockCode(e.target.value.toUpperCase())}
                   placeholder="ARCH-XXXX-XXXX"
-                  className="w-full bg-white/5 border-2 border-white/5 rounded-2xl py-5 text-center text-xl font-mono tracking-[0.3em] text-[#a8c8ff] focus:border-[#a8c8ff]/50 focus:outline-none transition-all placeholder:text-[#414752]"
+                  className="w-full bg-white/5 border-2 border-white/5 rounded-2xl py-5 text-center text-xl font-mono tracking-[0.3em] text-[#a8c8ff] focus:border-[#a8c8ff]/50 focus:outline-none transition-all placeholder:text-msgr-on-surface-variant"
                   required
                   autoFocus
                 />
@@ -287,7 +287,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
                 </button>
               </form>
 
-              <p className="mt-10 text-[10px] text-center text-[#414752] font-black uppercase tracking-[0.2em]">
+              <p className="mt-10 text-[10px] text-center text-msgr-on-surface-variant font-black uppercase tracking-[0.2em]">
                 Code Required • Secure Encryption Active
               </p>
             </motion.div>

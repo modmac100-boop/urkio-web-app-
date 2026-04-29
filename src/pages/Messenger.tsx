@@ -198,10 +198,10 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
        {/* 🚀 TopNavBar Cluster */}
        <header className="h-16 shrink-0 bg-white/80 dark:bg-stone-900/80 backdrop-blur-xl border-b border-stone-100 dark:border-zinc-800 flex items-center justify-between px-8 z-50">
           <div className="flex items-center gap-8">
-             <span className="text-xl font-black tracking-tighter text-[#004e99] dark:text-blue-400">URKIO</span>
+             <span className="text-xl font-black tracking-tighter text-msgr-primary dark:text-blue-400">URKIO</span>
              <span className="text-zinc-400 font-light ms-1 uppercase tracking-widest text-[10px]">Editorial</span>
              <div className="hidden lg:flex items-center gap-6">
-                <Link to="/messenger" className="text-xs font-bold uppercase tracking-widest text-[#004e99] border-b-2 border-[#004e99] pb-1">Pulse</Link>
+                <Link to="/messenger" className="text-xs font-bold uppercase tracking-widest text-msgr-primary border-b-2 border-msgr-primary pb-1">Pulse</Link>
                 <Link to="/specialist-hub" className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900">Network</Link>
                 <Link to="/guide" className="text-xs font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900">Knowledge</Link>
              </div>
@@ -211,19 +211,19 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
              <div className="flex items-center gap-1">
                 <button 
                   onClick={() => selectedPartner ? initiateCall(selectedPartner, 'video', selectedConvId || 'new') : toast.error('Select a conversation partner first')}
-                  className="p-2 text-zinc-400 hover:text-[#004e99] transition-colors"
+                  className="p-2 text-zinc-400 hover:text-msgr-primary transition-colors"
                   title="Global Video Initiate"
                 >
                   <span className="material-symbols-outlined text-lg">video_call</span>
                 </button>
                 <button 
                   onClick={() => selectedPartner ? initiateCall(selectedPartner, 'audio', selectedConvId || 'new') : toast.error('Select a conversation partner first')}
-                  className="p-2 text-zinc-400 hover:text-[#004e99] transition-colors"
+                  className="p-2 text-zinc-400 hover:text-msgr-primary transition-colors"
                   title="Global Phone Initiate"
                 >
                   <span className="material-symbols-outlined text-lg">phone</span>
                 </button>
-                <button className="p-2 text-zinc-400 hover:text-[#004e99] transition-colors"><span className="material-symbols-outlined text-lg">more_vert</span></button>
+                <button className="p-2 text-zinc-400 hover:text-msgr-primary transition-colors"><span className="material-symbols-outlined text-lg">more_vert</span></button>
              </div>
              <img 
                src={userData?.photoURL || currentUser?.photoURL || `https://ui-avatars.com/api/?name=${userData?.userCode || currentUser?.displayName}`} 
@@ -237,11 +237,11 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
           {/* 💼 SideNavBar (Expert Panel) */}
           <nav className="w-64 shrink-0 bg-[#faf9f6]/50 border-e border-stone-100 hidden xl:flex flex-col p-6">
              <div className="flex items-center gap-3 mb-10 px-2">
-                <div className="w-10 h-10 bg-[#004e99] rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                <div className="w-10 h-10 bg-msgr-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                    <span className="material-symbols-outlined text-lg">business_center</span>
                 </div>
                 <div>
-                   <h2 className="text-sm font-black italic text-[#004e99] uppercase tracking-tighter">Expert Panel</h2>
+                   <h2 className="text-sm font-black italic text-msgr-primary uppercase tracking-tighter">Expert Panel</h2>
                    <p className="text-[9px] font-bold text-zinc-400 tracking-widest uppercase">Verified Network</p>
                 </div>
              </div>
@@ -261,7 +261,7 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                     }}
                     className={clsx(
                       "flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer text-xs font-black uppercase tracking-widest",
-                      activeFilter === item.filter ? "bg-white text-[#004e99] shadow-sm border border-zinc-50" : "text-zinc-500 hover:translate-x-1 hover:text-zinc-900"
+                      activeFilter === item.filter ? "bg-white text-msgr-primary shadow-sm border border-zinc-50" : "text-zinc-500 hover:translate-x-1 hover:text-zinc-900"
                     )}
                   >
                      <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
@@ -284,14 +284,14 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                 <h3 className="font-headline text-2xl font-black italic tracking-tighter uppercase mb-6">{t('messenger.messages')}</h3>
                 <div className="relative group">
                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
-                     <Search className="size-4 text-zinc-400 group-focus-within:text-[#004e99] transition-colors" />
+                     <Search className="size-4 text-zinc-400 group-focus-within:text-msgr-primary transition-colors" />
                    </div>
                    <input 
                       type="text" 
                       placeholder={t('messenger.searchPlaceholder')}
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full bg-white border border-stone-100 rounded-2xl pl-11 pr-4 py-3.5 text-xs font-bold outline-none focus:ring-4 focus:ring-[#004e99]/5 focus:border-[#004e99]/20 transition-all shadow-sm placeholder-zinc-400"
+                      className="w-full bg-white border border-stone-100 rounded-2xl pl-11 pr-4 py-3.5 text-xs font-bold outline-none focus:ring-4 focus:ring-msgr-primary/5 focus:border-msgr-primary/20 transition-all shadow-sm placeholder-zinc-400"
                    />
                    {searchQuery && (
                      <button 
@@ -321,7 +321,7 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                          isActive ? "bg-msgr-surface-container-highest shadow-sm" : "hover:bg-msgr-surface-container-high"
                        )}
                      >
-                        {isActive && <div className="absolute inset-s-0 top-4 bottom-4 w-1 bg-[#004e99] rounded-e-full" />}
+                        {isActive && <div className="absolute inset-s-0 top-4 bottom-4 w-1 bg-msgr-primary rounded-e-full" />}
                         
                         <div className="relative shrink-0">
                            <img 
@@ -341,13 +341,13 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                            </div>
                            <p className={clsx("text-[11px] truncate", unread > 0 ? "font-black text-zinc-900" : "text-zinc-500")}>
                              {isTyping ? (
-                               <span className="text-[#004e99] font-black italic">Typing...</span>
+                               <span className="text-msgr-primary font-black italic">Typing...</span>
                              ) : (
                                conv.lastMessage?.text || 'No messages'
                              )}
                            </p>
                         </div>
-                        {unread > 0 && <div className="size-2 bg-[#004e99] rounded-full animate-pulse" />}
+                        {unread > 0 && <div className="size-2 bg-msgr-primary rounded-full animate-pulse" />}
                      </div>
                    );
                 })}
@@ -367,7 +367,7 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                />
              ) : (
                <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                  <div className="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center text-[#004e99] shadow-2xl mb-10 border border-zinc-50">
+                  <div className="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center text-msgr-primary shadow-2xl mb-10 border border-zinc-50">
                      <span className="material-symbols-outlined text-5xl">forum</span>
                   </div>
                   <h2 className="text-3xl font-black italic font-headline uppercase tracking-tighter mb-4">Select a Thread</h2>
@@ -383,11 +383,11 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
              <h3 className="font-headline text-lg font-black italic uppercase tracking-tighter mb-8">Case Context</h3>
              
              <div className="space-y-8">
-                <div className="p-6 bg-[#004e99]/5 rounded-3xl border border-[#004e99]/10">
-                   <p className="text-[9px] font-black text-[#004e99] uppercase tracking-[0.2em] mb-2">Active File</p>
+                <div className="p-6 bg-msgr-primary/5 rounded-3xl border border-msgr-primary/10">
+                   <p className="text-[9px] font-black text-msgr-primary uppercase tracking-[0.2em] mb-2">Active File</p>
                    <h6 className="text-[13px] font-bold text-zinc-900 leading-tight mb-2">Nexus_Strategic_Brief_V4.pdf</h6>
                    <p className="text-[10px] text-zinc-400 font-medium">Modified 2 hours ago by Lead Expert</p>
-                   <button onClick={() => navigate('/clinical-workstation')} className="mt-6 w-full py-3 bg-msgr-primary-container/10 text-[#004e99] rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-msgr-primary-container/20 transition-all">
+                   <button onClick={() => navigate('/clinical-workstation')} className="mt-6 w-full py-3 bg-msgr-primary-container/10 text-msgr-primary rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-msgr-primary-container/20 transition-all">
                       Open Workspace
                    </button>
                 </div>

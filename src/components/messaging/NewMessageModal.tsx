@@ -102,22 +102,22 @@ export function NewMessageModal({
         <div className="p-10 pb-6">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h3 className="font-headline text-2xl font-black italic uppercase tracking-tighter text-[#1b1c1a] leading-none mb-1">Secure Node Scan</h3>
-              <p className="text-[10px] font-black text-[#004e99] uppercase tracking-widest">Network Access Authorization</p>
+              <h3 className="font-headline text-2xl font-black italic uppercase tracking-tighter text-msgr-on-surface leading-none mb-1">Secure Node Scan</h3>
+              <p className="text-[10px] font-black text-msgr-primary uppercase tracking-widest">Network Access Authorization</p>
             </div>
-            <button onClick={onClose} className="size-12 rounded-2xl bg-white border border-stone-100 shadow-sm flex items-center justify-center text-zinc-400 hover:text-[#004e99] transition-all active:scale-95">
+            <button onClick={onClose} className="size-12 rounded-2xl bg-white border border-stone-100 shadow-sm flex items-center justify-center text-zinc-400 hover:text-msgr-primary transition-all active:scale-95">
               <X className="size-5" />
             </button>
           </div>
 
           <div className="relative group">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 size-5 text-zinc-400 group-focus-within:text-[#004e99] transition-colors" />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 size-5 text-zinc-400 group-focus-within:text-msgr-primary transition-colors" />
             <input 
               type="text"
               placeholder="Enter node identifier (Name or Email)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-14 pr-6 py-5 bg-white border border-stone-100 rounded-[2rem] text-sm font-body outline-none focus:ring-4 focus:ring-[#004e99]/10 focus:border-[#004e99]/30 transition-all shadow-sm"
+              className="w-full pl-14 pr-6 py-5 bg-white border border-stone-100 rounded-4xl text-sm font-body outline-none focus:ring-4 focus:ring-msgr-primary/10 focus:border-msgr-primary/30 transition-all shadow-sm"
               autoFocus
             />
           </div>
@@ -126,8 +126,8 @@ export function NewMessageModal({
         <div className="max-h-[400px] overflow-y-auto px-6 pb-10 space-y-2 custom-scrollbar">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-12 gap-4">
-              <div className="size-10 border-4 border-[#004e99] border-t-transparent rounded-full animate-spin" />
-              <p className="text-[9px] font-black text-[#004e99] uppercase tracking-[0.3em] animate-pulse">Syncing Directory...</p>
+              <div className="size-10 border-4 border-msgr-primary border-t-transparent rounded-full animate-spin" />
+              <p className="text-[9px] font-black text-msgr-primary uppercase tracking-[0.3em] animate-pulse">Syncing Directory...</p>
             </div>
           ) : users.length > 0 ? (
             <div className="space-y-3">
@@ -136,9 +136,9 @@ export function NewMessageModal({
                 <button
                   key={user.uid}
                   onClick={() => handleSelectUser(user)}
-                  className="w-full p-4 flex items-center gap-5 rounded-[2rem] transition-all bg-white hover:bg-[#004e99]/5 border border-stone-50 hover:border-[#004e99]/20 group text-start relative overflow-hidden"
+                  className="w-full p-4 flex items-center gap-5 rounded-4xl transition-all bg-white hover:bg-msgr-primary/5 border border-stone-50 hover:border-msgr-primary/20 group text-start relative overflow-hidden"
                 >
-                  <div className="absolute inset-y-0 left-0 w-1 bg-[#004e99] scale-y-0 group-hover:scale-y-100 transition-transform origin-center" />
+                  <div className="absolute inset-y-0 left-0 w-1 bg-msgr-primary scale-y-0 group-hover:scale-y-100 transition-transform origin-center" />
                   <img 
                     src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`}
                     className="size-14 rounded-[1.25rem] object-cover shadow-md border-2 border-white group-hover:scale-105 transition-transform" 
@@ -147,7 +147,7 @@ export function NewMessageModal({
                     <p className="text-[14px] font-black italic uppercase tracking-tight text-zinc-900 leading-tight mb-1">{user.displayName}</p>
                     <p className="text-[10px] font-bold text-zinc-400 truncate uppercase tracking-widest">{user.email}</p>
                   </div>
-                  <div className="size-10 rounded-xl bg-white shadow-sm border border-stone-100 flex items-center justify-center text-[#004e99] opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                  <div className="size-10 rounded-xl bg-white shadow-sm border border-stone-100 flex items-center justify-center text-msgr-primary opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
                     <Plus className="size-5" />
                   </div>
                 </button>
@@ -162,8 +162,8 @@ export function NewMessageModal({
             </div>
           ) : (
             <div className="text-center py-16 flex flex-col items-center">
-               <div className="w-16 h-16 bg-white rounded-[1.5rem] flex items-center justify-center shadow-lg border border-stone-50 mb-6 animate-bounce">
-                  <span className="material-symbols-outlined text-[#004e99] text-3xl">hub</span>
+               <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center shadow-lg border border-stone-50 mb-6 animate-bounce">
+                  <span className="material-symbols-outlined text-msgr-primary text-3xl">hub</span>
                </div>
                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] max-w-[200px] leading-relaxed">
                   Initiate credential stream to scan clinical network

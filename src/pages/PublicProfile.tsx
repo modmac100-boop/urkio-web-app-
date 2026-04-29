@@ -973,7 +973,7 @@ export function PublicProfile({
 
       {/* Review Modal */}
       {isReviewModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-200 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white dark:bg-zinc-900 rounded-[3rem] w-full max-w-xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-500 border border-white/20">
             <div className="bg-teal-600 p-10 text-white relative">
               <button 
@@ -1027,7 +1027,7 @@ export function PublicProfile({
                   name="content"
                   required
                   rows={5}
-                  className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-[2rem] p-6 text-sm font-medium focus:ring-2 focus:ring-teal-500/20 outline-none resize-none text-zinc-900 dark:text-zinc-100"
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-4xl p-6 text-sm font-medium focus:ring-2 focus:ring-teal-500/20 outline-none resize-none text-zinc-900 dark:text-zinc-100"
                   placeholder="Tell us about the impact of this session..."
                 />
               </div>
@@ -1055,7 +1055,7 @@ export function PublicProfile({
            Always visible on the bottom-right corner when visiting an expert's
            profile. Appears ONLY for visitors (not the expert themselves).    */}
       {profileData && !isOwnProfile && isExpert && (
-        <div className="fixed bottom-8 right-8 z-[100]">
+        <div className="fixed bottom-8 right-8 z-100">
           <button
             onClick={() => setIsBookingModalOpen(true)}
             className="flex items-center gap-3 bg-teal-600 text-white rounded-full px-8 py-4 text-[10px] font-black uppercase tracking-widest shadow-2xl shadow-teal-600/40 hover:scale-105 active:scale-95 transition-all"

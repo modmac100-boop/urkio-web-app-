@@ -64,8 +64,8 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
 
   return (
     <div className={clsx(
-      "min-h-screen font-manrope selection:bg-[#30B0D0]/30 transition-all duration-700",
-      theme === 'dark' ? "bg-[#050A0F] text-[#e1e2ea]" : "bg-[#fbf9f5] text-[#1A222B]"
+      "min-h-screen font-manrope selection:bg-ur-primary/30 transition-all duration-700",
+      theme === 'dark' ? "bg-ur-on-surface text-[#e1e2ea]" : "bg-[#fbf9f5] text-[#1A222B]"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&display=swap');
@@ -74,17 +74,17 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
 
       {/* Immersive Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#30B0D0]/5 rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-ur-primary/5 rounded-full blur-[150px] animate-pulse" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#C8A96E]/5 rounded-full blur-[120px]" />
       </div>
 
       <header className="relative pt-32 pb-40 px-8 text-center max-w-5xl mx-auto z-10">
-         <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#30B0D0]/10 border border-[#30B0D0]/20 text-[#30B0D0] text-[10px] font-black uppercase tracking-[0.3em] mb-10">
+         <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-ur-primary/10 border border-ur-primary/20 text-ur-primary text-[10px] font-black uppercase tracking-[0.3em] mb-10">
             <Zap className="size-3 animate-pulse" />
             Global Healing Sanctuary
          </div>
          <h1 className="text-7xl md:text-9xl font-black italic tracking-tighter leading-[0.85] text-inherit mb-12">
-            Elite <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E]">Practitioners</span> <br />
+            Elite <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E]">Practitioners</span> <br />
             for Synergy.
          </h1>
          
@@ -100,7 +100,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                  value={searchQuery}
                  onChange={(e) => setSearchQuery(e.target.value)}
                />
-               <button className="bg-[#30B0D0] text-[#050A0F] px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
+               <button className="bg-ur-primary text-ur-on-surface px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
                  Filter
                </button>
             </div>
@@ -140,7 +140,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                      <div className="flex justify-between items-start mb-4">
                         <div>
                            <h3 className="text-2xl font-bold font-serif-clinical tracking-tight">{expert.displayName}</h3>
-                           <p className="text-[10px] font-black uppercase tracking-widest text-[#30B0D0] mt-1">{expert.specialty || expert.primaryRole || "Clinical Expert"}</p>
+                           <p className="text-[10px] font-black uppercase tracking-widest text-ur-primary mt-1">{expert.specialty || expert.primaryRole || "Clinical Expert"}</p>
                         </div>
                         <p className="text-lg font-bold">${expert.hourlyRate || '180'}<span className="text-[10px] opacity-40">/hr</span></p>
                      </div>
@@ -154,7 +154,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                         <div className="flex gap-3">
                            <button 
                              onClick={() => navigate(`/expert/${expert.id}?action=book`)}
-                             className="flex-[1.2] bg-[#30B0D0] text-[#050A0F] py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-between px-6 hover:brightness-110 transition-all shadow-xl shadow-[#30B0D0]/20"
+                             className="flex-[1.2] bg-ur-primary text-ur-on-surface py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-between px-6 hover:brightness-110 transition-all shadow-xl shadow-ur-primary/20"
                            >
                               BOOK NOW <ChevronRight className="w-4 h-4" />
                            </button>

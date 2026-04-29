@@ -159,12 +159,12 @@ export function ExpertDashboard({ user, userData }: any) {
   }, [user.uid]);
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#1b1c1a] font-body flex flex-col">
+    <div className="min-h-screen bg-[#faf9f6] text-msgr-on-surface font-body flex flex-col">
       {/* Navigation Header */}
       <nav className="h-16 w-full bg-white border-b border-zinc-100 flex justify-between items-center px-10">
         <div className="flex items-center gap-10">
            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-             <span className="text-xl font-black tracking-tighter text-[#004e99] dark:text-blue-400">URKIO</span>
+             <span className="text-xl font-black tracking-tighter text-msgr-primary dark:text-blue-400">URKIO</span>
              <span className="text-zinc-400 font-light ms-1 uppercase tracking-widest text-[10px]">Command Center</span>
            </div>
         </div>
@@ -190,7 +190,7 @@ export function ExpertDashboard({ user, userData }: any) {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {[
-            { label: 'Active Cases', val: stats.cases, icon: Shield, color: 'text-[#004e99]' },
+            { label: 'Active Cases', val: stats.cases, icon: Shield, color: 'text-msgr-primary' },
             { label: 'Total Sessions', val: stats.appts, icon: Calendar, color: 'text-ur-primary' },
             { label: 'Published Courses', val: stats.courses, icon: BookOpen, color: 'text-emerald-500' },
             { label: 'Reports', val: stats.reports, icon: MessageSquare, color: 'text-amber-500' }
@@ -209,8 +209,8 @@ export function ExpertDashboard({ user, userData }: any) {
             <div className="bg-white p-6 rounded-3xl border border-zinc-100 shadow-xl space-y-6">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#004e99]/10 flex items-center justify-center">
-                    <TrendingUp className="text-[#004e99]" size={20} />
+                  <div className="w-10 h-10 rounded-xl bg-msgr-primary/10 flex items-center justify-center">
+                    <TrendingUp className="text-msgr-primary" size={20} />
                   </div>
                   <div>
                     <h3 className="text-lg font-black italic">Emotional Sentiment Trend</h3>

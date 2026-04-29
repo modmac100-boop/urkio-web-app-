@@ -111,7 +111,7 @@ export function LandingPageV2({
   return (
     <div
       className={clsx(
-        "min-h-screen bg-[#050A0F] text-[#EDE8E4] transition-colors duration-300 overflow-x-hidden font-body",
+        "min-h-screen bg-ur-on-surface text-ur-background transition-colors duration-300 overflow-x-hidden font-body",
       )}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
@@ -123,7 +123,7 @@ export function LandingPageV2({
             opacity: [0.1, 0.2, 0.1],
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-[#30B0D0] rounded-full blur-[150px] opacity-10"
+          className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-ur-primary rounded-full blur-[150px] opacity-10"
         />
         <motion.div 
           animate={{
@@ -140,7 +140,7 @@ export function LandingPageV2({
         className={clsx(
           'fixed top-0 w-full z-50 transition-all duration-500',
           scrolled
-            ? 'bg-[#050A0F]/80 backdrop-blur-md border-b border-white/5 shadow-lg'
+            ? 'bg-ur-on-surface/80 backdrop-blur-md border-b border-white/5 shadow-lg'
             : 'bg-transparent'
         )}
       >
@@ -148,10 +148,10 @@ export function LandingPageV2({
           <div className="flex justify-between items-center h-20">
             <button
               onClick={() => navigate('/')}
-              className="font-headline text-2xl font-black tracking-tight text-white hover:text-[#30B0D0] transition-colors flex items-center gap-2 relative z-10"
+              className="font-headline text-2xl font-black tracking-tight text-white hover:text-ur-primary transition-colors flex items-center gap-2 relative z-10"
             >
-              <div className="size-8 rounded-lg bg-gradient-to-br from-[#30B0D0] to-[#C8A96E] p-[1px]">
-                <div className="w-full h-full bg-[#050A0F] rounded-md flex items-center justify-center">
+              <div className="size-8 rounded-lg bg-linear-to-br from-ur-primary to-[#C8A96E] p-px">
+                <div className="w-full h-full bg-ur-on-surface rounded-md flex items-center justify-center">
                   <span className="text-[14px] leading-none">U</span>
                 </div>
               </div>
@@ -164,10 +164,10 @@ export function LandingPageV2({
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-white/60 hover:text-[#30B0D0] transition-colors relative group"
+                  className="text-white/60 hover:text-ur-primary transition-colors relative group"
                 >
                   {link.label}
-                  <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-[#30B0D0] transition-all group-hover:w-full"></span>
+                  <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-ur-primary transition-all group-hover:w-full"></span>
                 </a>
               ))}
             </div>
@@ -182,7 +182,7 @@ export function LandingPageV2({
               </button>
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
-                className="hidden lg:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-[#30B0D0] transition-colors"
+                className="hidden lg:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-ur-primary transition-colors"
               >
                 <Sparkles className="size-4" />
                 Urkio Agent
@@ -197,7 +197,7 @@ export function LandingPageV2({
                 whileHover={{ scale: 1.05, boxShadow: "0px 0px 20px rgba(48,176,208,0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openSignUp('user')}
-                className="bg-[#30B0D0] text-[#050A0F] px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all"
+                className="bg-ur-primary text-ur-on-surface px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all"
               >
                 Start Your Journey
               </motion.button>
@@ -218,7 +218,7 @@ export function LandingPageV2({
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="md:hidden bg-[#050A0F]/95 backdrop-blur-xl border-t border-white/5 px-6 py-6 space-y-4 absolute w-full left-0 right-0 top-20"
+              className="md:hidden bg-ur-on-surface/95 backdrop-blur-xl border-t border-white/5 px-6 py-6 space-y-4 absolute w-full left-0 right-0 top-20"
             >
               {navLinks.map((link) => (
                 <a
@@ -228,7 +228,7 @@ export function LandingPageV2({
                     setMobileMenuOpen(false);
                     handleNavClick(e, link.href);
                   }}
-                  className="block text-sm font-black uppercase tracking-widest text-white/80 hover:text-[#30B0D0] transition-colors py-2"
+                  className="block text-sm font-black uppercase tracking-widest text-white/80 hover:text-ur-primary transition-colors py-2"
                 >
                   {link.label}
                 </a>
@@ -238,7 +238,7 @@ export function LandingPageV2({
                   window.dispatchEvent(new CustomEvent('open-urkio-agent'));
                   setMobileMenuOpen(false);
                 }}
-                className="flex items-center gap-3 text-xl font-black tracking-tight text-[#30B0D0] py-2"
+                className="flex items-center gap-3 text-xl font-black tracking-tight text-ur-primary py-2"
               >
                 <Sparkles className="size-6" />
                 Urkio Agent
@@ -249,7 +249,7 @@ export function LandingPageV2({
                 </button>
                 <button
                   onClick={() => { openSignUp('user'); setMobileMenuOpen(false); }}
-                  className="bg-[#30B0D0] text-[#050A0F] py-4 rounded-xl font-black text-sm uppercase tracking-widest"
+                  className="bg-ur-primary text-ur-on-surface py-4 rounded-xl font-black text-sm uppercase tracking-widest"
                 >
                   Start Your Journey
                 </button>
@@ -260,10 +260,10 @@ export function LandingPageV2({
       </nav>
 
       {/* ── Hero Section ── */}
-      <section className="relative min-h-[90vh] flex items-center pt-28 pb-16 overflow-hidden z-10 bg-[#050A0F]">
+      <section className="relative min-h-[90vh] flex items-center pt-28 pb-16 overflow-hidden z-10 bg-ur-on-surface">
         {/* Aesthetic overlays */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-[#30B0D0]/10 rounded-full blur-[150px]" />
+          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-ur-primary/10 rounded-full blur-[150px]" />
           <div className="absolute bottom-0 inset-s-0 translate-y-1/2 -translate-x-1/4 w-[800px] h-[800px] bg-[#0A3D91]/10 rounded-full blur-[150px]" />
         </div>
 
@@ -274,10 +274,10 @@ export function LandingPageV2({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#30B0D0]/10 border border-[#30B0D0]/20 mb-8 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ur-primary/10 border border-ur-primary/20 mb-8 backdrop-blur-sm"
             >
-              <div className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
-              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-[#30B0D0]">
+              <div className="size-2 rounded-full bg-ur-primary animate-pulse" />
+              <span className="text-[10px] font-black tracking-[0.2em] uppercase text-ur-primary">
                 {isRTL ? 'تشفير تام وقنوات آمنة' : 'Secure & Fully Encrypted Channels'}
               </span>
             </motion.div>
@@ -292,10 +292,10 @@ export function LandingPageV2({
               )}
             >
               {isRTL ? (
-                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
+                <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
                 <>Urkio: Your Journey Toward <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] italic pr-4">
+                <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E] italic pr-4">
                   Healing and Self-Elevation
                 </span></>
               )}
@@ -322,7 +322,7 @@ export function LandingPageV2({
                 whileHover={{ scale: 1.05, boxShadow: "0px 10px 40px rgba(48,176,208,0.4)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-[#30B0D0] text-[#050A0F] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-[#30B0D0]/20"
+                className="w-full sm:w-auto bg-ur-primary text-ur-on-surface px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-ur-primary/20"
               >
                 {isRTL ? 'ابدأ رحلة العودة لذاتك' : 'Begin Your Return to Self'}
               </motion.button>
@@ -340,7 +340,7 @@ export function LandingPageV2({
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(48,176,208,0.1)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
-                className="w-full sm:w-auto border border-[#30B0D0]/30 text-[#30B0D0] px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
+                className="w-full sm:w-auto border border-ur-primary/30 text-ur-primary px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
               >
                 <Sparkles className="size-4" />
                 {isRTL ? 'تحدث مع المرشد الذكي' : 'Talk to Urkio Agent'}
@@ -350,11 +350,11 @@ export function LandingPageV2({
             {/* Trust Signals */}
             <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 w-full max-w-2xl text-sm font-medium text-white/60">
               <span className="flex items-center gap-2">
-                <span className="text-[#30B0D0]">🔒</span>
+                <span className="text-ur-primary">🔒</span>
                 {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-[#30B0D0]">👥</span>
+                <span className="text-ur-primary">👥</span>
                 {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
               </span>
             </div>
@@ -365,7 +365,7 @@ export function LandingPageV2({
 
 
       {/* ── Features & Encryption ── */}
-      <section className="py-24 relative z-10 bg-[#050A0F]">
+      <section className="py-24 relative z-10 bg-ur-on-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
@@ -374,8 +374,8 @@ export function LandingPageV2({
             transition={{ duration: 0.8 }}
             className="grid md:grid-cols-2 gap-8"
           >
-            <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-sm group hover:border-[#30B0D0]/50 transition-colors">
-              <div className="size-16 rounded-2xl bg-[#30B0D0]/10 flex items-center justify-center text-[#30B0D0] mb-8 group-hover:scale-110 transition-transform">
+            <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-sm group hover:border-ur-primary/50 transition-colors">
+              <div className="size-16 rounded-2xl bg-ur-primary/10 flex items-center justify-center text-ur-primary mb-8 group-hover:scale-110 transition-transform">
                 <Activity className="size-8" />
               </div>
               <h3 className="text-2xl font-headline font-black mb-4">The Journey Timeline</h3>
@@ -416,10 +416,10 @@ export function LandingPageV2({
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 whileHover={{ y: -10, boxShadow: "0px 20px 40px rgba(0,0,0,0.5)" }}
-                className="bg-[#050A0F] border border-white/10 rounded-[2rem] p-8 relative overflow-hidden group"
+                className="bg-ur-on-surface border border-white/10 rounded-4xl p-8 relative overflow-hidden group"
               >
                 {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#30B0D0]/0 to-[#C8A96E]/0 group-hover:from-[#30B0D0]/10 group-hover:to-[#C8A96E]/10 transition-colors duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-br from-ur-primary/0 to-[#C8A96E]/0 group-hover:from-ur-primary/10 group-hover:to-[#C8A96E]/10 transition-colors duration-500 pointer-events-none" />
                 
                 <div className="flex items-center gap-4 mb-6">
                   <div className="size-16 rounded-full bg-white/10 p-1">
@@ -430,7 +430,7 @@ export function LandingPageV2({
                       {expert.name}
                       {expert.verified && <Star className="size-4 text-[#C8A96E] fill-[#C8A96E]" />}
                     </h4>
-                    <p className="text-[#30B0D0] text-sm font-semibold">{expert.title}</p>
+                    <p className="text-ur-primary text-sm font-semibold">{expert.title}</p>
                   </div>
                 </div>
 
@@ -442,7 +442,7 @@ export function LandingPageV2({
                   ))}
                 </div>
 
-                <button className="w-full py-4 rounded-xl border border-white/10 text-xs font-black uppercase tracking-widest hover:bg-white hover:text-[#050A0F] transition-all relative z-10">
+                <button className="w-full py-4 rounded-xl border border-white/10 text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all relative z-10">
                   View Profile
                 </button>
               </motion.div>
@@ -464,7 +464,7 @@ export function LandingPageV2({
               <h2 className="font-headline text-3xl lg:text-4xl font-black mb-6">
                 {isRTL ? 'الشبكة: من الاتصال الرقمي إلى الترابط الإنساني' : 'The Network: From Digital Contact to Human Connection'}
               </h2>
-              <div className="font-serif italic text-[#30B0D0] text-lg md:text-xl border-s-2 border-[#30B0D0]/40 ps-4 mb-6 leading-relaxed">
+              <div className="font-serif italic text-ur-primary text-lg md:text-xl border-s-2 border-ur-primary/40 ps-4 mb-6 leading-relaxed">
                 {isRTL 
                   ? '"ما وراء الخوارزميات: نبض الإنسانية المشترك."'
                   : '"Beyond the Algorithm: A Pulse of Shared Humanity."'}
@@ -476,7 +476,7 @@ export function LandingPageV2({
               </p>
               <ul className="space-y-6">
                 <li className="flex gap-4">
-                  <div className="shrink-0 size-10 rounded-xl bg-[#30B0D0]/10 text-[#30B0D0] flex items-center justify-center border border-[#30B0D0]/20">
+                  <div className="shrink-0 size-10 rounded-xl bg-ur-primary/10 text-ur-primary flex items-center justify-center border border-ur-primary/20">
                     <Activity className="size-5" />
                   </div>
                   <div>
@@ -506,7 +506,7 @@ export function LandingPageV2({
                  <motion.div 
                    animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                   className="absolute top-0 -translate-y-1/2 size-8 bg-[#30B0D0] rounded-full shadow-[0_0_20px_#30B0D0]"
+                   className="absolute top-0 -translate-y-1/2 size-8 bg-ur-primary rounded-full shadow-[0_0_20px_#30B0D0]"
                  />
                  <motion.div 
                    animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
@@ -519,7 +519,7 @@ export function LandingPageV2({
                    className="absolute left-0 -translate-x-1/2 size-4 bg-white rounded-full shadow-[0_0_10px_white]"
                  />
                  <div className="w-32 h-32 border border-white/20 rounded-full flex items-center justify-center">
-                    <div className="size-16 bg-[#050A0F] border-2 border-[#30B0D0] rounded-full flex items-center justify-center font-headline font-black text-xl text-[#30B0D0]">
+                    <div className="size-16 bg-ur-on-surface border-2 border-ur-primary rounded-full flex items-center justify-center font-headline font-black text-xl text-ur-primary">
                       U
                     </div>
                  </div>
@@ -530,13 +530,13 @@ export function LandingPageV2({
       </section>
 
       {/* ── Pillars ── */}
-      <section id="pillars" className="py-24 relative z-10 bg-gradient-to-b from-[#050A0F] to-[#012330]">
+      <section id="pillars" className="py-24 relative z-10 bg-linear-to-b from-ur-on-surface to-[#012330]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
               {isRTL ? 'المرتكزات: العمارة الداخلية للروح' : 'The Pillars: The Internal Architecture of the Soul'}
             </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] mx-auto rounded-full mb-6" />
+            <div className="w-16 h-1 bg-linear-to-r from-ur-primary to-[#C8A96E] mx-auto rounded-full mb-6" />
             
             <div className="font-serif italic text-[#C8A96E] text-lg md:text-xl mb-4 max-w-2xl mx-auto leading-relaxed">
               {isRTL 
@@ -559,10 +559,10 @@ export function LandingPageV2({
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
                 whileHover={{ y: -10 }}
-                className="group p-10 rounded-[2rem] bg-white/5 border border-white/10 hover:border-[#30B0D0]/50 transition-all duration-300"
+                className="group p-10 rounded-4xl bg-white/5 border border-white/10 hover:border-ur-primary/50 transition-all duration-300"
               >
-                <div className="size-14 bg-[#050A0F] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#30B0D0] group-hover:border-[#30B0D0] transition-colors">
-                  <div className="text-white/60 group-hover:text-[#050A0F] transition-colors">
+                <div className="size-14 bg-ur-on-surface border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-ur-primary group-hover:border-ur-primary transition-colors">
+                  <div className="text-white/60 group-hover:text-ur-on-surface transition-colors">
                     {pillar.icon === 'psychology' && <Brain className="size-6" />}
                     {pillar.icon === 'military_tech' && <Shield className="size-6" />}
                     {pillar.icon === 'trending_up' && <TrendingUp className="size-6" />}
@@ -577,14 +577,14 @@ export function LandingPageV2({
       </section>
 
       {/* ── Investment / Pricing ── */}
-      <section id="investment" className="py-24 relative z-10 bg-gradient-to-b from-[#012330] to-[#001220]">
+      <section id="investment" className="py-24 relative z-10 bg-linear-to-b from-[#012330] to-[#001220]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
               {isRTL ? 'الاستثمار: صناعة الثروة النفسية' : 'The Investment: Creating Psychological Wealth'}
             </h2>
             
-            <div className="font-serif italic text-[#30B0D0] text-lg md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
+            <div className="font-serif italic text-ur-primary text-lg md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
               {isRTL 
                 ? '"الاستثمار في هندسة الغد."'
                 : '"Investing in the Architecture of Tomorrow."'}
@@ -596,12 +596,12 @@ export function LandingPageV2({
                 : 'The most valuable currency in 2026 is mental resilience. Investing in URKIO is an investment in "Social Capital" and "Personal Equilibrium." We empower you to turn your vulnerabilities into assets of wisdom. When you heal yourself, you stabilize your family; when you stabilize your family, you strengthen society. This is the ultimate return: a community of built personalities, ready to lead with clarity and compassion.'}
             </p>
             
-            <div className="inline-flex bg-[#050A0F] p-1.5 rounded-full border border-white/10">
+            <div className="inline-flex bg-ur-on-surface p-1.5 rounded-full border border-white/10">
               <button
                 onClick={() => setActivePricingCategory('users')}
                 className={clsx(
                   "px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all",
-                  activePricingCategory === 'users' ? "bg-[#30B0D0] text-[#050A0F]" : "text-white/60 hover:text-white"
+                  activePricingCategory === 'users' ? "bg-ur-primary text-ur-on-surface" : "text-white/60 hover:text-white"
                 )}
               >
                 User Track
@@ -610,7 +610,7 @@ export function LandingPageV2({
                 onClick={() => setActivePricingCategory('pros')}
                 className={clsx(
                   "px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest transition-all",
-                  activePricingCategory === 'pros' ? "bg-[#C8A96E] text-[#050A0F]" : "text-white/60 hover:text-white"
+                  activePricingCategory === 'pros' ? "bg-[#C8A96E] text-ur-on-surface" : "text-white/60 hover:text-white"
                 )}
               >
                 Professional Track
@@ -625,42 +625,42 @@ export function LandingPageV2({
             className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto"
           >
             {/* Keeping the dynamic pricing structure short for brevity but styling it completely */}
-            <div className="bg-white/5 border border-white/10 p-8 rounded-[2rem] flex flex-col hover:border-white/30 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
               <h3 className="font-headline text-xl font-bold mb-2">Essential Pass</h3>
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-4xl font-black">$0</span><span className="text-white/40">/mo</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-[#30B0D0]" /> Public Forum Access</li>
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-[#30B0D0]" /> Resource Library</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> Public Forum Access</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> Resource Library</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-[#050A0F] transition-all">Start Free</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">Start Free</button>
             </div>
 
-            <div className="bg-gradient-to-b from-[#30B0D0]/20 to-[#050A0F] border border-[#30B0D0] p-8 rounded-[2rem] flex flex-col scale-105 relative shadow-[0_0_50px_rgba(48,176,208,0.1)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#30B0D0] text-[#050A0F] px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Most Popular</div>
+            <div className="bg-linear-to-b from-ur-primary/20 to-ur-on-surface border border-ur-primary p-8 rounded-4xl flex flex-col scale-105 relative shadow-[0_0_50px_rgba(48,176,208,0.1)]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ur-primary text-ur-on-surface px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Most Popular</div>
               <h3 className="font-headline text-xl font-bold mb-2">Growth Tier</h3>
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-4xl font-black">$49</span><span className="text-white/40">/mo</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white"><Check className="size-5 text-[#30B0D0]" /> All Free Features</li>
-                <li className="flex gap-3 text-white"><Check className="size-5 text-[#30B0D0]" /> Monthly Coach Check-in</li>
-                <li className="flex gap-3 text-white"><Check className="size-5 text-[#30B0D0]" /> Community Contribution</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> All Free Features</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> Monthly Coach Check-in</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> Community Contribution</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 bg-[#30B0D0] text-[#050A0F] rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white transition-all">Upgrade</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 bg-ur-primary text-ur-on-surface rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white transition-all">Upgrade</button>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-8 rounded-[2rem] flex flex-col hover:border-white/30 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
               <h3 className="font-headline text-xl font-bold mb-2">Transformation</h3>
               <div className="flex items-baseline gap-1 mb-8">
                 <span className="text-4xl font-black">$399</span><span className="text-white/40">/mo</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-[#30B0D0]" /> 1-on-1 Clinical Therapy</li>
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-[#30B0D0]" /> On-Demand Crisis Line</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> 1-on-1 Clinical Therapy</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> On-Demand Crisis Line</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-[#050A0F] transition-all">Begin Transformation</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">Begin Transformation</button>
             </div>
           </motion.div>
         </div>
@@ -668,7 +668,7 @@ export function LandingPageV2({
 
       {/* ── Call to Action ── */}
       <section className="py-32 relative z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A3D91]/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#0A3D91]/20 to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 text-center relative">
           <motion.h2 
             initial={{ opacity: 0, scale: 0.9 }}
@@ -682,7 +682,7 @@ export function LandingPageV2({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => openSignUp('user')}
-            className="bg-[#EDE8E4] text-[#050A0F] px-12 py-6 rounded-full font-black text-sm uppercase tracking-[0.2em] shadow-2xl hover:shadow-[0_0_40px_rgba(237,232,228,0.3)] transition-all"
+            className="bg-ur-background text-ur-on-surface px-12 py-6 rounded-full font-black text-sm uppercase tracking-[0.2em] shadow-2xl hover:shadow-[0_0_40px_rgba(237,232,228,0.3)] transition-all"
           >
             Create Your Account
           </motion.button>

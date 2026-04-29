@@ -73,9 +73,9 @@ export function PostSessionDebrief({ session, onClose }: DebriefProps) {
         className="w-full max-w-xl bg-white rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative"
       >
         <div className="flex items-center gap-3 mb-8">
-           <div className="p-3 bg-indigo-50 rounded-2xl text-[#004e99]"><Zap size={24} /></div>
+           <div className="p-3 bg-indigo-50 rounded-2xl text-msgr-primary"><Zap size={24} /></div>
            <div>
-              <p className="text-xs font-black uppercase tracking-widest text-[#004e99]">{t('debrief.pulse')}</p>
+              <p className="text-xs font-black uppercase tracking-widest text-msgr-primary">{t('debrief.pulse')}</p>
               <h2 className="text-2xl font-black italic tracking-tight text-zinc-900">{t('debrief.title')}</h2>
            </div>
         </div>
@@ -103,7 +103,7 @@ export function PostSessionDebrief({ session, onClose }: DebriefProps) {
              <div className="flex gap-4">
                 <button 
                   onClick={() => setAiUseful(true)}
-                  className={`flex-1 py-4 rounded-2xl font-bold border-2 transition-all ${aiUseful === true ? 'border-[#004e99] bg-indigo-50 text-[#004e99]' : 'border-zinc-100 text-zinc-400'}`}
+                  className={`flex-1 py-4 rounded-2xl font-bold border-2 transition-all ${aiUseful === true ? 'border-msgr-primary bg-indigo-50 text-msgr-primary' : 'border-zinc-100 text-zinc-400'}`}
                 >
                   {t('debrief.yes')}
                 </button>
@@ -125,7 +125,7 @@ export function PostSessionDebrief({ session, onClose }: DebriefProps) {
                value={suggestions}
                onChange={(e) => setSuggestions(e.target.value)}
                placeholder={t('debrief.placeholder')}
-               className="w-full h-32 p-6 rounded-3xl bg-zinc-50 border-none text-sm placeholder:text-zinc-300 focus:ring-2 focus:ring-[#004e99] transition-all"
+               className="w-full h-32 p-6 rounded-3xl bg-zinc-50 border-none text-sm placeholder:text-zinc-300 focus:ring-2 focus:ring-msgr-primary transition-all"
              />
           </div>
         </div>
@@ -140,7 +140,7 @@ export function PostSessionDebrief({ session, onClose }: DebriefProps) {
            <button 
              onClick={handleSubmit}
              disabled={isSubmitting}
-             className="flex-1 py-4 bg-zinc-900 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-[#004e99] hover:shadow-xl transition-all disabled:opacity-50"
+             className="flex-1 py-4 bg-zinc-900 text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-msgr-primary hover:shadow-xl transition-all disabled:opacity-50"
            >
              {isSubmitting ? t('debrief.securing') : t('debrief.complete')}
            </button>

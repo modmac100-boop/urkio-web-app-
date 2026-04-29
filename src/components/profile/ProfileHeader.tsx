@@ -315,14 +315,14 @@ export function ProfileHeader({
     <>
       <div className="rounded-xl overflow-hidden shadow-[0px_10px_30px_rgba(27,77,75,0.05)] bg-surface-container group/header">
         {/* ── Cover Image ─────────────────────────────────────────────────── */}
-        <div className="aspect-[21/9] md:aspect-[16/6] relative bg-bg-main">
+        <div className="aspect-21/9 md:aspect-16/6 relative bg-bg-main">
           <img
             src={displayCover || 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80'}
             alt="Cover"
             className="w-full h-full object-cover transition-transform duration-1000 group-hover/header:scale-105 cursor-zoom-in"
             onClick={() => setSelectedFullImage(displayCover || 'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&q=80')}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent"></div>
 
           {isOwnProfile && (
             <>

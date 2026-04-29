@@ -203,7 +203,7 @@ export function FeedPost({ post, user, isRTL, currentUserId }: FeedPostProps) {
   };
 
   return (
-    <article className="bento-card bg-surface dark:bg-[#121212] border border-border-light shadow-sm overflow-hidden hover:shadow-xl transition-all duration-500 group/post animate-scale-in rounded-[2rem]">
+    <article className="bento-card bg-surface dark:bg-[#121212] border border-border-light shadow-sm overflow-hidden hover:shadow-xl transition-all duration-500 group/post animate-scale-in rounded-4xl">
       {/* Editorial Header */}
       <div className="p-4 sm:p-6 pb-4">
         <div className="flex items-center justify-between">
@@ -414,7 +414,7 @@ export function FeedPost({ post, user, isRTL, currentUserId }: FeedPostProps) {
                   initial={{ opacity: 0, y: 10, scale: 0.9 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.9 }}
-                  className="absolute bottom-full left-0 mb-4 p-2 bg-white dark:bg-zinc-800 border border-border-light rounded-[1.5rem] shadow-2xl z-[60] grid grid-cols-4 sm:grid-cols-8 gap-1"
+                  className="absolute bottom-full left-0 mb-4 p-2 bg-white dark:bg-zinc-800 border border-border-light rounded-3xl shadow-2xl z-60 grid grid-cols-4 sm:grid-cols-8 gap-1"
                   onMouseEnter={() => {
                     if (reactionTimeoutRef.current) clearTimeout(reactionTimeoutRef.current);
                   }}

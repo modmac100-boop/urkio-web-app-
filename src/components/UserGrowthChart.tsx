@@ -13,11 +13,11 @@ const UserGrowthChart: React.FC<UserGrowthChartProps> = ({ data }) => {
     <div className="bg-[#1A2127] p-6 rounded-2xl border border-gray-800 shadow-2xl">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h3 className="text-[#EDE8E4] text-xl font-bold">نمو مستخدمي أوركيو</h3>
+          <h3 className="text-ur-background text-xl font-bold">نمو مستخدمي أوركيو</h3>
           <p className="text-[#6B8E7D] text-sm mt-1">تتبع نمو قاعدة المستخدمين شهرياً</p>
         </div>
-        <div className="bg-[#30B0D0]/10 px-3 py-1 rounded-full">
-          <span className="text-[#30B0D0] text-xs font-medium">Monthly Stats</span>
+        <div className="bg-ur-primary/10 px-3 py-1 rounded-full">
+          <span className="text-ur-primary text-xs font-medium">Monthly Stats</span>
         </div>
       </div>
       

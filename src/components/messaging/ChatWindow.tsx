@@ -880,7 +880,7 @@ export function ChatWindow({
               {partner?.isOnline && <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#007440] border-2 border-white rounded-full shadow-sm"></span>}
             </div>
             <div className="cursor-pointer" onClick={() => setShowExpertSidebar(!showExpertSidebar)}>
-              <h4 className="font-headline font-black italic text-[#1b1c1a] uppercase tracking-tighter leading-none mb-1">
+              <h4 className="font-headline font-black italic text-msgr-on-surface uppercase tracking-tighter leading-none mb-1">
                 {partner?.displayName || 'Active Stream'}
               </h4>
               <p className="text-[10px] text-[#007440] font-black uppercase tracking-widest flex items-center gap-1.5">
@@ -912,19 +912,19 @@ export function ChatWindow({
             ) : null}
             <button 
               onClick={() => startCall('video')} 
-              className="p-2.5 text-zinc-400 hover:bg-[#004e99]/5 hover:text-[#004e99] rounded-xl transition-all group"
+              className="p-2.5 text-zinc-400 hover:bg-msgr-primary/5 hover:text-msgr-primary rounded-xl transition-all group"
               title="Start Video Call"
             >
               <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">video_call</span>
             </button>
             <button 
               onClick={() => startCall('audio')} 
-              className="p-2.5 text-zinc-400 hover:bg-[#004e99]/5 hover:text-[#004e99] rounded-xl transition-all group"
+              className="p-2.5 text-zinc-400 hover:bg-msgr-primary/5 hover:text-msgr-primary rounded-xl transition-all group"
               title="Start Voice Call"
             >
               <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">phone</span>
             </button>
-            <button onClick={() => setShowExpertSidebar(!showExpertSidebar)} className={clsx("p-2.5 rounded-xl transition-all", showExpertSidebar ? "bg-[#004e99] text-white" : "text-zinc-400 hover:bg-[#004e99]/5 hover:text-[#004e99]")}>
+            <button onClick={() => setShowExpertSidebar(!showExpertSidebar)} className={clsx("p-2.5 rounded-xl transition-all", showExpertSidebar ? "bg-msgr-primary text-white" : "text-zinc-400 hover:bg-msgr-primary/5 hover:text-msgr-primary")}>
               <span className="material-symbols-outlined text-lg">more_vert</span>
             </button>
           </div>
@@ -967,10 +967,10 @@ export function ChatWindow({
                 <div className={clsx("max-w-[75%] flex flex-col", isOwn ? "items-end" : "items-start")}>
                    {msg.replyTo && (
                      <div className={clsx(
-                       "mb-[-12px] p-3 pt-2 pb-4 rounded-t-2xl text-[11px] font-medium border-l-4 border-[#004e99] bg-msgr-surface-container-low opacity-80 min-w-[120px]",
+                       "mb-[-12px] p-3 pt-2 pb-4 rounded-t-2xl text-[11px] font-medium border-l-4 border-msgr-primary bg-msgr-surface-container-low opacity-80 min-w-[120px]",
                        isOwn ? "mr-4" : "ml-4"
                      )}>
-                        <p className="text-[9px] font-black uppercase text-[#004e99] mb-1">{msg.replyTo.senderId === currentUser.uid ? 'You' : partner?.displayName}</p>
+                        <p className="text-[9px] font-black uppercase text-msgr-primary mb-1">{msg.replyTo.senderId === currentUser.uid ? 'You' : partner?.displayName}</p>
                         <p className="truncate italic text-zinc-500">{msg.replyTo.text}</p>
                      </div>
                    )}
@@ -980,8 +980,8 @@ export function ChatWindow({
                         className={clsx(
                           "p-4 px-5 text-[14px] leading-relaxed shadow-sm transition-all duration-300 relative z-1",
                           isOwn 
-                            ? "bg-linear-to-br from-[#004e99] to-msgr-primary-container text-white rounded-[24px] rounded-tr-sm" 
-                            : "bg-msgr-surface-container-high text-[#1b1c1a] rounded-[24px] rounded-tl-sm"
+                            ? "bg-linear-to-br from-msgr-primary to-msgr-primary-container text-white rounded-[24px] rounded-tr-sm" 
+                            : "bg-msgr-surface-container-high text-msgr-on-surface rounded-[24px] rounded-tl-sm"
                         )}
                         onDoubleClick={() => toggleReaction(msg.id, '❤️')}
                       >
@@ -989,15 +989,15 @@ export function ChatWindow({
                          {msg.type === 'session_invite' && (msg.sessionData || msg.roomId) && (
                            <div className="min-w-[260px] space-y-4">
                              <div className="flex items-center gap-3 mb-3">
-                               <div className={clsx("w-10 h-10 rounded-2xl flex items-center justify-center shrink-0", isOwn ? "bg-white/20" : "bg-[#004e99]/10")}>
-                                 <span className={clsx("material-symbols-outlined text-xl fill-1", isOwn ? "text-white" : "text-[#004e99]")}> healing </span>
+                               <div className={clsx("w-10 h-10 rounded-2xl flex items-center justify-center shrink-0", isOwn ? "bg-white/20" : "bg-msgr-primary/10")}>
+                                 <span className={clsx("material-symbols-outlined text-xl fill-1", isOwn ? "text-white" : "text-msgr-primary")}> healing </span>
                                </div>
                                <div>
-                                 <p className={clsx("text-[10px] font-black uppercase tracking-widest", isOwn ? "text-white/70" : "text-[#004e99]/70")}>Secure Healing Session</p>
+                                 <p className={clsx("text-[10px] font-black uppercase tracking-widest", isOwn ? "text-white/70" : "text-msgr-primary/70")}>Secure Healing Session</p>
                                  <p className={clsx("text-[13px] font-black", isOwn ? "text-white" : "text-zinc-900")}>{msg.sessionData?.title || 'Expert Healing Invitation'}</p>
                                </div>
                              </div>
-                             <div className={clsx("rounded-2xl p-3 space-y-2", isOwn ? "bg-white/10" : "bg-[#004e99]/5 border border-[#004e99]/10")}>
+                             <div className={clsx("rounded-2xl p-3 space-y-2", isOwn ? "bg-white/10" : "bg-msgr-primary/5 border border-msgr-primary/10")}>
                                <div className="flex justify-between items-center">
                                  <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOwn ? "text-white/50" : "text-zinc-400")}>Room ID</span>
                                  <span className={clsx("text-xs font-black font-mono", isOwn ? "text-white" : "text-zinc-800")}>{(msg.sessionData?.roomId || msg.roomId)?.slice(-8).toUpperCase()}</span>
@@ -1005,14 +1005,14 @@ export function ChatWindow({
                                {(msg.sessionData?.accessCode) && (
                                  <div className="flex justify-between items-center">
                                    <span className={clsx("text-[9px] font-black uppercase tracking-widest", isOwn ? "text-white/50" : "text-zinc-400")}>Access Code</span>
-                                   <span className={clsx("text-[14px] font-black tracking-[0.3em] font-mono", isOwn ? "text-white" : "text-[#004e99]")}>{msg.sessionData.accessCode}</span>
+                                   <span className={clsx("text-[14px] font-black tracking-[0.3em] font-mono", isOwn ? "text-white" : "text-msgr-primary")}>{msg.sessionData.accessCode}</span>
                                  </div>
                                )}
                              </div>
                              {!isOwn && (
                                <button
                                  onClick={() => navigate(`/therapy-room/${msg.sessionData?.roomId || msg.roomId}`)}
-                                 className="w-full py-3 bg-[#004e99] hover:bg-[#003d7a] text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-[#004e99]/30 flex items-center justify-center gap-2"
+                                 className="w-full py-3 bg-msgr-primary hover:bg-[#003d7a] text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-msgr-primary/30 flex items-center justify-center gap-2"
                                >
                                  <span className="material-symbols-outlined text-[16px] fill-1">self_improvement</span>
                                  Join Healing Session
@@ -1026,7 +1026,7 @@ export function ChatWindow({
                          {msg.type === 'file' && (
                             <a href={msg.fileUrl} target="_blank" className="flex items-center gap-3 p-1">
                                <div className={clsx("w-11 h-11 rounded-xl flex items-center justify-center shrink-0", isOwn ? "bg-white/20" : "bg-white shadow-sm")}>
-                                  <span className={clsx("material-symbols-outlined", isOwn ? "text-white" : "text-[#004e99]")}>description</span>
+                                  <span className={clsx("material-symbols-outlined", isOwn ? "text-white" : "text-msgr-primary")}>description</span>
                                </div>
                                <div className="min-w-0 pr-2">
                                   <p className="text-xs font-black truncate">{msg.text || 'Document.pdf'}</p>
@@ -1095,7 +1095,7 @@ export function ChatWindow({
                           onClick={() => toggleReaction(msg.id, '👍')}
                           className={clsx(
                             "flex items-center gap-1.5 py-1 px-2 rounded-lg transition-all",
-                            isLiked ? "text-[#004e99] bg-[#004e99]/5" : "text-zinc-400 hover:bg-zinc-100"
+                            isLiked ? "text-msgr-primary bg-msgr-primary/5" : "text-zinc-400 hover:bg-zinc-100"
                           )}
                         >
                           <Heart size={14} className={clsx(isLiked && "fill-current")} />
@@ -1118,7 +1118,7 @@ export function ChatWindow({
                         <div className="relative">
                            <button 
                              onClick={() => setShowEmojiPickerFor(showEmojiPickerFor === msg.id ? null : msg.id)}
-                             className="p-1.5 text-zinc-400 hover:text-[#004e99] hover:bg-zinc-100 rounded-full transition-all"
+                             className="p-1.5 text-zinc-400 hover:text-msgr-primary hover:bg-zinc-100 rounded-full transition-all"
                            >
                              <SmilePlus size={14} />
                            </button>
@@ -1166,7 +1166,7 @@ export function ChatWindow({
 
                    <div className={clsx("flex items-center gap-2 mt-1 px-1", isOwn ? "justify-end" : "justify-start")}>
                       {isOwn && (
-                        <span className={clsx("text-xs", msg.read ? "text-[#004e99]" : "text-zinc-300")}>
+                        <span className={clsx("text-xs", msg.read ? "text-msgr-primary" : "text-zinc-300")}>
                            {msg.read ? <CheckCheck size={12} /> : <Check size={12} />}
                         </span>
                       )}
@@ -1184,9 +1184,9 @@ export function ChatWindow({
         {/* ⌨️ Message Input Area */}
         <div className="p-8 pb-10 bg-linear-to-t from-white to-transparent shrink-0">
           {replyingTo && (
-            <div className="max-w-4xl mx-auto mb-4 p-4 bg-msgr-surface-container-low rounded-2xl flex items-center justify-between border-l-4 border-[#004e99] animate-in slide-in-from-bottom-2 duration-300">
+            <div className="max-w-4xl mx-auto mb-4 p-4 bg-msgr-surface-container-low rounded-2xl flex items-center justify-between border-l-4 border-msgr-primary animate-in slide-in-from-bottom-2 duration-300">
                <div>
-                  <p className="text-[9px] font-black uppercase text-[#004e99] tracking-widest mb-1">Replying to {replyingTo.senderId === currentUser.uid ? 'You' : partner?.displayName}</p>
+                  <p className="text-[9px] font-black uppercase text-msgr-primary tracking-widest mb-1">Replying to {replyingTo.senderId === currentUser.uid ? 'You' : partner?.displayName}</p>
                   <p className="text-xs italic text-zinc-500 truncate">{replyingTo.text}</p>
                </div>
                <button onClick={() => setReplyingTo(null)} className="p-2 text-zinc-400 hover:text-zinc-600 transition-colors"><span className="material-symbols-outlined text-sm">close</span></button>
@@ -1196,7 +1196,7 @@ export function ChatWindow({
           <div className="max-w-4xl mx-auto bg-white rounded-3xl p-2 border border-stone-100 shadow-2xl shadow-blue-900/5 ring-1 ring-zinc-50">
             <div className="flex items-end gap-2">
               <div className="flex items-center gap-1 p-1">
-                <button type="button" onClick={() => fileInputRef.current?.click()} className="p-3 text-zinc-400 hover:text-[#004e99] transition-all" title="Attach File"><span className="material-symbols-outlined">attach_file</span></button>
+                <button type="button" onClick={() => fileInputRef.current?.click()} className="p-3 text-zinc-400 hover:text-msgr-primary transition-all" title="Attach File"><span className="material-symbols-outlined">attach_file</span></button>
                 <input type="file" ref={fileInputRef} onChange={(e) => handleFileUpload(e, 'file')} className="hidden" />
                 <button 
                   type="button" 
@@ -1216,12 +1216,12 @@ export function ChatWindow({
                       });
                     }
                   }} 
-                  className="p-3 text-zinc-400 hover:text-[#004e99] transition-all"
+                  className="p-3 text-zinc-400 hover:text-msgr-primary transition-all"
                   title="Send Programmatic Video"
                 >
                   <span className="material-symbols-outlined">movie</span>
                 </button>
-                <button type="button" onClick={() => setShowEmojiPickerFor('input')} className="p-3 text-zinc-400 hover:text-[#004e99] transition-all" title="Emoji"><SmilePlus size={20} /></button>
+                <button type="button" onClick={() => setShowEmojiPickerFor('input')} className="p-3 text-zinc-400 hover:text-msgr-primary transition-all" title="Emoji"><SmilePlus size={20} /></button>
                 {showEmojiPickerFor === 'input' && (
                   <div className="absolute bottom-full left-0 mb-2 z-50">
                     <EmojiPicker 
@@ -1269,7 +1269,7 @@ export function ChatWindow({
                    onTouchEnd={() => handleStopRecording(true)}
                    className={clsx(
                      "p-3 transition-all rounded-2xl", 
-                     isRecording ? "text-white bg-red-500 scale-125 shadow-lg animate-pulse" : "text-zinc-400 hover:text-[#004e99] hover:bg-zinc-50"
+                     isRecording ? "text-white bg-red-500 scale-125 shadow-lg animate-pulse" : "text-zinc-400 hover:text-msgr-primary hover:bg-zinc-50"
                    )}
                 >
                   <span className="material-symbols-outlined">{isRecording ? 'mic' : 'mic'}</span>
@@ -1277,7 +1277,7 @@ export function ChatWindow({
                 <button 
                   onClick={handleSend}
                   disabled={!newMessage.trim() && !isRecording}
-                  className="w-12 h-12 bg-linear-to-br from-[#004e99] to-msgr-primary-container text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-90 transition-all disabled:opacity-50 disabled:scale-100 group"
+                  className="w-12 h-12 bg-linear-to-br from-msgr-primary to-msgr-primary-container text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 active:scale-90 transition-all disabled:opacity-50 disabled:scale-100 group"
                 >
                   <span className="material-symbols-outlined text-[20px] fill-1 group-hover:-rotate-12 transition-transform duration-300">send</span>
                 </button>
@@ -1294,7 +1294,7 @@ export function ChatWindow({
       {showExpertSidebar && partner && (
         <aside className="w-80 shrink-0 bg-white border-l border-zinc-100 flex flex-col p-8 overflow-y-auto custom-scrollbar animate-in slide-in-from-right-4 duration-500">
            <div className="flex justify-between items-center mb-10">
-              <h5 className="font-headline font-black italic text-[#1b1c1a] uppercase tracking-tighter">Case Context</h5>
+              <h5 className="font-headline font-black italic text-msgr-on-surface uppercase tracking-tighter">Case Context</h5>
               <button onClick={() => setShowExpertSidebar(false)} className="p-1 hover:bg-zinc-100 rounded-full transition-colors"><span className="material-symbols-outlined text-sm">close</span></button>
            </div>
            
@@ -1306,7 +1306,7 @@ export function ChatWindow({
                     className="w-24 h-24 rounded-4xl object-cover mx-auto mb-6 shadow-xl border-4 border-white" 
                  />
                  <h4 className="font-black italic text-zinc-900 uppercase tracking-tight text-lg leading-none mb-1">{partner?.displayName}</h4>
-                 <p className="text-[10px] font-black text-[#004e99] uppercase tracking-widest">{partner?.role || 'Patient Asset'}</p>
+                 <p className="text-[10px] font-black text-msgr-primary uppercase tracking-widest">{partner?.role || 'Patient Asset'}</p>
                  {partner?.specialties && <p className="text-[9px] text-zinc-400 font-bold mt-2">{partner.specialties.join(' · ')}</p>}
               </div>
 
@@ -1326,12 +1326,12 @@ export function ChatWindow({
               <div className="pt-8 border-t border-zinc-100">
                  <div className="flex justify-between items-center mb-6">
                     <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Shared Briefs</p>
-                    <button className="text-[9px] font-black text-[#004e99] uppercase">View All</button>
+                    <button className="text-[9px] font-black text-msgr-primary uppercase">View All</button>
                  </div>
                  <div className="space-y-3">
                     {messages.filter(m => m.type === 'file').slice(-3).map((f, i) => (
                       <div key={i} className="flex items-center gap-3 p-3 bg-zinc-50 rounded-2xl border border-transparent hover:border-zinc-200 cursor-pointer transition-all">
-                         <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm"><span className="material-symbols-outlined text-[#004e99]">description</span></div>
+                         <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm"><span className="material-symbols-outlined text-msgr-primary">description</span></div>
                          <div className="min-w-0">
                             <p className="text-[11px] font-black italic tracking-tight truncate uppercase">{f.text || 'Brief_File.pdf'}</p>
                             <p className="text-[8px] font-bold text-zinc-400 uppercase">Expert Handover</p>
@@ -1401,7 +1401,7 @@ const AudioMessage = ({ url, duration, isOwn }: { url: string; duration?: number
         onClick={toggle} 
         className={clsx(
           "size-12 shrink-0 rounded-[18px] flex items-center justify-center transition-all shadow-lg active:scale-90", 
-          isOwn ? "bg-white text-[#004e99] hover:bg-zinc-50" : "bg-linear-to-br from-[#004e99] to-msgr-primary-container text-white"
+          isOwn ? "bg-white text-msgr-primary hover:bg-zinc-50" : "bg-linear-to-br from-msgr-primary to-msgr-primary-container text-white"
         )}
       >
         {isPlaying ? <span className="material-symbols-outlined text-[24px] fill-1">pause</span> : <span className="material-symbols-outlined text-[24px] fill-1">play_arrow</span>}
@@ -1424,7 +1424,7 @@ const AudioMessage = ({ url, duration, isOwn }: { url: string; duration?: number
                   "w-[3px] rounded-full transition-all duration-300", 
                   isOwn 
                     ? (isPlayed ? "bg-white h-[80%]" : "bg-white/30 h-[40%]") 
-                    : (isPlayed ? "bg-[#004e99] h-[80%]" : "bg-[#004e99]/20 h-[40%]")
+                    : (isPlayed ? "bg-msgr-primary h-[80%]" : "bg-msgr-primary/20 h-[40%]")
                 )} 
                 style={{ 
                   height: `${isPlayed ? height * 100 : height * 50}%`,

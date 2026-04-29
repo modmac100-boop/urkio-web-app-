@@ -29,7 +29,7 @@ export function EmojiPicker({ onSelect, onClose }: { onSelect: (emoji: string) =
             className={clsx(
               "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all shrink-0",
               activeCategory === cat.name 
-                ? "bg-[#004e99] text-white shadow-sm" 
+                ? "bg-msgr-primary text-white shadow-sm" 
                 : "text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
             )}
           >

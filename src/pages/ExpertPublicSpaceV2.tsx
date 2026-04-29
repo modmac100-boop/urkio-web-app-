@@ -57,7 +57,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#1b1c1a]/60 backdrop-blur-sm animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-[#1b1c1a]/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="bg-[#fbf9f5] border border-[#e4e2de] rounded-[2.5rem] w-full max-w-lg p-10 relative shadow-2xl font-['Manrope']">
         <button onClick={onClose} className="absolute top-8 right-8 text-[#707978] hover:text-[#003634] transition-colors"><X className="size-6" /></button>
 
@@ -72,19 +72,19 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
                 <div>
                   <label className="text-[10px] font-bold text-[#707978] uppercase tracking-widest mb-2 block">Date</label>
                   <input type="date" required value={form.date} onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
-                    className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-[#1b1c1a] text-sm focus:outline-none focus:border-[#003634]/50"
+                    className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-msgr-on-surface text-sm focus:outline-none focus:border-[#003634]/50"
                     min={new Date().toISOString().split('T')[0]} />
                 </div>
                 <div>
                   <label className="text-[10px] font-bold text-[#707978] uppercase tracking-widest mb-2 block">Time</label>
                   <input type="time" required value={form.time} onChange={e => setForm(p => ({ ...p, time: e.target.value }))}
-                    className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-[#1b1c1a] text-sm focus:outline-none focus:border-[#003634]/50" />
+                    className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-msgr-on-surface text-sm focus:outline-none focus:border-[#003634]/50" />
                 </div>
               </div>
               <div>
                 <label className="text-[10px] font-bold text-[#707978] uppercase tracking-widest mb-2 block">Session Type</label>
                 <select value={form.sessionType} onChange={e => setForm(p => ({ ...p, sessionType: e.target.value }))}
-                  className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-[#1b1c1a] text-sm focus:outline-none">
+                  className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-msgr-on-surface text-sm focus:outline-none">
                   <option value="therapy">One-on-One Therapy</option>
                   <option value="healing-course">Healing Course Session</option>
                   <option value="consultation">Consultation</option>
@@ -95,7 +95,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
                 <textarea value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                   placeholder="Briefly describe what you'd like to work on..."
                   rows={3}
-                  className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-[#1b1c1a] text-sm focus:outline-none resize-none" />
+                  className="w-full bg-[#efeeea] border border-[#e4e2de] rounded-2xl px-4 py-3 text-msgr-on-surface text-sm focus:outline-none resize-none" />
               </div>
               <button type="submit" disabled={loading}
                 className="w-full py-4 bg-[#003634] text-[#ffffff] rounded-2xl font-bold text-sm tracking-wide shadow-lg active:scale-95 transition-all disabled:opacity-50">
@@ -165,7 +165,7 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
   );
 
   if (!expert) return (
-    <div className="min-h-screen bg-[#fbf9f5] flex flex-col items-center justify-center text-[#1b1c1a] gap-6 font-['Manrope']">
+    <div className="min-h-screen bg-[#fbf9f5] flex flex-col items-center justify-center text-msgr-on-surface gap-6 font-['Manrope']">
       <p className="text-2xl font-bold">Expert not found</p>
       <button onClick={() => navigate(-1)} className="text-[#003634] underline">Go back</button>
     </div>
@@ -178,7 +178,7 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
   const tabs = ['Posts', 'Media', 'Live Replays', 'Reviews', 'Services'];
 
   return (
-    <div className="bg-[#fbf9f5] text-[#1b1c1a] font-['Manrope'] min-h-screen selection:bg-[#9ed0cd]/30">
+    <div className="bg-[#fbf9f5] text-msgr-on-surface font-['Manrope'] min-h-screen selection:bg-[#9ed0cd]/30">
       
       {/* Top Navigation Shell */}
       <nav className="bg-[#FDFCFB] dark:bg-[#121414] border-b border-[#E6E2DE] dark:border-[#2A2D2D] shadow-[0px_4px_20px_rgba(27,77,75,0.02)] fixed top-0 w-full z-50">
@@ -190,7 +190,7 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
             <button onClick={() => navigate('/guide')} className="text-[#1B4D4B]/60 dark:text-[#3D8C89]/60 hover:text-[#1B4D4B] transition-colors duration-200">Journey</button>
             <button 
               onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
-              className="flex items-center gap-1.5 text-[#30B0D0] font-bold hover:opacity-80 transition-opacity duration-200"
+              className="flex items-center gap-1.5 text-ur-primary font-bold hover:opacity-80 transition-opacity duration-200"
             >
               <span className="material-symbols-outlined text-[20px]">sparkles</span>
               Urkio Agent
@@ -332,7 +332,7 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
                       <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">{course.title}</h4>
                       <p className="text-[#404848] font-['Manrope'] text-[16px] mt-2 max-w-xl">{course.description}</p>
                       {course.coverURL && (
-                        <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
+                        <div className="mt-4 rounded-xl overflow-hidden aspect-21/9 bg-[#efeeea]">
                           <img alt={course.title} className="w-full h-full object-cover" src={course.coverURL} />
                         </div>
                       )}
@@ -346,7 +346,7 @@ export function ExpertPublicSpaceV2({ user, userData }: { user: any; userData: a
                         <span className="text-[12px] text-[#52634d] font-bold uppercase tracking-widest font-['Manrope']">2023 • Major Release</span>
                         <h4 className="font-['Newsreader'] text-2xl text-[#1b4d4b] mt-1">Book Publication: "The Malleable Mind"</h4>
                         <p className="text-[#404848] font-['Manrope'] text-[16px] mt-2 max-w-xl">Deep dive into sustainable neuro-habit architecture for modern high-performers.</p>
-                        <div className="mt-4 rounded-xl overflow-hidden aspect-[21/9] bg-[#efeeea]">
+                        <div className="mt-4 rounded-xl overflow-hidden aspect-21/9 bg-[#efeeea]">
                           <img alt="Book Launch" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1455390582262-044cdead2708?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" />
                         </div>
                       </div>

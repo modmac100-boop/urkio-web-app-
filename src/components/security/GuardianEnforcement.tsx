@@ -101,7 +101,7 @@ export const GuardianEnforcement: React.FC<Props> = ({ user, userData, onRefresh
              Our clinical leads are reviewing the legal guardian documents for your account. 
              You will be notified once the "Guardian Verified" status is active.
            </p>
-           <button onClick={() => window.location.reload()} className="mt-8 text-xs font-black uppercase tracking-widest text-[#004e99] underline">Refresh Status</button>
+           <button onClick={() => window.location.reload()} className="mt-8 text-xs font-black uppercase tracking-widest text-msgr-primary underline">Refresh Status</button>
            
            <div className="mt-20 pt-10 border-t border-zinc-100">
              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-4">Guardian Control</p>
@@ -131,7 +131,7 @@ export const GuardianEnforcement: React.FC<Props> = ({ user, userData, onRefresh
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-2xl bg-white rounded-5xl shadow-2xl overflow-hidden flex flex-col"
       >
-        <div className="bg-[#004e99] p-8 md:p-12 text-white text-center">
+        <div className="bg-msgr-primary p-8 md:p-12 text-white text-center">
            <Shield className="size-12 mx-auto mb-6 opacity-80" />
            <h2 className="text-3xl md:text-4xl font-black italic tracking-tighter uppercase font-headline leading-none">
              {isRTL ? 'بروتوكول حماية القصر' : 'Minor Guardian Protocol'}
@@ -146,7 +146,7 @@ export const GuardianEnforcement: React.FC<Props> = ({ user, userData, onRefresh
              <div className="space-y-8">
                <div className="bg-white p-6 rounded-3xl border border-zinc-100 shadow-sm">
                  <h3 className="font-black text-lg italic mb-3 flex items-center gap-2">
-                   <Lock className="text-[#004e99] size-5" /> {isRTL ? 'لماذا هذا مطلوب؟' : 'Why is this required?'}
+                   <Lock className="text-msgr-primary size-5" /> {isRTL ? 'لماذا هذا مطلوب؟' : 'Why is this required?'}
                  </h3>
                  <p className="text-sm text-zinc-600 leading-relaxed">
                    {isRTL 
@@ -180,7 +180,7 @@ export const GuardianEnforcement: React.FC<Props> = ({ user, userData, onRefresh
                       type="email"
                       value={guardianEmail}
                       onChange={e => setGuardianEmail(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#004e99] text-sm"
+                      className="w-full pl-12 pr-6 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:ring-2 focus:ring-msgr-primary text-sm"
                       placeholder="parent@example.com"
                     />
                   </div>
@@ -194,14 +194,14 @@ export const GuardianEnforcement: React.FC<Props> = ({ user, userData, onRefresh
                       type="tel"
                       value={guardianPhone}
                       onChange={e => setGuardianPhone(e.target.value)}
-                      className="w-full pl-12 pr-6 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:ring-2 focus:ring-[#004e99] text-sm"
+                      className="w-full pl-12 pr-6 py-4 bg-white border border-zinc-100 rounded-2xl outline-none focus:ring-2 focus:ring-msgr-primary text-sm"
                       placeholder="+20 123 456 7890"
                     />
                   </div>
                 </div>
 
                 <div className="pt-4">
-                  <div className="bg-white border-2 border-dashed border-zinc-200 rounded-4xl p-8 text-center hover:border-[#004e99] transition-colors cursor-pointer relative">
+                  <div className="bg-white border-2 border-dashed border-zinc-200 rounded-4xl p-8 text-center hover:border-msgr-primary transition-colors cursor-pointer relative">
                     <input 
                       type="file" 
                       onChange={e => setIdFile(e.target.files?.[0] || null)}

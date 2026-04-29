@@ -13,7 +13,7 @@ export const PrivacyPolicy: React.FC = () => {
   const isRTL = lang === 'ar';
 
   return (
-    <div className={clsx("min-h-screen bg-[#faf9f6] text-[#1b1c1a] font-body p-8 md:p-20", isRTL && "dir-rtl")} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+    <div className={clsx("min-h-screen bg-[#faf9f6] text-msgr-on-surface font-body p-8 md:p-20", isRTL && "dir-rtl")} style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
       <div className="max-w-4xl mx-auto">
         <header className="mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div>

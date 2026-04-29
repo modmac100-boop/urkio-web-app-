@@ -122,8 +122,8 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
   return (
     <div className={clsx(
-      "min-h-screen font-sans selection:bg-[#30B0D0]/30 transition-all duration-700 overflow-hidden",
-      theme === 'dark' ? "bg-[#050A0F] text-[#EDE8E4]" : "bg-[#F8F9FA] text-[#1A222B]"
+      "min-h-screen font-sans selection:bg-ur-primary/30 transition-all duration-700 overflow-hidden",
+      theme === 'dark' ? "bg-ur-on-surface text-ur-background" : "bg-[#F8F9FA] text-[#1A222B]"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Noto+Serif+SC:wght@200..900&display=swap');
@@ -154,11 +154,11 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       `}</style>
 
       {/* Floating Header - Compact & Premium */}
-      <header className="fixed top-6 left-6 right-6 z-[100] flex justify-between items-center px-10 py-5 rounded-[2.5rem] glass-panel border-[#C8A96E]/10 premium-shadow transition-all duration-500">
+      <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-[2.5rem] glass-panel border-[#C8A96E]/10 premium-shadow transition-all duration-500">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
              <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                <ShieldCheck className="w-6 h-6 text-[#050A0F]" />
+                <ShieldCheck className="w-6 h-6 text-ur-on-surface" />
              </div>
              <span className="font-serif-clinical text-2xl font-bold tracking-tighter">
                URKIO <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-2 hidden sm:inline">Clinical</span>
@@ -167,7 +167,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
           
           <div className="hidden lg:flex items-center gap-4 px-5 py-2 rounded-2xl bg-white/5 border border-white/5 group">
             <span className="text-[9px] font-black uppercase tracking-widest opacity-30">Studio Bridge:</span>
-            <span className="text-xs font-mono font-black text-[#30B0D0] tracking-widest">{roomId}</span>
+            <span className="text-xs font-mono font-black text-ur-primary tracking-widest">{roomId}</span>
             <button onClick={() => { navigator.clipboard.writeText(roomId); toast.success('Link Secured'); }} className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#C8A96E]">
               <Copy className="w-3 h-3" />
             </button>
@@ -175,22 +175,22 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
         </div>
 
         <div className="flex items-center gap-6">
-          <div className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full border border-[#30B0D0]/20 bg-[#30B0D0]/5">
-             <div className={clsx("size-2 rounded-full", connectionState === 'CONNECTED' ? "bg-[#30B0D0] animate-pulse" : "bg-red-500")} />
-             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-[#30B0D0]">
+          <div className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full border border-ur-primary/20 bg-ur-primary/5">
+             <div className={clsx("size-2 rounded-full", connectionState === 'CONNECTED' ? "bg-ur-primary animate-pulse" : "bg-red-500")} />
+             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-ur-primary">
                 {connectionState === 'CONNECTED' ? 'E2E SECURED' : 'BRIDGE OFFLINE'}
              </span>
           </div>
 
           <div className="flex items-center gap-4 border-l pl-6 border-white/10">
-            <button onClick={toggleTheme} className="text-slate-400 hover:text-[#30B0D0] transition-colors">
+            <button onClick={toggleTheme} className="text-slate-400 hover:text-ur-primary transition-colors">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
             
             <div className="relative">
                <button 
                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                 className={clsx("size-10 rounded-xl flex items-center justify-center transition-all", isMenuOpen ? "bg-[#30B0D0] text-[#050A0F]" : "bg-white/5 text-slate-400 hover:text-white")}
+                 className={clsx("size-10 rounded-xl flex items-center justify-center transition-all", isMenuOpen ? "bg-ur-primary text-ur-on-surface" : "bg-white/5 text-slate-400 hover:text-white")}
                >
                   <Menu className="w-5 h-5" />
                </button>
@@ -205,14 +205,14 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                      >
                         <div className="space-y-2">
                            <button onClick={() => navigate('/')} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
-                              <Home className="w-4 h-4 text-[#30B0D0]" /> Home Dashboard
+                              <Home className="w-4 h-4 text-ur-primary" /> Home Dashboard
                            </button>
                            <button onClick={() => navigate(`/user/${user?.uid}`)} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
                               <User className="w-4 h-4 text-[#C8A96E]" /> Expert Profile
                            </button>
-                           <div className="h-[1px] bg-white/5 my-2" />
+                           <div className="h-px bg-white/5 my-2" />
                            <button onClick={() => setIsAssistantOpen(!isAssistantOpen)} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
-                              <Bot className="w-4 h-4 text-[#30B0D0]" /> Assistant
+                              <Bot className="w-4 h-4 text-ur-primary" /> Assistant
                            </button>
                            <button onClick={() => { leave().then(() => navigate('/')); }} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-red-500/10 text-red-500 transition-all text-xs font-bold uppercase tracking-widest">
                               <LogOut className="w-4 h-4" /> Exit Studio
@@ -232,7 +232,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
          {/* Top Section: Immersive Video & Notes Split */}
          <div className="flex-1 flex flex-col lg:flex-row gap-4 md:gap-8 min-h-0">
             {/* Primary Video Hub - EXPANDED */}
-            <div className="flex-[3] relative min-h-0">
+            <div className="flex-3 relative min-h-0">
                {connectionState === 'CONNECTED' ? (
                   <div className={clsx("w-full h-full grid gap-4 md:gap-6", remoteUsers.length > 0 ? "grid-cols-2" : "grid-cols-1")}>
                      <VideoPlayer 
@@ -265,7 +265,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                   <div className="w-full h-full rounded-[4rem] glass-panel border-[#C8A96E]/5 flex flex-col items-center justify-center text-center p-20 premium-shadow">
                      <div className="relative mb-12">
                         <div className="size-40 rounded-[3rem] clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
-                           <Zap className="w-16 h-16 text-[#050A0F]" />
+                           <Zap className="w-16 h-16 text-ur-on-surface" />
                         </div>
                         <div className="absolute inset-0 rounded-[3rem] clinical-gradient blur-[80px] opacity-20 animate-pulse-slow" />
                      </div>
@@ -274,7 +274,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                         Encrypted Neural Access Protocol v4.0.0
                      </p>
                      <div className="flex gap-4">
-                        <button onClick={join} className="px-16 py-6 rounded-3xl bg-[#30B0D0] text-[#050A0F] font-black text-[12px] uppercase tracking-[0.4em] shadow-3xl shadow-[#30B0D0]/20 hover:scale-105 active:scale-95 transition-all">
+                        <button onClick={join} className="px-16 py-6 rounded-3xl bg-ur-primary text-ur-on-surface font-black text-[12px] uppercase tracking-[0.4em] shadow-3xl shadow-ur-primary/20 hover:scale-105 active:scale-95 transition-all">
                            Initialize Connection
                         </button>
                         <button onClick={() => navigate('/')} className="px-10 py-6 rounded-3xl bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
@@ -286,7 +286,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
             </div>
 
             {/* Integrated Clinical Documentation Panel */}
-            <div className="flex-[1] rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
+            <div className="flex-1 rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
                <div className="p-10 border-b border-white/5 flex justify-between items-center">
                   <div className="flex items-center gap-4">
                      <div className="size-12 rounded-2xl bg-[#C8A96E]/10 flex items-center justify-center shadow-inner">
@@ -310,7 +310,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
                <div className="p-10 border-t border-white/5 bg-white/2 flex gap-4">
                   <button className="flex-1 py-5 rounded-2xl bg-white/5 text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5">Local Archive</button>
-                  <button className="flex-1 py-5 rounded-2xl clinical-gradient text-[#050A0F] text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-[#C8A96E]/20 hover:scale-105 transition-all">Sync to Cloud</button>
+                  <button className="flex-1 py-5 rounded-2xl clinical-gradient text-ur-on-surface text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-[#C8A96E]/20 hover:scale-105 transition-all">Sync to Cloud</button>
                </div>
             </div>
          </div>
@@ -322,8 +322,8 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Session Timer</span>
                   <p className="text-3xl font-serif-clinical font-bold mt-1 tracking-tighter">00:42:15</p>
                </div>
-               <div className="size-14 rounded-2xl bg-[#30B0D0]/10 flex items-center justify-center">
-                  <Monitor className="w-7 h-7 text-[#30B0D0]" />
+               <div className="size-14 rounded-2xl bg-ur-primary/10 flex items-center justify-center">
+                  <Monitor className="w-7 h-7 text-ur-primary" />
                </div>
             </div>
 
@@ -349,14 +349,14 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
             <button 
               onClick={() => setIsAssistantOpen(true)}
-              className="rounded-[2.5rem] bg-[#30B0D0] p-8 flex items-center justify-between hover:scale-105 transition-all group shadow-3xl shadow-[#30B0D0]/20"
+              className="rounded-[2.5rem] bg-ur-primary p-8 flex items-center justify-between hover:scale-105 transition-all group shadow-3xl shadow-ur-primary/20"
             >
-               <div className="text-[#050A0F] text-left">
+               <div className="text-ur-on-surface text-left">
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Neural Agent</span>
                   <p className="text-xl font-serif-clinical font-bold mt-1">Consult AI</p>
                </div>
                <div className="size-14 rounded-2xl bg-white/20 flex items-center justify-center">
-                  <Bot className="w-8 h-8 text-[#050A0F]" />
+                  <Bot className="w-8 h-8 text-ur-on-surface" />
                </div>
             </button>
          </div>
@@ -370,16 +370,16 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                animate={{ x: 0 }}
                exit={{ x: '100%' }}
                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-               className="fixed top-8 right-8 bottom-8 w-[450px] z-[200] glass-panel border-[#30B0D0]/20 premium-shadow flex flex-col rounded-[3.5rem] overflow-hidden"
+               className="fixed top-8 right-8 bottom-8 w-[450px] z-200 glass-panel border-ur-primary/20 premium-shadow flex flex-col rounded-[3.5rem] overflow-hidden"
             >
                <div className="p-10 border-b border-white/10 flex items-center justify-between bg-black/20">
                   <div className="flex items-center gap-4">
-                     <div className="size-12 rounded-2xl bg-[#30B0D0]/10 flex items-center justify-center shadow-lg">
-                        <Bot className="w-7 h-7 text-[#30B0D0]" />
+                     <div className="size-12 rounded-2xl bg-ur-primary/10 flex items-center justify-center shadow-lg">
+                        <Bot className="w-7 h-7 text-ur-primary" />
                      </div>
                      <div>
                         <h3 className="font-serif-clinical text-2xl font-bold">Neural Assistant</h3>
-                        <p className="text-[10px] font-black uppercase tracking-widest text-[#30B0D0] animate-pulse">Real-time Analysis</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-ur-primary animate-pulse">Real-time Analysis</p>
                      </div>
                   </div>
                   <button onClick={() => setIsAssistantOpen(false)} className="p-4 rounded-2xl hover:bg-white/10 transition-colors">

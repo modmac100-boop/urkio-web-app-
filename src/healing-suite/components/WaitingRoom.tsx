@@ -168,7 +168,7 @@ export function WaitingRoom({
               <button 
                 onClick={onEnterSession}
                 disabled={!agreedToTerms || isEntering}
-                className="w-full py-6 rounded-full bg-gradient-to-r from-[#0a66c2] to-[#a8c8ff] text-[#001b3d] font-headline font-black text-lg tracking-tight hover:shadow-[0px_0px_32px_rgba(10,102,194,0.4)] active:scale-[0.98] disabled:opacity-30 disabled:grayscale transition-all duration-300 flex items-center justify-center gap-3 group"
+                className="w-full py-6 rounded-full bg-linear-to-r from-[#0a66c2] to-[#a8c8ff] text-[#001b3d] font-headline font-black text-lg tracking-tight hover:shadow-[0px_0px_32px_rgba(10,102,194,0.4)] active:scale-[0.98] disabled:opacity-30 disabled:grayscale transition-all duration-300 flex items-center justify-center gap-3 group"
               >
                 {isEntering ? (
                   <span className="flex items-center gap-3">
@@ -184,7 +184,7 @@ export function WaitingRoom({
             </div>
 
             {/* Architectural Accent Line */}
-            <div className="absolute top-0 right-0 h-32 w-[2px] bg-gradient-to-b from-[#a8c8ff] to-transparent opacity-40"></div>
+            <div className="absolute top-0 right-0 h-32 w-[2px] bg-linear-to-b from-[#a8c8ff] to-transparent opacity-40"></div>
           </div>
         </div>
       </main>

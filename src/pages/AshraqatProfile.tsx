@@ -173,14 +173,14 @@ export function AshraqatProfile({ user, userData }: any) {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-body pb-12">
       {/* Hero Section */}
-      <div className="relative h-80 md:h-96 bg-gradient-to-r from-pink-950 via-slate-950 to-indigo-950 overflow-hidden rounded-b-[3rem] shadow-2xl">
+      <div className="relative h-80 md:h-96 bg-linear-to-r from-pink-950 via-slate-950 to-indigo-950 overflow-hidden rounded-b-[3rem] shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,#D81B60,transparent_40%)] opacity-30" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,#1A237E,transparent_40%)] opacity-30" />
         
         {/* Animated Grid Background */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-size-[40px_40px]" />
         
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-zinc-950 to-transparent" />
       </div>
 
       {/* Profile Info Card */}
@@ -200,7 +200,7 @@ export function AshraqatProfile({ user, userData }: any) {
             <div className="flex-1 space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-black font-headline tracking-tight bg-gradient-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
+                  <h1 className="text-3xl md:text-4xl font-black font-headline tracking-tight bg-linear-to-r from-pink-500 to-indigo-400 bg-clip-text text-transparent">
                     {isRTL ? data.nameAr : data.name}
                   </h1>
                   <p className="text-pink-400 font-semibold mt-1 text-sm md:text-base">
@@ -390,7 +390,7 @@ export function AshraqatProfile({ user, userData }: any) {
             { label: isRTL ? 'المتطوعين' : 'Volunteers', value: data.impactStats.volunteers, icon: Heart, color: 'from-blue-500 to-teal-500' },
           ].map((stat, i) => (
             <div key={i} className="bg-zinc-900/50 border border-zinc-800 rounded-3xl p-6 flex items-center gap-4 hover:bg-zinc-900 transition-colors">
-              <div className={`size-12 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg shadow-pink-500/10 shrink-0`}>
+              <div className={`size-12 rounded-2xl bg-linear-to-br ${stat.color} flex items-center justify-center shadow-lg shadow-pink-500/10 shrink-0`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               <div>

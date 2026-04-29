@@ -122,11 +122,11 @@ export function NotificationPermissionBanner({ onRequest }: NotificationPermissi
               <button
                 onClick={handleAllow}
                 disabled={requesting}
-                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-[#004e99] text-xs font-black uppercase tracking-widest
+                className="flex items-center gap-2 px-5 py-3 rounded-xl bg-white text-msgr-primary text-xs font-black uppercase tracking-widest
                            hover:bg-blue-50 hover:scale-105 active:scale-95 transition-all shadow-xl disabled:opacity-60"
               >
                 {requesting ? (
-                  <span className="w-4 h-4 border-2 border-[#004e99] border-t-transparent rounded-full animate-spin" />
+                  <span className="w-4 h-4 border-2 border-msgr-primary border-t-transparent rounded-full animate-spin" />
                 ) : (
                   <span className="material-symbols-outlined text-base" style={{ fontVariationSettings: "'FILL' 1" }}>
                     notifications_active

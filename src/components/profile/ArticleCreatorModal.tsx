@@ -125,7 +125,7 @@ export function ArticleCreatorModal({ isOpen, onClose, user, userData, onArticle
               <button 
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full aspect-[21/9] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 text-slate-500 hover:border-indigo-500 hover:text-indigo-500 hover:bg-indigo-500/5 transition-all group"
+                className="w-full aspect-21/9 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-700 flex flex-col items-center justify-center gap-3 text-slate-500 hover:border-indigo-500 hover:text-indigo-500 hover:bg-indigo-500/5 transition-all group"
               >
                 <div className="size-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <ImageIcon className="w-6 h-6" />

@@ -8,7 +8,7 @@ interface LogoProps {
 export const Logo: React.FC<LogoProps> = ({ className = "h-8", showText = false }) => {
   return (
     <div className="flex items-center gap-3">
-      <span className="text-2xl font-black tracking-tighter text-[#004e99] dark:text-blue-400">
+      <span className="text-2xl font-black tracking-tighter text-msgr-primary dark:text-blue-400">
         URKIO
       </span>
       {showText && (

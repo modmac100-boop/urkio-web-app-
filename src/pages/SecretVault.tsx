@@ -165,7 +165,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search reflections..." 
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-[11px] uppercase font-black tracking-widest text-white outline-none focus:ring-1 focus:ring-[#a8c8ff]/30 transition-all placeholder-[#414752]"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-[11px] uppercase font-black tracking-widest text-white outline-none focus:ring-1 focus:ring-[#a8c8ff]/30 transition-all placeholder-msgr-on-surface-variant"
                 />
              </div>
              <div className="flex gap-2 p-1 bg-white/5 rounded-2xl border border-white/5">
@@ -272,7 +272,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
                         {item.url && <video src={item.url} className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover/thumb:opacity-60 transition-opacity" />}
                       </div>
                     )}
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-[#414752]">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-msgr-on-surface-variant">
                       <span className="flex items-center gap-2">
                         <Clock className="size-3" /> {formatDuration(item.duration)}
                       </span>
@@ -313,7 +313,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
             ))
           ) : (
             <div className="col-span-full py-32 text-center bg-white/2 border-2 border-dashed border-white/5 rounded-[4rem] animate-in fade-in zoom-in duration-500">
-              <Lock className="size-20 text-[#414752] mx-auto mb-8 opacity-20" />
+              <Lock className="size-20 text-msgr-on-surface-variant mx-auto mb-8 opacity-20" />
               <p className="text-xl font-black text-white italic tracking-tighter mb-2">Vault is currently sealed</p>
               <p className="text-sm text-[#5b616e] font-bold tracking-widest uppercase mb-10">Visit the Sanctuary to begin your first neural sync.</p>
               <GlassButton onClick={() => window.open('/messenger', '_self')} className="px-12 h-14 rounded-2xl! text-[11px] uppercase font-black tracking-widest">

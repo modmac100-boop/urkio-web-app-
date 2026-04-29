@@ -412,7 +412,7 @@ export function ProfileSettings({
                     <span className="material-symbols-outlined text-4xl">image</span>
                   </div>
               }
-              <div className="absolute top-0 inset-inline-0 h-48 bg-linear-to-br from-[#004e99] to-[#001c37] opacity-10 dark:opacity-40" />
+              <div className="absolute top-0 inset-inline-0 h-48 bg-linear-to-br from-msgr-primary to-[#001c37] opacity-10 dark:opacity-40" />
               <label
                 htmlFor="cover-upload"
                 className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white opacity-0 group-hover:opacity-100 cursor-pointer transition-all duration-300 backdrop-blur-sm"

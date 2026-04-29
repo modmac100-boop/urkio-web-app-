@@ -240,7 +240,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
   );
 
   return (
-    <div className="bg-[#fbf9f5] font-['Manrope'] text-[#1b1c1a] min-h-screen flex selection:bg-teal-100">
+    <div className="bg-[#fbf9f5] font-['Manrope'] text-msgr-on-surface min-h-screen flex selection:bg-teal-100">
       <aside className="fixed left-0 top-0 h-full z-40 flex flex-col h-screen w-64 border-r border-slate-200 bg-slate-50">
         <div className="p-6 flex flex-col h-full">
           <div className="mb-8">
@@ -602,7 +602,7 @@ export function ClinicalIntake({ user, userData }: any) {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#1b1c1a] p-8">
+    <div className="min-h-screen bg-[#faf9f6] text-msgr-on-surface p-8">
       <div className="max-w-4xl mx-auto">
         <button 
           onClick={() => navigate(-1)}
@@ -614,7 +614,7 @@ export function ClinicalIntake({ user, userData }: any) {
 
         <header className="mb-12">
           <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-[#004e99] rounded-2xl text-white shadow-xl shadow-[#004e99]/20">
+            <div className="p-3 bg-msgr-primary rounded-2xl text-white shadow-xl shadow-msgr-primary/20">
               <Activity className="w-6 h-6" />
             </div>
             <h1 className="text-4xl font-black tracking-tighter italic">{t('clinical.initializeCase')}</h1>
@@ -625,26 +625,26 @@ export function ClinicalIntake({ user, userData }: any) {
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-white p-8 rounded-[2.5rem] border border-zinc-100 shadow-sm space-y-6">
             <h2 className="text-lg font-black italic flex items-center gap-2">
-              <User size={20} className="text-[#004e99]" /> {t('clinical.patientId')}
+              <User size={20} className="text-msgr-primary" /> {t('clinical.patientId')}
             </h2>
             <div className="space-y-4">
               <input 
                 type="text" required value={formData.patientName}
                 onChange={e => setFormData({...formData, patientName: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#004e99] outline-none"
+                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
                 placeholder={t('clinical.fullName')}
               />
               <div className="grid grid-cols-2 gap-4">
                 <input 
                   type="number" value={formData.age}
                   onChange={e => setFormData({...formData, age: e.target.value})}
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#004e99] outline-none"
+                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
                   placeholder={t('clinical.age')}
                 />
                 <select 
                   value={formData.gender}
                   onChange={e => setFormData({...formData, gender: e.target.value})}
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#004e99] outline-none"
+                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
                 >
                   <option value="Male">{t('clinical.male')}</option>
                   <option value="Female">{t('clinical.female')}</option>
@@ -656,19 +656,19 @@ export function ClinicalIntake({ user, userData }: any) {
 
           <div className="bg-white p-8 rounded-[2.5rem] border border-zinc-100 shadow-sm space-y-6">
             <h2 className="text-lg font-black italic flex items-center gap-2">
-              <FlaskConical size={20} className="text-[#004e99]" /> {t('clinical.clinicalContext')}
+              <FlaskConical size={20} className="text-msgr-primary" /> {t('clinical.clinicalContext')}
             </h2>
             <div className="space-y-4">
               <input 
                 type="text" required value={formData.primaryIssue}
                 onChange={e => setFormData({...formData, primaryIssue: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#004e99] outline-none"
+                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
                 placeholder={t('clinical.primaryDiagnosis')}
               />
               <textarea 
                 value={formData.initialObservation}
                 onChange={e => setFormData({...formData, initialObservation: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#004e99] outline-none min-h-[100px]"
+                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none min-h-[100px]"
                 placeholder={t('clinical.initialOrientationNotes')}
               />
             </div>

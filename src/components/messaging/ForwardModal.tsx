@@ -125,14 +125,14 @@ export function ForwardModal({
               placeholder="Search contacts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-[#004e99]/20"
+              className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-msgr-primary/20"
             />
           </div>
 
           <div className="h-80 overflow-y-auto custom-scrollbar space-y-2">
             {loading ? (
               <div className="flex flex-col items-center justify-center h-full gap-3">
-                <Loader2 className="animate-spin text-[#004e99]" size={24} />
+                <Loader2 className="animate-spin text-msgr-primary" size={24} />
                 <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Loading circle...</p>
               </div>
             ) : filteredContacts.length === 0 ? (
@@ -157,10 +157,10 @@ export function ForwardModal({
                     <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{contact.role || 'Member'}</p>
                   </div>
                   {forwarding === contact.uid ? (
-                    <Loader2 className="animate-spin text-[#004e99]" size={18} />
+                    <Loader2 className="animate-spin text-msgr-primary" size={18} />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center group-hover:bg-[#004e99]/10 transition-colors">
-                      <Send size={14} className="text-zinc-400 group-hover:text-[#004e99]" />
+                    <div className="w-8 h-8 rounded-full bg-zinc-50 flex items-center justify-center group-hover:bg-msgr-primary/10 transition-colors">
+                      <Send size={14} className="text-zinc-400 group-hover:text-msgr-primary" />
                     </div>
                   )}
                 </button>

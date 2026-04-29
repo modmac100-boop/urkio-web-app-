@@ -86,8 +86,8 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
 
   return (
     <div className={clsx(
-      "min-h-screen font-sans selection:bg-[#30B0D0]/30 transition-all duration-700",
-      theme === 'dark' ? "bg-[#050A0F] text-[#e6e2de]" : "bg-[#fbf9f5] text-[#1b1c1a]"
+      "min-h-screen font-sans selection:bg-ur-primary/30 transition-all duration-700",
+      theme === 'dark' ? "bg-ur-on-surface text-[#e6e2de]" : "bg-[#fbf9f5] text-msgr-on-surface"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Noto+Serif+SC:wght@200..900&display=swap');
@@ -105,18 +105,18 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
       {/* Premium Header */}
       <nav className={clsx(
         "fixed top-0 left-0 w-full z-50 flex justify-between items-center px-12 py-6 border-b transition-all",
-        theme === 'dark' ? "bg-[#050A0F]/80 backdrop-blur-2xl border-white/5" : "bg-white/80 backdrop-blur-2xl border-slate-200"
+        theme === 'dark' ? "bg-ur-on-surface/80 backdrop-blur-2xl border-white/5" : "bg-white/80 backdrop-blur-2xl border-slate-200"
       )}>
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="size-10 rounded-xl bg-gradient-to-tr from-[#30B0D0] to-[#C8A96E] flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-             <ShieldCheck className="w-6 h-6 text-[#050A0F]" />
+          <div className="size-10 rounded-xl bg-linear-to-tr from-ur-primary to-[#C8A96E] flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+             <ShieldCheck className="w-6 h-6 text-ur-on-surface" />
           </div>
           <span className="font-serif-clinical text-2xl font-bold tracking-tighter">URKIO</span>
         </div>
         
         <div className="hidden md:flex items-center gap-12">
           {['Discover', 'Experts', 'Network', 'Library'].map((item) => (
-             <button key={item} className={clsx("text-[10px] font-black uppercase tracking-[0.2em] transition-all", item === 'Experts' ? "text-[#30B0D0]" : "opacity-40 hover:opacity-100")}>{item}</button>
+             <button key={item} className={clsx("text-[10px] font-black uppercase tracking-[0.2em] transition-all", item === 'Experts' ? "text-ur-primary" : "opacity-40 hover:opacity-100")}>{item}</button>
           ))}
         </div>
 
@@ -125,7 +125,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
           <UserIcon className="w-5 h-5 opacity-40 hover:opacity-100 cursor-pointer transition-all" onClick={() => navigate('/settings')} />
           <button 
             onClick={() => navigate('/verify')}
-            className="bg-[#30B0D0] text-[#050A0F] px-8 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-[#30B0D0]/20"
+            className="bg-ur-primary text-ur-on-surface px-8 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-ur-primary/20"
           >
             Apply as Expert
           </button>
@@ -140,11 +140,11 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
              Verified Clinical Directory
           </div>
           <h1 className="font-serif-clinical text-6xl md:text-8xl font-bold mb-10 tracking-tighter leading-[0.9]">
-             Elite <span className="italic text-[#30B0D0]">Mindscape</span> <br/> Architects.
+             Elite <span className="italic text-ur-primary">Mindscape</span> <br/> Architects.
           </h1>
           
           <div className="relative group max-w-2xl mx-auto mt-16">
-             <div className="absolute inset-0 bg-[#30B0D0]/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+             <div className="absolute inset-0 bg-ur-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
              <div className={clsx(
                "relative flex items-center p-2 rounded-[2.5rem] border transition-all",
                theme === 'dark' ? "bg-white/5 border-white/10" : "bg-white border-slate-200 shadow-2xl"
@@ -156,7 +156,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                 />
-                <button className="bg-[#30B0D0] text-[#050A0F] px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#289CB8] transition-all shadow-xl">
+                <button className="bg-ur-primary text-ur-on-surface px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#289CB8] transition-all shadow-xl">
                   Analyze
                 </button>
              </div>
@@ -165,7 +165,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
 
         {loading ? (
            <div className="flex flex-col items-center py-40 gap-6">
-              <div className="size-16 rounded-3xl border-4 border-[#30B0D0]/20 border-t-[#30B0D0] animate-spin" />
+              <div className="size-16 rounded-3xl border-4 border-ur-primary/20 border-t-ur-primary animate-spin" />
               <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Scanning Registry...</p>
            </div>
         ) : (
@@ -177,7 +177,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                    whileInView={{ opacity: 1, y: 0 }}
                    viewport={{ once: true }}
                    className={clsx(
-                     "group rounded-[2rem] md:rounded-[3rem] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 border",
+                     "group rounded-4xl md:rounded-[3rem] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 border",
                      theme === 'dark' ? "bg-[#10161D] border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
                    )}
                  >
@@ -188,7 +188,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                          alt={expert.displayName}
                          className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
                        />
-                       <div className="absolute inset-0 bg-gradient-to-t from-[#10161D] via-transparent to-transparent opacity-80" />
+                       <div className="absolute inset-0 bg-linear-to-t from-[#10161D] via-transparent to-transparent opacity-80" />
                        
                        <div className="absolute top-3 md:top-6 left-3 md:left-6 flex flex-col gap-2">
                           <div className="flex items-center gap-1.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full bg-emerald-500/10 backdrop-blur-xl border border-emerald-500/20 text-emerald-400">
@@ -202,8 +202,8 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                     <div className="p-4 md:p-10 flex-1 flex flex-col">
                        <div className="flex flex-col md:flex-row justify-between items-start mb-2">
                           <div>
-                             <h3 className="text-sm md:text-2xl font-bold font-serif-clinical tracking-tight group-hover:text-[#30B0D0] transition-colors line-clamp-1">{expert.displayName}</h3>
-                             <p className="text-[7px] md:text-[10px] font-black uppercase tracking-widest text-[#30B0D0] mt-1 line-clamp-1">{expert.specialty || expert.primaryRole || "Mental Lead"}</p>
+                             <h3 className="text-sm md:text-2xl font-bold font-serif-clinical tracking-tight group-hover:text-ur-primary transition-colors line-clamp-1">{expert.displayName}</h3>
+                             <p className="text-[7px] md:text-[10px] font-black uppercase tracking-widest text-ur-primary mt-1 line-clamp-1">{expert.specialty || expert.primaryRole || "Mental Lead"}</p>
                           </div>
                        </div>
 
@@ -211,7 +211,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                        <div className="mt-auto space-y-2 md:space-y-4">
                           <button 
                             onClick={() => navigate(`/expert/${expert.id}?action=book`)}
-                            className="w-full bg-[#30B0D0] text-[#050A0F] py-2.5 md:py-4 rounded-xl md:rounded-2xl font-black text-[7px] md:text-[10px] uppercase tracking-widest flex items-center justify-between px-4 md:px-6"
+                            className="w-full bg-ur-primary text-ur-on-surface py-2.5 md:py-4 rounded-xl md:rounded-2xl font-black text-[7px] md:text-[10px] uppercase tracking-widest flex items-center justify-between px-4 md:px-6"
                           >
                              BOOK <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
                           </button>
@@ -247,21 +247,21 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                  Global Practitioner Network
               </div>
               <h2 className="font-serif-clinical text-5xl font-bold mb-8 tracking-tighter leading-tight">
-                 Are you a <span className="italic text-[#30B0D0]">Visionary</span> <br/> Practitioner?
+                 Are you a <span className="italic text-ur-primary">Visionary</span> <br/> Practitioner?
               </h2>
               <p className="text-lg opacity-60 mb-12 leading-relaxed">
                  Join our elite sanctuary. We provide the infrastructure, the security, and the clinical tools. You provide the brilliance.
               </p>
               <button 
                 onClick={() => navigate('/verify')}
-                className="px-16 py-6 rounded-3xl clinical-gradient text-[#050A0F] font-black text-xs uppercase tracking-[0.3em] shadow-3xl shadow-[#C8A96E]/20 hover:scale-105 active:scale-95 transition-all"
+                className="px-16 py-6 rounded-3xl clinical-gradient text-ur-on-surface font-black text-xs uppercase tracking-[0.3em] shadow-3xl shadow-[#C8A96E]/20 hover:scale-105 active:scale-95 transition-all"
               >
                  Submit Application
               </button>
            </div>
            
            <div className="relative group shrink-0">
-              <div className="absolute inset-0 bg-[#30B0D0]/20 blur-[100px] scale-150 group-hover:scale-110 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-ur-primary/20 blur-[100px] scale-150 group-hover:scale-110 transition-transform duration-1000" />
               <div className="size-72 rounded-[4rem] clinical-gradient flex items-center justify-center relative z-10 shadow-3xl rotate-12 group-hover:rotate-0 transition-transform duration-700">
                  <Bot className="w-32 h-32 text-white/90 animate-float" />
               </div>
@@ -271,10 +271,10 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
       
       <footer className="py-20 px-12 border-t border-white/5 bg-black/20 text-center">
          <div className="max-w-7xl mx-auto flex flex-col items-center gap-10">
-            <span className="font-serif-clinical text-3xl font-bold tracking-tighter bg-gradient-to-r from-[#30B0D0] to-[#C8A96E] bg-clip-text text-transparent">URKIO</span>
+            <span className="font-serif-clinical text-3xl font-bold tracking-tighter bg-linear-to-r from-ur-primary to-[#C8A96E] bg-clip-text text-transparent">URKIO</span>
             <div className="flex flex-wrap justify-center gap-12">
                {['Protocols', 'Privacy', 'Network', 'Support'].map(l => (
-                  <a key={l} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 hover:opacity-100 hover:text-[#30B0D0] transition-all">{l}</a>
+                  <a key={l} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 hover:opacity-100 hover:text-ur-primary transition-all">{l}</a>
                ))}
             </div>
             <p className="text-[9px] font-black uppercase tracking-widest opacity-20">© 2026 URKIO CLINICAL. ALL RIGHTS SECURED.</p>

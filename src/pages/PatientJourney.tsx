@@ -130,17 +130,17 @@ export default function PatientJourney({ user, userData }: { user: any, userData
   );
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#1b1c1a] font-body pb-32 overflow-x-hidden">
+    <div className="min-h-screen bg-[#faf9f6] text-msgr-on-surface font-body pb-32 overflow-x-hidden">
       {/* Premium Header */}
       <nav className="h-20 bg-white/80 backdrop-blur-md border-b border-zinc-100 flex justify-between items-center px-6 md:px-12 sticky top-0 z-100">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="p-2 bg-[#004e99] rounded-xl text-white shadow-lg"><Heart size={20} fill="white" /></div>
-          <span className="text-2xl font-black tracking-tighter text-[#004e99]">URKIO</span>
+          <div className="p-2 bg-msgr-primary rounded-xl text-white shadow-lg"><Heart size={20} fill="white" /></div>
+          <span className="text-2xl font-black tracking-tighter text-msgr-primary">URKIO</span>
         </div>
         <div className="flex items-center gap-6">
            <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-zinc-50 rounded-2xl border border-zinc-100">
               <Sparkles size={14} className="text-[#00aaff]" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#004e99]">Healing Mode Active</span>
+              <span className="text-[10px] font-black uppercase tracking-widest text-msgr-primary">Healing Mode Active</span>
            </div>
            <img src={userData?.photoURL || "https://ui-avatars.com/api/?name=H"} className="size-10 rounded-2xl ring-4 ring-white shadow-sm" alt="" />
         </div>
@@ -152,7 +152,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <h1 className="text-6xl md:text-8xl font-black tracking-tighter italic leading-none text-zinc-900">
               {userData?.displayName?.split(' ')[0] || 'Hero'}'s <br />
-              <span className="text-[#004e99]">Path</span>
+              <span className="text-msgr-primary">Path</span>
             </h1>
             <p className="text-zinc-400 font-bold uppercase tracking-[0.3em] mt-6 text-sm">Milestone 04: Cognitive Restoration</p>
           </motion.div>
@@ -160,7 +160,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
 
         {/* Dynamic Join Section */}
         <section className="mb-16">
-          <div className="bg-[#004e99] rounded-[3.5rem] p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
+          <div className="bg-msgr-primary rounded-[3.5rem] p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 inset-e-0 p-12 opacity-10 animate-pulse"><Compass size={300} /></div>
             
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -188,7 +188,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                   disabled={!isJoinable}
                   className={clsx(
                     "w-full lg:w-auto px-16 py-6 rounded-[2.5rem] font-black uppercase text-sm tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-4 active:scale-95",
-                    isJoinable ? "bg-white text-[#004e99] hover:bg-[#00aaff] hover:text-white" : "bg-black/20 text-white/30 cursor-not-allowed border border-white/10"
+                    isJoinable ? "bg-white text-msgr-primary hover:bg-[#00aaff] hover:text-white" : "bg-black/20 text-white/30 cursor-not-allowed border border-white/10"
                   )}
                 >
                   {isJoinable ? <><Video size={20} /> Join Session Now</> : <><Shield size={20} /> Preparing Perimeter...</>}
@@ -215,7 +215,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                   >
                     <div className={clsx(
                       "absolute -inset-s-[61px] size-6 rounded-full border-4 border-[#faf9f6] z-10",
-                      session.status === 'completed' ? "bg-[#006d3c]" : "bg-[#004e99] animate-pulse"
+                      session.status === 'completed' ? "bg-[#006d3c]" : "bg-msgr-primary animate-pulse"
                     )} />
                     <div className="bg-white p-6 rounded-3xl border border-zinc-50 shadow-sm">
                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-1">{session.status === 'completed' ? 'Restored' : 'Upcoming'}</p>
@@ -257,7 +257,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                      onTouchEnd={handleStopRecording}
                      className={clsx(
                        "size-24 rounded-full flex items-center justify-center transition-all relative z-10",
-                       isRecording ? "bg-red-500 scale-110 shadow-red-200 shadow-2xl" : "bg-[#004e99] hover:bg-zinc-900 shadow-xl"
+                       isRecording ? "bg-red-500 scale-110 shadow-red-200 shadow-2xl" : "bg-msgr-primary hover:bg-zinc-900 shadow-xl"
                      )}
                    >
                      {isRecording ? <StopCircle size={40} className="text-white" /> : <Mic size={40} className="text-white" />}
@@ -282,7 +282,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                          <div className="aspect-video relative">
                             <img src={story.thumbnail || "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800"} className="w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-all" alt="" />
                             <div className="absolute inset-0 flex items-center justify-center">
-                               <div className="size-16 bg-white rounded-full flex items-center justify-center text-[#004e99] group-hover:scale-110 transition-all shadow-2xl"><Play size={24} fill="currentColor" /></div>
+                               <div className="size-16 bg-white rounded-full flex items-center justify-center text-msgr-primary group-hover:scale-110 transition-all shadow-2xl"><Play size={24} fill="currentColor" /></div>
                             </div>
                          </div>
                          <div className="p-8">
@@ -316,7 +316,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
            <button 
              key={i}
              onClick={() => navigate(item.path)}
-             className={clsx("p-4 rounded-2xl transition-all", item.active ? "bg-[#004e99] text-white shadow-lg" : "text-zinc-300 hover:text-[#004e99]")}
+             className={clsx("p-4 rounded-2xl transition-all", item.active ? "bg-msgr-primary text-white shadow-lg" : "text-zinc-300 hover:text-msgr-primary")}
            >
               {item.icon}
            </button>

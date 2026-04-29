@@ -227,8 +227,8 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
                 <div 
                   className={`max-w-[80%] rounded-2xl px-4 py-3 ${
                     isAI 
-                      ? 'bg-[#1E293B] text-[#EDE8E4] rounded-tl-sm' 
-                      : 'bg-[#30B0D0] text-[#050A0F] rounded-tr-sm'
+                      ? 'bg-[#1E293B] text-ur-background rounded-tl-sm' 
+                      : 'bg-ur-primary text-ur-on-surface rounded-tr-sm'
                   }`}
                 >
                   <p className="text-[15px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
@@ -244,8 +244,8 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
         )}
         {isSending && (
            <div className="flex justify-end">
-             <div className="bg-[#30B0D0]/50 rounded-2xl px-4 py-3 rounded-tr-sm">
-               <Loader2 className="w-4 h-4 text-[#050A0F] animate-spin" />
+             <div className="bg-ur-primary/50 rounded-2xl px-4 py-3 rounded-tr-sm">
+               <Loader2 className="w-4 h-4 text-ur-on-surface animate-spin" />
              </div>
            </div>
         )}

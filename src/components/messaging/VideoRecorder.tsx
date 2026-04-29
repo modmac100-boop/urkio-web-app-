@@ -204,7 +204,7 @@ export function VideoRecorder({ onClose, onSend, onSaveToVault }: VideoRecorderP
         </div>
 
         {/* Controls */}
-        <div className="p-8 bg-gradient-to-t from-black/80 to-transparent absolute bottom-0 inset-x-0">
+        <div className="p-8 bg-linear-to-t from-black/80 to-transparent absolute bottom-0 inset-x-0">
           <div className="flex items-center justify-between gap-6 max-w-sm mx-auto">
             {!recordedBlob ? (
               <>

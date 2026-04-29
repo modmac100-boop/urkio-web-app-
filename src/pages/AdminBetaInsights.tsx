@@ -65,11 +65,11 @@ export function AdminBetaInsights({ userData }: any) {
                  <div className="p-3 bg-zinc-900 rounded-2xl text-[#00aaff]"><BarChart3 size={24} /></div>
                  <p className="text-xs font-black uppercase tracking-widest text-zinc-400">Management Hub</p>
               </div>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic">Beta Insights <span className="text-[#004e99] font-light">Edition One</span></h1>
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter italic">Beta Insights <span className="text-msgr-primary font-light">Edition One</span></h1>
            </div>
            <div className="flex gap-4">
               <div className="bg-white px-8 py-5 rounded-4xl border border-zinc-100 shadow-sm text-center">
-                 <p className="text-[10px] font-black uppercase tracking-widest text-[#004e99] mb-1">Total Pulses</p>
+                 <p className="text-[10px] font-black uppercase tracking-widest text-msgr-primary mb-1">Total Pulses</p>
                  <p className="text-2xl font-black">{stats.totalSessions}</p>
               </div>
            </div>
@@ -81,7 +81,7 @@ export function AdminBetaInsights({ userData }: any) {
                <div className="relative z-10">
                   <h3 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-8">AI Orientation Accuracy</h3>
                   <div className="flex items-end gap-2 mb-6">
-                     <h4 className="text-6xl font-black italic tracking-tighter text-[#004e99]">{stats.aiAccuracy}%</h4>
+                     <h4 className="text-6xl font-black italic tracking-tighter text-msgr-primary">{stats.aiAccuracy}%</h4>
                      <TrendingUp className="text-emerald-500 mb-2" size={24} />
                   </div>
                   <p className="text-sm text-zinc-500 leading-relaxed font-medium">Of experts find the Gemini clinical orientation "High Fidelity" and useful for sessions.</p>
@@ -132,10 +132,10 @@ export function AdminBetaInsights({ userData }: any) {
                   key={item.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-8 bg-zinc-50 rounded-[2.5rem] border border-zinc-100 flex flex-col md:flex-row gap-8 items-start hover:border-[#004e99] transition-all group"
+                  className="p-8 bg-zinc-50 rounded-[2.5rem] border border-zinc-100 flex flex-col md:flex-row gap-8 items-start hover:border-msgr-primary transition-all group"
                 >
                   <div className="flex flex-col items-center gap-2 shrink-0">
-                     <div className={`p-4 rounded-2xl font-black text-xl whitespace-nowrap ${item.aiOrientationUseful ? 'bg-indigo-50 text-[#004e99]' : 'bg-red-50 text-red-500'}`}>
+                     <div className={`p-4 rounded-2xl font-black text-xl whitespace-nowrap ${item.aiOrientationUseful ? 'bg-indigo-50 text-msgr-primary' : 'bg-red-50 text-red-500'}`}>
                         {item.aiOrientationUseful ? 'AI ✓' : 'AI ✗'}
                      </div>
                      <p className="text-[9px] font-black uppercase tracking-widest text-zinc-400">Ref: {item.sessionId?.substring(0,8)}</p>
@@ -145,7 +145,7 @@ export function AdminBetaInsights({ userData }: any) {
                      <div className="flex items-center gap-4 mb-4">
                         <div className="flex gap-1">
                            {[1,2,3,4,5].map(s => (
-                             <Zap key={s} size={12} className={item.rating >= s ? 'text-[#004e99]' : 'text-zinc-200'} fill={item.rating >= s ? 'currentColor' : 'none'} />
+                             <Zap key={s} size={12} className={item.rating >= s ? 'text-msgr-primary' : 'text-zinc-200'} fill={item.rating >= s ? 'currentColor' : 'none'} />
                            ))}
                         </div>
                         <span className="text-[10px] font-black uppercase tracking-widest text-zinc-300">| {item.metadata?.category || 'Clinical'}</span>
@@ -154,7 +154,7 @@ export function AdminBetaInsights({ userData }: any) {
                   </div>
                   
                   <div className="shrink-0 pt-2">
-                     <button className="text-[9px] font-black uppercase tracking-[0.2em] text-[#004e99] opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1">
+                     <button className="text-[9px] font-black uppercase tracking-[0.2em] text-msgr-primary opacity-0 group-hover:opacity-100 transition-all flex items-center gap-1">
                         Retrain AI <ChevronRight size={10} />
                      </button>
                   </div>

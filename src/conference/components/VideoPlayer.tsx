@@ -88,7 +88,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className={clsx(
-        "relative rounded-[2.5rem] overflow-hidden group shadow-3xl border border-white/5 bg-[#050A0F] transition-all duration-500",
+        "relative rounded-[2.5rem] overflow-hidden group shadow-3xl border border-white/5 bg-ur-on-surface transition-all duration-500",
         isFullscreen ? "fixed inset-0 z-[9999] rounded-none" : "h-full",
         className
       )}
@@ -100,15 +100,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#0A0F14] to-[#050A0F] z-10"
+            className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#0A0F14] to-ur-on-surface z-10"
           >
              <div className="relative mb-8">
                 <div className="size-24 rounded-[2.5rem] bg-white/5 border border-white/10 flex items-center justify-center animate-float">
-                   <User className="w-10 h-10 text-[#30B0D0] opacity-40" />
+                   <User className="w-10 h-10 text-ur-primary opacity-40" />
                 </div>
-                <div className="absolute inset-0 rounded-[2.5rem] bg-[#30B0D0]/10 blur-3xl animate-pulse" />
+                <div className="absolute inset-0 rounded-[2.5rem] bg-ur-primary/10 blur-3xl animate-pulse" />
              </div>
-             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#30B0D0]/60">Stream Obfuscated</p>
+             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ur-primary/60">Stream Obfuscated</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -123,7 +123,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
          <div className="flex justify-between items-start pointer-events-auto">
             <div className="flex flex-col gap-3">
                <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl">
-                  <div className={clsx("size-2.5 rounded-full", isOff ? "bg-red-500" : "bg-[#30B0D0] animate-pulse")} />
+                  <div className={clsx("size-2.5 rounded-full", isOff ? "bg-red-500" : "bg-ur-primary animate-pulse")} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-white">{name}</span>
                </div>
                
@@ -139,9 +139,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                )}
 
                {activeBiometric && (
-                  <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#30B0D0]/10 backdrop-blur-md border border-[#30B0D0]/20 w-fit">
-                     <Activity className="w-4 h-4 text-[#30B0D0]" />
-                     <span className="text-[10px] font-black text-[#30B0D0]">{activeBiometric} BPM</span>
+                  <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-ur-primary/10 backdrop-blur-md border border-ur-primary/20 w-fit">
+                     <Activity className="w-4 h-4 text-ur-primary" />
+                     <span className="text-[10px] font-black text-ur-primary">{activeBiometric} BPM</span>
                   </div>
                )}
             </div>
@@ -203,7 +203,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   <button 
                     onClick={onInvite}
                     title="Invite Participants"
-                    className="size-14 rounded-2xl bg-[#30B0D0]/10 text-[#30B0D0] flex items-center justify-center hover:bg-[#30B0D0] hover:text-[#050A0F] hover:scale-110 active:scale-95 transition-all shadow-xl shadow-[#30B0D0]/10 border border-[#30B0D0]/20"
+                    className="size-14 rounded-2xl bg-ur-primary/10 text-ur-primary flex items-center justify-center hover:bg-ur-primary hover:text-ur-on-surface hover:scale-110 active:scale-95 transition-all shadow-xl shadow-ur-primary/10 border border-ur-primary/20"
                   >
                      <UserPlus className="w-6 h-6" />
                   </button>
@@ -241,7 +241,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       </div>
 
       {/* Aesthetic Overlays */}
-      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-[#30B0D0]/5 blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-ur-primary/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-[#C8A96E]/5 blur-[120px] pointer-events-none" />
     </motion.div>
   );

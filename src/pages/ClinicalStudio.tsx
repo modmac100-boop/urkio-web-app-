@@ -86,8 +86,8 @@ export const ClinicalStudio: React.FC = () => {
 
   return (
     <div className={clsx(
-      "min-h-screen font-sans selection:bg-[#30B0D0]/30 transition-all duration-700 overflow-hidden",
-      theme === 'dark' ? "bg-[#050A0F] text-[#EDE8E4]" : "bg-[#F8F9FA] text-[#1A222B]"
+      "min-h-screen font-sans selection:bg-ur-primary/30 transition-all duration-700 overflow-hidden",
+      theme === 'dark' ? "bg-ur-on-surface text-ur-background" : "bg-[#F8F9FA] text-[#1A222B]"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Noto+Serif+SC:wght@200..900&display=swap');
@@ -118,11 +118,11 @@ export const ClinicalStudio: React.FC = () => {
       `}</style>
 
       {/* Floating Header */}
-      <header className="fixed top-6 left-6 right-6 z-50 flex justify-between items-center px-10 py-5 rounded-[2rem] glass-panel border-[#C8A96E]/10 premium-shadow">
+      <header className="fixed top-6 left-6 right-6 z-50 flex justify-between items-center px-10 py-5 rounded-4xl glass-panel border-[#C8A96E]/10 premium-shadow">
         <div className="flex items-center gap-12">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
              <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                <Zap className="w-6 h-6 text-[#050A0F]" />
+                <Zap className="w-6 h-6 text-ur-on-surface" />
              </div>
              <span className="font-serif-clinical text-2xl font-bold tracking-tighter">
                URKIO <span className="text-[11px] font-black uppercase tracking-[0.2em] opacity-40 ml-2">Clinical Studio</span>
@@ -136,19 +136,19 @@ export const ClinicalStudio: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-8">
-          <div className="flex items-center gap-2 px-5 py-2 rounded-full border border-[#30B0D0]/20 bg-[#30B0D0]/5">
-             <div className={clsx("size-2 rounded-full", isSecureLineActive ? "bg-[#30B0D0] animate-pulse" : "bg-red-500")} />
-             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#30B0D0]">
+          <div className="flex items-center gap-2 px-5 py-2 rounded-full border border-ur-primary/20 bg-ur-primary/5">
+             <div className={clsx("size-2 rounded-full", isSecureLineActive ? "bg-ur-primary animate-pulse" : "bg-red-500")} />
+             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ur-primary">
                 {isSecureLineActive ? 'Neural Bridge Active' : 'Bridge Offline'}
              </span>
           </div>
 
           <div className="flex items-center gap-6 border-l pl-8 border-white/10">
-            <button onClick={toggleTheme} className="text-slate-400 hover:text-[#30B0D0] transition-colors">
+            <button onClick={toggleTheme} className="text-slate-400 hover:text-ur-primary transition-colors">
               {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </button>
-            <div className="w-10 h-10 rounded-2xl p-[1px] bg-gradient-to-tr from-[#30B0D0] to-[#C8A96E]">
-               <div className="w-full h-full rounded-2xl bg-[#050A0F] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl p-px bg-linear-to-tr from-ur-primary to-[#C8A96E]">
+               <div className="w-full h-full rounded-2xl bg-ur-on-surface flex items-center justify-center">
                   <User className="w-5 h-5 text-white" />
                </div>
             </div>
@@ -159,7 +159,7 @@ export const ClinicalStudio: React.FC = () => {
       {/* MINIMAL 3-LINE SIDEBAR REQUESTED */}
       <nav className="fixed left-6 top-32 bottom-6 w-20 z-50 flex flex-col items-center py-10 rounded-[2.5rem] glass-panel border-[#C8A96E]/10 premium-shadow">
          <div className="flex flex-col gap-8 flex-1">
-            <button onClick={() => navigate('/')} className="p-4 rounded-2xl text-slate-400 hover:text-[#30B0D0] hover:bg-white/5 transition-all group relative">
+            <button onClick={() => navigate('/')} className="p-4 rounded-2xl text-slate-400 hover:text-ur-primary hover:bg-white/5 transition-all group relative">
                <Home className="w-6 h-6" />
                <span className="absolute left-24 px-4 py-2 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Home</span>
             </button>
@@ -206,7 +206,7 @@ export const ClinicalStudio: React.FC = () => {
             <div className="rounded-[2.5rem] glass-panel p-8 flex-1 premium-shadow">
                <div className="flex items-center justify-between mb-8">
                   <h3 className="font-serif-clinical text-xl font-bold">Case Documents</h3>
-                  <button className="text-[#30B0D0] hover:scale-110 transition-transform"><Plus className="w-5 h-5" /></button>
+                  <button className="text-ur-primary hover:scale-110 transition-transform"><Plus className="w-5 h-5" /></button>
                </div>
                <div className="space-y-4">
                   {[
@@ -236,12 +236,12 @@ export const ClinicalStudio: React.FC = () => {
                   {isSecureLineActive ? (
                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full relative">
                         <div className="absolute inset-0 bg-[#0A0F14] flex flex-col items-center justify-center">
-                           <div className="size-48 rounded-full border-4 border-dashed border-[#30B0D0]/20 animate-spin-slow flex items-center justify-center">
-                              <div className="size-32 rounded-[2rem] clinical-gradient flex items-center justify-center animate-pulse">
-                                 <Monitor className="w-12 h-12 text-[#050A0F]" />
+                           <div className="size-48 rounded-full border-4 border-dashed border-ur-primary/20 animate-spin-slow flex items-center justify-center">
+                              <div className="size-32 rounded-4xl clinical-gradient flex items-center justify-center animate-pulse">
+                                 <Monitor className="w-12 h-12 text-ur-on-surface" />
                               </div>
                            </div>
-                           <p className="mt-8 text-sm font-black uppercase tracking-[0.4em] text-[#30B0D0]">Secure Line Visualized</p>
+                           <p className="mt-8 text-sm font-black uppercase tracking-[0.4em] text-ur-primary">Secure Line Visualized</p>
                         </div>
                         
                         <div className="absolute top-10 right-10 flex gap-4">
@@ -264,7 +264,7 @@ export const ClinicalStudio: React.FC = () => {
                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full flex flex-col items-center justify-center text-center p-20">
                         <div className="relative mb-12">
                            <div className="size-32 rounded-[2.5rem] clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
-                              <Zap className="w-12 h-12 text-[#050A0F]" />
+                              <Zap className="w-12 h-12 text-ur-on-surface" />
                            </div>
                            <div className="absolute inset-0 rounded-[2.5rem] clinical-gradient blur-3xl opacity-20" />
                         </div>
@@ -272,7 +272,7 @@ export const ClinicalStudio: React.FC = () => {
                         <p className="text-sm font-manrope opacity-40 max-w-lg mx-auto mb-12 uppercase tracking-[0.3em] font-black">
                            XR-Studio v4.0 is waiting for biometric sync initialization.
                         </p>
-                        <button onClick={() => setIsSecureLineActive(true)} className="px-16 py-6 rounded-3xl bg-[#30B0D0] text-[#050A0F] font-black text-[11px] uppercase tracking-[0.3em] shadow-3xl shadow-[#30B0D0]/20 hover:scale-105 active:scale-95 transition-all">
+                        <button onClick={() => setIsSecureLineActive(true)} className="px-16 py-6 rounded-3xl bg-ur-primary text-ur-on-surface font-black text-[11px] uppercase tracking-[0.3em] shadow-3xl shadow-ur-primary/20 hover:scale-105 active:scale-95 transition-all">
                            Initialize Secure Bridge
                         </button>
                      </motion.div>
@@ -287,8 +287,8 @@ export const ClinicalStudio: React.FC = () => {
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Session Duration</span>
                      <p className="text-4xl font-serif-clinical font-bold mt-2">{formatTime(sessionTime)}</p>
                   </div>
-                  <div className="size-14 rounded-2xl bg-[#30B0D0]/10 flex items-center justify-center">
-                     <Activity className="w-8 h-8 text-[#30B0D0] animate-pulse" />
+                  <div className="size-14 rounded-2xl bg-ur-primary/10 flex items-center justify-center">
+                     <Activity className="w-8 h-8 text-ur-primary animate-pulse" />
                   </div>
                </div>
                <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
@@ -325,14 +325,14 @@ export const ClinicalStudio: React.FC = () => {
             <div className="h-[300px] rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
                <div className="px-10 py-6 border-b border-white/5 flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Neural Assistant</span>
-                  <div className="size-2 bg-[#30B0D0] rounded-full animate-pulse" />
+                  <div className="size-2 bg-ur-primary rounded-full animate-pulse" />
                </div>
                <div className="flex-1 p-8 overflow-y-auto custom-scrollbar space-y-4">
                   {chatMessages.map((m, i) => (
                      <div key={i} className={clsx("flex flex-col gap-1", m.sender === 'ME' ? "items-end" : "items-start")}>
                         <div className={clsx(
                            "px-4 py-2 rounded-xl text-[11px] font-medium",
-                           m.sender === 'ME' ? "bg-[#30B0D0] text-[#050A0F] rounded-tr-none" : "bg-white/5 text-white/80 rounded-tl-none"
+                           m.sender === 'ME' ? "bg-ur-primary text-ur-on-surface rounded-tr-none" : "bg-white/5 text-white/80 rounded-tl-none"
                         )}>
                            {m.text}
                         </div>
@@ -342,7 +342,7 @@ export const ClinicalStudio: React.FC = () => {
                <div className="p-8 pt-0">
                   <div className="relative">
                      <input 
-                       className="w-full bg-white/5 border border-white/10 rounded-[1.2rem] py-3 px-5 text-[11px] font-medium outline-none focus:border-[#30B0D0]" 
+                       className="w-full bg-white/5 border border-white/10 rounded-[1.2rem] py-3 px-5 text-[11px] font-medium outline-none focus:border-ur-primary" 
                        placeholder="Consult AI..." 
                        value={chatInput}
                        onChange={e => setChatInput(e.target.value)}

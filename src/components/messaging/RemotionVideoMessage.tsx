@@ -16,7 +16,7 @@ export const RemotionVideoMessage: React.FC<RemotionVideoMessageProps> = ({
   isOwn 
 }) => {
   return (
-    <div className={`relative rounded-[32px] overflow-hidden shadow-2xl border-2 ${isOwn ? 'border-white/20' : 'border-[#004e99]/10'} bg-black aspect-9/16 w-full max-w-[280px]`}>
+    <div className={`relative rounded-[32px] overflow-hidden shadow-2xl border-2 ${isOwn ? 'border-white/20' : 'border-msgr-primary/10'} bg-black aspect-9/16 w-full max-w-[280px]`}>
       <Player
         component={VideoMessage}
         inputProps={{

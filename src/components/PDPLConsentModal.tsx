@@ -46,8 +46,8 @@ export function PDPLConsentModal({ userId, onComplete }: { userId: string, onCom
         
         <div className="flex justify-between items-center mb-10">
            <div className="flex items-center gap-3">
-              <div className="p-3 bg-indigo-50 rounded-2xl text-[#004e99]"><Lock size={24} /></div>
-              <p className="text-xs font-black uppercase tracking-widest text-[#004e99]">Privacy Vault Compliance</p>
+              <div className="p-3 bg-indigo-50 rounded-2xl text-msgr-primary"><Lock size={24} /></div>
+              <p className="text-xs font-black uppercase tracking-widest text-msgr-primary">Privacy Vault Compliance</p>
            </div>
            <button 
              onClick={() => setLang(l => l === 'ar' ? 'en' : 'ar')}
@@ -83,7 +83,7 @@ export function PDPLConsentModal({ userId, onComplete }: { userId: string, onCom
           <button 
             onClick={handleAccept}
             disabled={loading}
-            className="w-full py-6 bg-zinc-900 text-white rounded-3xl font-black uppercase text-xs tracking-[0.3em] hover:bg-[#004e99] hover:scale-[1.02] transition-all shadow-xl disabled:opacity-50"
+            className="w-full py-6 bg-zinc-900 text-white rounded-3xl font-black uppercase text-xs tracking-[0.3em] hover:bg-msgr-primary hover:scale-[1.02] transition-all shadow-xl disabled:opacity-50"
           >
             {loading ? 'Vaulting...' : (lang === 'ar' ? 'أوافق صراحةً' : 'I Explicitly Accept')}
           </button>

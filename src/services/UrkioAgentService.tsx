@@ -477,10 +477,10 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   // Vibe-Driven UI: determine color scheme based on mood
   const moodColors = {
     calm: {
-       bg: 'bg-[#F8F9FA] dark:bg-[#050A0F]',
+       bg: 'bg-[#F8F9FA] dark:bg-ur-on-surface',
        bubble: 'bg-white dark:bg-[#10161D]',
        text: 'text-slate-900 dark:text-slate-100',
-       accent: 'bg-[#30B0D0]',
+       accent: 'bg-ur-primary',
        border: 'border-slate-200 dark:border-[#C8A96E]/20',
        ring: 'focus:ring-[#30B0D0]/20',
     },
@@ -531,26 +531,26 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
       {/* Header */}
       <div className="p-8 bg-white/40 dark:bg-[#10161D]/40 backdrop-blur-3xl border-b border-inherit flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-xl bg-[#30B0D0]/10 flex items-center justify-center">
-            <Bot className="size-6 text-[#30B0D0]" />
+          <div className="size-10 rounded-xl bg-ur-primary/10 flex items-center justify-center">
+            <Bot className="size-6 text-ur-primary" />
           </div>
           <div>
             <h3 className="text-sm font-bold tracking-tight">Neural Assistant</h3>
-            <p className="text-[9px] font-black uppercase tracking-widest text-[#30B0D0]">v4.2 Encryption Active</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-ur-primary">v4.2 Encryption Active</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button 
             onClick={syncHistory}
-            className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-[#30B0D0] transition-colors"
+            className="p-2 hover:bg-white/5 rounded-lg text-slate-400 hover:text-ur-primary transition-colors"
             title="Sync History"
           >
             <RefreshCcw className="size-4" />
           </button>
-          <div className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
+          <div className="size-2 rounded-full bg-ur-primary animate-pulse" />
         </div>
         <div className="flex items-center gap-5">
-          <div className={clsx("w-14 h-14 rounded-[1.5rem] flex items-center justify-center text-white shadow-2xl animate-float", theme.accent)}>
+          <div className={clsx("w-14 h-14 rounded-3xl flex items-center justify-center text-white shadow-2xl animate-float", theme.accent)}>
             <Bot className="w-8 h-8" />
           </div>
           <div>
@@ -571,7 +571,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   className={clsx(
                     "px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all flex items-center gap-2", 
                     condition === c.id 
-                      ? "bg-white dark:bg-[#10161D] shadow-xl " + (condition === 'panic' ? 'text-rose-500' : 'text-[#30B0D0]')
+                      ? "bg-white dark:bg-[#10161D] shadow-xl " + (condition === 'panic' ? 'text-rose-500' : 'text-ur-primary')
                       : "opacity-40 hover:opacity-100"
                   )}
                 >
@@ -608,9 +608,9 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   {m.role === 'user' ? <User className="w-5 h-5" /> : <Bot className="w-5 h-5" />}
                 </div>
                 <div className={clsx(
-                  "p-5 rounded-[2rem] shadow-xl border transition-all hover:shadow-2xl",
+                  "p-5 rounded-4xl shadow-xl border transition-all hover:shadow-2xl",
                   m.role === 'user' 
-                    ? "bg-[#30B0D0] text-[#050A0F] rounded-se-none border-[#30B0D0]/20"
+                    ? "bg-ur-primary text-ur-on-surface rounded-se-none border-ur-primary/20"
                     : "bg-white dark:bg-[#10161D] text-slate-800 dark:text-slate-100 rounded-ss-none border-inherit"
                   )}
                 >
@@ -620,7 +620,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                         const audio = new Audio(m.audioUrl);
                         audio.play();
                       }}
-                      className={clsx("flex items-center gap-3 mb-3 px-4 py-2 rounded-xl transition-all hover:scale-105", m.role === 'user' ? "bg-black/10 hover:bg-black/20" : "bg-[#30B0D0]/10 hover:bg-[#30B0D0]/20 text-[#30B0D0]")}
+                      className={clsx("flex items-center gap-3 mb-3 px-4 py-2 rounded-xl transition-all hover:scale-105", m.role === 'user' ? "bg-black/10 hover:bg-black/20" : "bg-ur-primary/10 hover:bg-ur-primary/20 text-ur-primary")}
                     >
                       <Volume2 className="w-4 h-4" />
                       <span className="text-[10px] font-black uppercase tracking-widest">History Voice Record</span>
@@ -643,11 +643,11 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="p-8 bg-gradient-to-br from-[#30B0D0] to-[#C8A96E] rounded-[3rem] text-white shadow-3xl space-y-6 border border-white/20 relative overflow-hidden"
+                className="p-8 bg-linear-to-br from-ur-primary to-[#C8A96E] rounded-[3rem] text-white shadow-3xl space-y-6 border border-white/20 relative overflow-hidden"
               >
                 <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-3xl" />
                 <div className="flex items-center gap-5 relative z-10">
-                  <div className="size-16 rounded-[1.5rem] bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl">
+                  <div className="size-16 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-xl">
                     <ShieldCheck className="w-8 h-8 text-white" />
                   </div>
                   <div>
@@ -663,7 +663,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                 <div className="flex gap-3 pt-2 relative z-10">
                   <button 
                     onClick={() => navigate('/expert-list')}
-                    className="flex-1 bg-white text-[#050A0F] py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl"
+                    className="flex-1 bg-white text-ur-on-surface py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-2xl"
                   >
                     {i18n.language === 'ar' ? 'التواصل مع خبير' : 'Connect with Expert'}
                   </button>
@@ -703,7 +703,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                 >
                     {attachments.map((file, i) => (
                         <div key={i} className="flex items-center gap-3 bg-white/80 dark:bg-slate-800/80 px-4 py-2 rounded-xl border border-inherit text-[10px] font-bold uppercase tracking-widest">
-                            <ImageIcon className="w-4 h-4 text-[#30B0D0]" />
+                            <ImageIcon className="w-4 h-4 text-ur-primary" />
                             <span className="truncate max-w-[150px]">{file.name}</span>
                             <button type="button" onClick={() => removeAttachment(i)} className="hover:text-red-500 transition-colors">
                                <X className="w-4 h-4" />
@@ -716,7 +716,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
           <div className="relative group">
             {recordingState === 'reviewing' ? (
-              <div className="flex items-center gap-4 w-full bg-white dark:bg-[#10161D] border-2 border-[#30B0D0]/30 rounded-[2rem] p-3 shadow-3xl animate-in zoom-in-95">
+              <div className="flex items-center gap-4 w-full bg-white dark:bg-[#10161D] border-2 border-ur-primary/30 rounded-4xl p-3 shadow-3xl animate-in zoom-in-95">
                 <button 
                   type="button" 
                   onClick={handleCancelVoice}
@@ -726,13 +726,13 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                 </button>
                 <div className="flex-1 px-6 py-3 bg-black/5 dark:bg-white/5 rounded-2xl flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                     <div className="size-2 bg-[#30B0D0] rounded-full animate-pulse" />
+                     <div className="size-2 bg-ur-primary rounded-full animate-pulse" />
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Voice Recorded</span>
                   </div>
                   <button 
                     type="button" 
                     onClick={handleRepeat}
-                    className="flex items-center gap-2 text-[#30B0D0] hover:scale-110 transition-transform"
+                    className="flex items-center gap-2 text-ur-primary hover:scale-110 transition-transform"
                   >
                     <Play className="w-5 h-5 fill-current" />
                     <span className="text-[10px] font-black tracking-widest">REPLAY</span>
@@ -750,7 +750,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   type="button" 
                   onClick={() => sendMessage(undefined, audioBlob!)}
                   disabled={isUploading}
-                  className="px-8 py-4 bg-[#30B0D0] text-[#050A0F] rounded-2xl shadow-2xl shadow-[#30B0D0]/20 hover:scale-105 transition-all flex items-center gap-3"
+                  className="px-8 py-4 bg-ur-primary text-ur-on-surface rounded-2xl shadow-2xl shadow-ur-primary/20 hover:scale-105 transition-all flex items-center gap-3"
                 >
                   {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                   <span className="text-[10px] font-black uppercase tracking-widest">Send Voice</span>
@@ -767,7 +767,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   className={clsx(
                     "w-full bg-white/80 dark:bg-[#10161D]/80 border-2 border-inherit rounded-[2.5rem] ps-16 pe-28 py-6 focus:outline-none focus:ring-8 text-sm sm:text-base font-medium resize-none transition-all group-hover:bg-white dark:group-hover:bg-[#10161D] text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600",
                     theme.ring,
-                    recordingState === 'recording' && "animate-pulse border-[#30B0D0]/50"
+                    recordingState === 'recording' && "animate-pulse border-ur-primary/50"
                   )}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -801,7 +801,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                       type="submit"
                       disabled={!input?.trim() || isLoading}
                       className={clsx(
-                        "p-4 rounded-2xl shadow-2xl transition-all transform active:scale-95 disabled:opacity-30 disabled:scale-100 text-[#050A0F]",
+                        "p-4 rounded-2xl shadow-2xl transition-all transform active:scale-95 disabled:opacity-30 disabled:scale-100 text-ur-on-surface",
                         theme.accent, "shadow-current/20"
                       )}
                     >
@@ -823,7 +823,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                  key={i}
                  type="button"
                  onClick={() => { setInput(tip); sendMessage(); }}
-                 className="px-5 py-2.5 rounded-full bg-white dark:bg-[#10161D] border border-inherit text-[10px] font-black uppercase tracking-widest hover:bg-[#30B0D0] hover:text-[#050A0F] hover:border-[#30B0D0] transition-all shadow-sm"
+                 className="px-5 py-2.5 rounded-full bg-white dark:bg-[#10161D] border border-inherit text-[10px] font-black uppercase tracking-widest hover:bg-ur-primary hover:text-ur-on-surface hover:border-ur-primary transition-all shadow-sm"
                >
                  {tip}
                </button>

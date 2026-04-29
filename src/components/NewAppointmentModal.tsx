@@ -164,7 +164,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
         >
           {/* Progress Bar */}
           <div className="absolute top-0 inset-s-0 inset-e-0 h-1.5 bg-slate-100 flex">
-             <div className="h-full bg-[#004e99] transition-all duration-500" style={{ width: `${(step/4)*100}%` }} />
+             <div className="h-full bg-msgr-primary transition-all duration-500" style={{ width: `${(step/4)*100}%` }} />
           </div>
 
           <div className="p-10">
@@ -173,7 +173,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                   <h2 className="text-2xl font-black tracking-tighter italic text-slate-900 dark:text-white uppercase transition-all duration-300">
                     {step === 1 ? 'Patient Identity' : step === 2 ? 'Service Category' : step === 3 ? 'Slot Selection' : 'Intake Summary'}
                   </h2>
-                  <p className="text-sm font-bold text-[#004e99] tracking-widest uppercase mt-1">Step {step} of 4</p>
+                  <p className="text-sm font-bold text-msgr-primary tracking-widest uppercase mt-1">Step {step} of 4</p>
                </div>
                <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full"><X className="text-slate-400" /></button>
             </header>
@@ -186,7 +186,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                     <Search className="absolute inset-s-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input 
                       type="text"
-                      className="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-2xl ps-12 ltr:pr-4 rtl:pl-4 py-4 text-sm font-medium focus:ring-2 focus:ring-[#004e99]"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border-none rounded-2xl ps-12 ltr:pr-4 rtl:pl-4 py-4 text-sm font-medium focus:ring-2 focus:ring-msgr-primary"
                       placeholder="Search Existing Patient Record..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -199,7 +199,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                         onClick={() => setSelectedPatient(p)}
                         className={clsx(
                           "p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between",
-                          selectedPatient?.id === p.id ? "bg-[#004e99]/5 border-[#004e99]" : "border-slate-100 hover:border-slate-300"
+                          selectedPatient?.id === p.id ? "bg-msgr-primary/5 border-msgr-primary" : "border-slate-100 hover:border-slate-300"
                         )}
                       >
                          <div className="flex items-center gap-4">
@@ -211,7 +211,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                                <p className="text-[10px] text-slate-400 uppercase font-black">{p.role || 'Patient'}</p>
                             </div>
                          </div>
-                         {selectedPatient?.id === p.id && <Check className="text-[#004e99]" size={18} />}
+                         {selectedPatient?.id === p.id && <Check className="text-msgr-primary" size={18} />}
                       </div>
                     ))}
                     {searchQuery.length >= 2 && searchResults.length === 0 && (
@@ -235,7 +235,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                         onClick={() => setCategory(cat.id)}
                         className={clsx(
                           "p-6 rounded-4xl border-2 transition-all cursor-pointer flex flex-col items-center gap-4",
-                          category === cat.id ? "bg-white border-[#004e99] shadow-inner" : "bg-white/50 border-transparent shadow-sm hover:shadow-md"
+                          category === cat.id ? "bg-white border-msgr-primary shadow-inner" : "bg-white/50 border-transparent shadow-sm hover:shadow-md"
                         )}
                       >
                         <div className={cat.color}>{cat.icon}</div>
@@ -252,7 +252,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                       <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ms-4 mb-2 block">Available Dates</label>
                       <input 
                         type="date"
-                        className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-medium focus:ring-2 focus:ring-[#004e99]"
+                        className="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-medium focus:ring-2 focus:ring-msgr-primary"
                         value={selectedDate}
                         onChange={(e) => setSelectedDate(e.target.value)}
                         min={new Date().toISOString().split('T')[0]}
@@ -270,7 +270,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                               onClick={() => setSelectedTime(t)}
                               className={clsx(
                                 "py-3 rounded-xl border text-[11px] font-black transition-all relative overflow-hidden",
-                                selectedTime === t ? "bg-[#004e99] text-white border-[#004e99]" : 
+                                selectedTime === t ? "bg-msgr-primary text-white border-msgr-primary" : 
                                 isBooked ? "bg-slate-50 text-slate-300 border-slate-50 opacity-50 cursor-not-allowed" :
                                 "border-slate-100 hover:border-slate-300"
                               )}
@@ -290,7 +290,7 @@ export function NewAppointmentModal({ isOpen, onClose, user, userData }: NewAppo
                 <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ms-4 mb-2 block">Primary Reason for Visit</label>
                    <textarea 
-                     className="w-full bg-slate-50 border-none rounded-4xl p-6 text-sm font-medium focus:ring-2 focus:ring-[#004e99] min-h-[160px] resize-none"
+                     className="w-full bg-slate-50 border-none rounded-4xl p-6 text-sm font-medium focus:ring-2 focus:ring-msgr-primary min-h-[160px] resize-none"
                      placeholder="State the core clinical challenge..."
                      value={notes}
                      onChange={(e) => setNotes(e.target.value)}

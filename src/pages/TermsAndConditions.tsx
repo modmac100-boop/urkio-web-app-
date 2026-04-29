@@ -72,7 +72,7 @@ export const TermsAndConditions: React.FC<{ user?: any }> = ({ user }) => {
   ];
 
   return (
-    <div className={clsx("min-h-screen bg-[#faf9f6] text-[#1b1c1a] font-body p-4 sm:p-8 md:p-20 transition-all duration-500", isRTL ? "font-arabic" : "font-sans")} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={clsx("min-h-screen bg-[#faf9f6] text-msgr-on-surface font-body p-4 sm:p-8 md:p-20 transition-all duration-500", isRTL ? "font-arabic" : "font-sans")} dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-4xl mx-auto">
         <header className="mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 bg-white p-6 rounded-3xl shadow-sm border border-zinc-100">
           <div>

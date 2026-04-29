@@ -267,19 +267,19 @@ export function LandingPage({
       </nav>
 
       {/* ══════════════════════ HERO ══════════════════════ */}
-      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-[#050A0F]">
+      <section className="relative pt-24 pb-16 lg:pt-32 lg:pb-24 overflow-hidden bg-ur-on-surface">
         {/* Aesthetic overlays */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-[#30B0D0]/10 rounded-full blur-[120px]" />
+          <div className="absolute top-0 inset-e-0 -translate-y-1/2 translate-x-1/4 w-[800px] h-[800px] bg-ur-primary/10 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 inset-s-0 translate-y-1/2 -translate-x-1/4 w-[800px] h-[800px] bg-[#0A3D91]/10 rounded-full blur-[120px]" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="text-center max-w-4xl mx-auto">
             {/* Premium Badge */}
-            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#30B0D0]/10 border border-[#30B0D0]/20 mb-6">
-              <span className="size-2 rounded-full bg-[#30B0D0] animate-pulse" />
-              <span className="text-xs font-bold tracking-widest uppercase text-[#30B0D0]">
+            <div className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-ur-primary/10 border border-ur-primary/20 mb-6">
+              <span className="size-2 rounded-full bg-ur-primary animate-pulse" />
+              <span className="text-xs font-bold tracking-widest uppercase text-ur-primary">
                 {isRTL ? 'تشفير تام وقنوات آمنة' : 'Secure & Fully Encrypted Channels'}
               </span>
             </div>
@@ -290,9 +290,9 @@ export function LandingPage({
               isRTL ? "font-['Tajawal',sans-serif]" : "font-['Outfit',sans-serif]"
             )}>
               {isRTL ? (
-                <>أوركيو: رحلتك نحو <span className="text-[#30B0D0] italic">التشافي</span> والارتقاء بذاتك</>
+                <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
-                <>Urkio: Your Journey Toward <span className="text-[#30B0D0] italic">Healing</span> and Self-Elevation</>
+                <>Urkio: Your Journey Toward <span className="text-ur-primary italic">Healing</span> and Self-Elevation</>
               )}
             </h1>
 
@@ -307,13 +307,13 @@ export function LandingPage({
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-[#30B0D0] text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-[#30B0D0]/30 hover:bg-[#259cbd] transition-all hover:-translate-y-1 active:scale-95"
+                className="w-full sm:w-auto bg-ur-primary text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:bg-[#259cbd] transition-all hover:-translate-y-1 active:scale-95"
               >
                 {isRTL ? 'ابدأ رحلتك الآن' : 'Start Your Journey'}
               </button>
               <button
                 onClick={openSignIn}
-                className="w-full sm:w-auto border border-slate-700 hover:border-[#30B0D0] px-8 py-4 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white"
+                className="w-full sm:w-auto border border-slate-700 hover:border-ur-primary px-8 py-4 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white"
               >
                 {t('landing.viewManifesto', 'View Manifesto')}
                 <ArrowRight className={clsx('size-5', isRTL && 'rotate-180')} />
@@ -323,11 +323,11 @@ export function LandingPage({
             {/* Trust Signals */}
             <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 max-w-2xl mx-auto text-sm font-medium text-slate-400">
               <span className="flex items-center gap-2">
-                <span className="text-[#30B0D0]">🔒</span>
+                <span className="text-ur-primary">🔒</span>
                 {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
               </span>
               <span className="flex items-center gap-2">
-                <span className="text-[#30B0D0]">👥</span>
+                <span className="text-ur-primary">👥</span>
                 {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
               </span>
             </div>

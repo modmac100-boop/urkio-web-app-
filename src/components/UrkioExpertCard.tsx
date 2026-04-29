@@ -66,7 +66,7 @@ export const UrkioExpertCard: React.FC<UrkioExpertCardProps> = ({
           <p className="text-sm font-semibold text-[#a8c8ff] mt-1">{expert.primaryRole || 'Global Healing Specialist'}</p>
         </div>
 
-        <p className="text-xs text-[#c1c6d4] leading-relaxed line-clamp-2 italic">
+        <p className="text-xs text-msgr-outline-variant leading-relaxed line-clamp-2 italic">
           "{expert.bio || 'Dedicated to transforming human potential through architectural healing and mindfulness.'}"
         </p>
 
@@ -85,7 +85,7 @@ export const UrkioExpertCard: React.FC<UrkioExpertCardProps> = ({
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
           {((expert.expertSkills || ['Stress Relief', 'Mindfulness', 'Trauma Zen']).slice(0, 3)).map((tag: string, i: number) => (
-            <span key={i} className="px-2.5 py-1 rounded-md bg-[#32353b] text-[9px] font-bold text-[#c1c6d4] border border-white/5 uppercase tracking-widest">
+            <span key={i} className="px-2.5 py-1 rounded-md bg-[#32353b] text-[9px] font-bold text-msgr-outline-variant border border-white/5 uppercase tracking-widest">
               {tag}
             </span>
           ))}

@@ -117,7 +117,7 @@ export const ResumeOverlay: React.FC<ResumeOverlayProps> = ({ isOpen, onClose, e
                     <Briefcase className="size-4 text-[#a8c8ff]" />
                     Professional Directive
                   </h3>
-                  <p className="text-xl font-medium text-[#c1c6d4] leading-relaxed tracking-tight italic">
+                  <p className="text-xl font-medium text-msgr-outline-variant leading-relaxed tracking-tight italic">
                     "{expert.applicationLetter || 'Commitment to architectural healing and neural synchronization within the Urkio framework. Specialized in clinical residency and premium patient resonance.'}"
                   </p>
                </section>
@@ -213,9 +213,9 @@ export const ResumeOverlay: React.FC<ResumeOverlayProps> = ({ isOpen, onClose, e
                       ))
                     ) : (
                       <div className="py-12 border border-dashed border-white/5 rounded-4xl text-center">
-                        <Calendar className="size-10 text-[#414752] mx-auto mb-4" />
+                        <Calendar className="size-10 text-msgr-on-surface-variant mx-auto mb-4" />
                         <p className="text-[10px] font-black uppercase tracking-widest text-[#5b616e]">No Real-time Slots</p>
-                        <p className="text-[8px] font-bold text-[#414752] uppercase mt-2">Check back in T-minus 2 hours</p>
+                        <p className="text-[8px] font-bold text-msgr-on-surface-variant uppercase mt-2">Check back in T-minus 2 hours</p>
                       </div>
                     )}
                   </div>
