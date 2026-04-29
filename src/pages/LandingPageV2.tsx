@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Globe, Menu, X, ArrowRight, Shield, Activity, Star, Check, Sparkles } from 'lucide-react';
+import { Globe, Menu, X, ArrowRight, Shield, Activity, Star, Check, Sparkles, Brain, TrendingUp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -551,9 +551,11 @@ export function LandingPageV2({
                 className="group p-10 rounded-[2rem] bg-white/5 border border-white/10 hover:border-[#30B0D0]/50 transition-all duration-300"
               >
                 <div className="size-14 bg-[#050A0F] border border-white/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-[#30B0D0] group-hover:border-[#30B0D0] transition-colors">
-                  <span className="material-icons-outlined text-white/60 group-hover:text-[#050A0F] text-2xl">
-                    {pillar.icon}
-                  </span>
+                  <div className="text-white/60 group-hover:text-[#050A0F] transition-colors">
+                    {pillar.icon === 'psychology' && <Brain className="size-6" />}
+                    {pillar.icon === 'military_tech' && <Shield className="size-6" />}
+                    {pillar.icon === 'trending_up' && <TrendingUp className="size-6" />}
+                  </div>
                 </div>
                 <h3 className="font-headline text-2xl font-black mb-4">{pillar.title}</h3>
                 <p className="text-white/50 leading-relaxed">{pillar.desc}</p>
