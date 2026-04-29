@@ -209,22 +209,82 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       speakResponse(accumulated);
 
     } catch (error: any) {
-      console.warn('Voice API failed, using empathetic fallback:', error);
-      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
-      const mockText = `${errorPrefix}\n\n${getMockResponse(msgText)}`;
+      console.warn('Voice API failed, attempting direct Gemini fallback:', error);
       
-      // Simulate typing/streaming for assistant
-      let currentAccumulated = '';
-      const words = mockText.split(' ');
-      for (let i = 0; i < words.length; i++) {
-        currentAccumulated += (i === 0 ? '' : ' ') + words[i];
-        setMessages(prev =>
-          prev.map(m => (m.id === assistantId ? { ...m, content: currentAccumulated } : m))
-        );
-        await new Promise(r => setTimeout(r, 40));
+      try {
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found in frontend env");
+
+        const systemPrompt = `You are the Urkio AI Guide, a deeply empathetic and professional social worker.
+        Tone: Humble, warm, and supportive.
+        Current Language: ${i18n.language}.
+        User: ${userData?.displayName || 'Guest'}.
+        
+        Instructions:
+        - Provide immediate emotional support.
+        - Use ${i18n.language} for the response.
+        - Keep responses concise but meaningful.`;
+
+        const contents = [
+          ...messages.map(m => ({
+            role: m.role === 'user' ? 'user' : 'model',
+            parts: [{ text: m.content }]
+          })),
+          {
+            role: 'user',
+            parts: [{ text: msgText }]
+          }
+        ];
+
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            systemInstruction: {
+              parts: [{ text: systemPrompt }]
+            }
+          })
+        });
+
+        if (!res.ok) throw new Error(`Direct API error (HTTP ${res.status})`);
+        const data = await res.json();
+        const fallbackText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if (!fallbackText) throw new Error("Empty response from Gemini API");
+
+        // Simulate typing for fallback
+        let currentAccumulated = '';
+        const words = fallbackText.split(' ');
+        for (let i = 0; i < words.length; i++) {
+          currentAccumulated += (i === 0 ? '' : ' ') + words[i];
+          setMessages(prev =>
+            prev.map(m => (m.id === assistantId ? { ...m, content: currentAccumulated } : m))
+          );
+          await new Promise(r => setTimeout(r, 20));
+        }
+
+        speakResponse(fallbackText);
+        return;
+      } catch (fallbackError) {
+        console.error('Direct fallback failed:', fallbackError);
+        const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+        const mockText = `${errorPrefix}\n\n${getMockResponse(msgText)}`;
+        
+        // Simulate typing/streaming for assistant
+        let currentAccumulated = '';
+        const words = mockText.split(' ');
+        for (let i = 0; i < words.length; i++) {
+          currentAccumulated += (i === 0 ? '' : ' ') + words[i];
+          setMessages(prev =>
+            prev.map(m => (m.id === assistantId ? { ...m, content: currentAccumulated } : m))
+          );
+          await new Promise(r => setTimeout(r, 40));
+        }
+        
+        speakResponse(mockText);
       }
-      
-      speakResponse(mockText);
     } finally {
       setIsLoading(false);
       abortRef.current = null;

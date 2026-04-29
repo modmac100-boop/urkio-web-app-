@@ -72,7 +72,9 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   const chunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<any>(null);
 
-  const conversationId = `agent_guide_v2_${user?.uid}`;
+  const conversationId = user?.uid 
+    ? `agent_guide_v2_${user.uid}`
+    : `agent_guide_guest_${Math.random().toString(36).substring(7)}`;
 
   // Scroll to bottom helper
   const scrollToBottom = useCallback(() => {
@@ -87,7 +89,12 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
 
   // 1. Subscribe to history with robust sorting
   const syncHistory = useCallback(() => {
-    if (!user?.uid) return;
+    // For guests, we don't sync history from Firestore to avoid permission errors, 
+    // but we allow the component to stay active.
+    if (!user?.uid) {
+      console.log("[UrkioAgent] Guest session - skip history sync");
+      return;
+    }
     toast.loading('Syncing Neural Bridge...', { id: 'ai-sync' });
     const unsub = subscribeToMessages(conversationId, (newMessages: any[]) => {
       const formatted = newMessages.map(msg => {

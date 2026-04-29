@@ -37,10 +37,12 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Use a predictable conversation ID based on user and condition
-  const conversationId = `therapy_${user?.uid}_${condition}`;
+  const conversationId = user?.uid 
+    ? `therapy_${user.uid}_${condition}`
+    : `therapy_guest_${Math.random().toString(36).substring(7)}_${condition}`;
 
   useEffect(() => {
-    if (!user) return;
+    // If we're still loading user but have a guest ID, proceed
     let unsubscribe = () => {};
 
     setLoading(true);

@@ -140,7 +140,7 @@ export default function App() {
         console.warn("Auth loading timed out. Forcing loading state to false.");
         setLoading(false);
       }
-    }, 8000); // Reduced from 15s to 8s for snappier perceived performance
+    }, 3000); // Reduced to 3s for aggressive initialization
 
     let userDocUnsubscribe: (() => void) | null = null;
 
@@ -332,7 +332,7 @@ export default function App() {
         console.warn("[Auth] Auth observer timed out. Forcing loading state to false.");
         setLoading(false);
       }
-    }, 7000); // Reduced from 12s to 7s to match main timeout context
+    }, 3000); // Reduced to 3s for aggressive initialization
 
     // Heartbeat for presence
     const heartbeatInterval = setInterval(async () => {
