@@ -382,8 +382,9 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
     } catch (error: any) {
       console.warn('[UrkioAgent] /api/chat failed, attempting direct Gemini API:', error);
       try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) throw new Error("GEMINI_API_KEY not found in frontend process.env");
+        const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+        console.log("Connection check...", !!apiKey);
+        if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found in frontend env");
 
         const systemPrompt = `${SYSTEM_PROMPTS[condition] || SYSTEM_PROMPTS.general}
         Current Language: ${i18n.language === 'ar' ? 'Arabic (العربية)' : 'English'}.

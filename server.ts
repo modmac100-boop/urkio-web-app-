@@ -50,7 +50,7 @@ async function startServer() {
   app.post('/api/analyze-voice', async (req, res) => {
     try {
       const { audioData, mimeType, userContext } = req.body;
-      const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+      const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 
       if (!apiKey) {
         return res.status(500).json({ error: 'GEMINI_API_KEY not configured' });
@@ -98,7 +98,7 @@ async function startServer() {
   app.post('/api/chat', async (req, res) => {
     try {
       const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
-      const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+      const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 
       const lastMessage = messages[messages.length - 1]?.content || '';
       
