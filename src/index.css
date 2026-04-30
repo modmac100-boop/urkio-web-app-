@@ -299,6 +299,33 @@ html {
   --color-nexus-surface-container: var(--nexus-surface-container);
   --color-nexus-surface-container-low: var(--nexus-surface-container-low);
   --color-nexus-outline: var(--nexus-outline);
+
+  /* Hmoii Ethereal System Mapping */
+  --color-hmoii-surface: var(--hmoii-surface);
+  --color-hmoii-surface-container: var(--hmoii-surface-container);
+  --color-hmoii-surface-container-low: var(--hmoii-surface-container-low);
+  --color-hmoii-surface-container-high: var(--hmoii-surface-container-high);
+  --color-hmoii-surface-container-highest: var(--hmoii-surface-container-highest);
+  --color-hmoii-primary: var(--hmoii-primary);
+  --color-hmoii-on-primary: var(--hmoii-on-primary);
+  --color-hmoii-tertiary: var(--hmoii-tertiary);
+  --color-hmoii-secondary: var(--hmoii-secondary);
+  --color-hmoii-outline: var(--hmoii-outline);
+  --color-hmoii-error: var(--hmoii-error);
+  --color-hmoii-error-container: var(--hmoii-error-container);
+
+  /* Urkio Healing System Mapping */
+  --color-urkio-primary: var(--urkio-primary);
+  --color-urkio-on-primary: var(--urkio-on-primary);
+  --color-urkio-primary-container: var(--urkio-primary-container);
+  --color-urkio-on-primary-container: var(--urkio-on-primary-container);
+  --color-urkio-background: var(--urkio-background);
+  --color-urkio-surface: var(--urkio-surface);
+  --color-urkio-surface-variant: var(--urkio-surface-variant);
+  --color-urkio-on-surface: var(--urkio-on-surface);
+  --color-urkio-on-surface-variant: var(--urkio-on-surface-variant);
+  --color-urkio-outline: var(--urkio-outline);
+  --color-urkio-tertiary: var(--urkio-tertiary);
 }
 
 /* Material Symbols configuration */

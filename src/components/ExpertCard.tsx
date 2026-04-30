@@ -26,7 +26,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
     <div 
       onClick={onSelect}
       className={clsx(
-        "group relative glass-2 rounded-[2.5rem] p-8 transition-all duration-500 cursor-pointer overflow-hidden isolate",
+        "group relative glass-2 rounded-4xl p-8 transition-all duration-500 cursor-pointer overflow-hidden isolate",
         isSelected 
           ? 'ring-4 ring-blue-500/20 shadow-[0_40px_80px_rgba(59,130,246,0.15)] scale-[1.02]' 
           : 'hover:scale-[1.01] hover:shadow-2xl hover:shadow-black/5'
@@ -138,8 +138,7 @@ export const ExpertCard: React.FC<ExpertCardProps> = ({
             e.stopPropagation();
             onBook(expert);
           }}
-          className="w-full py-4.5 rounded-2xl text-[12px] uppercase tracking-[0.2em] font-black text-white shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group/btn shimmer-effect"
-          style={{ background: 'linear-gradient(135deg, #004e99, #0a66c2)' }}
+          className="w-full py-4.5 rounded-2xl text-[12px] uppercase tracking-[0.2em] font-black text-white shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all relative overflow-hidden group/btn shimmer-effect bg-linear-to-br from-msgr-primary to-msgr-primary-light"
         >
           <span className="relative z-10 flex items-center justify-center gap-3">
              <span className="material-symbols-outlined text-[20px]">event_available</span>

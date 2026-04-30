@@ -307,7 +307,7 @@ export function LandingPage({
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-ur-primary text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:bg-[#259cbd] transition-all hover:-translate-y-1 active:scale-95"
+                className="w-full sm:w-auto bg-gradient-to-r from-[#30B0D0] via-[#00f2fe] to-[#000080] bg-[length:200%_auto] transition-all duration-700 hover:bg-right text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:-translate-y-1 active:scale-95"
               >
                 {isRTL ? 'ابدأ رحلتك الآن' : 'Start Your Journey'}
               </button>

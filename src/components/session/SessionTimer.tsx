@@ -48,7 +48,7 @@ export function SessionTimer({ metadata, isExpert, onStart, onStop }: SessionTim
   const percentage = (timeLeft / metadata.timerDuration) * 100;
 
   return (
-    <div className="flex flex-col items-center gap-8 py-10 px-12 bg-[#1d2026] backdrop-blur-3xl border border-white/5 rounded-[3rem] shadow-[0_32px_128px_-16px_rgba(0,0,0,0.8)] w-full max-w-sm">
+    <div className="flex flex-col items-center gap-8 py-10 px-12 bg-msgr-surface-container backdrop-blur-3xl border border-white/5 rounded-[3rem] shadow-[0_32px_128px_-16px_rgba(0,0,0,0.8)] w-full max-w-sm">
       <div className="relative size-48 flex items-center justify-center">
         {/* Anti-gravity Progress Ring */}
         <svg className="absolute inset-0 size-full -rotate-90 filter drop-shadow-[0_0_12px_rgba(59,130,246,0.3)]">

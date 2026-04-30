@@ -10,11 +10,11 @@ interface UserGrowthChartProps {
 
 const UserGrowthChart: React.FC<UserGrowthChartProps> = ({ data }) => {
   return (
-    <div className="bg-[#1A2127] p-6 rounded-2xl border border-gray-800 shadow-2xl">
+    <div className="bg-msgr-surface-container p-6 rounded-4xl border border-white/5 shadow-2xl">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h3 className="text-ur-background text-xl font-bold">نمو مستخدمي أوركيو</h3>
-          <p className="text-[#6B8E7D] text-sm mt-1">تتبع نمو قاعدة المستخدمين شهرياً</p>
+          <p className="text-ur-secondary text-sm mt-1">تتبع نمو قاعدة المستخدمين شهرياً</p>
         </div>
         <div className="bg-ur-primary/10 px-3 py-1 rounded-full">
           <span className="text-ur-primary text-xs font-medium">Monthly Stats</span>
@@ -26,53 +26,53 @@ const UserGrowthChart: React.FC<UserGrowthChartProps> = ({ data }) => {
           <AreaChart data={data} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#30B0D0" stopOpacity={0.4}/>
-                <stop offset="95%" stopColor="#30B0D0" stopOpacity={0}/>
+                <stop offset="5%" stopColor="var(--ur-primary)" stopOpacity={0.4}/>
+                <stop offset="95%" stopColor="var(--ur-primary)" stopOpacity={0}/>
               </linearGradient>
             </defs>
             
             <CartesianGrid 
               strokeDasharray="3 3" 
-              stroke="#2D3748" 
+              stroke="var(--ur-outline)" 
               vertical={false} 
-              opacity={0.5}
+              opacity={0.3}
             />
             
             <XAxis 
               dataKey="month" 
-              stroke="#6B8E7D" 
+              stroke="var(--ur-secondary)" 
               fontSize={11} 
               tickLine={false} 
               axisLine={false}
-              tick={{ fill: '#6B8E7D' }}
+              tick={{ fill: 'var(--ur-secondary)' }}
               dy={10}
             />
             
             <YAxis 
-              stroke="#6B8E7D" 
+              stroke="var(--ur-secondary)" 
               fontSize={11} 
               tickLine={false} 
               axisLine={false} 
-              tick={{ fill: '#6B8E7D' }}
+              tick={{ fill: 'var(--ur-secondary)' }}
               tickFormatter={(value) => `${value}`} 
             />
             
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: '#050A0F', 
-                border: '1px solid #30B0D0',
+                backgroundColor: 'var(--ur-on-surface)', 
+                border: '1px solid var(--ur-primary)',
                 borderRadius: '12px',
                 padding: '12px'
               }}
-              itemStyle={{ color: '#30B0D0', fontWeight: 'bold' }}
-              labelStyle={{ color: '#EDE8E4', marginBottom: '4px' }}
-              cursor={{ stroke: '#30B0D0', strokeWidth: 1 }}
+              itemStyle={{ color: 'var(--ur-primary)', fontWeight: 'bold' }}
+              labelStyle={{ color: 'var(--ur-background)', marginBottom: '4px' }}
+              cursor={{ stroke: 'var(--ur-primary)', strokeWidth: 1 }}
             />
 
             <Area 
               type="monotone" 
               dataKey="users" 
-              stroke="#30B0D0" 
+              stroke="var(--ur-primary)" 
               strokeWidth={4}
               fillOpacity={1} 
               fill="url(#colorUsers)"

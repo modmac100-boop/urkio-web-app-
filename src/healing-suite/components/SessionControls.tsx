@@ -43,10 +43,10 @@ export function SessionControls({
       className={clsx(
         'group relative flex items-center justify-center size-12 rounded-full transition-all duration-300 active:scale-90',
         danger
-          ? 'bg-[#93000a] text-[#ffdad6] hover:bg-red-600 shadow-lg'
+          ? 'bg-hmoii-error-container text-hmoii-error hover:bg-red-600 shadow-lg'
           : active
-          ? 'bg-[#a8c8ff] text-[#003062] shadow-[0_0_20px_rgba(168,200,255,0.4)]'
-          : 'bg-[#32353b] text-white hover:bg-white/10 border border-white/5'
+          ? 'bg-hmoii-primary text-hmoii-on-primary shadow-[0_0_20px_rgba(168,200,255,0.4)]'
+          : 'bg-hmoii-surface-container-highest text-white hover:bg-white/10 border border-white/5'
       )}
     >
       {children}

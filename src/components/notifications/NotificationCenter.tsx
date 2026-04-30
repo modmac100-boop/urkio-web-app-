@@ -179,10 +179,10 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'message': return <MessageSquare className="w-5 h-5 text-blue-500" />;
+      case 'message': return <MessageSquare className="w-5 h-5 text-hmoii-primary" />;
       case 'live_stream_invite':
-      case 'session_invite': return <LogIn className="w-5 h-5 text-blue-500" />;
-      case 'call': return <Video className="w-5 h-5 text-emerald-500" />;
+      case 'session_invite': return <LogIn className="w-5 h-5 text-hmoii-primary" />;
+      case 'call': return <Video className="w-5 h-5 text-emerald-400" />;
       case 'follow': return <UserPlus className="w-5 h-5 text-green-500" />;
       case 'event_reminder': return <Calendar className="w-5 h-5 text-purple-500" />;
       case 'task': return <CheckSquare className="w-5 h-5 text-amber-500" />;
@@ -200,7 +200,7 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
         onClick={onClose}
       />
       
-      <div className="fixed top-16 inset-e-0 sm:inset-e-4 w-full sm:w-96 max-h-[calc(100vh-80px)] bg-white dark:bg-zinc-900 rounded-none sm:rounded-2xl shadow-2xl border-b sm:border border-zinc-100 dark:border-zinc-800 z-1001 overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-4 duration-200">
+      <div className="fixed top-16 inset-e-0 sm:inset-e-4 w-full sm:w-96 max-h-[calc(100vh-80px)] bg-msgr-surface-container-lowest dark:bg-zinc-900 rounded-none sm:rounded-4xl shadow-2xl border-b sm:border border-zinc-100 dark:border-zinc-800 z-1001 overflow-hidden flex flex-col animate-in fade-in slide-in-from-top-4 duration-200">
       <div className="p-4 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between bg-zinc-50/50 dark:bg-zinc-950/30">
         <h3 className="font-headline font-black text-zinc-900 dark:text-white flex items-center gap-2 tracking-tight">
           <Bell className="w-5 h-5 text-ur-primary dark:text-blue-400" />
@@ -221,10 +221,10 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
 
       <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1 min-h-[200px]">
         {pushSupported && !pushEnabled && (
-          <div className="mb-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl relative group">
+          <div className="mb-2 p-3 bg-hmoii-primary/10 border border-hmoii-primary/20 rounded-xl relative group">
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 shrink-0 rounded-full bg-indigo-100 dark:bg-indigo-800 flex items-center justify-center">
-                <Bell className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <div className="w-8 h-8 shrink-0 rounded-full bg-hmoii-primary/20 flex items-center justify-center">
+                <Bell className="w-4 h-4 text-hmoii-primary" />
               </div>
               <div className="flex-1 min-w-0 pe-6">
                 <p className="text-sm font-bold text-slate-900 dark:text-white mb-0.5">Stay Updated</p>
@@ -234,7 +234,7 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
                 <button 
                   onClick={enablePushNotifications}
                   disabled={isRequestingPush}
-                  className="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors shadow-sm"
+                  className="px-4 py-1.5 bg-hmoii-primary hover:bg-hmoii-primary-container disabled:opacity-50 text-hmoii-on-primary text-[10px] font-black uppercase tracking-widest rounded-lg transition-colors shadow-sm"
                 >
                   {isRequestingPush ? 'Configuring...' : 'Enable Notifications'}
                 </button>
@@ -296,7 +296,7 @@ export function NotificationCenter({ userId, isOpen, onClose }: NotificationCent
                   {(notif.type === 'session_invite' || notif.type === 'live_stream_invite') && !notif.read && (
                     <div className="mt-2 flex gap-2">
                       <button 
-                        className="px-3 py-1 bg-ur-primary text-white text-[10px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1.5"
+                        className="px-3 py-1 bg-hmoii-primary text-hmoii-on-primary text-[10px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1.5"
                         onClick={(e) => { e.stopPropagation(); handleNotificationClick(notif); }}
                       >
                         <Video className="w-3 h-3" />

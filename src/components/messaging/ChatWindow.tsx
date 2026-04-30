@@ -91,6 +91,7 @@ interface Message {
   reactions?: { [emoji: string]: string[] };
   savedBy?: string[];
   isForwarded?: boolean;
+  roomId?: string;
 }
 
 export function ChatWindow({ 
@@ -867,9 +868,9 @@ export function ChatWindow({
 
   return (
     <>
-      <main className="flex-1 flex flex-col bg-[#faf9f6]/40 relative overflow-hidden h-full">
+      <main className="flex-1 flex flex-col bg-msgr-surface-bright/40 relative overflow-hidden h-full">
         {/* 🏢 Chat Header */}
-        <header className="h-16 flex items-center justify-between px-8 bg-white/60 backdrop-blur-xl border-b border-stone-100 dark:border-zinc-800 shadow-sm z-10 shrink-0">
+        <header className="h-16 flex items-center justify-between px-8 bg-msgr-surface/60 backdrop-blur-xl border-b border-msgr-surface-container shadow-sm z-10 shrink-0">
           <div className="flex items-center gap-4">
             <div className="relative cursor-pointer group" onClick={() => setShowExpertSidebar(!showExpertSidebar)}>
               <img 
@@ -877,14 +878,14 @@ export function ChatWindow({
                 className="w-11 h-11 rounded-2xl object-cover shadow-sm group-hover:scale-105 transition-transform" 
                 alt="" 
               />
-              {partner?.isOnline && <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-[#007440] border-2 border-white rounded-full shadow-sm"></span>}
+              {partner?.isOnline && <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-ur-secondary border-2 border-msgr-surface rounded-full shadow-sm"></span>}
             </div>
             <div className="cursor-pointer" onClick={() => setShowExpertSidebar(!showExpertSidebar)}>
               <h4 className="font-headline font-black italic text-msgr-on-surface uppercase tracking-tighter leading-none mb-1">
                 {partner?.displayName || 'Active Stream'}
               </h4>
-              <p className="text-[10px] text-[#007440] font-black uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-[#007440] rounded-full animate-pulse"></span>
+              <p className="text-[10px] text-ur-secondary font-black uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 bg-ur-secondary rounded-full animate-pulse"></span>
                 Active Now
               </p>
             </div>
@@ -895,7 +896,7 @@ export function ChatWindow({
               <>
                 <button 
                   onClick={handleSendSessionInvite} 
-                  className="p-2.5 text-zinc-400 hover:bg-[#007440]/5 hover:text-[#007440] rounded-xl transition-all group"
+                  className="p-2.5 text-zinc-400 hover:bg-ur-secondary/5 hover:text-ur-secondary rounded-xl transition-all group"
                   title="Invite to Healing Session"
                 >
                   <span className="material-symbols-outlined text-lg group-hover:rotate-12 transition-transform">calendar_add_on</span>
@@ -933,7 +934,7 @@ export function ChatWindow({
         {/* 💬 Messages Stream */}
         <div className="flex-1 overflow-y-auto p-8 space-y-10 custom-scrollbar relative" id="message-container">
           <div className="flex justify-center mb-12">
-            <span className="bg-[#efeeeb] px-4 py-1.5 rounded-full text-[9px] font-black text-zinc-400 uppercase tracking-[0.3em]">Session Archive · {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</span>
+            <span className="bg-msgr-surface-container-high px-4 py-1.5 rounded-full text-[9px] font-black text-zinc-400 uppercase tracking-[0.3em]">Session Archive · {new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</span>
           </div>
 
           {messages.map((msg, idx) => {
@@ -1012,7 +1013,7 @@ export function ChatWindow({
                              {!isOwn && (
                                <button
                                  onClick={() => navigate(`/therapy-room/${msg.sessionData?.roomId || msg.roomId}`)}
-                                 className="w-full py-3 bg-msgr-primary hover:bg-[#003d7a] text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-msgr-primary/30 flex items-center justify-center gap-2"
+                                 className="w-full py-3 bg-msgr-primary hover:bg-msgr-primary-container text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-msgr-primary/30 flex items-center justify-center gap-2"
                                >
                                  <span className="material-symbols-outlined text-[16px] fill-1">self_improvement</span>
                                  Join Healing Session
@@ -1295,46 +1296,46 @@ export function ChatWindow({
         <aside className="w-80 shrink-0 bg-white border-l border-zinc-100 flex flex-col p-8 overflow-y-auto custom-scrollbar animate-in slide-in-from-right-4 duration-500">
            <div className="flex justify-between items-center mb-10">
               <h5 className="font-headline font-black italic text-msgr-on-surface uppercase tracking-tighter">Case Context</h5>
-              <button onClick={() => setShowExpertSidebar(false)} className="p-1 hover:bg-zinc-100 rounded-full transition-colors"><span className="material-symbols-outlined text-sm">close</span></button>
+              <button onClick={() => setShowExpertSidebar(false)} className="p-1 hover:bg-msgr-surface-container rounded-full transition-colors"><span className="material-symbols-outlined text-sm">close</span></button>
            </div>
            
            <div className="space-y-10">
               {/* Active Profile Card */}
-              <div className="text-center p-6 bg-zinc-50 rounded-4xl border border-zinc-100">
+               <div className="text-center p-6 bg-msgr-surface-container-low rounded-4xl border border-msgr-surface-container">
                  <img 
                     src={partner?.photoURL || `https://ui-avatars.com/api/?name=${partner?.displayName}`} 
                     className="w-24 h-24 rounded-4xl object-cover mx-auto mb-6 shadow-xl border-4 border-white" 
                  />
-                 <h4 className="font-black italic text-zinc-900 uppercase tracking-tight text-lg leading-none mb-1">{partner?.displayName}</h4>
+                  <h4 className="font-black italic text-msgr-on-surface uppercase tracking-tight text-lg leading-none mb-1">{partner?.displayName}</h4>
                  <p className="text-[10px] font-black text-msgr-primary uppercase tracking-widest">{partner?.role || 'Patient Asset'}</p>
-                 {partner?.specialties && <p className="text-[9px] text-zinc-400 font-bold mt-2">{partner.specialties.join(' · ')}</p>}
+                 {partner?.specialties && <p className="text-[9px] text-msgr-on-surface-variant font-bold mt-2">{partner.specialties.join(' · ')}</p>}
               </div>
 
               {/* Action Grid */}
               <div className="grid grid-cols-2 gap-3">
-                 <button onClick={() => startCall('video')} className="flex flex-col items-center gap-2 p-4 bg-zinc-50 hover:bg-zinc-100 rounded-3xl transition-all group">
+                  <button onClick={() => startCall('video')} className="flex flex-col items-center gap-2 p-4 bg-msgr-surface-container-low hover:bg-msgr-surface-container rounded-3xl transition-all group">
                     <span className="material-symbols-outlined p-2 bg-white rounded-2xl group-hover:scale-110 transition-transform">videocam</span>
                     <span className="text-[9px] font-black uppercase tracking-widest">Video</span>
                  </button>
-                 <button onClick={() => startCall('audio')} className="flex flex-col items-center gap-2 p-4 bg-zinc-50 hover:bg-zinc-100 rounded-3xl transition-all group">
+                  <button onClick={() => startCall('audio')} className="flex flex-col items-center gap-2 p-4 bg-msgr-surface-container-low hover:bg-msgr-surface-container rounded-3xl transition-all group">
                     <span className="material-symbols-outlined p-2 bg-white rounded-2xl group-hover:scale-110 transition-transform">call</span>
                     <span className="text-[9px] font-black uppercase tracking-widest">Audio</span>
                  </button>
               </div>
 
               {/* Documents Section */}
-              <div className="pt-8 border-t border-zinc-100">
+              <div className="pt-8 border-t border-msgr-surface-container">
                  <div className="flex justify-between items-center mb-6">
-                    <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em]">Shared Briefs</p>
+                    <p className="text-[10px] font-black text-msgr-on-surface-variant uppercase tracking-[0.2em]">Shared Briefs</p>
                     <button className="text-[9px] font-black text-msgr-primary uppercase">View All</button>
                  </div>
                  <div className="space-y-3">
                     {messages.filter(m => m.type === 'file').slice(-3).map((f, i) => (
-                      <div key={i} className="flex items-center gap-3 p-3 bg-zinc-50 rounded-2xl border border-transparent hover:border-zinc-200 cursor-pointer transition-all">
+                       <div key={i} className="flex items-center gap-3 p-3 bg-msgr-surface-container-low rounded-2xl border border-transparent hover:border-msgr-surface-container cursor-pointer transition-all">
                          <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm"><span className="material-symbols-outlined text-msgr-primary">description</span></div>
                          <div className="min-w-0">
                             <p className="text-[11px] font-black italic tracking-tight truncate uppercase">{f.text || 'Brief_File.pdf'}</p>
-                            <p className="text-[8px] font-bold text-zinc-400 uppercase">Expert Handover</p>
+                            <p className="text-[8px] font-bold text-msgr-on-surface-variant uppercase">Expert Handover</p>
                          </div>
                       </div>
                     ))}
@@ -1345,12 +1346,12 @@ export function ChatWindow({
               </div>
 
               {/* Compliance Note */}
-              <div className="p-5 bg-[#007440]/5 rounded-4xl border border-[#007440]/10">
+              <div className="p-5 bg-ur-secondary/5 rounded-4xl border border-ur-secondary/10">
                  <div className="flex items-center gap-2 mb-2">
-                    <span className="material-symbols-outlined text-[16px] text-[#007440] fill-1">verified_user</span>
-                    <p className="text-[9px] font-black text-[#007440] uppercase tracking-widest leading-none">PDPL 2026 Compliant</p>
+                    <span className="material-symbols-outlined text-[16px] text-ur-secondary fill-1">verified_user</span>
+                    <p className="text-[9px] font-black text-ur-secondary uppercase tracking-widest leading-none">PDPL 2026 Compliant</p>
                  </div>
-                 <p className="text-[10px] text-[#007440]/70 font-bold leading-relaxed">Identity hashing enabled. Metadata is siloed and audit-ready.</p>
+                 <p className="text-[10px] text-ur-secondary/70 font-bold leading-relaxed">Identity hashing enabled. Metadata is siloed and audit-ready.</p>
               </div>
            </div>
         </aside>

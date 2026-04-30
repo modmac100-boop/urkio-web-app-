@@ -79,10 +79,7 @@ export function NotificationPermissionBanner({ onRequest }: NotificationPermissi
                  animate-in fade-in slide-in-from-top-4 duration-500"
     >
       <div
-        className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20"
-        style={{
-          background: 'linear-gradient(135deg, #004e99 0%, #0066cc 50%, #1a7fe8 100%)',
-        }}
+        className="relative overflow-hidden rounded-2xl shadow-2xl border border-white/20 bg-linear-to-br from-msgr-primary via-msgr-primary-light to-msgr-primary-lighter"
       >
         {/* Decorative blur circle */}
         <div

@@ -123,7 +123,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
   return (
     <div className={clsx(
       "min-h-screen font-sans selection:bg-ur-primary/30 transition-all duration-700 overflow-hidden",
-      theme === 'dark' ? "bg-ur-on-surface text-ur-background" : "bg-[#F8F9FA] text-[#1A222B]"
+      theme === 'dark' ? "bg-ur-on-surface text-ur-background" : "bg-msgr-surface text-msgr-on-surface"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Noto+Serif+SC:wght@200..900&display=swap');
@@ -146,7 +146,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
         }
 
         .clinical-gradient {
-           background: linear-gradient(135deg, #30B0D0 0%, #C8A96E 100%);
+           background: linear-gradient(135deg, var(--ur-primary) 0%, var(--ur-gold) 100%);
         }
 
         .animate-float { animation: float 6s ease-in-out infinite; }
@@ -154,7 +154,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       `}</style>
 
       {/* Floating Header - Compact & Premium */}
-      <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-[2.5rem] glass-panel border-[#C8A96E]/10 premium-shadow transition-all duration-500">
+      <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-[2.5rem] glass-panel border-ur-gold/10 premium-shadow transition-all duration-500">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
              <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
@@ -168,7 +168,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
           <div className="hidden lg:flex items-center gap-4 px-5 py-2 rounded-2xl bg-white/5 border border-white/5 group">
             <span className="text-[9px] font-black uppercase tracking-widest opacity-30">Studio Bridge:</span>
             <span className="text-xs font-mono font-black text-ur-primary tracking-widest">{roomId}</span>
-            <button onClick={() => { navigator.clipboard.writeText(roomId); toast.success('Link Secured'); }} className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-[#C8A96E]">
+            <button onClick={() => { navigator.clipboard.writeText(roomId); toast.success('Link Secured'); }} className="opacity-0 group-hover:opacity-100 transition-opacity hover:text-ur-gold">
               <Copy className="w-3 h-3" />
             </button>
           </div>
@@ -201,14 +201,14 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
                        animate={{ opacity: 1, y: 0, scale: 1 }}
                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                       className="absolute top-14 right-0 w-64 glass-panel rounded-3xl p-4 premium-shadow border-[#C8A96E]/20"
+                       className="absolute top-14 right-0 w-64 glass-panel rounded-3xl p-4 premium-shadow border-ur-gold/20"
                      >
                         <div className="space-y-2">
                            <button onClick={() => navigate('/')} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
                               <Home className="w-4 h-4 text-ur-primary" /> Home Dashboard
                            </button>
                            <button onClick={() => navigate(`/user/${user?.uid}`)} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
-                              <User className="w-4 h-4 text-[#C8A96E]" /> Expert Profile
+                              <User className="w-4 h-4 text-ur-gold" /> Expert Profile
                            </button>
                            <div className="h-px bg-white/5 my-2" />
                            <button onClick={() => setIsAssistantOpen(!isAssistantOpen)} className="w-full flex items-center gap-4 p-3 rounded-2xl hover:bg-white/5 transition-all text-xs font-bold uppercase tracking-widest">
@@ -262,7 +262,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                      ))}
                   </div>
                ) : (
-                  <div className="w-full h-full rounded-[4rem] glass-panel border-[#C8A96E]/5 flex flex-col items-center justify-center text-center p-20 premium-shadow">
+                  <div className="w-full h-full rounded-[4rem] glass-panel border-ur-gold/5 flex flex-col items-center justify-center text-center p-20 premium-shadow">
                      <div className="relative mb-12">
                         <div className="size-40 rounded-[3rem] clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
                            <Zap className="w-16 h-16 text-ur-on-surface" />
@@ -286,11 +286,11 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
             </div>
 
             {/* Integrated Clinical Documentation Panel */}
-            <div className="flex-1 rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
+            <div className="flex-1 rounded-[3.5rem] glass-panel border-ur-gold/5 flex flex-col premium-shadow">
                <div className="p-10 border-b border-white/5 flex justify-between items-center">
                   <div className="flex items-center gap-4">
-                     <div className="size-12 rounded-2xl bg-[#C8A96E]/10 flex items-center justify-center shadow-inner">
-                        <FileText className="w-6 h-6 text-[#C8A96E]" />
+                     <div className="size-12 rounded-2xl bg-ur-gold/10 flex items-center justify-center shadow-inner">
+                        <FileText className="w-6 h-6 text-ur-gold" />
                      </div>
                      <div>
                         <h3 className="font-serif-clinical text-2xl font-bold tracking-tight">Clinical Session Log</h3>
@@ -310,7 +310,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
                <div className="p-10 border-t border-white/5 bg-white/2 flex gap-4">
                   <button className="flex-1 py-5 rounded-2xl bg-white/5 text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all border border-white/5">Local Archive</button>
-                  <button className="flex-1 py-5 rounded-2xl clinical-gradient text-ur-on-surface text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-[#C8A96E]/20 hover:scale-105 transition-all">Sync to Cloud</button>
+                  <button className="flex-1 py-5 rounded-2xl clinical-gradient text-ur-on-surface text-[11px] font-black uppercase tracking-widest shadow-2xl shadow-ur-gold/20 hover:scale-105 transition-all">Sync to Cloud</button>
                </div>
             </div>
          </div>
@@ -342,8 +342,8 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Case Docs</span>
                   <p className="text-xs font-bold mt-1 opacity-60">3 FILES SECURED</p>
                </div>
-               <div className="size-14 rounded-2xl bg-[#C8A96E]/10 flex items-center justify-center">
-                  <FolderOpen className="w-7 h-7 text-[#C8A96E]" />
+               <div className="size-14 rounded-2xl bg-ur-gold/10 flex items-center justify-center">
+                  <FolderOpen className="w-7 h-7 text-ur-gold" />
                </div>
             </div>
 

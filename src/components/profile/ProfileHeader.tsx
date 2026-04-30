@@ -171,7 +171,7 @@ function buildSocialIcons(userData: any) {
       key: 'email',
       Icon: Mail,
       label: 'Email',
-      color: '#004e99',
+      color: 'var(--msgr-primary)',
       href: userData.email ? `mailto:${userData.email}` : null,
     },
   ].filter(s => s.href);

@@ -194,10 +194,13 @@ export function LandingPageV2({
                 {t('common.login', 'Sign In')}
               </button>
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0px 0px 20px rgba(48,176,208,0.4)" }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: "0px 0px 30px rgba(48,176,208,0.5)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openSignUp('user')}
-                className="bg-ur-primary text-ur-on-surface px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all"
+                className="bg-ur-primary hover:bg-linear-to-r hover:from-ur-primary hover:to-blue-800 text-ur-on-surface px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500"
               >
                 Start Your Journey
               </motion.button>
@@ -249,7 +252,7 @@ export function LandingPageV2({
                 </button>
                 <button
                   onClick={() => { openSignUp('user'); setMobileMenuOpen(false); }}
-                  className="bg-ur-primary text-ur-on-surface py-4 rounded-xl font-black text-sm uppercase tracking-widest"
+                  className="bg-ur-primary hover:bg-linear-to-r hover:from-ur-primary hover:to-blue-800 text-ur-on-surface py-4 rounded-xl font-black text-sm uppercase tracking-widest transition-all duration-500"
                 >
                   Start Your Journey
                 </button>
@@ -319,10 +322,13 @@ export function LandingPageV2({
               className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-8"
             >
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: "0px 10px 40px rgba(48,176,208,0.4)" }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: "0px 10px 40px rgba(48,176,208,0.5)",
+                }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-ur-primary text-ur-on-surface px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all shadow-lg shadow-ur-primary/20"
+                className="w-full sm:w-auto bg-ur-primary hover:bg-linear-to-r hover:from-ur-primary hover:to-blue-800 text-ur-on-surface px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all duration-500 shadow-lg shadow-ur-primary/20"
               >
                 {isRTL ? 'ابدأ رحلة العودة لذاتك' : 'Begin Your Return to Self'}
               </motion.button>
@@ -506,7 +512,7 @@ export function LandingPageV2({
                  <motion.div 
                    animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                   className="absolute top-0 -translate-y-1/2 size-8 bg-ur-primary rounded-full shadow-[0_0_20px_#30B0D0]"
+                   className="absolute top-0 -translate-y-1/2 size-8 bg-ur-primary rounded-full shadow-[0_0_20px_var(--ur-primary)]"
                  />
                  <motion.div 
                    animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}

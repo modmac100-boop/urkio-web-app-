@@ -87,7 +87,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
   return (
     <div className={clsx(
       "min-h-screen font-sans selection:bg-ur-primary/30 transition-all duration-700",
-      theme === 'dark' ? "bg-ur-on-surface text-[#e6e2de]" : "bg-[#fbf9f5] text-msgr-on-surface"
+      theme === 'dark' ? "bg-ur-on-surface text-ur-background" : "bg-nexus-surface text-msgr-on-surface"
     )}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,ital,wght@0,6..72,200..800;1,6..72,200..800&family=Manrope:wght@200..800&family=Noto+Serif+SC:wght@200..900&display=swap');
@@ -108,7 +108,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
         theme === 'dark' ? "bg-ur-on-surface/80 backdrop-blur-2xl border-white/5" : "bg-white/80 backdrop-blur-2xl border-slate-200"
       )}>
         <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
-          <div className="size-10 rounded-xl bg-linear-to-tr from-ur-primary to-[#C8A96E] flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+          <div className="size-10 rounded-xl bg-linear-to-tr from-ur-primary to-ur-gold flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
              <ShieldCheck className="w-6 h-6 text-ur-on-surface" />
           </div>
           <span className="font-serif-clinical text-2xl font-bold tracking-tighter">URKIO</span>
@@ -135,7 +135,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
       <main className="pt-40 px-8 max-w-[1400px] mx-auto pb-40">
         {/* Search & Hero */}
         <header className="mb-24 text-center max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#C8A96E]/10 border border-[#C8A96E]/20 text-[#C8A96E] text-[9px] font-black uppercase tracking-[0.3em] mb-10 shadow-inner">
+          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-ur-gold/10 border border-ur-gold/20 text-ur-gold text-[9px] font-black uppercase tracking-[0.3em] mb-10 shadow-inner">
              <Zap className="size-3 animate-pulse" />
              Verified Clinical Directory
           </div>
@@ -156,7 +156,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                 />
-                <button className="bg-ur-primary text-ur-on-surface px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-[#289CB8] transition-all shadow-xl">
+                <button className="bg-ur-primary text-ur-on-surface px-12 py-5 rounded-full text-[11px] font-black uppercase tracking-widest hover:bg-msgr-primary-container transition-all shadow-xl">
                   Analyze
                 </button>
              </div>
@@ -178,7 +178,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                    viewport={{ once: true }}
                    className={clsx(
                      "group rounded-4xl md:rounded-[3rem] overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 border",
-                     theme === 'dark' ? "bg-[#10161D] border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
+                     theme === 'dark' ? "bg-ur-on-surface border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
                    )}
                  >
                     {/* Visual Header */}
@@ -188,7 +188,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
                          alt={expert.displayName}
                          className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
                        />
-                       <div className="absolute inset-0 bg-linear-to-t from-[#10161D] via-transparent to-transparent opacity-80" />
+                       <div className="absolute inset-0 bg-linear-to-t from-ur-on-surface via-transparent to-transparent opacity-80" />
                        
                        <div className="absolute top-3 md:top-6 left-3 md:left-6 flex flex-col gap-2">
                           <div className="flex items-center gap-1.5 px-2.5 py-1 md:px-4 md:py-2 rounded-full bg-emerald-500/10 backdrop-blur-xl border border-emerald-500/20 text-emerald-400">
@@ -242,7 +242,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
            theme === 'dark' ? "bg-white/2 border border-white/5" : "bg-white shadow-3xl border border-slate-100"
         )}>
            <div className="max-w-2xl relative z-10">
-              <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-[#C8A96E]/10 border border-[#C8A96E]/20 text-[#C8A96E] text-[9px] font-black uppercase tracking-[0.3em] mb-10">
+              <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-ur-gold/10 border border-ur-gold/20 text-ur-gold text-[9px] font-black uppercase tracking-[0.3em] mb-10">
                  <Award className="size-4" />
                  Global Practitioner Network
               </div>
@@ -254,7 +254,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
               </p>
               <button 
                 onClick={() => navigate('/verify')}
-                className="px-16 py-6 rounded-3xl clinical-gradient text-ur-on-surface font-black text-xs uppercase tracking-[0.3em] shadow-3xl shadow-[#C8A96E]/20 hover:scale-105 active:scale-95 transition-all"
+                className="px-16 py-6 rounded-3xl clinical-gradient text-ur-on-surface font-black text-xs uppercase tracking-[0.3em] shadow-3xl shadow-ur-gold/20 hover:scale-105 active:scale-95 transition-all"
               >
                  Submit Application
               </button>
@@ -271,7 +271,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
       
       <footer className="py-20 px-12 border-t border-white/5 bg-black/20 text-center">
          <div className="max-w-7xl mx-auto flex flex-col items-center gap-10">
-            <span className="font-serif-clinical text-3xl font-bold tracking-tighter bg-linear-to-r from-ur-primary to-[#C8A96E] bg-clip-text text-transparent">URKIO</span>
+            <span className="font-serif-clinical text-3xl font-bold tracking-tighter bg-linear-to-r from-ur-primary to-ur-gold bg-clip-text text-transparent">URKIO</span>
             <div className="flex flex-wrap justify-center gap-12">
                {['Protocols', 'Privacy', 'Network', 'Support'].map(l => (
                   <a key={l} href="#" className="text-[10px] font-black uppercase tracking-[0.4em] opacity-30 hover:opacity-100 hover:text-ur-primary transition-all">{l}</a>

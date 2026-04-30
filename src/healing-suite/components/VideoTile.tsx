@@ -27,7 +27,7 @@ export function VideoTile({
   }, [videoTrack, isOff]);
 
   return (
-    <div className={`relative bg-[#191c21] rounded-2xl overflow-hidden border border-white/5 group shadow-lg ${className}`}>
+    <div className={`relative bg-msgr-surface-container-low rounded-3xl overflow-hidden border border-white/5 group shadow-lg ${className}`}>
       {/* Video Content */}
       {!isOff && videoTrack ? (
         <div 
@@ -35,14 +35,14 @@ export function VideoTile({
           className={`w-full h-full object-cover ${isLocal ? 'video-mirror-transform' : ''}`} 
         />
       ) : (
-        <div className="w-full h-full flex flex-col items-center justify-center bg-[#1d2026]">
+        <div className="w-full h-full flex flex-col items-center justify-center bg-msgr-surface-container">
           {avatar
             ? <img src={avatar} alt={name} className="size-16 rounded-full border-2 border-white/10 object-cover opacity-80" />
-            : <div className="size-16 rounded-full bg-slate-800 border-2 border-white/5 flex items-center justify-center text-2xl font-black text-slate-500">
+            : <div className="size-16 rounded-full bg-msgr-surface-container-high border-2 border-white/5 flex items-center justify-center text-2xl font-black text-msgr-on-surface-variant">
                 {name?.[0]?.toUpperCase()}
               </div>
           }
-          <p className="mt-3 text-[10px] uppercase font-black tracking-widest text-slate-600">Feed Inactive</p>
+          <p className="mt-3 text-[10px] uppercase font-black tracking-widest text-msgr-on-surface-variant">Feed Inactive</p>
         </div>
       )}
 
@@ -52,7 +52,7 @@ export function VideoTile({
            <div className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
               <span className="text-white text-[10px] font-bold">{name}</span>
               {isLocal && <span className="text-white/40 text-[9px] font-bold">(You)</span>}
-              {isHost && <Shield className="size-3 text-[#a8c8ff]" />}
+              {isHost && <Shield className="size-3 text-hmoii-primary" />}
            </div>
            {isMuted && <MicOff className="size-3 text-red-500" />}
         </div>
@@ -65,7 +65,7 @@ export function VideoTile({
 
       {/* Hand raised indicator */}
       {isHandRaised && (
-        <div className="absolute top-3 right-3 bg-[#a8c8ff] text-[#001b3d] p-1.5 rounded-lg animate-bounce shadow-xl scale-75 origin-top-right">
+        <div className="absolute top-3 right-3 bg-hmoii-primary text-hmoii-on-primary p-1.5 rounded-lg animate-bounce shadow-xl scale-75 origin-top-right">
           <span className="text-sm">✋</span>
         </div>
       )}

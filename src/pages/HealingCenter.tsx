@@ -75,7 +75,7 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
       {/* Immersive Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-ur-primary/5 rounded-full blur-[150px] animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#C8A96E]/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-ur-gold/5 rounded-full blur-[120px]" />
       </div>
 
       <header className="relative pt-32 pb-40 px-8 text-center max-w-5xl mx-auto z-10">
@@ -84,13 +84,13 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
             Global Healing Sanctuary
          </div>
          <h1 className="text-7xl md:text-9xl font-black italic tracking-tighter leading-[0.85] text-inherit mb-12">
-            Elite <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E]">Practitioners</span> <br />
+            Elite <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-ur-gold">Practitioners</span> <br />
             for Synergy.
          </h1>
          
          <div className="max-w-3xl mx-auto mt-16 relative group">
             <div className={clsx(
-               "flex items-center p-2 rounded-[2.5rem] border transition-all",
+               "flex items-center p-2 rounded-4xl border transition-all",
                theme === 'dark' ? "bg-white/5 border-white/10" : "bg-white border-slate-200 shadow-3xl"
             )}>
                <Search className="ml-8 mr-4 size-6 opacity-30" />
@@ -114,8 +114,8 @@ export function HealingCenter({ user, userData }: { user: any; userData: any }) 
                <div 
                  key={expert.id}
                  className={clsx(
-                   "group rounded-[3rem] overflow-hidden border transition-all duration-500 hover:-translate-y-2",
-                   theme === 'dark' ? "bg-[#10161D] border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
+                   "group rounded-5xl overflow-hidden border transition-all duration-500 hover:-translate-y-2",
+                   theme === 'dark' ? "bg-ur-surface-base border-white/5 shadow-3xl" : "bg-white border-slate-100 shadow-2xl"
                  )}
                >
                   <div className="relative h-64 overflow-hidden">

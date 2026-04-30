@@ -58,18 +58,14 @@ export function WaitingRoom({
   };
 
   return (
-    <div className="min-h-screen bg-[#101319] text-[#e1e2ea] relative overflow-hidden flex flex-col font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-surface-container-lowest text-on-surface relative overflow-hidden flex flex-col font-sans selection:bg-primary/20">
       <style>{`
-        .glass-card {
-            background: rgba(50, 53, 59, 0.4);
-            backdrop-filter: blur(24px);
-        }
         .antigravity-orb {
             position: absolute;
             width: 400px;
             height: 400px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(10, 102, 194, 0.15) 0%, rgba(16, 19, 25, 0) 70%);
+            background: radial-gradient(circle, var(--hmoii-primary) 0.15, transparent 0.7);
             filter: blur(60px);
             z-index: 0;
         }
@@ -92,10 +88,10 @@ export function WaitingRoom({
           
           {/* Left Side: Camera Preview (Zen View) */}
           <div className="space-y-8">
-            <div className="relative aspect-video glass-card rounded-3xl overflow-hidden border border-white/5 shadow-2xl group">
+            <div className="relative aspect-video bg-hmoii-surface-container/40 backdrop-blur-2xl rounded-4xl overflow-hidden border border-white/5 shadow-2xl group">
               <div ref={videoRef} className="w-full h-full object-cover" />
               {isCameraOff && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#101319]/90 backdrop-blur-3xl">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-surface-container-lowest/90 backdrop-blur-3xl">
                   {userAvatar
                     ? <img src={userAvatar} alt={userName} className="size-24 rounded-full object-cover border-4 border-white/10 shadow-xl" />
                     : <div className="size-24 rounded-full bg-primary/20 border-2 border-primary/30 flex items-center justify-center text-4xl font-bold text-primary">{userName?.[0]?.toUpperCase()}</div>
@@ -116,7 +112,7 @@ export function WaitingRoom({
 
               {/* Expert Name Tag Style */}
               <div className="absolute top-6 left-6 flex items-center gap-2 bg-slate-950/40 backdrop-blur-xl px-4 py-2 rounded-full border border-white/10">
-                <span className="text-[10px] font-black uppercase tracking-widest text-[#a8c8ff]">You</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-hmoii-primary">You</span>
                 <span className="text-sm font-bold">{userName}</span>
               </div>
             </div>
@@ -133,10 +129,10 @@ export function WaitingRoom({
           </div>
 
           {/* Right Side: Join Interface (Antigravity Design) */}
-          <div className="glass-card rounded-[2.5rem] p-10 md:p-14 shadow-2xl relative overflow-hidden">
+          <div className="bg-hmoii-surface-container/40 backdrop-blur-2xl rounded-4xl p-10 md:p-14 shadow-2xl relative overflow-hidden">
             <div className="mb-10">
               <h1 className="text-4xl md:text-5xl font-headline font-black tracking-tighter text-on-surface mb-6 leading-none">
-                Enter Your <br/><span className="text-[#a8c8ff]">Healing Space</span>
+                Enter Your <br/><span className="text-hmoii-primary">Healing Space</span>
               </h1>
               <p className="text-on-surface-variant font-medium text-lg max-w-sm leading-relaxed opacity-80">
                 {practitionerName ? `Facilitated by ${practitionerName}` : 'Secure, end-to-end encrypted therapeutic direct line.'}
@@ -146,9 +142,9 @@ export function WaitingRoom({
             <div className="space-y-10">
               {/* Session Code Area */}
               <div className="space-y-4">
-                <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-[#a8c8ff]">Session Code</label>
+                <label className="block text-[10px] font-black uppercase tracking-[0.3em] text-hmoii-primary">Session Code</label>
                 <div className="flex items-center gap-3">
-                  <div className="flex-1 bg-white/5 border-b-2 border-white/10 py-4 px-1 text-3xl tracking-[0.4em] font-headline font-black text-on-surface focus-within:border-[#a8c8ff] transition-all duration-300">
+                  <div className="flex-1 bg-white/5 border-b-2 border-white/10 py-4 px-1 text-3xl tracking-[0.4em] font-headline font-black text-on-surface focus-within:border-hmoii-primary transition-all duration-300">
                     {sessionId.toUpperCase()}
                   </div>
                 </div>
@@ -156,11 +152,11 @@ export function WaitingRoom({
 
               {/* Behavior Agreement */}
               <div onClick={() => setAgreedToTerms(!agreedToTerms)} className="flex items-start gap-4 group cursor-pointer select-none">
-                <div className={`mt-1 size-6 rounded border transition-all flex items-center justify-center ${agreedToTerms ? 'bg-[#a8c8ff] border-[#a8c8ff]' : 'border-white/20 bg-white/5 group-hover:border-white/40'}`}>
-                  {agreedToTerms && <Check className="size-4 text-[#001b3d] stroke-[4]" />}
+                <div className={`mt-1 size-6 rounded border transition-all flex items-center justify-center ${agreedToTerms ? 'bg-hmoii-primary border-hmoii-primary' : 'border-white/20 bg-white/5 group-hover:border-white/40'}`}>
+                  {agreedToTerms && <Check className="size-4 text-hmoii-on-primary stroke-[4]" />}
                 </div>
                 <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
-                  I agree to the <span className="text-on-surface font-bold underline decoration-[#a8c8ff]/30 underline-offset-4">Terms & Conditions</span> and represent a spirit of good behavior during this shared session.
+                  I agree to the <span className="text-on-surface font-bold underline decoration-hmoii-primary/30 underline-offset-4">Terms & Conditions</span> and represent a spirit of good behavior during this shared session.
                 </p>
               </div>
 
@@ -168,7 +164,7 @@ export function WaitingRoom({
               <button 
                 onClick={onEnterSession}
                 disabled={!agreedToTerms || isEntering}
-                className="w-full py-6 rounded-full bg-linear-to-r from-[#0a66c2] to-[#a8c8ff] text-[#001b3d] font-headline font-black text-lg tracking-tight hover:shadow-[0px_0px_32px_rgba(10,102,194,0.4)] active:scale-[0.98] disabled:opacity-30 disabled:grayscale transition-all duration-300 flex items-center justify-center gap-3 group"
+                className="w-full py-6 rounded-full bg-linear-to-r from-hmoii-primary-container to-hmoii-primary text-hmoii-on-primary font-headline font-black text-lg tracking-tight hover:shadow-[0px_0px_32px_rgba(10,102,194,0.4)] active:scale-[0.98] disabled:opacity-30 disabled:grayscale transition-all duration-300 flex items-center justify-center gap-3 group"
               >
                 {isEntering ? (
                   <span className="flex items-center gap-3">
@@ -184,7 +180,7 @@ export function WaitingRoom({
             </div>
 
             {/* Architectural Accent Line */}
-            <div className="absolute top-0 right-0 h-32 w-[2px] bg-linear-to-b from-[#a8c8ff] to-transparent opacity-40"></div>
+            <div className="absolute top-0 right-0 h-32 w-[2px] bg-linear-to-b from-hmoii-primary to-transparent opacity-40"></div>
           </div>
         </div>
       </main>

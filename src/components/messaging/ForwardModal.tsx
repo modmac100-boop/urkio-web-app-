@@ -105,9 +105,9 @@ export function ForwardModal({
   );
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full max-w-md rounded-[32px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-        <div className="p-6 border-b border-zinc-100 flex items-center justify-between">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="bg-msgr-surface-container-low w-full max-w-md rounded-4xl overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+        <div className="p-6 border-b border-msgr-outline-variant flex items-center justify-between">
           <div>
             <h3 className="text-xl font-black italic text-zinc-900 uppercase tracking-tighter">Forward Message</h3>
             <p className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mt-1">Select recipient</p>
@@ -125,7 +125,7 @@ export function ForwardModal({
               placeholder="Search contacts..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-zinc-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-msgr-primary/20"
+              className="w-full pl-12 pr-4 py-3 bg-msgr-surface-container border-none rounded-2xl text-sm focus:ring-2 focus:ring-msgr-primary/20"
             />
           </div>
 
@@ -145,7 +145,7 @@ export function ForwardModal({
                   key={contact.uid}
                   onClick={() => handleForward(contact)}
                   disabled={!!forwarding}
-                  className="w-full flex items-center gap-4 p-3 hover:bg-zinc-50 rounded-2xl transition-all group active:scale-[0.98]"
+                  className="w-full flex items-center gap-4 p-3 hover:bg-msgr-surface-container-high rounded-2xl transition-all group active:scale-[0.98]"
                 >
                   <img 
                     src={contact.photoURL || `https://ui-avatars.com/api/?name=${contact.displayName}`} 
@@ -169,7 +169,7 @@ export function ForwardModal({
           </div>
         </div>
 
-        <div className="p-4 bg-zinc-50 border-t border-zinc-100">
+        <div className="p-4 bg-msgr-surface-container-low border-t border-msgr-outline-variant">
           <p className="text-[9px] font-black text-zinc-400 uppercase tracking-[0.2em] text-center">
             Messages are end-to-end encrypted
           </p>

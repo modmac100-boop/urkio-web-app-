@@ -235,7 +235,7 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
 
        <div className="flex-1 flex overflow-hidden">
           {/* 💼 SideNavBar (Expert Panel) */}
-          <nav className="w-64 shrink-0 bg-[#faf9f6]/50 border-e border-stone-100 hidden xl:flex flex-col p-6">
+          <nav className="w-64 shrink-0 bg-msgr-surface-bright/50 border-e border-stone-100 hidden xl:flex flex-col p-6">
              <div className="flex items-center gap-3 mb-10 px-2">
                 <div className="w-10 h-10 bg-msgr-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                    <span className="material-symbols-outlined text-lg">business_center</span>

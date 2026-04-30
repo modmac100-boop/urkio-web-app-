@@ -88,7 +88,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       className={clsx(
-        "relative rounded-[2.5rem] overflow-hidden group shadow-3xl border border-white/5 bg-ur-on-surface transition-all duration-500",
+        "relative rounded-4xl overflow-hidden group shadow-3xl border border-white/5 bg-ur-on-surface transition-all duration-500",
         isFullscreen ? "fixed inset-0 z-[9999] rounded-none" : "h-full",
         className
       )}
@@ -100,13 +100,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-[#0A0F14] to-ur-on-surface z-10"
+            className="absolute inset-0 flex flex-col items-center justify-center bg-linear-to-br from-surface-container-lowest to-surface-container-low z-10"
           >
              <div className="relative mb-8">
-                <div className="size-24 rounded-[2.5rem] bg-white/5 border border-white/10 flex items-center justify-center animate-float">
+                <div className="size-24 rounded-4xl bg-white/5 border border-white/10 flex items-center justify-center animate-float">
                    <User className="w-10 h-10 text-ur-primary opacity-40" />
                 </div>
-                <div className="absolute inset-0 rounded-[2.5rem] bg-ur-primary/10 blur-3xl animate-pulse" />
+                <div className="absolute inset-0 rounded-4xl bg-ur-primary/10 blur-3xl animate-pulse" />
              </div>
              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-ur-primary/60">Stream Obfuscated</p>
           </motion.div>
@@ -148,8 +148,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
             <div className="flex items-center gap-3">
                <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                  <ShieldCheck className="w-4 h-4 text-[#C8A96E]" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#C8A96E]">Encrypted Channel</span>
+                  <ShieldCheck className="w-4 h-4 text-ur-tertiary" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-ur-tertiary">Encrypted Channel</span>
                </div>
                <button 
                  onClick={toggleFullscreen}
@@ -162,7 +162,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
          {/* Bottom Action Bar */}
          <div className="flex justify-center items-center gap-6 pointer-events-auto opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-6 group-hover:translate-y-0">
-            <div className="flex items-center gap-4 px-8 py-4 rounded-[2.5rem] bg-black/50 backdrop-blur-3xl border border-white/10 shadow-3xl">
+            <div className="flex items-center gap-4 px-8 py-4 rounded-4xl bg-black/50 backdrop-blur-3xl border border-white/10 shadow-3xl">
                <button 
                  onClick={onToggleMic}
                  title={isMuted ? "Unmute" : "Mute"}
@@ -242,7 +242,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
       {/* Aesthetic Overlays */}
       <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-ur-primary/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-[#C8A96E]/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-ur-tertiary/5 blur-[120px] pointer-events-none" />
     </motion.div>
   );
 };

@@ -277,8 +277,8 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
           onClick={() => setIsOpen(true)}
           className="fixed bottom-24 inset-e-6 z-9999 group"
         >
-          <span className="absolute inset-0 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 animate-ping opacity-30" />
-          <div className="relative w-16 h-16 rounded-full bg-linear-to-br from-indigo-500 via-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/40 hover:scale-110 active:scale-95 transition-transform duration-300">
+          <span className="absolute inset-0 rounded-full bg-linear-to-br from-hmoii-primary to-hmoii-secondary animate-ping opacity-30" />
+          <div className="relative w-16 h-16 rounded-full bg-linear-to-br from-hmoii-primary via-hmoii-secondary to-hmoii-tertiary flex items-center justify-center shadow-2xl shadow-hmoii-primary/40 hover:scale-110 active:scale-95 transition-transform duration-300">
             <Sparkles className="w-7 h-7 text-white" />
           </div>
           <div className="absolute -top-10 inset-e-0 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap shadow-xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -288,11 +288,11 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       )}
 
       {isOpen && (
-        <div className="fixed bottom-20 inset-e-4 z-9999 w-[380px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] flex flex-col rounded-3xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 animate-in fade-in slide-in-from-bottom-4 duration-300 bg-gradient-to-b from-navy to-slate-900"
+        <div className="fixed bottom-20 inset-e-4 z-9999 w-[380px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-6rem)] flex flex-col rounded-4xl overflow-hidden shadow-2xl shadow-black/40 border border-white/10 animate-in fade-in slide-in-from-bottom-4 duration-300 bg-linear-to-b from-msgr-surface-container-lowest to-msgr-surface-container-low"
         >
           <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 bg-white/5 backdrop-blur-md shrink-0">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <div className="w-10 h-10 rounded-2xl bg-linear-to-br from-hmoii-primary to-hmoii-secondary flex items-center justify-center shadow-lg shadow-hmoii-primary/30">
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -329,8 +329,8 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
           <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10">
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center space-y-6 py-8">
-                <div className="w-20 h-20 rounded-4xl bg-linear-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center">
-                  <Bot className="w-10 h-10 text-indigo-400" />
+                <div className="w-20 h-20 rounded-4xl bg-linear-to-br from-hmoii-primary/20 to-hmoii-secondary/20 border border-hmoii-primary/30 flex items-center justify-center">
+                  <Bot className="w-10 h-10 text-hmoii-primary" />
                 </div>
                 <div>
                    <p className="text-white font-bold text-base mb-2">
@@ -346,10 +346,10 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                     <button
                       key={action.label}
                       onClick={() => sendMessage(action.intent)}
-                      className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-indigo-500/10 hover:border-indigo-500/30 text-start transition-all group"
+                      className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-hmoii-primary/10 hover:border-hmoii-primary/30 text-start transition-all group"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0 group-hover:bg-indigo-500/20 transition-colors">
-                        <action.icon className="w-4 h-4 text-indigo-400" />
+                      <div className="w-9 h-9 rounded-xl bg-hmoii-primary/10 flex items-center justify-center shrink-0 group-hover:bg-hmoii-primary/20 transition-colors">
+                        <action.icon className="w-4 h-4 text-hmoii-primary" />
                       </div>
                       <span className="text-slate-300 text-sm font-semibold group-hover:text-white transition-colors">{action.label}</span>
                     </button>
@@ -369,7 +369,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <div
                   className={clsx(
                     'w-7 h-7 rounded-full flex items-center justify-center shrink-0 mt-1',
-                    m.role === 'user' ? 'bg-indigo-500 text-white' : 'bg-white/10 text-indigo-400 border border-white/10'
+                    m.role === 'user' ? 'bg-hmoii-primary text-white' : 'bg-white/10 text-hmoii-primary border border-white/10'
                   )}
                 >
                   {m.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
@@ -377,7 +377,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <div
                   className={clsx(
                     'px-4 py-3 rounded-2xl text-sm leading-relaxed',
-                    m.role === 'user' ? 'bg-indigo-500 text-white rounded-ee-md shadow-lg shadow-indigo-500/20' : 'bg-white/10 text-slate-200 rounded-es-md border border-white/5'
+                    m.role === 'user' ? 'bg-hmoii-primary text-white rounded-ee-md shadow-lg shadow-hmoii-primary/20' : 'bg-white/10 text-slate-200 rounded-es-md border border-white/5'
                   )}
                 >
                   {m.content ? (
@@ -405,7 +405,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 rows={1}
                 placeholder={isRecording ? t('agent.listening') : t('agent.inputPlaceholder')}
                 className={clsx(
-                  "w-full bg-white/10 border border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/30 resize-none transition-all",
+                  "w-full bg-white/10 border border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-hmoii-primary/40 focus:border-hmoii-primary/30 resize-none transition-all",
                   isRecording && "border-red-500/50 ring-2 ring-red-500/20",
                   audioLanguage === 'ar' && "text-end"
                 )}
@@ -430,7 +430,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                   onClick={toggleRecording}
                   className={clsx(
                     "p-2 rounded-xl transition-all relative group",
-                    isRecording ? "text-red-500 bg-red-500/10" : "text-slate-500 hover:text-indigo-400 hover:bg-white/10"
+                    isRecording ? "text-red-500 bg-red-500/10" : "text-slate-500 hover:text-hmoii-primary hover:bg-white/10"
                   )}
                   title={t('agent.speak')}
                 >
@@ -440,7 +440,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <button
                   type="submit"
                   disabled={!input?.trim() || isLoading}
-                  className="p-2 rounded-xl bg-indigo-500 text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-400 disabled:opacity-30 disabled:shadow-none transition-all active:scale-90"
+                  className="p-2 rounded-xl bg-hmoii-primary text-white shadow-lg shadow-hmoii-primary/30 hover:bg-hmoii-secondary disabled:opacity-30 disabled:shadow-none transition-all active:scale-90"
                 >
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 </button>

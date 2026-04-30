@@ -66,35 +66,35 @@ export const ActiveConsentHandshake: React.FC<Props> = ({ user, onAccept }) => {
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="w-full max-w-2xl bg-white rounded-[3.5rem] overflow-hidden shadow-2xl flex flex-col border border-white/20"
+        className="w-full max-w-2xl bg-white rounded-4xl overflow-hidden shadow-2xl flex flex-col border border-white/20"
       >
         {/* Header */}
         <div className={`p-10 border-b border-zinc-100 flex items-center gap-6 ${isRTL ? 'flex-row-reverse' : ''}`}>
-          <div className="p-4 bg-emerald-600 rounded-3xl text-white shadow-xl shadow-emerald-500/30">
+          <div className="p-4 bg-emerald-500 rounded-3xl text-white shadow-xl shadow-emerald-500/30">
             <span className="material-symbols-outlined text-3xl">handshake</span>
           </div>
           <div className={`flex-1 ${isRTL ? 'text-right' : ''}`}>
             <h2 className="text-2xl md:text-3xl font-black italic tracking-tighter uppercase">
               {isRTL ? 'مصافحة الموافقة النشطة' : 'Active Consent Handshake'}
             </h2>
-            <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-600 mt-1">
+            <p className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] text-emerald-500 mt-1">
               {isRTL ? 'قانون حماية البيانات الشخصية المصري 2026' : 'PDPL 2026 COMPLIANCE PROTOCOL'}
             </p>
           </div>
         </div>
 
         {/* Scrollable Content */}
-        <div className={`overflow-y-auto p-10 bg-[#faf9f6] text-sm leading-relaxed text-zinc-600 font-medium max-h-[45vh] ${isRTL ? 'text-right' : ''}`}>
+        <div className={`overflow-y-auto p-10 bg-msgr-surface-container-low text-sm leading-relaxed text-zinc-600 font-medium max-h-[45vh] ${isRTL ? 'text-right' : ''}`}>
           {isRTL ? (
             <div className="space-y-6">
               <p className="font-black text-zinc-900 border-r-4 border-emerald-500 pr-4 py-2 bg-emerald-50/50">
                 بموجب القانون رقم 151 لسنة 2020، تطلب Urkio موافقتك الصريحة لمعالجة بياناتك الحساسة.
               </p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">جهة التحكم والاتصال</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">جهة التحكم والاتصال</h3>
               <p>يتم التحكم في بياناتك من قبل منصة Urkio (المرحلة التجريبية الأولى). مسؤول حماية البيانات هو سامر الحلاقي.</p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">ماذا نعالج؟</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">ماذا نعالج؟</h3>
               <p>نقوم بمعالجة البيانات الصحية العقلية، المذكرات الصوتية "هومي"، والبيانات الحيوية المشفرة لتحسين تجربتك العلاجية.</p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">حقوقك القانونية</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">حقوقك القانونية</h3>
               <p>لديك الحق في الوصول، التصحيح، سحب الموافقة في أي وقت، والحق في مسح البيانات (الحق في النسيان).</p>
             </div>
           ) : (
@@ -102,11 +102,11 @@ export const ActiveConsentHandshake: React.FC<Props> = ({ user, onAccept }) => {
               <p className="font-black text-zinc-900 border-l-4 border-emerald-500 pl-4 py-2 bg-emerald-50/50">
                 Under Law 151/2020, Urkio requires your explicit consent to process your sensitive data.
               </p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">Controller &amp; Contact</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">Controller &amp; Contact</h3>
               <p>Your data is controlled by Urkio (Beta Phase - One). The DPO is Samer Alhalaki.</p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">What do we process?</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">What do we process?</h3>
               <p>We process mental health data, "Homii" voice journals, and encrypted biometrics to enhance your therapeutic journey.</p>
-              <h3 className="font-black text-emerald-700 italic text-lg mt-8 mb-4">Your Legal Rights</h3>
+              <h3 className="font-black text-emerald-600 italic text-lg mt-8 mb-4">Your Legal Rights</h3>
               <p>You have the right to access, correct, withdraw consent at any time, and the right to erasure (Right to be Forgotten).</p>
             </div>
           )}
@@ -154,9 +154,9 @@ export const ActiveConsentHandshake: React.FC<Props> = ({ user, onAccept }) => {
           <button
             disabled={!agreed || isAccepting}
             onClick={handleAccept}
-            className={`w-full py-6 rounded-[2.5rem] font-black uppercase text-xs tracking-widest transition-all shadow-xl ${
+            className={`w-full py-6 rounded-4xl font-black uppercase text-xs tracking-widest transition-all shadow-xl ${
               agreed
-                ? 'bg-zinc-900 text-white hover:bg-black active:scale-95 shadow-zinc-400/20'
+                ? 'bg-msgr-on-surface text-white hover:bg-black active:scale-95 shadow-zinc-400/20'
                 : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
             }`}
           >
