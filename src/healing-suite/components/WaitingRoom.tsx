@@ -76,7 +76,7 @@ export function WaitingRoom({
       <div className="antigravity-orb bottom-[-10%] right-[-5%] opacity-60"></div>
 
       {/* Main Entry Canvas */}
-      <main className="flex-grow flex items-center justify-center p-6 md:p-12 relative z-10">
+      <main className="grow flex items-center justify-center p-6 md:p-12 relative z-10">
         
         {/* Asymmetrical Background Element */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-20 hidden md:block">
@@ -153,7 +153,7 @@ export function WaitingRoom({
               {/* Behavior Agreement */}
               <div onClick={() => setAgreedToTerms(!agreedToTerms)} className="flex items-start gap-4 group cursor-pointer select-none">
                 <div className={`mt-1 size-6 rounded border transition-all flex items-center justify-center ${agreedToTerms ? 'bg-hmoii-primary border-hmoii-primary' : 'border-white/20 bg-white/5 group-hover:border-white/40'}`}>
-                  {agreedToTerms && <Check className="size-4 text-hmoii-on-primary stroke-[4]" />}
+                  {agreedToTerms && <Check className="size-4 text-hmoii-on-primary stroke-4" />}
                 </div>
                 <p className="text-sm text-on-surface-variant leading-relaxed font-medium">
                   I agree to the <span className="text-on-surface font-bold underline decoration-hmoii-primary/30 underline-offset-4">Terms & Conditions</span> and represent a spirit of good behavior during this shared session.

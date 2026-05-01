@@ -89,7 +89,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
       animate={{ opacity: 1, scale: 1 }}
       className={clsx(
         "relative rounded-4xl overflow-hidden group shadow-3xl border border-white/5 bg-ur-on-surface transition-all duration-500",
-        isFullscreen ? "fixed inset-0 z-[9999] rounded-none" : "h-full",
+        isFullscreen ? "fixed inset-0 z-9999 rounded-none" : "h-full",
         className
       )}
     >
@@ -184,7 +184,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   {isOff ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
                </button>
                
-               <div className="w-[1px] h-10 bg-white/10 mx-2" />
+               <div className="w-px h-10 bg-white/10 mx-2" />
 
                {onStartRecording && (
                   <button 
@@ -209,7 +209,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                   </button>
                )}
 
-               <div className="w-[1px] h-10 bg-white/10 mx-2" />
+               <div className="w-px h-10 bg-white/10 mx-2" />
 
                <button 
                  onClick={onLeave}

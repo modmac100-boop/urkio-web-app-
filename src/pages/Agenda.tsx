@@ -80,9 +80,9 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
   const selectedSession = appointments.find(a => a.id === selectedSessionId);
 
   return (
-    <div className="flex h-screen bg-[#020617] text-slate-300 font-['Manrope'] overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className="flex h-screen bg-nexus-bg text-slate-300 font-['Manrope'] overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Sidebar - Sleek Glassmorphism */}
-      <aside className="w-72 bg-[#020617] border-e border-white/5 flex flex-col shrink-0">
+      <aside className="w-72 bg-nexus-bg border-e border-white/5 flex flex-col shrink-0">
         <div className="p-8">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-linear-to-tr from-cyan-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
@@ -102,7 +102,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
             <button
               key={item.id}
               className={clsx(
-                "w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group",
+                "w-full flex items-center gap-4 px-5 py-4 rounded-3xl transition-all duration-300 group",
                 item.active 
                   ? "bg-white/5 text-white ring-1 ring-white/10 shadow-xl" 
                   : "text-slate-500 hover:text-white hover:bg-white/5"
@@ -116,7 +116,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
         </nav>
 
         <div className="p-6">
-          <div className="bg-linear-to-br from-indigo-600/20 to-cyan-600/20 p-6 rounded-3xl border border-white/5 relative overflow-hidden group">
+          <div className="bg-linear-to-br from-indigo-600/20 to-cyan-600/20 p-6 rounded-4xl border border-white/5 relative overflow-hidden group">
             <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:rotate-12 transition-transform duration-500">
                <Shield className="w-24 h-24 text-white" />
             </div>
@@ -138,7 +138,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full translate-y-1/2 -translate-x-1/2" />
 
         {/* Header */}
-        <header className="h-24 flex items-center justify-between px-10 bg-[#020617]/50 backdrop-blur-xl border-b border-white/5 z-10">
+        <header className="h-24 flex items-center justify-between px-10 bg-nexus-bg/50 backdrop-blur-xl border-b border-white/5 z-10">
           <div className="relative w-[400px]">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input 
@@ -146,22 +146,22 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Query biometric records..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl py-3.5 ps-12 pe-6 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:bg-white/10 transition-all duration-300 placeholder:text-slate-600"
+              className="w-full bg-white/5 border border-white/10 rounded-3xl py-3.5 ps-12 pe-6 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:bg-white/10 transition-all duration-300 placeholder:text-slate-600"
             />
           </div>
           <div className="flex items-center gap-8">
             <LanguageToggle />
             <div className="flex items-center gap-4 border-s border-white/10 ps-8">
-              <button className="relative w-12 h-12 flex items-center justify-center rounded-2xl hover:bg-white/5 transition-colors group">
+              <button className="relative w-12 h-12 flex items-center justify-center rounded-3xl hover:bg-white/5 transition-colors group">
                 <Bell className="w-5 h-5 text-slate-400 group-hover:text-white" />
-                <span className="absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full border-2 border-[#020617]" />
+                <span className="absolute top-3 right-3 w-2 h-2 bg-rose-500 rounded-full border-2 border-nexus-bg" />
               </button>
               <div className="flex items-center gap-3">
                 <div className="text-end">
                   <p className="text-xs font-black text-white uppercase tracking-tighter">{userData?.displayName || 'Expert'}</p>
                   <p className="text-[10px] text-cyan-500 font-bold uppercase tracking-widest">Authorized</p>
                 </div>
-                <div className="w-11 h-11 rounded-2xl bg-linear-to-br from-slate-800 to-black border border-white/10 flex items-center justify-center font-bold text-white shadow-lg">
+                <div className="w-11 h-11 rounded-3xl bg-linear-to-br from-slate-800 to-black border border-white/10 flex items-center justify-center font-bold text-white shadow-lg">
                    {userData?.displayName?.charAt(0) || 'U'}
                 </div>
               </div>
@@ -184,10 +184,10 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                 <h1 className="text-6xl font-black text-white tracking-tighter uppercase italic leading-none">Clinical<br/><span className="text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-indigo-500">Agenda</span></h1>
               </div>
               <div className="flex gap-4">
-                <button className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] border border-white/10 transition-all duration-300">
+                <button className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] border border-white/10 transition-all duration-300">
                   Bulk Analysis
                 </button>
-                <button className="px-8 py-4 bg-linear-to-r from-cyan-500 to-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
+                <button className="px-8 py-4 bg-linear-to-r from-cyan-500 to-indigo-600 text-white rounded-3xl font-black text-xs uppercase tracking-[0.2em] hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(34,211,238,0.3)]">
                   Start New Session
                 </button>
               </div>
@@ -201,7 +201,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                 { label: 'Success Velocity', value: '88%', icon: Activity, color: 'text-emerald-500' },
                 { label: 'Security Level', value: 'High', icon: Shield, color: 'text-indigo-500' },
               ].map((m, i) => (
-                <div key={i} className="bg-[#0f172a]/40 backdrop-blur-md p-8 rounded-[2.5rem] border border-white/5 relative group hover:border-white/20 transition-all duration-500">
+                <div key={i} className="bg-white/5 backdrop-blur-md p-8 rounded-5xl border border-white/5 relative group hover:border-white/20 transition-all duration-500">
                   <div className={clsx("absolute top-8 right-8 transition-colors", m.color, "opacity-20")}>
                     <m.icon className="w-12 h-12" />
                   </div>
@@ -242,7 +242,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                         "group flex items-center justify-between p-8 rounded-4xl border transition-all duration-500 cursor-pointer relative overflow-hidden",
                         selectedSessionId === appt.id 
                           ? "bg-linear-to-r from-cyan-500/10 to-indigo-500/10 border-cyan-500/30 shadow-2xl" 
-                          : "bg-[#0f172a]/30 border-white/5 hover:border-white/20"
+                          : "bg-white/5 border-white/5 hover:border-white/20"
                       )}
                     >
                       <div className="flex items-center gap-8 z-10">
@@ -277,7 +277,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
 
                       <div className="flex items-center gap-6 z-10">
                         <button 
-                          className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all duration-300 group/btn"
+                          className="w-14 h-14 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all duration-300 group/btn"
                           onClick={(e) => { e.stopPropagation(); handleAcceptSession(appt.id); }}
                         >
                           <ArrowRight className="w-6 h-6 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-white transition-all" />
@@ -290,7 +290,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
 
               {/* Dossier Detail Panel */}
               <div className="w-[450px]">
-                <div className="bg-[#0f172a]/50 backdrop-blur-2xl rounded-[3rem] border border-white/10 p-10 sticky top-10 shadow-3xl overflow-hidden group">
+                <div className="bg-white/5 backdrop-blur-2xl rounded-6xl border border-white/10 p-10 sticky top-10 shadow-3xl overflow-hidden group">
                   <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-600/10 blur-[60px] rounded-full translate-x-1/2 -translate-y-1/2" />
                   
                   <div className="flex items-center justify-between mb-12 relative z-10">
@@ -303,8 +303,8 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                   {selectedSession ? (
                     <div className="space-y-10 relative z-10">
                       <div className="flex flex-col items-center text-center">
-                        <div className="w-32 h-32 rounded-[2.5rem] bg-linear-to-br from-slate-800 to-black p-1 mb-6 ring-1 ring-white/10">
-                           <div className="w-full h-full rounded-[2.2rem] bg-[#020617] flex items-center justify-center text-5xl font-black text-white uppercase italic tracking-tighter">
+                        <div className="w-32 h-32 rounded-5xl bg-linear-to-br from-slate-800 to-black p-1 mb-6 ring-1 ring-white/10">
+                           <div className="w-full h-full rounded-4xl bg-nexus-bg flex items-center justify-center text-5xl font-black text-white uppercase italic tracking-tighter">
                              {selectedSession.clientName?.substring(0, 2)}
                            </div>
                         </div>
@@ -316,11 +316,11 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
-                         <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
+                         <div className="bg-white/5 p-6 rounded-4xl border border-white/5">
                             <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Age</p>
                             <p className="text-xl font-bold text-white">28 Years</p>
                          </div>
-                         <div className="bg-white/5 p-6 rounded-3xl border border-white/5">
+                         <div className="bg-white/5 p-6 rounded-4xl border border-white/5">
                             <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-2">Stability</p>
                             <p className="text-xl font-bold text-cyan-400">Stable</p>
                          </div>
@@ -331,7 +331,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Protocol Insight</p>
                            <FileText className="w-4 h-4 text-slate-700" />
                         </div>
-                        <div className="w-full bg-[#020617] border border-white/5 rounded-3xl p-8 text-sm text-slate-400 min-h-[160px] italic leading-relaxed">
+                        <div className="w-full bg-nexus-bg border border-white/5 rounded-4xl p-8 text-sm text-slate-400 min-h-[160px] italic leading-relaxed">
                           Intake data suggests moderate anxiety related to professional transitions. Biometric sensors indicating slightly elevated resting heart rate.
                         </div>
                       </div>
@@ -339,7 +339,7 @@ export const Agenda: React.FC<{ user: any, userData: any }> = ({ user, userData 
                       <div className="flex gap-4 pt-4">
                         <button 
                           onClick={() => navigate(`/room/session-${selectedSession.caseCode}`)}
-                          className="flex-1 flex items-center justify-center gap-3 p-5 bg-white text-black rounded-3xl text-xs font-black uppercase tracking-[0.2em] hover:bg-cyan-400 transition-all duration-300 shadow-xl"
+                          className="flex-1 flex items-center justify-center gap-3 p-5 bg-indigo-600 text-white rounded-4xl text-xs font-black uppercase tracking-[0.2em] hover:bg-indigo-700 transition-all duration-300 shadow-xl shadow-indigo-900/20"
                         >
                            <Terminal className="w-4 h-4" />
                            Enter Secure Room

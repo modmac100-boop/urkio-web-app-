@@ -6,6 +6,7 @@ import { containsSelfHarmKeywords, generateSafetyResponse } from '../security/sa
 import { SafetyAlertModal } from '../components/messaging/SafetyAlertModal';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
+import clsx from 'clsx';
 
 interface Message {
   _id: string;
@@ -337,7 +338,7 @@ export const TherapyAgent = ({ user, userData }: { user: any; userData: any }) =
           <button
             type="submit"
             disabled={!newMessage.trim() || isSending}
-            className="p-3 bg-ur-primary text-navy rounded-full flex-shrink-0 hover:bg-ur-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 bg-ur-primary text-navy rounded-full shrink-0 hover:bg-ur-secondary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Send className="w-6 h-6" />}
           </button>

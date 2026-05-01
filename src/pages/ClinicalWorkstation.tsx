@@ -240,19 +240,19 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
   );
 
   return (
-    <div className="bg-[#fbf9f5] font-['Manrope'] text-msgr-on-surface min-h-screen flex selection:bg-teal-100">
-      <aside className="fixed left-0 top-0 h-full z-40 flex flex-col h-screen w-64 border-r border-slate-200 bg-slate-50">
+    <div className="bg-urkio-nexus-bg font-['Manrope'] text-slate-300 min-h-screen flex selection:bg-teal-900/30">
+      <aside className="fixed left-0 top-0 h-full z-40 flex flex-col w-64 border-r border-white/5 bg-nexus-bg">
         <div className="p-6 flex flex-col h-full">
           <div className="mb-8">
             <span className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">Clinical Portal</span>
-            <div className="mt-4 flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-200/50">
+            <div className="mt-4 flex items-center gap-3 bg-white/5 p-3 rounded-2xl border border-white/10">
               <img 
                 alt="Profile" 
                 className="w-10 h-10 rounded-full object-cover ring-2 ring-teal-50" 
                 src={userData?.photoURL || "https://ui-avatars.com/api/?name=Admin"} 
               />
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[#1B4D4B] truncate">{userData?.displayName || 'Dr. Wellness'}</p>
+                <p className="text-sm font-bold text-white truncate">{userData?.displayName || 'Dr. Wellness'}</p>
                 <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">{userData?.role || 'Practitioner'}</p>
               </div>
             </div>
@@ -273,10 +273,10 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                   else setActiveTab(item.id as any);
                 }}
                 className={clsx(
-                  "w-full flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-xl group",
+                  "w-full flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-2xl group",
                   activeTab === item.id 
-                    ? "text-[#1B4D4B] font-bold bg-teal-50 border-r-4 border-[#1B4D4B]" 
-                    : "text-slate-500 hover:text-[#1B4D4B] hover:bg-slate-100"
+                    ? "text-cyan-400 font-bold bg-white/5 border-r-4 border-cyan-400" 
+                    : "text-slate-500 hover:text-white hover:bg-white/5"
                 )}
               >
                 <MaterialIcon name={item.icon} className={clsx(activeTab === item.id ? "text-[#1B4D4B]" : "text-slate-400 group-hover:text-[#1B4D4B]")} />
@@ -287,7 +287,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
 
           <button 
             onClick={() => setIsModalOpen(true)}
-            className="mt-auto bg-[#1B4D4B] text-white px-4 py-4 rounded-xl text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-teal-900/20 active:scale-95"
+            className="mt-auto bg-indigo-600 text-white px-4 py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-indigo-900/20 active:scale-95"
           >
             <MaterialIcon name="add" className="text-xl" />
             New Protocol
@@ -296,15 +296,15 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
       </aside>
 
       <div className="flex-1 ml-64 flex flex-col">
-        <header className="h-16 px-8 sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 flex justify-between items-center">
+        <header className="h-16 px-8 sticky top-0 z-50 bg-nexus-bg/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center">
           <div className="flex items-center gap-8 flex-1">
-            <span className="text-2xl font-['Newsreader'] text-[#1B4D4B] font-bold">Clinical Nexus</span>
+            <span className="text-2xl font-['Newsreader'] text-white font-bold">Clinical Nexus</span>
             <div className="relative w-96">
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
               <input 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-full text-sm focus:ring-1 focus:ring-[#1B4D4B] outline-none transition-all focus:bg-white" 
+                className="w-full pl-10 pr-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm focus:ring-1 focus:ring-cyan-500 outline-none transition-all focus:bg-white/10" 
                 placeholder="Search clinical records..." 
                 type="text"
               />
@@ -314,14 +314,14 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
             <div className="flex items-center gap-4">
               <button className="text-slate-400 hover:text-[#1B4D4B] transition-colors relative">
                 <MaterialIcon name="notifications" />
-                <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                <span className="absolute top-0 right-0 w-2 h-2 bg-rose-500 rounded-full border-2 border-nexus-bg"></span>
               </button>
               <button className="text-slate-400 hover:text-[#1B4D4B] transition-colors"><MaterialIcon name="help_outline" /></button>
             </div>
             <div className="h-6 w-px bg-slate-200"></div>
             <button 
               onClick={() => toast.success("Secure Terminal Initialized")}
-              className="bg-[#1B4D4B] text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-[#256663] transition-all shadow-md active:scale-95"
+              className="bg-indigo-600 text-white px-6 py-2 rounded-full text-xs font-bold hover:bg-indigo-700 transition-all shadow-md active:scale-95"
             >
               Live Terminal
             </button>
@@ -331,13 +331,13 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
         <main className="p-8 grid grid-cols-12 gap-8">
           <div className="col-span-12 flex justify-between items-end">
             <div>
-              <h1 className="text-4xl font-['Newsreader'] font-bold text-[#1B4D4B] mb-1 capitalize">
+              <h1 className="text-4xl font-['Newsreader'] font-bold text-white mb-1 capitalize">
                 {activeTab.replace('-', ' ')}
               </h1>
               <p className="text-slate-500 text-sm font-medium">{format(new Date(), 'EEEE, dd MMMM yyyy')}</p>
             </div>
             <div className="flex gap-2">
-              <span className="bg-[#d2e5c9] text-[#1B4D4B] px-4 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-2 border border-[#b9ccb1]">
+              <span className="bg-cyan-500/10 text-cyan-400 px-4 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-2 border border-cyan-500/20">
                 <MaterialIcon name="verified" className="text-xs fill-1" />
                 EXPERT VERIFIED
               </span>
@@ -351,7 +351,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
               { label: 'Success Protocol', val: 'Optimum', icon: 'verified_user', color: 'bg-blue-50', text: 'text-blue-700', trend: '98%' },
               { label: 'Vault Density', val: 'High', icon: 'database', color: 'bg-purple-50', text: 'text-purple-700', trend: '8.4 TB' }
             ].map((metric, i) => (
-              <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 group hover:shadow-xl transition-all duration-500">
+              <div key={i} className="bg-white/5 p-6 rounded-4xl shadow-sm border border-white/10 group hover:shadow-xl transition-all duration-500">
                 <div className="flex justify-between items-start mb-4">
                   <div className={clsx("p-3 rounded-xl transition-transform group-hover:scale-110 duration-500", metric.color)}>
                     <MaterialIcon name={metric.icon} className={metric.text} />
@@ -370,20 +370,20 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
             ))}
           </div>
 
-          <div className="col-span-8 bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden flex flex-col">
+          <div className="col-span-8 bg-white/5 rounded-5xl shadow-sm border border-white/10 overflow-hidden flex flex-col">
             <div className="p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
-              <h2 className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">
+              <h2 className="text-xl font-bold text-white font-['Newsreader']">
                 {activeTab === 'records' ? 'Case Repository' : 'Incoming Protocols'}
               </h2>
               <button 
                 onClick={() => setActiveTab('records')}
-                className="text-xs text-[#1B4D4B] font-bold flex items-center gap-2 hover:underline group"
+                className="text-xs text-cyan-400 font-bold flex items-center gap-2 hover:underline group"
               >
                 View Archive <MaterialIcon name="arrow_forward" className="text-sm group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
             
-            <div className="divide-y divide-slate-50 flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
+            <div className="divide-y divide-white/5 flex-1 overflow-y-auto max-h-[600px] custom-scrollbar">
               {(activeTab === 'records' ? confidentialReports : filteredAppointments).length > 0 ? 
                 (activeTab === 'records' ? confidentialReports : filteredAppointments).map((item: any, i) => (
                 <div 
@@ -391,11 +391,11 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                   onClick={() => setSelectedCaseId(item.id)}
                   className={clsx(
                     "p-6 flex items-center justify-between transition-all cursor-pointer group",
-                    selectedCaseId === item.id ? "bg-teal-50/50" : "hover:bg-slate-50"
+                    selectedCaseId === item.id ? "bg-cyan-500/10" : "hover:bg-white/5"
                   )}
                 >
                   <div className="flex items-center gap-6">
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 border-2 border-white shadow-sm ring-1 ring-slate-100 transition-transform group-hover:scale-105">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden bg-white/5 border-2 border-white/10 shadow-sm ring-1 ring-white/10 transition-transform group-hover:scale-105">
                       <img 
                         alt="Imagery" 
                         className="w-full h-full object-cover" 
@@ -404,21 +404,21 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                     </div>
                     <div>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">#{item.caseCode || `PR-${item.id.substring(0,4)}`}</p>
-                      <h3 className="text-lg font-bold text-[#1B4D4B] font-['Newsreader']">{item.clientName || item.title}</h3>
+                      <h3 className="text-lg font-bold text-white font-['Newsreader']">{item.clientName || item.title}</h3>
                     </div>
                   </div>
                   <div className="flex items-center gap-10">
                     <div className="text-right">
-                      <p className="text-sm font-bold text-[#1B4D4B]">{item.category || 'Clinical Trial'}</p>
+                      <p className="text-sm font-bold text-white">{item.category || 'Clinical Trial'}</p>
                       <p className="text-[10px] text-slate-400 font-medium">
                         {item.createdAt?.toDate ? format(item.createdAt.toDate(), 'HH:mm') : 'Initiated 2h ago'}
                       </p>
                     </div>
                     <span className={clsx(
                       "px-4 py-2 rounded-full text-[10px] font-black tracking-widest border",
-                      item.status === 'completed' ? "bg-slate-50 text-slate-400 border-slate-100" :
-                      item.status === 'pending' ? "bg-amber-50 text-amber-700 border-amber-100" :
-                      "bg-teal-50 text-[#1B4D4B] border-teal-100"
+                      item.status === 'completed' ? "bg-white/5 text-slate-400 border-white/10" :
+                      item.status === 'pending' ? "bg-amber-500/10 text-amber-500 border-amber-500/20" :
+                      "bg-cyan-500/10 text-cyan-400 border-cyan-500/20"
                     )}>
                       {(item.status || 'active').toUpperCase()}
                     </span>
@@ -426,7 +426,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                 </div>
               )) : (
                 <div className="p-20 text-center">
-                  <MaterialIcon name="inventory_2" className="text-6xl text-slate-100 mb-4" />
+                  <MaterialIcon name="inventory_2" className="text-6xl text-white/5 mb-4" />
                   <p className="text-slate-400 font-bold uppercase text-xs tracking-widest">No active protocols detected</p>
                 </div>
               )}
@@ -434,19 +434,19 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
           </div>
 
           <div className="col-span-4 flex flex-col gap-8">
-            <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100 flex flex-col h-full min-h-[500px]">
+            <div className="bg-white/5 p-8 rounded-5xl shadow-sm border border-white/10 flex flex-col h-full min-h-[500px]">
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-xl font-bold text-[#1B4D4B] font-['Newsreader']">
+                <h2 className="text-xl font-bold text-white font-['Newsreader']">
                   Dossier: <span className="font-normal italic">{selectedCase?.clientName?.split(' ')[0] || 'Unknown'}</span>
                 </h2>
-                <button className="p-2 hover:bg-slate-50 rounded-lg transition-colors">
+                <button className="p-2 hover:bg-white/5 rounded-lg transition-colors">
                   <MaterialIcon name="more_vert" className="text-slate-300" />
                 </button>
               </div>
 
               {selectedCase ? (
                 <div className="space-y-8 flex-1 flex flex-col">
-                  <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                  <div className="bg-white/5 rounded-3xl p-6 border border-white/10">
                     <div className="flex justify-between items-center mb-3">
                       <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Biometric Sync Status</span>
                       <span className="text-[10px] font-black text-emerald-600 flex items-center gap-1">
@@ -454,18 +454,18 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                          ONLINE
                       </span>
                     </div>
-                    <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                      <div className="bg-[#1B4D4B] h-full w-[82%] transition-all duration-1000"></div>
+                    <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-cyan-500 h-full w-[82%] transition-all duration-1000"></div>
                     </div>
                     <p className="mt-2 text-[9px] font-bold text-slate-400 text-right uppercase tracking-tighter">82% Signal Strength</p>
                   </div>
 
                   <div className="flex-1 flex flex-col">
-                    <label className="block text-xs font-bold text-[#1B4D4B] uppercase tracking-widest mb-3">Clinical Observations</label>
+                    <label className="block text-xs font-bold text-white uppercase tracking-widest mb-3">Clinical Observations</label>
                     <textarea 
                       value={sessionNotes}
                       onChange={(e) => setSessionNotes(e.target.value)}
-                      className="w-full flex-1 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-medium focus:ring-1 focus:ring-[#1B4D4B] focus:bg-white transition-all p-6 outline-none resize-none custom-scrollbar" 
+                      className="w-full flex-1 bg-white/5 border border-white/10 rounded-3xl text-sm font-medium focus:ring-1 focus:ring-cyan-500 focus:bg-white/10 transition-all p-6 outline-none resize-none custom-scrollbar" 
                       placeholder={`Enter findings for protocol ${selectedCase?.caseCode || 'URKIO'}...`}
                     />
                   </div>
@@ -474,7 +474,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                     <div className="grid grid-cols-2 gap-3">
                       <button 
                         onClick={handleArchiveToVault}
-                        className="flex items-center justify-between px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-[#1B4D4B] hover:bg-slate-50 transition-all font-bold text-xs group"
+                        className="flex items-center justify-between px-5 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-white hover:bg-white/10 transition-all font-bold text-xs group"
                       >
                         <div className="flex items-center gap-3">
                           <MaterialIcon name="lock" className="text-lg group-hover:scale-110 transition-transform" />
@@ -484,7 +484,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                       </button>
                       <button 
                         onClick={() => toast.success("Dispatching clinical data...")}
-                        className="flex items-center justify-between px-5 py-3.5 bg-white border border-slate-200 rounded-xl text-[#1B4D4B] hover:bg-slate-50 transition-all font-bold text-xs group"
+                        className="flex items-center justify-between px-5 py-3.5 bg-white/5 border border-white/10 rounded-2xl text-white hover:bg-white/10 transition-all font-bold text-xs group"
                       >
                         <div className="flex items-center gap-3">
                           <MaterialIcon name="send" className="text-lg group-hover:scale-110 transition-transform" />
@@ -496,7 +496,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
                     
                     <button 
                       onClick={() => handleJoinCall(selectedCase)}
-                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-[#1B4D4B] text-white rounded-xl font-black uppercase text-[10px] tracking-widest hover:bg-[#256663] transition-all shadow-xl shadow-teal-900/10 active:scale-95"
+                      className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-900/10 active:scale-95"
                     >
                       <MaterialIcon name="terminal" />
                       Secure Terminal
@@ -511,7 +511,7 @@ export function ClinicalWorkstation({ user, userData, initialTab = 'agenda' }: a
               )}
             </div>
 
-            <div className="bg-[#1B4D4B] text-white p-8 rounded-[2.5rem] relative overflow-hidden shadow-xl group">
+            <div className="bg-indigo-600 text-white p-8 rounded-5xl relative overflow-hidden shadow-xl group">
               <div className="relative z-10">
                 <p className="text-xl font-['Newsreader'] font-bold mb-3 italic">Protocol Insight</p>
                 <p className="text-sm text-teal-100/80 mb-6 leading-relaxed">
@@ -602,11 +602,11 @@ export function ClinicalIntake({ user, userData }: any) {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-msgr-on-surface p-8">
+    <div className="min-h-screen bg-[#0a0a0b] text-white p-8">
       <div className="max-w-4xl mx-auto">
         <button 
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 transition-colors mb-8 font-black text-xs uppercase tracking-widest"
+          className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-8 font-black text-xs uppercase tracking-widest"
         >
           <ArrowLeft className="w-4 h-4 rtl:rotate-180" />
           {t('clinical.backToDashboard')}
@@ -614,61 +614,61 @@ export function ClinicalIntake({ user, userData }: any) {
 
         <header className="mb-12">
           <div className="flex items-center gap-4 mb-4">
-            <div className="p-3 bg-msgr-primary rounded-2xl text-white shadow-xl shadow-msgr-primary/20">
+            <div className="p-3 bg-cyan-500 rounded-2xl text-white shadow-xl shadow-cyan-500/20">
               <Activity className="w-6 h-6" />
             </div>
-            <h1 className="text-4xl font-black tracking-tighter italic">{t('clinical.initializeCase')}</h1>
+            <h1 className="text-4xl font-black tracking-tighter italic font-['Newsreader']">{t('clinical.initializeCase')}</h1>
           </div>
-          <p className="text-zinc-500 font-medium">{t('clinical.initializeCaseDesc')}</p>
+          <p className="text-slate-400 font-medium">{t('clinical.initializeCaseDesc')}</p>
         </header>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-zinc-100 shadow-sm space-y-6">
-            <h2 className="text-lg font-black italic flex items-center gap-2">
-              <User size={20} className="text-msgr-primary" /> {t('clinical.patientId')}
+          <div className="bg-white/5 p-8 rounded-5xl border border-white/10 shadow-sm space-y-6">
+            <h2 className="text-lg font-black italic flex items-center gap-2 font-['Newsreader']">
+              <User size={20} className="text-cyan-400" /> {t('clinical.patientId')}
             </h2>
             <div className="space-y-4">
               <input 
                 type="text" required value={formData.patientName}
                 onChange={e => setFormData({...formData, patientName: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none text-white placeholder-slate-500"
                 placeholder={t('clinical.fullName')}
               />
               <div className="grid grid-cols-2 gap-4">
                 <input 
                   type="number" value={formData.age}
                   onChange={e => setFormData({...formData, age: e.target.value})}
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none text-white placeholder-slate-500"
                   placeholder={t('clinical.age')}
                 />
                 <select 
                   value={formData.gender}
                   onChange={e => setFormData({...formData, gender: e.target.value})}
-                  className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none text-white"
                 >
-                  <option value="Male">{t('clinical.male')}</option>
-                  <option value="Female">{t('clinical.female')}</option>
-                  <option value="Other">{t('clinical.other')}</option>
+                  <option value="Male" className="bg-[#0a0a0b]">{t('clinical.male')}</option>
+                  <option value="Female" className="bg-[#0a0a0b]">{t('clinical.female')}</option>
+                  <option value="Other" className="bg-[#0a0a0b]">{t('clinical.other')}</option>
                 </select>
               </div>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[2.5rem] border border-zinc-100 shadow-sm space-y-6">
-            <h2 className="text-lg font-black italic flex items-center gap-2">
-              <FlaskConical size={20} className="text-msgr-primary" /> {t('clinical.clinicalContext')}
+          <div className="bg-white/5 p-8 rounded-5xl border border-white/10 shadow-sm space-y-6">
+            <h2 className="text-lg font-black italic flex items-center gap-2 font-['Newsreader']">
+              <FlaskConical size={20} className="text-cyan-400" /> {t('clinical.clinicalContext')}
             </h2>
             <div className="space-y-4">
               <input 
                 type="text" required value={formData.primaryIssue}
                 onChange={e => setFormData({...formData, primaryIssue: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none text-white placeholder-slate-500"
                 placeholder={t('clinical.primaryDiagnosis')}
               />
               <textarea 
                 value={formData.initialObservation}
                 onChange={e => setFormData({...formData, initialObservation: e.target.value})}
-                className="w-full bg-zinc-50 border border-zinc-100 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-msgr-primary outline-none min-h-[100px]"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-cyan-500 outline-none min-h-[100px] text-white placeholder-slate-500"
                 placeholder={t('clinical.initialOrientationNotes')}
               />
             </div>
@@ -677,7 +677,7 @@ export function ClinicalIntake({ user, userData }: any) {
           <button
             type="submit"
             disabled={loading}
-            className="md:col-span-2 w-full bg-zinc-900 text-white py-6 rounded-4xl font-black uppercase text-xs tracking-widest shadow-2xl hover:bg-black transition-all"
+            className="md:col-span-2 w-full bg-indigo-600 text-white py-6 rounded-5xl font-black uppercase text-xs tracking-widest shadow-2xl hover:bg-indigo-700 transition-all active:scale-[0.98]"
           >
             {loading ? t('clinical.initializing') : t('clinical.createSecureCase')}
           </button>

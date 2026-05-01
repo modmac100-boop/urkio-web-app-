@@ -222,12 +222,9 @@ export function AdminDashboard({ user, userData }: any) {
   ] as const;
 
   return (
-    <div
-      className="flex h-full overflow-hidden text-white"
-      style={{ background: 'linear-gradient(135deg, #0a0f1e 0%, #0f172a 100%)', minHeight: '100vh' }}
-    >
+    <div className="flex h-full min-h-screen overflow-hidden text-white bg-admin-bg">
       {/* ── Left Sidebar ── */}
-      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-ie py-6 px-4 gap-2" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)' }}>
+      <aside className="hidden lg:flex flex-col w-64 shrink-0 border-e border-white/5 bg-black/30 py-6 px-4 gap-2">
         <Link to="/" className="px-2 mb-6 flex items-center gap-3">
           <Logo className="w-12 h-12" />
           <div>
@@ -237,13 +234,13 @@ export function AdminDashboard({ user, userData }: any) {
         </Link>
 
         {/* Live clock */}
-        <div className="mx-2 mb-4 p-3 rounded-xl text-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="mx-2 mb-4 p-3 rounded-xl text-center bg-white/5 border border-white/10">
           <p className="text-2xl font-black tracking-tight text-white">{now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</p>
           <p className="text-slate-500 text-[10px]">{now.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}</p>
         </div>
 
         {/* Online indicator */}
-        <div className="mx-2 mb-4 flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
+        <div className="mx-2 mb-4 flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
           <div className="relative">
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             <div className="absolute inset-0 w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
@@ -257,15 +254,11 @@ export function AdminDashboard({ user, userData }: any) {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={clsx(
-              'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-start',
+              'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all text-start border border-transparent',
               activeTab === tab.id
-                ? 'text-white'
+                ? 'text-white bg-linear-to-br from-indigo-500/25 to-indigo-500/15 border-indigo-500/30'
                 : 'text-slate-500 hover:text-slate-300 hover:bg-white/5'
             )}
-            style={activeTab === tab.id ? {
-              background: 'linear-gradient(135deg, rgba(99,102,241,0.25), rgba(129,140,248,0.15))',
-              border: '1px solid rgba(99,102,241,0.3)',
-            } : {}}
           >
             <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>{tab.icon}</span>
             {tab.label}
@@ -275,7 +268,7 @@ export function AdminDashboard({ user, userData }: any) {
         <div className="flex-1" />
 
         {/* Admin info */}
-        <div className="mx-2 p-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="mx-2 p-3 rounded-xl bg-white/5 border border-white/10">
           <div className="flex items-center gap-2 mb-2">
             <img
               src={userData?.photoURL || `https://ui-avatars.com/api/?name=${userData?.displayName}`}
@@ -299,7 +292,7 @@ export function AdminDashboard({ user, userData }: any) {
       {/* ── Main ── */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex items-center justify-between px-8 py-4 border-b shrink-0" style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.2)' }}>
+        <header className="flex items-center justify-between px-8 py-4 border-b border-white/5 bg-black/20 shrink-0">
           <div>
             <h1 className="text-xl font-black">
               {TABS.find(t => t.id === activeTab)?.label || 'Overview'}
@@ -308,7 +301,7 @@ export function AdminDashboard({ user, userData }: any) {
           </div>
           <div className="flex items-center gap-3">
             {/* Mobile online badge */}
-            <div className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: 'rgba(16,185,129,0.1)', border: '1px solid rgba(16,185,129,0.2)' }}>
+            <div className="lg:hidden flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               <span className="text-emerald-400 text-xs font-bold">{onlineUsers.length} online</span>
             </div>
@@ -322,16 +315,15 @@ export function AdminDashboard({ user, userData }: any) {
         </header>
 
         {/* Mobile tabs */}
-        <div className="lg:hidden flex gap-1 overflow-x-auto px-4 py-3 border-b shrink-0" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+        <div className="lg:hidden flex gap-1 overflow-x-auto px-4 py-3 border-b border-white/5 shrink-0">
           {TABS.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={clsx(
-                'flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all shrink-0',
-                activeTab === tab.id ? 'text-white' : 'text-slate-500'
+                'flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-all shrink-0 border border-transparent',
+                activeTab === tab.id ? 'text-white bg-indigo-500/20 border-indigo-500/30' : 'text-slate-500'
               )}
-              style={activeTab === tab.id ? { background: 'rgba(99,102,241,0.2)', border: '1px solid rgba(99,102,241,0.3)' } : {}}
             >
               <span className="material-symbols-outlined text-[14px]">{tab.icon}</span>
               {tab.label}
@@ -356,8 +348,7 @@ export function AdminDashboard({ user, userData }: any) {
                   <div
                     key={kpi.label}
                     onClick={() => kpi.tab && setActiveTab(kpi.tab as any)}
-                    className="rounded-2xl p-5 cursor-pointer hover:scale-[1.02] transition-transform active:scale-95 group"
-                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    className="rounded-4xl p-5 cursor-pointer hover:scale-[1.02] transition-transform active:scale-95 group bg-white/5 border border-white/10"
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center group-hover:bg-opacity-30 transition-colors" style={{ background: `${kpi.color}18` }}>
@@ -379,8 +370,7 @@ export function AdminDashboard({ user, userData }: any) {
               <UserGrowthChart data={userGrowthStats} />
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Who's Online Right Now */}
-                <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2">
                       <div className="relative">
@@ -418,8 +408,7 @@ export function AdminDashboard({ user, userData }: any) {
                   </div>
                 </div>
 
-                {/* Live Activity Feed */}
-                <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-indigo-400 text-[18px]">bolt</span>
@@ -456,8 +445,7 @@ export function AdminDashboard({ user, userData }: any) {
                 </div>
               </div>
 
-              {/* Cases in Progress */}
-              <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
                 <div className="flex items-center justify-between mb-5">
                   <h3 className="font-black text-sm flex items-center gap-2">
                     <span className="material-symbols-outlined text-amber-400 text-[18px]">assignment</span>
@@ -512,7 +500,7 @@ export function AdminDashboard({ user, userData }: any) {
 
           {/* ── USERS TAB ── */}
           {activeTab === 'users' && (
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
               <h3 className="font-black mb-5 flex items-center gap-2">
                 <span className="material-symbols-outlined text-indigo-400">group</span>
                 Recent Members
@@ -521,8 +509,7 @@ export function AdminDashboard({ user, userData }: any) {
                 {recentUsers.map(u => (
                   <div
                     key={u.id}
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors"
-                    style={{ border: '1px solid rgba(255,255,255,0.05)' }}
+                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/5 transition-colors border border-white/5"
                   >
                     <div className="relative shrink-0">
                       <img src={u.photoURL || `https://ui-avatars.com/api/?name=${u.displayName || u.email}`} alt={u.displayName} className="w-10 h-10 rounded-full object-cover" />
@@ -567,7 +554,7 @@ export function AdminDashboard({ user, userData }: any) {
 
           {/* ── ACTIVITY TAB ── */}
           {activeTab === 'activity' && (
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
               <h3 className="font-black mb-5 flex items-center gap-2">
                 <span className="material-symbols-outlined text-indigo-400">timeline</span>
                 Full Activity Stream
@@ -576,7 +563,7 @@ export function AdminDashboard({ user, userData }: any) {
                 {recentActivity.map(ev => {
                   const meta = ACTIVITY_ICONS[ev.type] || { icon: 'notifications', color: '#94a3b8', label: ev.type };
                   return (
-                    <div key={ev.id} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors" style={{ border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div key={ev.id} className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors border border-white/5">
                       <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${meta.color}18` }}>
                         <span className="material-symbols-outlined" style={{ fontSize: 20, color: meta.color, fontVariationSettings: "'FILL' 1" }}>{meta.icon}</span>
                       </div>
@@ -600,7 +587,7 @@ export function AdminDashboard({ user, userData }: any) {
 
           {/* ── CASES TAB ── */}
           {activeTab === 'cases' && (
-            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
               <h3 className="font-black mb-5 flex items-center gap-2">
                 <span className="material-symbols-outlined text-amber-400">assignment</span>
                 All Cases & Bookings
@@ -610,8 +597,7 @@ export function AdminDashboard({ user, userData }: any) {
                   { label: 'Pending',   count: cases.filter((c: any) => c.status === 'pending' || !c.status).length,   color: '#f59e0b' },
                   { label: 'Active',    count: cases.filter((c: any) => c.status === 'confirmed').length,               color: '#6366f1' },
                   { label: 'Done',      count: cases.filter((c: any) => c.status === 'completed').length,               color: '#10b981' },
-                ].map(s => (
-                  <div key={s.label} className="rounded-xl p-4 text-center" style={{ background: `${s.color}10`, border: `1px solid ${s.color}25` }}>
+                  <div key={s.label} className="rounded-2xl p-4 text-center bg-white/5 border border-white/10">
                     <p className="text-3xl font-black" style={{ color: s.color }}>{s.count}</p>
                     <p className="text-slate-400 text-xs mt-1">{s.label}</p>
                   </div>
@@ -666,7 +652,7 @@ export function AdminDashboard({ user, userData }: any) {
                   { label: 'Sessions Revenue', value: '$28,500', change: '+12%', color: '#6366f1' },
                   { label: 'Subscriptions',    value: '$12,900', change: '+4%',  color: '#f59e0b' },
                 ].map(s => (
-                  <div key={s.label} className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div key={s.label} className="rounded-4xl p-6 bg-white/5 border border-white/10">
                     <p className="text-slate-400 text-xs mb-3">{s.label}</p>
                     <p className="text-4xl font-black text-white">{s.value}</p>
                     <span className="text-xs font-bold mt-2 inline-block px-2 py-1 rounded-full" style={{ background: `${s.color}18`, color: s.color }}>
@@ -677,7 +663,7 @@ export function AdminDashboard({ user, userData }: any) {
               </div>
 
               {/* Revenue breakdown visual */}
-              <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
                 <h3 className="font-black mb-6 text-sm">Monthly Revenue Chart</h3>
                 <div className="flex items-end gap-2 h-40">
                   {[30,45,38,60,52,75,58,80,65,90,72,100].map((h, i) => (
@@ -697,7 +683,7 @@ export function AdminDashboard({ user, userData }: any) {
               </div>
 
               {/* Revenue by source */}
-              <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div className="rounded-4xl p-6 bg-white/5 border border-white/10">
                 <h3 className="font-black mb-5 text-sm">Revenue by Source</h3>
                 <div className="space-y-4">
                   {[
@@ -753,7 +739,7 @@ export function AdminDashboard({ user, userData }: any) {
                         <h4 className="text-2xl font-black italic mb-2 tracking-tight">Beta Edition One Readiness</h4>
                         
                         {/* Maintenance Tools */}
-                        <div className="mb-8 p-6 rounded-3xl border border-rose-500/20 bg-rose-500/5">
+                        <div className="mb-8 p-6 rounded-4xl border border-rose-500/20 bg-rose-500/5">
                            <h3 className="text-sm font-black mb-4 flex items-center gap-3">
                              <Hammer size={18} className="text-rose-400" />
                              Specialist Hub Maintenance
@@ -878,7 +864,7 @@ export function AdminDashboard({ user, userData }: any) {
                </div>
 
                {/* US-EAST Optimization Advisory */}
-               <div className="p-8 rounded-[2.5rem] bg-indigo-500/10 border border-indigo-500/20">
+               <div className="p-8 rounded-5xl bg-indigo-500/10 border border-indigo-500/20">
                   <div className="flex items-start gap-4">
                     <div className="p-3 bg-indigo-500/20 rounded-2xl text-indigo-400"><span className="material-symbols-outlined">info</span></div>
                     <div>
@@ -905,7 +891,7 @@ export function AdminDashboard({ user, userData }: any) {
               {/* Statistics Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Online Users */}
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-indigo-500/30 transition-all">
+                <div className="p-6 rounded-4xl bg-white/5 border border-white/10 hover:border-indigo-500/30 transition-all">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Platform Footprint</span>
                     <div className="w-8 h-8 rounded-xl bg-indigo-500/10 flex items-center justify-center text-indigo-400">
@@ -924,7 +910,7 @@ export function AdminDashboard({ user, userData }: any) {
                 </div>
 
                 {/* Experts Tracker */}
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all">
+                <div className="p-6 rounded-4xl bg-white/5 border border-white/10 hover:border-emerald-500/30 transition-all">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Specialists Panel</span>
                     <div className="w-8 h-8 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400">
@@ -940,7 +926,7 @@ export function AdminDashboard({ user, userData }: any) {
                 </div>
 
                 {/* Closed Cases */}
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-all">
+                <div className="p-6 rounded-4xl bg-white/5 border border-white/10 hover:border-cyan-500/30 transition-all">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Treatment Records</span>
                     <div className="w-8 h-8 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400">
@@ -956,7 +942,7 @@ export function AdminDashboard({ user, userData }: any) {
                 </div>
 
                 {/* Revenue / Free of Charge */}
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:border-rose-500/30 transition-all">
+                <div className="p-6 rounded-4xl bg-white/5 border border-white/10 hover:border-rose-500/30 transition-all">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Revenue / Care</span>
                     <div className="w-8 h-8 rounded-xl bg-rose-500/10 flex items-center justify-center text-rose-400">
@@ -975,7 +961,7 @@ export function AdminDashboard({ user, userData }: any) {
               {/* Secondary Analytics Section */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Activities & Deletion Logs */}
-                <div className="lg:col-span-2 p-6 rounded-3xl bg-white/5 border border-white/10">
+                <div className="lg:col-span-2 p-6 rounded-4xl bg-white/5 border border-white/10">
                   <div className="flex justify-between items-center mb-6">
                     <h4 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-indigo-400 text-base">history</span>
@@ -1002,7 +988,7 @@ export function AdminDashboard({ user, userData }: any) {
                 </div>
 
                 {/* Feed Posts Aggregation */}
-                <div className="p-6 rounded-3xl bg-white/5 border border-white/10">
+                <div className="p-6 rounded-4xl bg-white/5 border border-white/10">
                   <div className="flex justify-between items-center mb-6">
                     <h4 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
                       <span className="material-symbols-outlined text-cyan-400 text-base">rss_feed</span>
@@ -1047,7 +1033,7 @@ export function AdminDashboard({ user, userData }: any) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                  {activeEvents.map(event => (
-                   <div key={event.id} className="p-8 rounded-[2.5rem] bg-white/5 border border-white/10 group hover:border-indigo-500/30 transition-all">
+                   <div key={event.id} className="p-8 rounded-4xl bg-white/5 border border-white/10 group hover:border-indigo-500/30 transition-all">
                       <div className="flex justify-between items-start mb-6">
                          <div className="flex items-center gap-3">
                             <div className="size-10 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400">
@@ -1122,7 +1108,7 @@ export function AdminDashboard({ user, userData }: any) {
               </div>
 
               {/* Founder/Admin Guidance Note */}
-              <div className="p-6 rounded-3xl bg-indigo-500/10 border border-indigo-500/30 mb-8 flex items-start gap-5 shadow-2xl shadow-indigo-500/10">
+              <div className="p-6 rounded-4xl bg-indigo-500/10 border border-indigo-500/30 mb-8 flex items-start gap-5 shadow-2xl shadow-indigo-500/10">
                 <div className="size-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center shrink-0">
                   <span className="material-symbols-outlined text-indigo-400">assignment_turned_in</span>
                 </div>
@@ -1141,7 +1127,7 @@ export function AdminDashboard({ user, userData }: any) {
                   {pendingExperts.map(expert => (
                     <div 
                       key={expert.id}
-                      className="p-8 rounded-3xl border border-white/10 bg-white/5 relative overflow-hidden group hover:border-indigo-500/30 transition-all"
+                      className="p-8 rounded-4xl border border-white/10 bg-white/5 relative overflow-hidden group hover:border-indigo-500/30 transition-all"
                     >
                       <div className="absolute top-0 inset-e-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none" />
                       
@@ -1283,7 +1269,7 @@ export function AdminDashboard({ user, userData }: any) {
                   {approvedExperts.map(expert => (
                     <div
                       key={expert.id}
-                      className="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 rounded-3xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all"
+                      className="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 rounded-4xl bg-emerald-500/5 border border-emerald-500/20 hover:border-emerald-500/40 transition-all"
                     >
                       <img
                         src={expert.photoURL || `https://ui-avatars.com/api/?name=${expert.displayName}`}

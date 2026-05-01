@@ -194,6 +194,10 @@ html {
   --hmoii-outline: #8b919e;
   --hmoii-error: #ffb4ab;
   --hmoii-error-container: #93000a;
+
+  /* Deep Admin/Nexus Tokens */
+  --urkio-nexus-bg: #020617;
+  --urkio-admin-bg: #0a0f1e;
 }
 
 @theme {
@@ -326,6 +330,15 @@ html {
   --color-urkio-on-surface-variant: var(--urkio-on-surface-variant);
   --color-urkio-outline: var(--urkio-outline);
   --color-urkio-tertiary: var(--urkio-tertiary);
+
+  /* Deep Backgrounds */
+  --color-nexus-bg: var(--urkio-nexus-bg);
+  --color-admin-bg: var(--urkio-admin-bg);
+
+  /* Standardized Rounding */
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+  --radius-6xl: 3.5rem;
 }
 
 /* Material Symbols configuration */

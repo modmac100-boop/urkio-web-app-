@@ -610,7 +610,7 @@ export function LandingPageV2({
                   activePricingCategory === 'users' ? "bg-ur-primary text-ur-on-surface" : "text-white/60 hover:text-white"
                 )}
               >
-                User Track
+                {isRTL ? 'مسار المستخدم' : 'User Track'}
               </button>
               <button
                 onClick={() => setActivePricingCategory('pros')}
@@ -619,7 +619,7 @@ export function LandingPageV2({
                   activePricingCategory === 'pros' ? "bg-[#C8A96E] text-ur-on-surface" : "text-white/60 hover:text-white"
                 )}
               >
-                Professional Track
+                {isRTL ? 'المسار المهني' : 'Professional Track'}
               </button>
             </div>
           </div>
@@ -632,41 +632,41 @@ export function LandingPageV2({
           >
             {/* Keeping the dynamic pricing structure short for brevity but styling it completely */}
             <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
-              <h3 className="font-headline text-xl font-bold mb-2">Essential Pass</h3>
+              <h3 className="font-headline text-xl font-bold mb-2">{isRTL ? 'الباقة الأساسية' : 'Essential Pass'}</h3>
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">$0</span><span className="text-white/40">/mo</span>
+                <span className="text-4xl font-black">{isRTL ? '0 ر.س' : '0 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> Public Forum Access</li>
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> Resource Library</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> {isRTL ? 'منتدى عام' : 'Public Forum Access'}</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> {isRTL ? 'مكتبة الموارد' : 'Resource Library'}</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">Start Free</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">{isRTL ? 'ابدأ مجاناً' : 'Start Free'}</button>
             </div>
 
             <div className="bg-linear-to-b from-ur-primary/20 to-ur-on-surface border border-ur-primary p-8 rounded-4xl flex flex-col scale-105 relative shadow-[0_0_50px_rgba(48,176,208,0.1)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ur-primary text-ur-on-surface px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Most Popular</div>
-              <h3 className="font-headline text-xl font-bold mb-2">Growth Tier</h3>
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ur-primary text-ur-on-surface px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{isRTL ? 'الأكثر شيوعاً' : 'Most Popular'}</div>
+              <h3 className="font-headline text-xl font-bold mb-2">{isRTL ? 'باقة النمو' : 'Growth Tier'}</h3>
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">$49</span><span className="text-white/40">/mo</span>
+                <span className="text-4xl font-black">{isRTL ? '150 ر.س' : '150 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> All Free Features</li>
-                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> Monthly Coach Check-in</li>
-                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> Community Contribution</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'جميع الميزات المجانية' : 'All Free Features'}</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'متابعة شهرية مع موجه' : 'Monthly Coach Check-in'}</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'المساهمة في المجتمع' : 'Community Contribution'}</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 bg-ur-primary text-ur-on-surface rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white transition-all">Upgrade</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 bg-ur-primary text-ur-on-surface rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white transition-all">{isRTL ? 'ترقية الباقة' : 'Upgrade'}</button>
             </div>
 
             <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
-              <h3 className="font-headline text-xl font-bold mb-2">Transformation</h3>
+              <h3 className="font-headline text-xl font-bold mb-2">{isRTL ? 'التحول الشامل' : 'Transformation'}</h3>
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">$399</span><span className="text-white/40">/mo</span>
+                <span className="text-4xl font-black">{isRTL ? '500 ر.س' : '500 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> 1-on-1 Clinical Therapy</li>
-                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> On-Demand Crisis Line</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> {isRTL ? 'جلسات علاج فردية' : '1-on-1 Clinical Therapy'}</li>
+                <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> {isRTL ? 'خط دعم الأزمات الفوري' : 'On-Demand Crisis Line'}</li>
               </ul>
-              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">Begin Transformation</button>
+              <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">{isRTL ? 'ابدأ التحول' : 'Begin Transformation'}</button>
             </div>
           </motion.div>
         </div>

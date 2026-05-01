@@ -79,7 +79,7 @@ export function LandingPage({
   const userTiers = [
     {
       name: t('landing.tierEssential', 'The Essential Pass'),
-      price: '$0',
+      price: '0 SR',
       period: '/mo',
       desc: 'Introduction & Awareness',
       features: [
@@ -93,7 +93,7 @@ export function LandingPage({
     },
     {
       name: t('landing.tierGrowth', 'The Growth Tier'),
-      price: '$49',
+      price: '150 SR',
       period: '/mo',
       desc: 'Facilitated Social Development',
       features: [
@@ -109,7 +109,7 @@ export function LandingPage({
     },
     {
       name: t('landing.tierTransformation', 'Transformation Package'),
-      price: '$399',
+      price: '500 SR',
       period: '/mo',
       desc: 'Accelerated & Clinical Wellness',
       features: [
@@ -307,7 +307,7 @@ export function LandingPage({
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
                 onClick={() => openSignUp('user')}
-                className="w-full sm:w-auto bg-gradient-to-r from-[#30B0D0] via-[#00f2fe] to-[#000080] bg-[length:200%_auto] transition-all duration-700 hover:bg-right text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:-translate-y-1 active:scale-95"
+                className="w-full sm:w-auto bg-linear-to-r from-ur-primary via-[#00f2fe] to-[#000080] bg-size-[200%_auto] transition-all duration-700 hover:bg-right text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:-translate-y-1 active:scale-95"
               >
                 {isRTL ? 'ابدأ رحلتك الآن' : 'Start Your Journey'}
               </button>
