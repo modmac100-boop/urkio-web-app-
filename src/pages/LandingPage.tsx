@@ -79,8 +79,8 @@ export function LandingPage({
   const userTiers = [
     {
       name: t('landing.tierEssential', 'The Essential Pass'),
-      price: '0 SR',
-      period: '/mo',
+      price: isRTL ? '0 ر.س' : '0 SR',
+      period: isRTL ? '/شهر' : '/mo',
       desc: 'Introduction & Awareness',
       features: [
         'Public Forum Access (View-only)',
@@ -93,8 +93,8 @@ export function LandingPage({
     },
     {
       name: t('landing.tierGrowth', 'The Growth Tier'),
-      price: '150 SR',
-      period: '/mo',
+      price: isRTL ? '150 ر.س' : '150 SR',
+      period: isRTL ? '/شهر' : '/mo',
       desc: 'Facilitated Social Development',
       features: [
         'All Free Features',
@@ -109,8 +109,8 @@ export function LandingPage({
     },
     {
       name: t('landing.tierTransformation', 'Transformation Package'),
-      price: '500 SR',
-      period: '/mo',
+      price: isRTL ? '500 ر.س' : '500 SR',
+      period: isRTL ? '/شهر' : '/mo',
       desc: 'Accelerated & Clinical Wellness',
       features: [
         'All Standard Features',
