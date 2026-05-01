@@ -597,6 +597,7 @@ export function AdminDashboard({ user, userData }: any) {
                   { label: 'Pending',   count: cases.filter((c: any) => c.status === 'pending' || !c.status).length,   color: '#f59e0b' },
                   { label: 'Active',    count: cases.filter((c: any) => c.status === 'confirmed').length,               color: '#6366f1' },
                   { label: 'Done',      count: cases.filter((c: any) => c.status === 'completed').length,               color: '#10b981' },
+                ].map((s: any) => (
                   <div key={s.label} className="rounded-2xl p-4 text-center bg-white/5 border border-white/10">
                     <p className="text-3xl font-black" style={{ color: s.color }}>{s.count}</p>
                     <p className="text-slate-400 text-xs mt-1">{s.label}</p>
