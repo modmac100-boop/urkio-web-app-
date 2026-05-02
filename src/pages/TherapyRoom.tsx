@@ -94,11 +94,14 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
     isMuted,
     isCameraOff,
     isRecording,
+    networkQuality,
+    isNoiseCancellationEnabled,
     error: connectionError,
     join,
     leave,
     toggleMute,
     toggleCamera,
+    toggleNoiseCancellation,
     startRecording,
     stopRecording
   } = useHealingSession(roomId, 'private', numericUid, 'host');
@@ -250,6 +253,9 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                         onStopRecording={stopRecording}
                         isRecording={isRecording}
                         activeBiometric={72}
+                        networkQuality={networkQuality}
+                        isNoiseCancellationEnabled={isNoiseCancellationEnabled}
+                        onToggleNoiseCancellation={toggleNoiseCancellation}
                         className="h-full"
                      />
                      {remoteUsers.map(u => (

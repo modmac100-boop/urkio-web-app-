@@ -4,7 +4,7 @@ import {
   Maximize2, Minimize2, Settings, ShieldCheck,
   MoreVertical, User, MessageSquare, Plus,
   Sparkles, Activity, Zap, Circle, Square,
-  UserPlus, Maximize, Share2
+  UserPlus, Maximize, Share2, Wifi, Waves
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
@@ -28,6 +28,9 @@ interface VideoPlayerProps {
   isRecording?: boolean;
   statusText?: string;
   activeBiometric?: number;
+  networkQuality?: 'excellent' | 'good' | 'poor' | 'unknown';
+  isNoiseCancellationEnabled?: boolean;
+  onToggleNoiseCancellation?: () => void;
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({
@@ -47,7 +50,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
   onStopRecording,
   isRecording = false,
   statusText = 'Secure Stream',
-  activeBiometric
+  activeBiometric,
+  networkQuality = 'unknown',
+  isNoiseCancellationEnabled = true,
+  onToggleNoiseCancellation
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<HTMLDivElement>(null);
@@ -144,6 +150,18 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                      <span className="text-[10px] font-black text-ur-primary">{activeBiometric} BPM</span>
                   </div>
                )}
+
+               {networkQuality !== 'unknown' && (
+                  <div className={clsx(
+                    "flex items-center gap-2 px-4 py-1.5 rounded-full backdrop-blur-md border w-fit",
+                    networkQuality === 'excellent' ? "bg-green-500/10 border-green-500/20 text-green-500" :
+                    networkQuality === 'good' ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-500" :
+                    "bg-red-500/10 border-red-500/20 text-red-500"
+                  )}>
+                     <Wifi className="w-4 h-4" />
+                     <span className="text-[10px] font-black uppercase tracking-widest">{networkQuality}</span>
+                  </div>
+               )}
             </div>
 
             <div className="flex items-center gap-3">
@@ -183,6 +201,19 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({
                >
                   {isOff ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
                </button>
+
+               {onToggleNoiseCancellation && (
+                 <button 
+                   onClick={onToggleNoiseCancellation}
+                   title={isNoiseCancellationEnabled ? "Disable Noise Cancellation" : "Enable Noise Cancellation"}
+                   className={clsx(
+                     "size-14 rounded-2xl flex items-center justify-center transition-all hover:scale-110",
+                     isNoiseCancellationEnabled ? "bg-ur-primary/20 text-ur-primary border border-ur-primary/30" : "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white border border-white/5"
+                   )}
+                 >
+                    <Waves className="w-6 h-6" />
+                 </button>
+               )}
                
                <div className="w-px h-10 bg-white/10 mx-2" />
 
