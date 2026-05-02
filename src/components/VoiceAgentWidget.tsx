@@ -303,10 +303,10 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="text-white font-black text-sm">{t('agent.header')}</h3>
+                <h3 className="text-zinc-900 dark:text-white font-black text-sm">{t('agent.header')}</h3>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-                  <span className="text-slate-400 text-[10px] font-semibold">Always here for you</span>
+                  <span className="text-zinc-600 dark:text-slate-400 text-[10px] font-semibold">Always here for you</span>
                 </div>
               </div>
             </div>
@@ -339,11 +339,11 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 <div className="w-20 h-20 rounded-4xl bg-linear-to-br from-hmoii-primary/20 to-hmoii-secondary/20 border border-hmoii-primary/30 flex items-center justify-center">
                   <Bot className="w-10 h-10 text-hmoii-primary" />
                 </div>
-                <div>
-                   <p className="text-white font-bold text-base mb-2">
-                     {i18n.language === 'ar' ? 'مرحباً' : 'Hi'} {userData?.displayName?.split(' ')[0] || user?.displayName?.split(' ')[0] || (i18n.language === 'ar' ? 'بك' : 'there')} 👋
-                   </p>
-                   <p className="text-slate-400 text-sm max-w-[260px] leading-relaxed">
+                 <div>
+                    <p className="text-zinc-900 dark:text-white font-bold text-base mb-2">
+                      {i18n.language === 'ar' ? 'مرحباً' : 'Hi'} {userData?.displayName?.split(' ')[0] || user?.displayName?.split(' ')[0] || (i18n.language === 'ar' ? 'بك' : 'there')} 👋
+                    </p>
+                   <p className="text-zinc-600 dark:text-slate-400 text-sm max-w-[260px] leading-relaxed">
                      {t('agent.welcome')}
                    </p>
                 </div>
@@ -381,10 +381,10 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 >
                   {m.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
                 </div>
-                <div
+                 <div
                   className={clsx(
-                    'px-4 py-3 rounded-2xl text-sm leading-relaxed',
-                    m.role === 'user' ? 'bg-hmoii-primary text-white rounded-ee-md shadow-lg shadow-hmoii-primary/20' : 'bg-white/10 text-slate-200 rounded-es-md border border-white/5'
+                    'px-4 py-3 rounded-2xl text-sm leading-relaxed font-medium',
+                    m.role === 'user' ? 'bg-hmoii-primary text-white rounded-ee-md shadow-lg shadow-hmoii-primary/20' : 'bg-black/5 text-zinc-900 dark:bg-white/10 dark:text-slate-200 rounded-es-md border border-zinc-200 dark:border-white/5'
                   )}
                 >
                   {m.content ? (
@@ -412,7 +412,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 rows={1}
                 placeholder={isRecording ? t('agent.listening') : t('agent.inputPlaceholder')}
                 className={clsx(
-                  "w-full bg-white/10 border border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-hmoii-primary/40 focus:border-hmoii-primary/30 resize-none transition-all",
+                  "w-full bg-black/5 dark:bg-white/10 border border-zinc-200 dark:border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-zinc-900 dark:text-white text-sm placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-hmoii-primary/40 focus:border-hmoii-primary/30 resize-none transition-all",
                   isRecording && "border-hmoii-primary/50 ring-2 ring-hmoii-primary/20",
                   audioLanguage === 'ar' && "text-end"
                 )}

@@ -196,7 +196,7 @@ export function useHealingSession(
           }
         } else if (isTokenError && token === null) {
           console.error('[HealingSuite] SECURITY ERROR: Your Agora project REQUIRES a token (App Certificate is enabled), but none was provided.');
-          throw new Error('Security Error: This Agora project requires an App Certificate. Please ensure AGORA_APP_CERTIFICATE is set in your server environment.');
+          throw new Error('SECURITY ERROR: This Agora project requires an App Certificate. ACTION REQUIRED: Please add AGORA_APP_CERTIFICATE to your Coolify Environment Variables and restart the deployment.');
         } else {
           throw new Error(`Agora Join Failed: ${joinErr.message || 'Check your internet connection or Agora App ID.'}`);
         }
