@@ -253,8 +253,15 @@ async function startServer() {
       const appCertificate = process.env.AGORA_APP_CERTIFICATE || "63e7a05a48ac41e5af746e75d0dbdfac";
       const { channelName, uid, role } = req.body;
 
+      console.log(`[AgoraToken] Generating token for channel: ${channelName}, uid: ${uid}, role: ${role}`);
+
       if (!channelName) {
         return res.status(400).json({ error: "channelName is required" });
+      }
+
+      if (!appId || !appCertificate) {
+        console.error('[AgoraToken] CRITICAL: App ID or Certificate missing!');
+        return res.status(500).json({ error: "Agora credentials missing on server" });
       }
 
       const expirationSeconds = 3600;
@@ -273,6 +280,7 @@ async function startServer() {
         expirationTimestamp
       );
 
+      console.log(`[AgoraToken] Successfully generated token for channel: ${channelName}`);
       res.status(200).json({ token, appId });
     } catch (err: any) {
       console.error('[agoraToken] Token generation failed:', err);

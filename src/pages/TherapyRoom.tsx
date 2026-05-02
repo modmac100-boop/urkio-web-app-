@@ -94,6 +94,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
     isMuted,
     isCameraOff,
     isRecording,
+    error: connectionError,
     join,
     leave,
     toggleMute,
@@ -157,12 +158,12 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-5xl glass-panel border-ur-gold/10 premium-shadow transition-all duration-500">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
-             <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
-                <ShieldCheck className="w-6 h-6 text-ur-on-surface" />
-             </div>
-             <span className="font-serif-clinical text-2xl font-bold tracking-tighter">
-               URKIO <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-2 hidden sm:inline">Clinical</span>
-             </span>
+              <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
+                 <ShieldCheck className="w-6 h-6 text-ur-on-surface" />
+              </div>
+              <span className="font-serif-clinical text-2xl font-bold tracking-tighter">
+                GOLDEN <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40 ml-2 hidden sm:inline">Clinical Suite</span>
+              </span>
           </div>
           
           <div className="hidden lg:flex items-center gap-4 px-5 py-2 rounded-2xl bg-white/5 border border-white/5 group">
@@ -262,24 +263,61 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                      ))}
                   </div>
                ) : (
-                  <div className="w-full h-full rounded-[4rem] glass-panel border-ur-gold/5 flex flex-col items-center justify-center text-center p-20 premium-shadow">
+                   <div className="w-full h-full rounded-[4rem] glass-panel border-ur-gold/5 flex flex-col items-center justify-center text-center p-12 md:p-20 premium-shadow relative overflow-hidden">
+                     {/* Background Ambient Effect */}
+                     <div className="absolute top-0 right-0 w-[60%] h-[60%] bg-ur-primary/5 blur-[120px] -z-10 animate-pulse" />
+                     <div className="absolute bottom-0 left-0 w-[60%] h-[60%] bg-ur-gold/5 blur-[120px] -z-10" />
+
                      <div className="relative mb-12">
-                        <div className="size-40 rounded-[3rem] clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
-                           <Zap className="w-16 h-16 text-ur-on-surface" />
+                        <div className={clsx(
+                          "size-40 rounded-[3rem] clinical-gradient flex items-center justify-center shadow-3xl relative z-10 transition-all duration-1000",
+                          connectionState === 'CONNECTING' ? "scale-110 animate-pulse" : "animate-float"
+                        )}>
+                           {connectionState === 'CONNECTING' ? <RefreshCcw className="w-16 h-16 text-ur-on-surface animate-spin-slow" /> : <Zap className="w-16 h-16 text-ur-on-surface" />}
                         </div>
                         <div className="absolute inset-0 rounded-[3rem] clinical-gradient blur-[80px] opacity-20 animate-pulse-slow" />
                      </div>
-                     <h2 className="font-serif-clinical text-6xl font-bold mb-6 tracking-tighter">Clinical Bridge Ready</h2>
-                     <p className="text-sm font-manrope opacity-40 max-w-lg mx-auto mb-12 uppercase tracking-[0.4em] font-black leading-loose">
-                        Encrypted Neural Access Protocol v4.0.0
+
+                     <h2 className="font-serif-clinical text-5xl md:text-6xl font-bold mb-4 tracking-tighter">
+                       {connectionState === 'CONNECTING' ? 'Securing Connection...' : 'Clinical Bridge Ready'}
+                     </h2>
+                     <p className="text-xs font-manrope opacity-40 max-w-lg mx-auto mb-10 uppercase tracking-[0.4em] font-black leading-loose">
+                        {connectionState === 'CONNECTING' ? 'Establishing Neural Neural Access Protocol...' : 'Encrypted Neural Access Protocol v4.0.0'}
                      </p>
-                     <div className="flex gap-4">
-                        <button onClick={join} className="px-16 py-6 rounded-3xl bg-ur-primary text-ur-on-surface font-black text-[12px] uppercase tracking-[0.4em] shadow-3xl shadow-ur-primary/20 hover:scale-105 active:scale-95 transition-all">
-                           Initialize Connection
+
+                     {connectionError && (
+                        <div className="mb-10 p-6 rounded-3xl bg-red-500/10 border border-red-500/20 max-w-md animate-in fade-in slide-in-from-top-2">
+                           <div className="flex items-center gap-3 text-red-500 mb-2 justify-center">
+                              <X className="w-5 h-5" />
+                              <span className="text-xs font-black uppercase tracking-widest">Protocol Failure</span>
+                           </div>
+                           <p className="text-xs text-red-400 font-medium leading-relaxed">{connectionError}</p>
+                           <p className="mt-3 text-[9px] text-red-400/60 uppercase font-black tracking-tighter">Check your internet connection or Agora credentials</p>
+                        </div>
+                     )}
+
+                     <div className="flex flex-wrap justify-center gap-4">
+                        <button 
+                          onClick={() => {
+                             if (connectionState === 'FAILED' || connectionState === 'DISCONNECTED') join();
+                          }} 
+                          disabled={connectionState === 'CONNECTING'}
+                          className={clsx(
+                            "px-16 py-6 rounded-3xl font-black text-[12px] uppercase tracking-[0.4em] shadow-3xl transition-all relative overflow-hidden group",
+                            connectionState === 'CONNECTING' ? "bg-white/5 text-slate-500 cursor-not-allowed" : "bg-ur-primary text-ur-on-surface shadow-ur-primary/20 hover:scale-105 active:scale-95"
+                          )}
+                        >
+                           <span className="relative z-10">{connectionState === 'CONNECTING' ? 'Processing...' : (connectionError ? 'Retry Connection' : 'Initialize Connection')}</span>
+                           {connectionState === 'CONNECTING' && <div className="absolute inset-0 bg-white/5 animate-shimmer" />}
                         </button>
                         <button onClick={() => navigate('/')} className="px-10 py-6 rounded-3xl bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
                            Return Home
                         </button>
+                     </div>
+                     
+                     <div className="mt-12 flex items-center gap-2 opacity-20 group">
+                        <ShieldCheck className="w-4 h-4" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Validated by Golden Medical Standards</span>
                      </div>
                   </div>
                )}

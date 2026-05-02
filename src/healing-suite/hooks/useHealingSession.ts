@@ -170,27 +170,34 @@ export function useHealingSession(
       const activeAppId = appId || APP_ID;
 
       if (!activeAppId) {
-        throw new Error('Agora App ID is not configured. Add VITE_AGORA_APP_ID to your .env file.');
+        const errorMsg = 'Agora App ID is not configured. Please add VITE_AGORA_APP_ID to your .env file.';
+        console.error('[HealingSuite] Configuration Error:', errorMsg);
+        throw new Error(errorMsg);
       }
 
       try {
-        console.log(`[HealingSuite] Attempting join for ${sessionId} with token: ${!!token}`);
+        console.log(`[HealingSuite] Attempting join for channel: "${sessionId}" as ${role}, UID: ${userUid}, using token: ${!!token}`);
         await client.join(activeAppId, sessionId, token, userUid);
       } catch (joinErr: any) {
         console.error('[HealingSuite] Initial join failed:', joinErr);
         
-        const isTokenError = joinErr.message?.includes('dynamic use static key') || joinErr.code === 'CAN_NOT_GET_GATEWAY_SERVER';
+        const isTokenError = joinErr.message?.includes('dynamic use static key') || 
+                            joinErr.code === 'CAN_NOT_GET_GATEWAY_SERVER' ||
+                            joinErr.message?.includes('invalid token');
         
         if (isTokenError && token !== null) {
-          // If we had a token but it failed, maybe it's expired or wrong
-          console.warn('[HealingSuite] Token join failed. Retrying without token as fallback...');
-          await client.join(activeAppId, sessionId, null, userUid);
+          console.warn('[HealingSuite] Token join failed. This usually means the token was invalid or expired. Retrying without token as fallback...');
+          try {
+            await client.join(activeAppId, sessionId, null, userUid);
+          } catch (fallbackErr: any) {
+            console.error('[HealingSuite] Fallback join also failed:', fallbackErr);
+            throw new Error(`Connection Failed: ${fallbackErr.message || 'Unknown Agora Error'}. Please check if your Agora project has "App Certificate" enabled.`);
+          }
         } else if (isTokenError && token === null) {
-          // If we had NO token and it failed with this error, it's DEFINITELY a missing certificate
-          console.error('[HealingSuite] PROJECT REQUIRES TOKEN. AGORA_APP_CERTIFICATE is likely missing on Vercel.');
-          throw new Error('Security Error: This Agora project requires an App Certificate. Please add AGORA_APP_CERTIFICATE to your Vercel Environment Variables.');
+          console.error('[HealingSuite] SECURITY ERROR: Your Agora project REQUIRES a token (App Certificate is enabled), but none was provided.');
+          throw new Error('Security Error: This Agora project requires an App Certificate. Please ensure AGORA_APP_CERTIFICATE is set in your server environment.');
         } else {
-          throw joinErr;
+          throw new Error(`Agora Join Failed: ${joinErr.message || 'Check your internet connection or Agora App ID.'}`);
         }
       }
 
