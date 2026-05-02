@@ -47,10 +47,10 @@ export function LandingPageV2({
   };
 
   const navLinks = [
-    { label: t('landing.navNetwork', 'The Network'), href: '#graph' },
+    { label: t('landing.navNetwork', 'Network'), href: '#graph' },
     { label: t('landing.navPillars', 'Pillars'), href: '#pillars' },
     { label: t('landing.navInvestment', 'Investment'), href: '#investment' },
-    { label: isRTL ? 'شركاؤنا' : 'Our Partners', href: '/ashraqat' },
+    { label: isRTL ? 'الشركاء' : 'Partners', href: '/ashraqat' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -185,13 +185,13 @@ export function LandingPageV2({
                 className="hidden lg:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-ur-primary transition-colors"
               >
                 <Sparkles className="size-4" />
-                Urkio Agent
+                {isRTL ? 'المرشد' : 'Agent'}
               </button>
               <button
                 onClick={openSignIn}
                 className="hidden sm:block text-[11px] font-black uppercase tracking-widest text-white/80 hover:text-white transition-colors"
               >
-                {t('common.login', 'Sign In')}
+                {t('common.login', 'Login')}
               </button>
               <motion.button
                 whileHover={{
@@ -202,7 +202,7 @@ export function LandingPageV2({
                 onClick={() => openSignUp('user')}
                 className="bg-ur-primary hover:bg-linear-to-r hover:from-ur-primary hover:to-blue-800 text-ur-on-surface px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-widest transition-all duration-500"
               >
-                Start Your Journey
+                {isRTL ? 'انضم الآن' : 'Join Urkio'}
               </motion.button>
               <button
                 className="md:hidden p-2 text-white/80 hover:text-white"
