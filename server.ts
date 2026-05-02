@@ -249,7 +249,7 @@ async function startServer() {
   // ─── Agora Token Generation ───────────────────────────────────────────────────
   app.post('/api/agora/token', async (req, res) => {
     try {
-      const appId = process.env.VITE_AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
+      const appId = process.env.VITE_AGORA_APP_ID || process.env.AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
       const appCertificate = process.env.AGORA_APP_CERTIFICATE || "63e7a05a48ac41e5af746e75d0dbdfac";
       const { channelName, uid, role } = req.body;
 

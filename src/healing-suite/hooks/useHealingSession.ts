@@ -34,7 +34,8 @@ export interface HealingSessionState {
   isRecording: boolean;
 }
 
-const APP_ID = import.meta.env.VITE_AGORA_APP_ID || '';
+const FALLBACK_APP_ID = "a5557dd007124b7aa7dfce0e3d61a7da";
+const APP_ID = import.meta.env.VITE_AGORA_APP_ID || FALLBACK_APP_ID;
 
 // HD Video Profiles per session mode
 const VIDEO_PROFILES = {
@@ -88,7 +89,7 @@ export function useHealingSession(
       });
       return await res.json();
     } catch {
-      return { token: null, appId: APP_ID };
+      return { token: null, appId: APP_ID || FALLBACK_APP_ID };
     }
   };
 
