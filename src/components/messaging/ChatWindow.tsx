@@ -1222,6 +1222,14 @@ export function ChatWindow({
                 >
                   <span className="material-symbols-outlined">movie</span>
                 </button>
+                <button 
+                  type="button" 
+                  onClick={() => setShowVideoRecorder(true)} 
+                  className="p-3 text-zinc-400 hover:text-msgr-primary transition-all"
+                  title="Record Video Message"
+                >
+                  <span className="material-symbols-outlined">videocam</span>
+                </button>
                 <button type="button" onClick={() => setShowEmojiPickerFor('input')} className="p-3 text-zinc-400 hover:text-msgr-primary transition-all" title="Emoji"><SmilePlus size={20} /></button>
                 {showEmojiPickerFor === 'input' && (
                   <div className="absolute bottom-full left-0 mb-2 z-50">
@@ -1362,6 +1370,14 @@ export function ChatWindow({
           onClose={() => setForwardingMessage(null)}
           message={forwardingMessage}
           currentUser={currentUser}
+        />
+      )}
+      
+      {showVideoRecorder && (
+        <VideoRecorder 
+          onClose={() => setShowVideoRecorder(false)}
+          onSend={handleVideoSend}
+          onSaveToVault={handleVideoSaveToVault}
         />
       )}
     </>

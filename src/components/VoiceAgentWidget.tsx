@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Bot, User, Sparkles, X, Mic, Loader2, Phone, Calendar, AlertTriangle, VolumeX, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import { useMediaStream } from '../hooks/useMediaStream';
+import { AudioVisualizer } from './common/AudioVisualizer';
 
 interface Message {
   id: string;
@@ -24,6 +26,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [audioLanguage, setAudioLanguage] = useState<'ar' | 'en'>(i18n.language === 'ar' ? 'ar' : 'en');
   const [voicesLoaded, setVoicesLoaded] = useState(false);
+  const { stream, startStream, stopStream, error: mediaError } = useMediaStream();
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -226,6 +229,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
     if (isRecording) {
       recognitionRef.current?.stop();
       setIsRecording(false);
+      stopStream();
       return;
     }
 
@@ -234,6 +238,8 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
       alert("Voice recording is not supported in this browser. Please try Chrome or Safari.");
       return;
     }
+
+    startStream({ audio: true, video: false });
 
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
@@ -254,6 +260,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
     };
     recognition.onend = () => {
       setIsRecording(false);
+      stopStream();
       if (inputRef.current?.value.trim()) {
         setTimeout(() => sendMessage(), 500);
       }
@@ -406,7 +413,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                 placeholder={isRecording ? t('agent.listening') : t('agent.inputPlaceholder')}
                 className={clsx(
                   "w-full bg-white/10 border border-white/10 rounded-2xl ps-4 pe-32 py-3.5 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-hmoii-primary/40 focus:border-hmoii-primary/30 resize-none transition-all",
-                  isRecording && "border-red-500/50 ring-2 ring-red-500/20",
+                  isRecording && "border-hmoii-primary/50 ring-2 ring-hmoii-primary/20",
                   audioLanguage === 'ar' && "text-end"
                 )}
                 onKeyDown={(e) => {
@@ -434,8 +441,15 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
                   )}
                   title={t('agent.speak')}
                 >
-                  {isRecording && <span className="absolute inset-0 rounded-xl bg-red-500 animate-ping opacity-20" />}
-                  <Mic className={clsx("w-4 h-4", isRecording && "relative z-10")} />
+                  {isRecording && (
+                    <div className="absolute inset-0 flex items-center justify-center -z-10 opacity-40">
+                      <div className="w-12 h-12">
+                        <AudioVisualizer stream={stream} mode="bars" color="#a8c8ff" barWidth={2} gap={1} />
+                      </div>
+                    </div>
+                  )}
+                  {isRecording && <span className="absolute inset-0 rounded-xl bg-hmoii-primary animate-pulse opacity-20" />}
+                  <Mic className={clsx("w-4 h-4", isRecording && "relative z-10 text-white")} />
                 </button>
                 <button
                   type="submit"
@@ -447,13 +461,24 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
               </div>
             </form>
             <div className="mt-2 flex justify-center">
-                <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-500/10 rounded-full border border-amber-500/20">
-                  <AlertCircle className="w-3 h-3 text-amber-500" />
-                  <span className="text-[9px] font-medium text-amber-500 uppercase tracking-tighter">
-                    {t('agent.developerNotice')}
-                  </span>
-                </div>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 bg-amber-500/10 rounded-full border border-amber-500/20">
+                <AlertCircle className="w-3 h-3 text-amber-500" />
+                <span className="text-[9px] font-medium text-amber-500 uppercase tracking-tighter">
+                  {t('agent.developerNotice')}
+                </span>
+              </div>
             </div>
+
+            {mediaError && (
+              <div className="mt-2 px-4">
+                <div className="flex items-center gap-2 p-2 bg-red-500/10 rounded-xl border border-red-500/20 animate-in fade-in slide-in-from-top-1">
+                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                  <p className="text-[10px] font-bold text-red-500 leading-tight">
+                    {mediaError}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
