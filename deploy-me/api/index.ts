@@ -18,7 +18,7 @@ app.get('/api/health', (req, res) => {
 app.post('/api/agora/token', async (req, res) => {
   try {
     const appId = process.env.VITE_AGORA_APP_ID || "a5557dd007124b7aa7dfce0e3d61a7da";
-    const appCertificate = process.env.AGORA_APP_CERTIFICATE || ""; // Default to empty to trigger fallback
+    const appCertificate = process.env.AGORA_APP_CERTIFICATE || "63e7a05a48ac41e5af746e75d0dbdfac";
     const { channelName, uid, role } = req.body;
 
     if (!channelName) {
