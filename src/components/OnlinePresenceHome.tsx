@@ -18,6 +18,7 @@ interface OnlineUser {
   statusUpdatedAt?: any;
   hasActiveStory?: boolean;
   email: string;
+  isDeleted?: boolean;
 }
 
 export function OnlinePresenceHome({ user }: { user: any }) {

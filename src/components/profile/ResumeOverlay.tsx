@@ -80,7 +80,7 @@ export const ResumeOverlay: React.FC<ResumeOverlayProps> = ({ isOpen, onClose, e
 
           {/* Profile Identity Overlay */}
           <div className="absolute -bottom-12 left-12 flex items-end gap-10">
-            <div className="size-40 rounded-[2.5rem] p-1.5 bg-linear-to-tr from-[#a8c8ff] to-[#4c75ff] shadow-2xl shadow-blue-500/30 overflow-hidden rotate-2">
+            <div className="size-40 rounded-5xl p-1.5 bg-linear-to-tr from-[#a8c8ff] to-[#4c75ff] shadow-2xl shadow-blue-500/30 overflow-hidden rotate-2">
                 <img 
                   src={expert.photoURL || `https://ui-avatars.com/api/?name=${expert.displayName}&background=080a0f&color=a8c8ff`} 
                   className="w-full h-full object-cover rounded-4xl -rotate-2 scale-110"
@@ -187,7 +187,7 @@ export const ResumeOverlay: React.FC<ResumeOverlayProps> = ({ isOpen, onClose, e
 
             {/* Live Availability Sidebar */}
             <aside className="lg:col-span-4 space-y-10">
-               <section className="bg-[#141820] border-2 border-[#a8c8ff]/20 rounded-[3.5rem] p-10 shadow-2xl relative">
+               <section className="bg-[#141820] border-2 border-[#a8c8ff]/20 rounded-6xl p-10 shadow-2xl relative">
                   <div className="absolute -top-4 -right-4 size-12 bg-[#a8c8ff] rounded-full flex items-center justify-center text-[#080a0f] shadow-lg animate-pulse">
                      <Clock className="size-6" />
                   </div>
@@ -225,7 +225,7 @@ export const ResumeOverlay: React.FC<ResumeOverlayProps> = ({ isOpen, onClose, e
                   </p>
                </section>
 
-               <div className="bg-[#0f111a] border border-white/5 rounded-[2.5rem] p-8 flex items-center justify-between">
+               <div className="bg-[#0f111a] border border-white/5 rounded-5xl p-8 flex items-center justify-between">
                   <div>
                     <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em] mb-1">Session Rate</p>
                     <p className="text-2xl font-black text-white tracking-widest ">$120<span className="text-sm text-[#5b616e]">/Resonance</span></p>

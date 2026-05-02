@@ -118,7 +118,7 @@ export function AdminBetaInsights({ userData }: any) {
         </div>
 
         {/* Feedback Feed */}
-        <div className="bg-white rounded-[3.5rem] p-12 border border-zinc-100 shadow-sm">
+        <div className="bg-white rounded-6xl p-12 border border-zinc-100 shadow-sm">
            <div className="flex justify-between items-center mb-10">
               <h3 className="text-xl font-black italic flex items-center gap-3">
                  <MessageSquare className="text-zinc-900" size={20} /> Specialist Feedback Stream
@@ -132,7 +132,7 @@ export function AdminBetaInsights({ userData }: any) {
                   key={item.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="p-8 bg-zinc-50 rounded-[2.5rem] border border-zinc-100 flex flex-col md:flex-row gap-8 items-start hover:border-msgr-primary transition-all group"
+                  className="p-8 bg-zinc-50 rounded-5xl border border-zinc-100 flex flex-col md:flex-row gap-8 items-start hover:border-msgr-primary transition-all group"
                 >
                   <div className="flex flex-col items-center gap-2 shrink-0">
                      <div className={`p-4 rounded-2xl font-black text-xl whitespace-nowrap ${item.aiOrientationUseful ? 'bg-indigo-50 text-msgr-primary' : 'bg-red-50 text-red-500'}`}>

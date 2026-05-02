@@ -46,9 +46,11 @@ interface Message {
 interface UrkioChatProps {
   user: any;
   userData: any;
+  conversationId?: string;
+  compact?: boolean;
 }
 
-export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
+export function UrkioAgentChat({ user, userData, conversationId: propConversationId, compact }: UrkioChatProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const isRTL = i18n.language === 'ar';
@@ -72,9 +74,9 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   const chunksRef = useRef<Blob[]>([]);
   const recognitionRef = useRef<any>(null);
 
-  const conversationId = user?.uid 
+  const conversationId = propConversationId || (user?.uid 
     ? `agent_guide_v2_${user.uid}`
-    : `agent_guide_guest_${Math.random().toString(36).substring(7)}`;
+    : `agent_guide_guest_${Math.random().toString(36).substring(7)}`);
 
   // Scroll to bottom helper
   const scrollToBottom = useCallback(() => {
@@ -372,8 +374,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
         const aiMessage: Message = {
           id: crypto.randomUUID(),
           role: 'assistant',
-          content: accumulated,
-          user: { _id: 2, name: 'Urkio AI' }
+          content: accumulated
         };
         setMessages(prev => [...prev, aiMessage]);
       }
@@ -468,7 +469,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
   ];
 
   return (
-    <div className={clsx("flex flex-col h-full rounded-[2.5rem] overflow-hidden shadow-3xl border transition-all duration-700", theme.bg, theme.border, theme.text)}>
+    <div className={clsx("flex flex-col h-full rounded-5xl overflow-hidden shadow-3xl border transition-all duration-700", theme.bg, theme.border, theme.text)}>
       <style>{`
         .animate-float { animation: float 6s ease-in-out infinite; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
@@ -711,7 +712,7 @@ export function UrkioAgentChat({ user, userData }: UrkioChatProps) {
                   placeholder={recordingState === 'recording' ? t('agent.voiceRecording') : t('agent.inputPlaceholder')}
                   disabled={recordingState === 'recording'}
                   className={clsx(
-                    "w-full bg-white/80 dark:bg-[#10161D]/80 border-2 border-inherit rounded-[2.5rem] ps-16 pe-28 py-6 focus:outline-none focus:ring-8 text-sm sm:text-base font-medium resize-none transition-all group-hover:bg-white dark:group-hover:bg-[#10161D] text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600",
+                    "w-full bg-white/80 dark:bg-[#10161D]/80 border-2 border-inherit rounded-5xl ps-16 pe-28 py-6 focus:outline-none focus:ring-8 text-sm sm:text-base font-medium resize-none transition-all group-hover:bg-white dark:group-hover:bg-[#10161D] text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-600",
                     theme.ring,
                     recordingState === 'recording' && "animate-pulse border-ur-primary/50"
                   )}

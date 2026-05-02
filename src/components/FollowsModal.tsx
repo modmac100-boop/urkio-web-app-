@@ -126,7 +126,7 @@ export function FollowsModal({
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
-      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-[2.5rem] w-full max-w-md shadow-2xl border border-white/20 dark:border-slate-800 flex flex-col max-h-[80vh] overflow-hidden">
+      <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl rounded-5xl w-full max-w-md shadow-2xl border border-white/20 dark:border-slate-800 flex flex-col max-h-[80vh] overflow-hidden">
         {/* Header */}
         <div className="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div>

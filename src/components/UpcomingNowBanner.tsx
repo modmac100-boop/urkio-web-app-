@@ -15,7 +15,7 @@ export function UpcomingNowBanner({ event, onDetailsClick }: UpcomingNowBannerPr
   const isToday = new Date().toDateString() === eventDate.toDateString();
 
   return (
-    <div className="group relative overflow-hidden rounded-[2.5rem] bg-slate-900 border border-slate-800 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-1">
+    <div className="group relative overflow-hidden rounded-5xl bg-slate-900 border border-slate-800 shadow-2xl transition-all duration-500 hover:shadow-primary/20 hover:-translate-y-1">
       {/* Background with Ambient Glow */}
       <div className="absolute inset-0 bg-linear-to-br from-primary/30 via-transparent to-accent/20 opacity-40 group-hover:opacity-60 transition-opacity"></div>
       

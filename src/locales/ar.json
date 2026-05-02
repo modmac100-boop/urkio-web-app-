@@ -8,7 +8,7 @@
     "aiGuide": "دليل الذكاء الاصطناعي",
     "myTasks": "مهامي",
     "specialistHub": "مركز القيادة الذهبي",
-    "healingHub": "مركز الخبراء",
+    "healingHub": "مركز الاستشفاء",
     "instantCall": "مكالمة فورية",
     "adminPanel": "لوحة التحكم",
     "executive": "تنفيذي",
@@ -58,12 +58,7 @@
     "signOut": "تسجيل الخروج",
     "verifyAsExpert": "التحقق كخبير",
     "expertList": "قائمة الخبراء",
-    "company": "الشركة",
-    "legal": "قانوني",
-    "therapyRoom": "غرفة العلاج",
-    "homii": "هومي",
-    "healingHub": "مركز الاستشفاء",
-    "inbox": "المحادثات"
+    "therapyRoom": "غرفة العلاج"
   },
   "notifications": {
     "title": "الإشعارات",

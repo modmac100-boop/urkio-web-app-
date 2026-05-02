@@ -312,7 +312,7 @@ export function SpecialistDashboard({ user, userData }: any) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Virtual Healing Suite Quick Access */}
-        <div className="bg-linear-to-br from-ur-primary to-indigo-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden group">
+        <div className="bg-linear-to-br from-ur-primary to-indigo-900 rounded-5xl p-10 text-white shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform duration-700">
             <Video className="w-40 h-40" />
           </div>
@@ -351,7 +351,7 @@ export function SpecialistDashboard({ user, userData }: any) {
         </div>
 
         {/* Access Codes Card */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden group">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-5xl p-10 shadow-sm relative overflow-hidden group">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-2xl bg-ur-primary/10 flex items-center justify-center">
@@ -507,7 +507,7 @@ export function SpecialistDashboard({ user, userData }: any) {
               </div>
             ))}
             {courses.length === 0 && !isAddingCourse && (
-              <div className="col-span-full py-20 text-center border-2 border-dashed border-zinc-100 rounded-[2.5rem]">
+              <div className="col-span-full py-20 text-center border-2 border-dashed border-zinc-100 rounded-5xl">
                 <p className="text-zinc-400 font-black text-xs uppercase tracking-widest">You haven't published any courses yet.</p>
                 <button onClick={() => setIsAddingCourse(true)} className="mt-4 text-ur-primary font-black text-xs uppercase tracking-widest hover:underline">Create your first course</button>
               </div>

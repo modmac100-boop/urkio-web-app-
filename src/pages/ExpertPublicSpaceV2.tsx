@@ -58,7 +58,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
 
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-[#1b1c1a]/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-[#fbf9f5] border border-[#e4e2de] rounded-[2.5rem] w-full max-w-lg p-10 relative shadow-2xl font-['Manrope']">
+      <div className="bg-[#fbf9f5] border border-[#e4e2de] rounded-5xl w-full max-w-lg p-10 relative shadow-2xl font-['Manrope']">
         <button onClick={onClose} className="absolute top-8 right-8 text-[#707978] hover:text-[#003634] transition-colors"><X className="size-6" /></button>
 
         {step === 'form' ? (

@@ -487,7 +487,7 @@ export function Homii({ user, userData }: { user: any; userData: any }) {
         {/* Access Matrix */}
         <div className="mt-auto">
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 mb-6">Access Matrix</h3>
-          <div className="p-8 bg-white text-slate-950 rounded-[2.5rem] flex items-center gap-6 shadow-2xl">
+          <div className="p-8 bg-white text-slate-950 rounded-5xl flex items-center gap-6 shadow-2xl">
              <div className="size-16 rounded-2xl bg-slate-950 flex items-center justify-center text-white">
                 <Lock className="size-7" />
              </div>

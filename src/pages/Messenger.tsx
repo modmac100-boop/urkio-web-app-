@@ -367,7 +367,7 @@ const Messenger: React.FC<MessengerProps> = ({ user, userData }) => {
                />
              ) : (
                <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-                  <div className="w-24 h-24 bg-white rounded-[2.5rem] flex items-center justify-center text-msgr-primary shadow-2xl mb-10 border border-zinc-50">
+                  <div className="w-24 h-24 bg-white rounded-5xl flex items-center justify-center text-msgr-primary shadow-2xl mb-10 border border-zinc-50">
                      <span className="material-symbols-outlined text-5xl">forum</span>
                   </div>
                   <h2 className="text-3xl font-black italic font-headline uppercase tracking-tighter mb-4">Select a Thread</h2>

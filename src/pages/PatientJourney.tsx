@@ -160,7 +160,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
 
         {/* Dynamic Join Section */}
         <section className="mb-16">
-          <div className="bg-msgr-primary rounded-[3.5rem] p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
+          <div className="bg-msgr-primary rounded-6xl p-10 md:p-16 text-white relative overflow-hidden shadow-2xl">
             <div className="absolute top-0 inset-e-0 p-12 opacity-10 animate-pulse"><Compass size={300} /></div>
             
             <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -187,7 +187,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                   onClick={() => nextSession && navigate(`/call/${nextSession.id}`)}
                   disabled={!isJoinable}
                   className={clsx(
-                    "w-full lg:w-auto px-16 py-6 rounded-[2.5rem] font-black uppercase text-sm tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-4 active:scale-95",
+                    "w-full lg:w-auto px-16 py-6 rounded-5xl font-black uppercase text-sm tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-4 active:scale-95",
                     isJoinable ? "bg-white text-msgr-primary hover:bg-[#00aaff] hover:text-white" : "bg-black/20 text-white/30 cursor-not-allowed border border-white/10"
                   )}
                 >
@@ -227,7 +227,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
                 
                 {/* Visual Endcap */}
                 <div className="pt-8">
-                   <div className="bg-zinc-900 p-8 rounded-[2.5rem] text-center text-white">
+                   <div className="bg-zinc-900 p-8 rounded-5xl text-center text-white">
                       <Zap size={32} className="mx-auto text-[#00aaff] mb-4" />
                       <p className="text-xs font-black uppercase tracking-[0.2em]">The Breakthrough</p>
                       <p className="text-white/40 text-[10px] mt-2 font-medium">Ultimate transformation milestone</p>
@@ -239,7 +239,7 @@ export default function PatientJourney({ user, userData }: { user: any, userData
           {/* THE VAULT & HOMII */}
           <div className="lg:col-span-8 space-y-16">
              {/* HOMII VOICE JOURNAL */}
-             <div className="bg-white p-10 rounded-[3.5rem] border border-zinc-100 shadow-xl overflow-hidden relative">
+             <div className="bg-white p-10 rounded-6xl border border-zinc-100 shadow-xl overflow-hidden relative">
                 <div className="absolute top-0 inset-e-0 p-8 opacity-5"><MaterialIcon name="voice_over_off" className="text-9xl" /></div>
                 <div className="flex justify-between items-center mb-10">
                    <div>

@@ -48,7 +48,7 @@ export function PrivacySettings({ formData, onChange, isExpert }: PrivacySetting
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] p-8 border border-white/20 dark:border-slate-800 shadow-xl">
+      <div className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-5xl p-8 border border-white/20 dark:border-slate-800 shadow-xl">
         <div className="flex items-center gap-3 mb-8">
           <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
             <Lock className="w-5 h-5" />

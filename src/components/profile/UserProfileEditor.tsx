@@ -113,7 +113,7 @@ export function UserProfileEditor({
     }
   }, [userData, isDirty]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target as HTMLInputElement;
     const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
     
@@ -625,7 +625,7 @@ export function UserProfileEditor({
 
             {/* Sticky Save Bar (Internal) */}
             <div className={clsx(
-              "sticky bottom-4 z-50 p-6 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl rounded-[2.5rem] border border-primary/20 shadow-2xl transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-6",
+              "sticky bottom-4 z-50 p-6 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl rounded-5xl border border-primary/20 shadow-2xl transition-all duration-500 flex flex-col md:flex-row items-center justify-between gap-6",
               isDirty ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
             )}>
               <div className="text-center md:text-start">

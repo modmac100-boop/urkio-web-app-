@@ -93,7 +93,7 @@ export function LandingPage({
     },
     {
       name: t('landing.tierGrowth', 'The Growth Tier'),
-      price: isRTL ? '150 ر.س' : '150 SR',
+      price: isRTL ? '185 ر.س' : '185 SR',
       period: isRTL ? '/شهر' : '/mo',
       desc: 'Facilitated Social Development',
       features: [
@@ -104,12 +104,11 @@ export function LandingPage({
         'Active Community Contribution',
       ],
       cta: 'Upgrade to Growth',
-      highlighted: true,
-      badge: 'Best Value',
+      highlighted: false,
     },
     {
       name: t('landing.tierTransformation', 'Transformation Package'),
-      price: isRTL ? '500 ر.س' : '500 SR',
+      price: isRTL ? '750 ر.س' : '750 SR',
       period: isRTL ? '/شهر' : '/mo',
       desc: 'Accelerated & Clinical Wellness',
       features: [
@@ -120,7 +119,8 @@ export function LandingPage({
         'Exclusive Masterclasses',
       ],
       cta: 'Begin Transformation',
-      highlighted: false,
+      highlighted: true,
+      badge: isRTL ? 'الأكثر شيوعاً' : 'Most Popular',
     },
   ];
 
@@ -528,7 +528,7 @@ export function LandingPage({
               {t('landing.investmentTitle', 'Investment in Excellence')}
             </h2>
             <p className="text-slate-500 mb-8">{t('landing.investmentSubtitle', 'Tiered access for varying stages of professional influence.')}</p>
-            
+
             <div className="inline-flex bg-white dark:bg-slate-800 p-1 rounded-full shadow-sm border border-slate-200 dark:border-slate-700">
               <button
                 onClick={() => setActivePricingCategory('users')}

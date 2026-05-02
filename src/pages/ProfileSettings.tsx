@@ -679,7 +679,7 @@ export function ProfileSettings({
         )}
 
         {/* ── Save ───────────────────────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-primary/5 rounded-[2.5rem] border border-primary/20 border-dashed">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 p-8 bg-primary/5 rounded-5xl border border-primary/20 border-dashed">
           <div>
             <p className="text-sm font-bold">Unsaved Changes</p>
             <p className="text-xs text-on-surface-variant/60 font-medium">Your profile is not automatically saved.</p>

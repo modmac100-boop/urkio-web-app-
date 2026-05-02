@@ -88,7 +88,7 @@ export function CallInterface({ status, type, partner, onAccept, onDecline, onEn
               </button>
               <button
                 onClick={onAccept}
-                className="size-20 rounded-[2.5rem] bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 hover:scale-110 active:scale-95 transition-all shadow-xl shadow-teal-500/20"
+                className="size-20 rounded-5xl bg-teal-500 text-white flex items-center justify-center hover:bg-teal-600 hover:scale-110 active:scale-95 transition-all shadow-xl shadow-teal-500/20"
               >
                 {type === 'video' ? <Video className="size-8" /> : <Phone className="size-8" />}
               </button>
@@ -101,7 +101,7 @@ export function CallInterface({ status, type, partner, onAccept, onDecline, onEn
                 </button>
                 <button
                   onClick={onEnd}
-                  className="size-20 rounded-[2.5rem] bg-red-500 text-white flex items-center justify-center hover:bg-red-600 hover:scale-110 active:scale-95 transition-all shadow-xl shadow-red-500/20"
+                  className="size-20 rounded-5xl bg-red-500 text-white flex items-center justify-center hover:bg-red-600 hover:scale-110 active:scale-95 transition-all shadow-xl shadow-red-500/20"
                 >
                   <PhoneOff className="size-8" />
                 </button>

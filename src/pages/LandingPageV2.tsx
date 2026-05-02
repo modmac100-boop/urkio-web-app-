@@ -117,7 +117,7 @@ export function LandingPageV2({
     >
       {/* ── Background Aura / Particles ── */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <motion.div 
+        <motion.div
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.1, 0.2, 0.1],
@@ -125,7 +125,7 @@ export function LandingPageV2({
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[-10%] right-[-10%] w-[800px] h-[800px] bg-ur-primary rounded-full blur-[150px] opacity-10"
         />
-        <motion.div 
+        <motion.div
           animate={{
             scale: [1, 1.3, 1],
             opacity: [0.05, 0.15, 0.05],
@@ -194,8 +194,8 @@ export function LandingPageV2({
                 {t('common.login', 'Sign In')}
               </button>
               <motion.button
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   boxShadow: "0px 0px 30px rgba(48,176,208,0.5)",
                 }}
                 whileTap={{ scale: 0.95 }}
@@ -217,7 +217,7 @@ export function LandingPageV2({
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
@@ -272,8 +272,8 @@ export function LandingPageV2({
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full">
           <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
@@ -285,7 +285,7 @@ export function LandingPageV2({
               </span>
             </motion.div>
 
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -298,13 +298,13 @@ export function LandingPageV2({
                 <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
                 <>Urkio: Your Journey Toward <br />
-                <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E] italic pr-4">
-                  Healing and Self-Elevation
-                </span></>
+                  <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E] italic pr-4">
+                    Healing and Self-Elevation
+                  </span></>
               )}
             </motion.h1>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -315,15 +315,15 @@ export function LandingPageV2({
                 : 'A sanctuary for healing, breathing, and becoming. You don\'t have to carry it all alone. We hear you.'}
             </motion.p>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-8"
             >
               <motion.button
-                whileHover={{ 
-                  scale: 1.05, 
+                whileHover={{
+                  scale: 1.05,
                   boxShadow: "0px 10px 40px rgba(48,176,208,0.5)",
                 }}
                 whileTap={{ scale: 0.95 }}
@@ -373,14 +373,14 @@ export function LandingPageV2({
       {/* ── Features & Encryption ── */}
       <section className="py-24 relative z-10 bg-ur-on-surface">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
             className="grid md:grid-cols-2 gap-8"
           >
-            <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-sm group hover:border-ur-primary/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-10 rounded-5xl backdrop-blur-sm group hover:border-ur-primary/50 transition-colors">
               <div className="size-16 rounded-2xl bg-ur-primary/10 flex items-center justify-center text-ur-primary mb-8 group-hover:scale-110 transition-transform">
                 <Activity className="size-8" />
               </div>
@@ -390,7 +390,7 @@ export function LandingPageV2({
               </p>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] backdrop-blur-sm group hover:border-[#C8A96E]/50 transition-colors">
+            <div className="bg-white/5 border border-white/10 p-10 rounded-5xl backdrop-blur-sm group hover:border-[#C8A96E]/50 transition-colors">
               <div className="size-16 rounded-2xl bg-[#C8A96E]/10 flex items-center justify-center text-[#C8A96E] mb-8 group-hover:scale-110 transition-transform">
                 <Shield className="size-8" />
               </div>
@@ -415,7 +415,7 @@ export function LandingPageV2({
 
           <div className="grid md:grid-cols-3 gap-6">
             {weeklyExperts.map((expert, i) => (
-              <motion.div 
+              <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -426,7 +426,7 @@ export function LandingPageV2({
               >
                 {/* Glow effect on hover */}
                 <div className="absolute inset-0 bg-linear-to-br from-ur-primary/0 to-[#C8A96E]/0 group-hover:from-ur-primary/10 group-hover:to-[#C8A96E]/10 transition-colors duration-500 pointer-events-none" />
-                
+
                 <div className="flex items-center gap-4 mb-6">
                   <div className="size-16 rounded-full bg-white/10 p-1">
                     <img src={expert.image} className="w-full h-full rounded-full object-cover" alt={expert.name} />
@@ -460,7 +460,7 @@ export function LandingPageV2({
       {/* ── Social Graph / Bridge ── */}
       <section id="graph" className="py-24 relative z-10 bg-[#020406] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -471,12 +471,12 @@ export function LandingPageV2({
                 {isRTL ? 'الشبكة: من الاتصال الرقمي إلى الترابط الإنساني' : 'The Network: From Digital Contact to Human Connection'}
               </h2>
               <div className="font-serif italic text-ur-primary text-lg md:text-xl border-s-2 border-ur-primary/40 ps-4 mb-6 leading-relaxed">
-                {isRTL 
+                {isRTL
                   ? '"ما وراء الخوارزميات: نبض الإنسانية المشترك."'
                   : '"Beyond the Algorithm: A Pulse of Shared Humanity."'}
               </div>
               <p className="text-white/80 text-sm md:text-base mb-8 leading-relaxed tracking-wide font-sans">
-                {isRTL 
+                {isRTL
                   ? 'في عالم من الضجيج الرقمي المشتت، تعيد "أوركيو" استرداد جوهر الاتصال. شبكتنا لم تُبنَ على مقاييس الغرور أو التصفح اللانهائي؛ بل هي "رسم بياني اجتماعي" حيّ صُمم لرسم مسارك نحو التعافي. نحن نجسر الفجوة بين الألم المنعزل والتشافي الجماعي، لنخلق مرفأً آمناً حيث يمثل كل اتصال مصدراً للقوة، وكل تفاعل خطوة نحو الاكتمال.'
                   : 'In a world of fragmented digital noise, URKIO reclaims the essence of connection. Our network is not built on vanity metrics or endless scrolling; it is a living "Social Graph" designed to map your path to recovery. We bridge the gap between isolated pain and collective healing, creating a safe harbor where every node is a source of strength and every interaction is a step toward wholeness.'}
               </p>
@@ -503,33 +503,33 @@ export function LandingPageV2({
             </div>
 
             <div className="relative h-[400px] flex items-center justify-center bg-white/5 rounded-[3rem] border border-white/10">
-               {/* Abstract nodes animation instead of the old complex one */}
-               <motion.div 
-                 animate={{ rotate: 360 }}
-                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                 className="relative w-64 h-64 border border-white/10 rounded-full flex items-center justify-center"
-               >
-                 <motion.div 
-                   animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
-                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                   className="absolute top-0 -translate-y-1/2 size-8 bg-ur-primary rounded-full shadow-[0_0_20px_var(--ur-primary)]"
-                 />
-                 <motion.div 
-                   animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
-                   transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                   className="absolute bottom-0 translate-y-1/2 size-6 bg-[#C8A96E] rounded-full shadow-[0_0_15px_#C8A96E]"
-                 />
-                 <motion.div 
-                   animate={{ scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
-                   transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                   className="absolute left-0 -translate-x-1/2 size-4 bg-white rounded-full shadow-[0_0_10px_white]"
-                 />
-                 <div className="w-32 h-32 border border-white/20 rounded-full flex items-center justify-center">
-                    <div className="size-16 bg-ur-on-surface border-2 border-ur-primary rounded-full flex items-center justify-center font-headline font-black text-xl text-ur-primary">
-                      U
-                    </div>
-                 </div>
-               </motion.div>
+              {/* Abstract nodes animation instead of the old complex one */}
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="relative w-64 h-64 border border-white/10 rounded-full flex items-center justify-center"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-0 -translate-y-1/2 size-8 bg-ur-primary rounded-full shadow-[0_0_20px_var(--ur-primary)]"
+                />
+                <motion.div
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  className="absolute bottom-0 translate-y-1/2 size-6 bg-[#C8A96E] rounded-full shadow-[0_0_15px_#C8A96E]"
+                />
+                <motion.div
+                  animate={{ scale: [1, 1.1, 1], opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute left-0 -translate-x-1/2 size-4 bg-white rounded-full shadow-[0_0_10px_white]"
+                />
+                <div className="w-32 h-32 border border-white/20 rounded-full flex items-center justify-center">
+                  <div className="size-16 bg-ur-on-surface border-2 border-ur-primary rounded-full flex items-center justify-center font-headline font-black text-xl text-ur-primary">
+                    U
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>
@@ -543,14 +543,14 @@ export function LandingPageV2({
               {isRTL ? 'المرتكزات: العمارة الداخلية للروح' : 'The Pillars: The Internal Architecture of the Soul'}
             </h2>
             <div className="w-16 h-1 bg-linear-to-r from-ur-primary to-[#C8A96E] mx-auto rounded-full mb-6" />
-            
+
             <div className="font-serif italic text-[#C8A96E] text-lg md:text-xl mb-4 max-w-2xl mx-auto leading-relaxed">
-              {isRTL 
+              {isRTL
                 ? '"ركائز الهوية السيادية."'
                 : '"The Pillars of Sovereign Identity."'}
             </div>
             <p className="text-white/60 text-sm md:text-base max-w-3xl mx-auto leading-relaxed font-sans">
-              {isRTL 
+              {isRTL
                 ? 'تطوير الذات دون أساس هو مجرد إصلاح مؤقت. تمثل مرتكزاتنا التزاماً بـ "النزاهة الجذرية". من خلال دمج التشفير المتقدم (الخصوصية) مع البصيرة النفسية العميقة (العلم)، نخلق هيكلاً لذاتك الجديدة. نحن نضمن أن نموك ليس مجرد مرحلة عابرة، بل هو تحول بنيوي يحميك من الآثار الجانبية للتوتر الحديث وتآكل الهوية.'
                 : 'Personal development without a foundation is merely a temporary fix. Our pillars represent a commitment to "Radical Integrity." By combining Advanced Cryptography (Privacy) with Deep Psychological Insights (Science), we create a scaffold for your new self. We ensure that your growth is not just a phase, but a structural transformation that shields you from the side effects of modern stress and identity erosion.'}
             </p>
@@ -589,19 +589,19 @@ export function LandingPageV2({
             <h2 className="font-headline text-3xl md:text-5xl font-black mb-4">
               {isRTL ? 'الاستثمار: صناعة الثروة النفسية' : 'The Investment: Creating Psychological Wealth'}
             </h2>
-            
+
             <div className="font-serif italic text-ur-primary text-lg md:text-xl mb-6 max-w-2xl mx-auto leading-relaxed">
-              {isRTL 
+              {isRTL
                 ? '"الاستثمار في هندسة الغد."'
                 : '"Investing in the Architecture of Tomorrow."'}
             </div>
-            
+
             <p className="text-white/60 text-sm md:text-base max-w-3xl mx-auto mb-8 leading-relaxed font-sans">
-              {isRTL 
+              {isRTL
                 ? 'العملة الأكثر قيمة في عام 2026 هي المرونة النفسية. الاستثمار في "أوركيو" هو استثمار في "رأس المال الاجتماعي" و"التوازن الشخصي". نحن نمكّنك من تحويل نقاط ضعفك إلى أصول من الحكمة. عندما تشفي نفسك، فإنك توازن عائلتك؛ وعندما توازن عائلتك، فإنك تقوي المجتمع. هذا هو العائد الأسمى: مجتمع من الشخصيات المبنية، المستعدة للقيادة بوضوح ورحمة.'
                 : 'The most valuable currency in 2026 is mental resilience. Investing in URKIO is an investment in "Social Capital" and "Personal Equilibrium." We empower you to turn your vulnerabilities into assets of wisdom. When you heal yourself, you stabilize your family; when you stabilize your family, you strengthen society. This is the ultimate return: a community of built personalities, ready to lead with clarity and compassion.'}
             </p>
-            
+
             <div className="inline-flex bg-ur-on-surface p-1.5 rounded-full border border-white/10">
               <button
                 onClick={() => setActivePricingCategory('users')}
@@ -624,7 +624,7 @@ export function LandingPageV2({
             </div>
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             key={activePricingCategory}
@@ -643,24 +643,25 @@ export function LandingPageV2({
               <button onClick={() => openSignUp()} className="w-full py-4 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white hover:text-ur-on-surface transition-all">{isRTL ? 'ابدأ مجاناً' : 'Start Free'}</button>
             </div>
 
-            <div className="bg-linear-to-b from-ur-primary/20 to-ur-on-surface border border-ur-primary p-8 rounded-4xl flex flex-col scale-105 relative shadow-[0_0_50px_rgba(48,176,208,0.1)]">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-ur-primary text-ur-on-surface px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{isRTL ? 'الأكثر شيوعاً' : 'Most Popular'}</div>
+            <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
               <h3 className="font-headline text-xl font-bold mb-2">{isRTL ? 'باقة النمو' : 'Growth Tier'}</h3>
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">{isRTL ? '150 ر.س' : '150 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
+                <span className="text-4xl font-black">{isRTL ? '185 ر.س' : '185 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
                 <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'جميع الميزات المجانية' : 'All Free Features'}</li>
                 <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'متابعة شهرية مع موجه' : 'Monthly Coach Check-in'}</li>
+                <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'تدريب متطور بالذكاء الاصطناعي' : 'Premium AI Coaching'}</li>
                 <li className="flex gap-3 text-white"><Check className="size-5 text-ur-primary" /> {isRTL ? 'المساهمة في المجتمع' : 'Community Contribution'}</li>
               </ul>
               <button onClick={() => openSignUp()} className="w-full py-4 bg-ur-primary text-ur-on-surface rounded-xl text-xs font-black uppercase tracking-widest hover:bg-white transition-all">{isRTL ? 'ترقية الباقة' : 'Upgrade'}</button>
             </div>
 
-            <div className="bg-white/5 border border-white/10 p-8 rounded-4xl flex flex-col hover:border-white/30 transition-colors">
+            <div className="bg-linear-to-b from-[#C8A96E]/20 to-ur-on-surface border border-[#C8A96E] p-8 rounded-4xl flex flex-col scale-105 relative shadow-[0_0_50px_rgba(200,169,110,0.1)]">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#C8A96E] text-ur-on-surface px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">{isRTL ? 'الأكثر شيوعاً' : 'Most Popular'}</div>
               <h3 className="font-headline text-xl font-bold mb-2">{isRTL ? 'التحول الشامل' : 'Transformation'}</h3>
               <div className="flex items-baseline gap-1 mb-8">
-                <span className="text-4xl font-black">{isRTL ? '500 ر.س' : '500 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
+                <span className="text-4xl font-black">{isRTL ? '750 ر.س' : '750 SR'}</span><span className="text-white/40">{isRTL ? '/شهر' : '/mo'}</span>
               </div>
               <ul className="space-y-4 mb-10 flex-1">
                 <li className="flex gap-3 text-white/70"><Check className="size-5 text-ur-primary" /> {isRTL ? 'جلسات علاج فردية' : '1-on-1 Clinical Therapy'}</li>
@@ -676,7 +677,7 @@ export function LandingPageV2({
       <section className="py-32 relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-t from-[#0A3D91]/20 to-transparent pointer-events-none" />
         <div className="max-w-4xl mx-auto px-4 text-center relative">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}

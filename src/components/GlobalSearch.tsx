@@ -206,7 +206,7 @@ export function GlobalSearch() {
               initial={{ opacity: 0, scale: 0.95, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
-              className="relative w-full max-w-2xl bg-white/95 dark:bg-[#161920]/95 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
+              className="relative w-full max-w-2xl bg-white/95 dark:bg-[#161920]/95 backdrop-blur-3xl rounded-5xl border border-white/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] overflow-hidden flex flex-col"
             >
               <div className="p-6 border-b border-white/5 flex items-center gap-4">
                 <Search className={clsx("size-6 transition-colors", isSearching ? "text-primary animate-pulse" : "text-slate-400")} />

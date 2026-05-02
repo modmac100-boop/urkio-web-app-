@@ -53,7 +53,7 @@ export function HelpCenter() {
       {/* Categories Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {categories.map((cat, i) => (
-          <div key={i} className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] border border-white/20 dark:border-slate-800 p-8 hover:shadow-xl transition-all group/card">
+          <div key={i} className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-5xl border border-white/20 dark:border-slate-800 p-8 hover:shadow-xl transition-all group/card">
             <div className="size-12 rounded-2xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center mb-6 group-hover/card:scale-110 transition-transform">
               {cat.icon}
             </div>
@@ -73,7 +73,7 @@ export function HelpCenter() {
       </div>
 
       {/* FAQ Section */}
-      <section className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-[2.5rem] border border-white/20 dark:border-slate-800 p-12">
+      <section className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl rounded-5xl border border-white/20 dark:border-slate-800 p-12">
         <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-8 tracking-tight flex items-center gap-3">
           <MessageCircle className="w-6 h-6 text-primary" />
           Frequently Asked Questions
@@ -94,7 +94,7 @@ export function HelpCenter() {
       </section>
 
       {/* Contact Support */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-slate-900 rounded-[2.5rem] text-white">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-8 p-10 bg-slate-900 rounded-5xl text-white">
         <div className="space-y-2">
           <h3 className="text-2xl font-black tracking-tight uppercase italic">Still need help?</h3>
           <p className="text-slate-400 font-medium">Our support team is available 24/7 to assist you.</p>

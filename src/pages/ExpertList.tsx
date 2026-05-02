@@ -146,7 +146,7 @@ export function ExpertList({ user, userData }: { user: any; userData: any }) {
           <div className="relative group max-w-2xl mx-auto mt-16">
              <div className="absolute inset-0 bg-ur-primary/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
              <div className={clsx(
-               "relative flex items-center p-2 rounded-[2.5rem] border transition-all",
+               "relative flex items-center p-2 rounded-5xl border transition-all",
                theme === 'dark' ? "bg-white/5 border-white/10" : "bg-white border-slate-200 shadow-2xl"
              )}>
                 <Search className="ml-8 mr-4 w-6 h-6 opacity-30" />

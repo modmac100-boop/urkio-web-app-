@@ -157,7 +157,7 @@ export const ClinicalStudio: React.FC = () => {
       </header>
 
       {/* MINIMAL 3-LINE SIDEBAR REQUESTED */}
-      <nav className="fixed left-6 top-32 bottom-6 w-20 z-50 flex flex-col items-center py-10 rounded-[2.5rem] glass-panel border-[#C8A96E]/10 premium-shadow">
+      <nav className="fixed left-6 top-32 bottom-6 w-20 z-50 flex flex-col items-center py-10 rounded-5xl glass-panel border-[#C8A96E]/10 premium-shadow">
          <div className="flex flex-col gap-8 flex-1">
             <button onClick={() => navigate('/')} className="p-4 rounded-2xl text-slate-400 hover:text-ur-primary hover:bg-white/5 transition-all group relative">
                <Home className="w-6 h-6" />
@@ -186,7 +186,7 @@ export const ClinicalStudio: React.FC = () => {
          
          {/* Left: Project & Case Overview */}
          <div className="col-span-12 lg:col-span-3 flex flex-col gap-8 overflow-y-auto custom-scrollbar pr-2 pb-10">
-            <div className="rounded-[2.5rem] glass-panel p-8 premium-shadow">
+            <div className="rounded-5xl glass-panel p-8 premium-shadow">
                <h3 className="font-serif-clinical text-xl font-bold mb-6">Patient Dossier</h3>
                <div className="space-y-4">
                   <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
@@ -203,7 +203,7 @@ export const ClinicalStudio: React.FC = () => {
                </div>
             </div>
 
-            <div className="rounded-[2.5rem] glass-panel p-8 flex-1 premium-shadow">
+            <div className="rounded-5xl glass-panel p-8 flex-1 premium-shadow">
                <div className="flex items-center justify-between mb-8">
                   <h3 className="font-serif-clinical text-xl font-bold">Case Documents</h3>
                   <button className="text-ur-primary hover:scale-110 transition-transform"><Plus className="w-5 h-5" /></button>
@@ -231,7 +231,7 @@ export const ClinicalStudio: React.FC = () => {
 
          {/* Center: Live Studio Bridge */}
          <div className="col-span-12 lg:col-span-6 flex flex-col gap-8">
-            <div className="flex-1 rounded-[3.5rem] glass-panel border-[#C8A96E]/5 relative overflow-hidden group premium-shadow">
+            <div className="flex-1 rounded-6xl glass-panel border-[#C8A96E]/5 relative overflow-hidden group premium-shadow">
                <AnimatePresence mode="wait">
                   {isSecureLineActive ? (
                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full relative">
@@ -248,7 +248,7 @@ export const ClinicalStudio: React.FC = () => {
                            <button className="px-6 py-3 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest">Toggle XR-View</button>
                         </div>
 
-                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-6 z-30 px-10 py-5 rounded-[2.5rem] bg-black/40 backdrop-blur-2xl border border-white/10 shadow-3xl">
+                        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-6 z-30 px-10 py-5 rounded-5xl bg-black/40 backdrop-blur-2xl border border-white/10 shadow-3xl">
                            <button onClick={() => setIsRecording(!isRecording)} className={clsx("size-14 rounded-2xl flex items-center justify-center transition-all", isRecording ? "bg-red-500/20 text-red-500 border-red-500" : "bg-white/5 text-white")}>
                               {isRecording ? <Square className="w-6 h-6 fill-current" /> : <Play className="w-6 h-6 fill-current ml-1" />}
                            </button>
@@ -263,10 +263,10 @@ export const ClinicalStudio: React.FC = () => {
                   ) : (
                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full flex flex-col items-center justify-center text-center p-20">
                         <div className="relative mb-12">
-                           <div className="size-32 rounded-[2.5rem] clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
+                           <div className="size-32 rounded-5xl clinical-gradient flex items-center justify-center shadow-3xl animate-float relative z-10">
                               <Zap className="w-12 h-12 text-ur-on-surface" />
                            </div>
-                           <div className="absolute inset-0 rounded-[2.5rem] clinical-gradient blur-3xl opacity-20" />
+                           <div className="absolute inset-0 rounded-5xl clinical-gradient blur-3xl opacity-20" />
                         </div>
                         <h2 className="font-serif-clinical text-5xl font-bold mb-6 tracking-tighter">Clinical Perimeter Ready</h2>
                         <p className="text-sm font-manrope opacity-40 max-w-lg mx-auto mb-12 uppercase tracking-[0.3em] font-black">
@@ -282,7 +282,7 @@ export const ClinicalStudio: React.FC = () => {
 
             {/* Bottom Widgets */}
             <div className="h-48 grid grid-cols-2 gap-8">
-               <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+               <div className="rounded-5xl glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
                   <div>
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Session Duration</span>
                      <p className="text-4xl font-serif-clinical font-bold mt-2">{formatTime(sessionTime)}</p>
@@ -291,7 +291,7 @@ export const ClinicalStudio: React.FC = () => {
                      <Activity className="w-8 h-8 text-ur-primary animate-pulse" />
                   </div>
                </div>
-               <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
+               <div className="rounded-5xl glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer group">
                   <div>
                      <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Biometric Score</span>
                      <p className="text-4xl font-serif-clinical font-bold mt-2">98.4</p>
@@ -305,7 +305,7 @@ export const ClinicalStudio: React.FC = () => {
 
          {/* Right: Operational Controls */}
          <div className="col-span-12 lg:col-span-3 flex flex-col gap-8 pb-10">
-            <div className="flex-1 rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
+            <div className="flex-1 rounded-6xl glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
                <div className="p-10 border-b border-white/5 flex justify-between items-center">
                   <h3 className="font-serif-clinical text-2xl font-bold tracking-tight">Observations</h3>
                   <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center">
@@ -322,7 +322,7 @@ export const ClinicalStudio: React.FC = () => {
                </div>
             </div>
 
-            <div className="h-[300px] rounded-[3.5rem] glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
+            <div className="h-[300px] rounded-6xl glass-panel border-[#C8A96E]/5 flex flex-col premium-shadow">
                <div className="px-10 py-6 border-b border-white/5 flex items-center justify-between">
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Neural Assistant</span>
                   <div className="size-2 bg-ur-primary rounded-full animate-pulse" />

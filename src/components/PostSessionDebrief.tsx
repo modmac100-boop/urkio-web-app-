@@ -70,7 +70,7 @@ export function PostSessionDebrief({ session, onClose }: DebriefProps) {
       <motion.div 
         initial={{ scale: 0.9, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
-        className="w-full max-w-xl bg-white rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative"
+        className="w-full max-w-xl bg-white rounded-5xl p-10 shadow-2xl overflow-hidden relative"
       >
         <div className="flex items-center gap-3 mb-8">
            <div className="p-3 bg-indigo-50 rounded-2xl text-msgr-primary"><Zap size={24} /></div>

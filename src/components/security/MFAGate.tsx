@@ -68,7 +68,7 @@ export const MFAGate: React.FC<MFAGateProps> = ({ user, userData, children }) =>
         <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-[#a8c8ff]/5 blur-[150px]" />
         <div className="absolute inset-0 backdrop-blur-[20px]" />
       </div>
-      <div className="w-full max-w-xl relative bg-[#11141b]/80 backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-16 shadow-2xl">
+      <div className="w-full max-w-xl relative bg-[#11141b]/80 backdrop-blur-3xl border border-white/10 rounded-6xl p-16 shadow-2xl">
         <div className="mb-14 text-center">
           <div className="relative inline-block mb-10">
             <div className="relative size-28 bg-white/5 border border-white/10 rounded-4xl flex items-center justify-center text-[#a8c8ff]">

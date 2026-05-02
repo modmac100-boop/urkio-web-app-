@@ -124,7 +124,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
       
       {/* Immersive Header - Bento Style */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-        <div className="lg:col-span-8 bg-linear-to-br from-[#1a2233] to-[#080a0f] rounded-[3.5rem] p-12 border border-white/10 relative overflow-hidden shadow-2xl">
+        <div className="lg:col-span-8 bg-linear-to-br from-[#1a2233] to-[#080a0f] rounded-6xl p-12 border border-white/10 relative overflow-hidden shadow-2xl">
            <div className="absolute top-0 right-0 w-80 h-80 bg-[#a8c8ff]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
               <div className="size-24 rounded-4xl bg-linear-to-tr from-[#a8c8ff] to-[#4c75ff] flex items-center justify-center shadow-2xl shadow-blue-500/20 rotate-3">
@@ -155,7 +155,7 @@ export function SecretVault({ user, userData }: SecretVaultProps) {
         </div>
 
         {/* Tactical Search & Filter */}
-        <aside className="lg:col-span-4 bg-[#0f111a] border border-white/5 rounded-[3.5rem] p-10 flex flex-col justify-between shadow-xl">
+        <aside className="lg:col-span-4 bg-[#0f111a] border border-white/5 rounded-6xl p-10 flex flex-col justify-between shadow-xl">
            <div>
              <h4 className="text-[11px] font-black uppercase tracking-[0.4em] text-white/30 mb-8">System Query</h4>
              <div className="relative mb-6">

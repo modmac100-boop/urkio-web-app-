@@ -106,7 +106,7 @@ export function CreateGroupModal({
   return (
     <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/20 dark:border-slate-800">
+      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-5xl shadow-2xl overflow-hidden border border-white/20 dark:border-slate-800">
         <div className="p-8 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-xl font-black uppercase tracking-tighter dark:text-white">Initialize Group</h3>

@@ -162,7 +162,7 @@ export function HealingCourses({ user, userData, expertId }: { user: any, userDa
                     exit={{ opacity: 0, scale: 0.95 }}
                     transition={{ delay: idx * 0.05 }}
                     onClick={() => isLocked ? setCourseToUnlock(course) : setSelectedCourse(course)}
-                    className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-[2.5rem] p-8 cursor-pointer hover:bg-white/10 hover:border-[#a8c8ff]/30 transition-all duration-500 overflow-hidden"
+                    className="group relative bg-white/5 backdrop-blur-md border border-white/10 rounded-5xl p-8 cursor-pointer hover:bg-white/10 hover:border-[#a8c8ff]/30 transition-all duration-500 overflow-hidden"
                   >
                     {/* Status Badge */}
                     <div className="flex justify-between items-start mb-8">

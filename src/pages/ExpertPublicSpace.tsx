@@ -58,7 +58,7 @@ function BookingModal({ expert, user, onClose }: { expert: any; user: any; onClo
 
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-[#0f1117] border border-white/10 rounded-[2.5rem] w-full max-w-lg p-10 relative shadow-2xl">
+      <div className="bg-[#0f1117] border border-white/10 rounded-5xl w-full max-w-lg p-10 relative shadow-2xl">
         <button onClick={onClose} className="absolute top-8 right-8 text-white/40 hover:text-white transition-colors"><X className="size-6" /></button>
 
         {step === 'form' ? (
@@ -191,7 +191,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
           <div className="flex flex-col md:flex-row gap-10 items-start">
             {/* Avatar */}
             <div className="relative shrink-0">
-              <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden border-4 border-white/10 shadow-2xl">
+              <div className="bg-white dark:bg-slate-900 rounded-5xl overflow-hidden border-4 border-white/10 shadow-2xl">
                 <img src={expert.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(expert.displayName || 'E')}&background=1a1a2e&color=fff&size=300`}
                   alt={expert.displayName} className="w-full h-full object-cover" />
               </div>
@@ -280,7 +280,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
       {expert.bio && (
         <section className="relative z-10 px-6 md:px-16 pb-20">
           <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2 bg-white/3 border border-white/5 rounded-[2.5rem] p-10 md:p-14">
+            <div className="md:col-span-2 bg-white/3 border border-white/5 rounded-5xl p-10 md:p-14">
               <h2 className="text-4xl md:text-6xl font-headline font-black text-white tracking-widest uppercase mb-4 flex items-center gap-3">
                 <Sparkles className="size-5 text-ur-primary" /> About
               </h2>
@@ -288,7 +288,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
             </div>
             
             {/* Clinical Agenda Preview */}
-            <div className="bg-white/3 border border-white/5 rounded-[2.5rem] p-8 space-y-6">
+            <div className="bg-white/3 border border-white/5 rounded-5xl p-8 space-y-6">
               <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
                 <Clock className="size-4 text-ur-primary" /> Clinic Hours
               </h3>
@@ -330,7 +330,7 @@ export function ExpertPublicSpace({ user, userData }: { user: any; userData: any
           </div>
 
           {courses.length === 0 ? (
-            <div className="py-24 text-center bg-white/2 border border-dashed border-white/10 rounded-[2.5rem]">
+            <div className="py-24 text-center bg-white/2 border border-dashed border-white/10 rounded-5xl">
               <BookOpen className="size-12 text-white/10 mx-auto mb-4" />
               <p className="text-zinc-600 font-black text-xs uppercase tracking-widest">
                 {isOwner ? 'No courses yet — create one from your Specialist Dashboard' : 'No courses published yet'}

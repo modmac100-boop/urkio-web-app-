@@ -60,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ user, userData }) => {
   };
 
   return (
-    <aside className="w-full h-[calc(100vh-2rem)] bg-white/80 dark:bg-zinc-900/80 backdrop-blur-3xl border border-zinc-200 dark:border-zinc-800 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden sticky top-4">
+    <aside className="w-full h-[calc(100vh-2rem)] bg-white/80 dark:bg-zinc-900/80 backdrop-blur-3xl border border-zinc-200 dark:border-zinc-800 rounded-5xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden sticky top-4">
       {/* User Branding Section */}
       <div className="p-8 pb-4 text-center relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-4">

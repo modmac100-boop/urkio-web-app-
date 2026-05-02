@@ -96,11 +96,11 @@ async function startServer() {
 
   // AI Chat endpoint for local development
   app.post('/api/chat', async (req, res) => {
+    const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
     try {
-      const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
       const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 
-      const lastMessage = messages[messages.length - 1]?.content || '';
+      const lastMessage = messages?.[messages.length - 1]?.content || '';
       
       // --- SAFETY GUARD ---
       if (assessRiskLevel(lastMessage) === 'high') {

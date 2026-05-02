@@ -18,7 +18,7 @@ export function PackagesModal({ isOpen, onClose }: { isOpen: boolean, onClose: (
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative bg-white dark:bg-zinc-900 rounded-[2.5rem] p-10 max-w-lg w-full shadow-2xl border border-zinc-100 dark:border-zinc-800 text-center overflow-hidden"
+          className="relative bg-white dark:bg-zinc-900 rounded-5xl p-10 max-w-lg w-full shadow-2xl border border-zinc-100 dark:border-zinc-800 text-center overflow-hidden"
         >
           {/* Decorative background */}
           <div className="absolute -top-32 -inset-s-32 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />

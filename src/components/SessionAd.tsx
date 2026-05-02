@@ -21,7 +21,7 @@ export function SessionAd({ event, onClick }: SessionAdProps) {
   return (
     <div 
       onClick={() => onClick(event)}
-      className="bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 p-6 shadow-sm group cursor-pointer transition-all duration-500 hover:shadow-xl hover:border-ur-primary/10 overflow-hidden relative"
+      className="bg-white dark:bg-zinc-900 rounded-5xl border border-zinc-100 dark:border-zinc-800 p-6 shadow-sm group cursor-pointer transition-all duration-500 hover:shadow-xl hover:border-ur-primary/10 overflow-hidden relative"
     >
       {/* Session Badge */}
       <div className="flex items-center gap-2 mb-4 bg-zinc-50 dark:bg-zinc-800/50 w-fit px-3 py-1.5 rounded-xl border border-zinc-100 dark:border-zinc-700">

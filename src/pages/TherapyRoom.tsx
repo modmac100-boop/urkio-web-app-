@@ -154,7 +154,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
       `}</style>
 
       {/* Floating Header - Compact & Premium */}
-      <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-[2.5rem] glass-panel border-ur-gold/10 premium-shadow transition-all duration-500">
+      <header className="fixed top-6 left-6 right-6 z-100 flex justify-between items-center px-10 py-5 rounded-5xl glass-panel border-ur-gold/10 premium-shadow transition-all duration-500">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-4 cursor-pointer group" onClick={() => navigate('/')}>
              <div className="size-10 rounded-xl clinical-gradient flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform">
@@ -286,7 +286,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
             </div>
 
             {/* Integrated Clinical Documentation Panel */}
-            <div className="flex-1 rounded-[3.5rem] glass-panel border-ur-gold/5 flex flex-col premium-shadow">
+            <div className="flex-1 rounded-6xl glass-panel border-ur-gold/5 flex flex-col premium-shadow">
                <div className="p-10 border-b border-white/5 flex justify-between items-center">
                   <div className="flex items-center gap-4">
                      <div className="size-12 rounded-2xl bg-ur-gold/10 flex items-center justify-center shadow-inner">
@@ -317,7 +317,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
          {/* Bottom Matrix - Functional & Minimal */}
          <div className="h-40 grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
+            <div className="rounded-5xl glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
                <div>
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Session Timer</span>
                   <p className="text-3xl font-serif-clinical font-bold mt-1 tracking-tighter">00:42:15</p>
@@ -327,7 +327,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                </div>
             </div>
 
-            <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
+            <div className="rounded-5xl glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
                <div>
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Neural Analysis</span>
                   <p className="text-xs font-bold mt-1 opacity-60">STABLE FLOW</p>
@@ -337,7 +337,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                </div>
             </div>
 
-            <div className="rounded-[2.5rem] glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
+            <div className="rounded-5xl glass-panel p-8 flex items-center justify-between hover:bg-white/5 transition-all cursor-pointer group">
                <div>
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Case Docs</span>
                   <p className="text-xs font-bold mt-1 opacity-60">3 FILES SECURED</p>
@@ -349,7 +349,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
 
             <button 
               onClick={() => setIsAssistantOpen(true)}
-              className="rounded-[2.5rem] bg-ur-primary p-8 flex items-center justify-between hover:scale-105 transition-all group shadow-3xl shadow-ur-primary/20"
+              className="rounded-5xl bg-ur-primary p-8 flex items-center justify-between hover:scale-105 transition-all group shadow-3xl shadow-ur-primary/20"
             >
                <div className="text-ur-on-surface text-left">
                   <span className="text-[10px] font-black uppercase tracking-widest opacity-60">Neural Agent</span>
@@ -370,7 +370,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                animate={{ x: 0 }}
                exit={{ x: '100%' }}
                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-               className="fixed top-8 right-8 bottom-8 w-[450px] z-200 glass-panel border-ur-primary/20 premium-shadow flex flex-col rounded-[3.5rem] overflow-hidden"
+               className="fixed top-8 right-8 bottom-8 w-[450px] z-200 glass-panel border-ur-primary/20 premium-shadow flex flex-col rounded-6xl overflow-hidden"
             >
                <div className="p-10 border-b border-white/10 flex items-center justify-between bg-black/20">
                   <div className="flex items-center gap-4">

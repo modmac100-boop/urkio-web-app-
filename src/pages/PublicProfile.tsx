@@ -555,7 +555,7 @@ export function PublicProfile({
               {activeTab === 'feed' && (
                 <div className="grid grid-cols-1 gap-8 animate-fade-in-up">
                   {isExpert && (
-                    <section className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm mb-4">
+                    <section className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-5xl shadow-sm mb-4">
                       <div className="flex items-center justify-between mb-8">
                         <h3 className="font-headline font-black text-primary italic text-xl">Professional Journey</h3>
                         {isOwnProfile && (
@@ -711,7 +711,7 @@ export function PublicProfile({
               {/* REVIEWS */}
               {activeTab === 'reviews' && (
                 <div className="space-y-8 animate-fade-in-up">
-                  <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                  <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-5xl shadow-sm">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                       <div>
                         <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic">Specialist Reviews</h3>
@@ -761,7 +761,7 @@ export function PublicProfile({
                           </p>
                         </div>
                       )) : (
-                        <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/30 rounded-[2.5rem] border border-dashed border-zinc-200 dark:border-zinc-800">
+                        <div className="text-center py-20 bg-zinc-50 dark:bg-zinc-800/30 rounded-5xl border border-dashed border-zinc-200 dark:border-zinc-800">
                           <h4 className="text-zinc-900 dark:text-zinc-100 font-black italic">Awaiting Feedback</h4>
                         </div>
                       )}
@@ -773,7 +773,7 @@ export function PublicProfile({
               {/* SERVICES */}
               {activeTab === 'services' && (
                 <div className="animate-fade-in-up">
-                   <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-[2.5rem] shadow-sm">
+                   <div className="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-8 rounded-5xl shadow-sm">
                     <h3 className="font-headline font-black text-zinc-900 dark:text-zinc-100 text-2xl italic mb-10">Specialized Protocols</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       {(profileData.services || [

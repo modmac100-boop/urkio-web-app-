@@ -55,15 +55,9 @@
     "safetyFirst": "Safety First",
     "verifiedExperts": "Verified Experts",
     "aiExpertGuide": "AI Expert Guide",
-    "signOut": "Sign Out",
-    "verifyAsExpert": "Verify as Expert",
-    "expertList": "Expert List",
     "company": "Company",
     "legal": "Legal",
-    "therapyRoom": "Therapy Room",
-    "homii": "Homii",
-    "healingHub": "Healing Center",
-    "inbox": "Chat"
+    "therapyRoom": "Therapy Room"
   },
   "notifications": {
     "title": "Notifications",
