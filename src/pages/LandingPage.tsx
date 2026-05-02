@@ -99,6 +99,7 @@ export function LandingPage({
       features: [
         'All Free Features',
         'Facilitated Group Access',
+        isRTL ? 'تدريب متطور بالذكاء الاصطناعي' : 'Premium AI Coaching',
         'Monthly Coach Check-in',
         'Full Library & Tool Access',
         'Active Community Contribution',
