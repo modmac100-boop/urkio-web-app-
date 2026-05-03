@@ -240,7 +240,9 @@
     "startJourney": "Start Your Journey",
     "newSpecialistHub": "New: Global Specialist Hub v4.0",
     "verifiedExpertsOnline": "verified experts online",
-    "keynoteStreaming": "Urkio Vision: Exclusive preview coming soon for verified partners."
+    "keynoteStreaming": "Urkio Vision: Exclusive preview coming soon for verified partners.",
+    "manifesto_button": "اكتشف رؤية أور كيو",
+    "agent_button": "تحدث مع مرشدك الذكي"
   },
   "aboutTitle": "Urkio: Your Journey Within",
     "aboutManifesto": "Official Introduction & Manifesto | Edition One (Public Beta)",
@@ -633,8 +635,6 @@
     "manualLog": "Manual Log",
     "initiateProtocol": "Initiate Protocol",
     "scanning": "Scanning...",
-    "guardianVerified": "Guardian Verified",
-    "guardianPending": "Guardian Pending",
 
     "protocol": "Protocol",
     "dossier": "Dossier",
@@ -657,8 +657,6 @@
     "biometricSync": "Biometric Sync Active",
     "dispatch": "Dispatch",
     "confirmEntry": "Confirm Entry",
-    "guardianVerified": "Guardian Verified",
-    "guardianPending": "Guardian Pending",
     "clinicalKey": "Clinical Key...",
     "newKey": "New Key",
     "confirmKey": "Confirm Key",
