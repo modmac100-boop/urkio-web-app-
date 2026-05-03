@@ -300,8 +300,10 @@ export function LandingPage({
             {/* Subtext */}
             <p className="text-base md:text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
               {isRTL
-                ? 'ملاذك الآمن للنمو والتحول. تواصل مع خبراء معتمدين في مساحة خاصة ومشفّرة بالكامل. نحن هنا لندعم رحلتك.'
-                : 'A private sanctuary for growth and transformation. Connect with verified experts in a secure, fully encrypted space. '} </p>
+                ? 'ملاذك الآمن للنمو والتحول. تواصل مع خبراء معتمدين في مساحة خاصة ومشفّرة بالكامل.'
+                : 'A private sanctuary for growth and transformation. Connect with verified experts in a secure, fully encrypted space.'
+              }
+            </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -309,28 +311,28 @@ export function LandingPage({
                 onClick={() => openSignUp('user')}
                 className="w-full sm:w-auto bg-linear-to-r from-ur-primary via-[#00f2fe] to-[#000080] bg-size-[200%_auto] transition-all duration-700 hover:bg-right text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:-translate-y-1 active:scale-95"
               >
-                {isRTL ? 'ابدأ رحلتك الآن' : 'Start Your Journey'}
-              </button>
-              <button
-                onClick={openSignIn}
-                className="w-full sm:w-auto border border-slate-700 hover:border-ur-primary px-8 py-4 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white"
-              >
-                {t('landing.viewManifesto', 'View Manifesto')}
-                <ArrowRight className={clsx('size-5', isRTL && 'rotate-180')} />
-              </button>
-            </div>
+                {isRTL ? 'ابدأ رحلة التغيير الآن' : 'Start Your Transformation'}
+                </button>
+                <button
+                  onClick={openSignIn}
+                  className="w-full sm:w-auto border border-slate-700 hover:border-ur-primary px-8 py-4 rounded-xl font-semibold text-base transition-all flex items-center justify-center gap-2 text-slate-300 hover:text-white"
+                >
+                  {t('landing.viewManifesto', 'View Manifesto')}
+                  <ArrowRight className={clsx('size-5', isRTL && 'rotate-180')} />
+                </button>
+              </div>
 
-            {/* Trust Signals */}
-            <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 max-w-2xl mx-auto text-sm font-medium text-slate-400">
-              <span className="flex items-center gap-2">
-                <span className="text-ur-primary">🔒</span>
-                {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
-              </span>
-              <span className="flex items-center gap-2">
-                <span className="text-ur-primary">👥</span>
-                {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
-              </span>
-            </div>
+              {/* Trust Signals */}
+              <div className="flex flex-wrap items-center justify-center gap-6 py-4 border-t border-white/5 max-w-2xl mx-auto text-sm font-medium text-slate-400">
+                <span className="flex items-center gap-2">
+                  <span className="text-ur-primary">🔒</span>
+                  {isRTL ? 'تشفير عالي الخصوصية (AES-256)' : 'End-to-End Encryption (AES-256)'}
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="text-ur-primary">👥</span>
+                  {isRTL ? 'نخبة من الخبراء والمرشدين الموثوقين' : 'Top Verified Guides & Experts'}
+                </span>
+              </div>
           </div>
         </div>
       </section>
