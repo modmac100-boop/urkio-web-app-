@@ -295,7 +295,7 @@ export function LandingPageV2({
               )}
             >
               {isRTL ? (
-                <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
+                <>أور كيو: طريقك نحو <span className="text-ur-primary italic">التعافي وإتقان الذات</span></>
               ) : (
                 <>Urkio: Your Path to Healing & Self-Mastery <br />
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E] italic pr-4">
@@ -311,7 +311,7 @@ export function LandingPageV2({
               className="text-base md:text-xl text-white/80 mb-12 max-w-2xl leading-relaxed font-medium tracking-wide"
             >
               {isRTL
-                ? 'مساحتك الخاصة للتنفس، التعافي، والنمو. لا تحمل عبء مشاعرك وحدك.. نحن نؤمن بك.'
+                ? 'ملاذك الآمن للنمو والتحول. تواصل مع خبراء معتمدين في مساحة خاصة ومشفّرة بالكامل.'
                 : 'A sanctuary for healing, breathing, and becoming. You don\'t have to carry it all alone. We hear you.'}
             </motion.p>
 
@@ -330,7 +330,7 @@ export function LandingPageV2({
                 onClick={() => openSignUp('user')}
                 className="w-full sm:w-auto bg-ur-primary hover:bg-linear-to-r hover:from-ur-primary hover:to-blue-800 text-ur-on-surface px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all duration-500 shadow-lg shadow-ur-primary/20"
               >
-                {isRTL ? 'ابدأ رحلة العودة لذاتك' : 'Begin Your Return to Self'}
+                {isRTL ? 'ابدأ رحلة التغيير الآن' : 'Begin Your Return to Self'}
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
@@ -338,7 +338,7 @@ export function LandingPageV2({
                 onClick={openSignIn}
                 className="w-full sm:w-auto border border-white/20 text-white px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
               >
-                {t('landing.viewManifesto', 'View Manifesto')}
+                {isRTL ? 'اكتشف رؤية أور كيو' : t('landing.viewManifesto', 'View Manifesto')}
                 <ArrowRight className={clsx('size-4', isRTL && 'rotate-180')} />
               </motion.button>
 
@@ -349,7 +349,7 @@ export function LandingPageV2({
                 className="w-full sm:w-auto border border-ur-primary/30 text-ur-primary px-10 py-5 rounded-full font-black text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3 backdrop-blur-sm"
               >
                 <Sparkles className="size-4" />
-                {isRTL ? 'تحدث مع المرشد الذكي' : 'Talk to Urkio Agent'}
+                {isRTL ? 'تحدث مع مرشدك الذكي' : 'Talk to Urkio Agent'}
               </motion.button>
             </motion.div>
 
