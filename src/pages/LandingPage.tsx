@@ -291,9 +291,9 @@ export function LandingPage({
               isRTL ? "font-['Tajawal',sans-serif]" : "font-['Outfit',sans-serif]"
             )}>
               {isRTL ? (
-                <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
+                <>أور كيو: طريقك نحو <span className="text-ur-primary italic">التعافي وإتقان الذات</span></>
               ) : (
-                <>Urkio: Your Path to Healing & Self-Mastery  <span className="text-ur-primary italic">Healing</span> and Self-Elevation</>
+                <>Urkio: Your Path to Healing & Self-Mastery <span className="text-ur-primary italic">Healing and Self-Elevation</span></>
               )}
             </h1>
 
