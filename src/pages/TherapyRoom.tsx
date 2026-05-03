@@ -51,7 +51,7 @@ import { db, auth } from '../firebase';
 import { useHealingSession } from '../healing-suite/hooks/useHealingSession';
 import { VideoPlayer } from '../conference/components/VideoPlayer';
 import { useTheme } from '../contexts/ThemeContext';
-import { UrkioAgentChat } from '../services/UrkioAgentService';
+import { UrkioConsultant } from '../components/UrkioConsultant';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
 import { SessionInviteModal } from '../components/messaging/SessionInviteModal';
@@ -432,7 +432,7 @@ export function TherapyRoom({ user, userData }: { user: any; userData: any }) {
                </div>
 
                <div className="flex-1 overflow-hidden">
-                  <UrkioAgentChat 
+                  <UrkioConsultant 
                     user={user} 
                     userData={userData} 
                     conversationId={`therapy_session_${roomId}`}

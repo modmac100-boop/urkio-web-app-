@@ -59,7 +59,7 @@ import { useWebPushNotifications } from './hooks/useWebPushNotifications';
 import { NotificationPermissionBanner } from './components/notifications/NotificationPermissionBanner';
 import { AppProvider, useApp } from './contexts/AppContext';
 import { CallProvider } from './contexts/CallContext';
-import { VoiceAgentWidget } from './components/VoiceAgentWidget';
+import { UrkioAiConsultant } from './components/UrkioAiConsultant';
 import toast, { Toaster } from 'react-hot-toast';
 import { SessionTimeout } from './components/security/SessionTimeout';
 import { MFAGate } from './components/security/MFAGate';
@@ -593,7 +593,7 @@ export default function App() {
             {user && <NotificationPermissionBanner onRequest={requestPermission} />}
 
             {/* Floating AI Voice Agent — visible to ALL users including guests */}
-            <VoiceAgentWidget user={user} userData={userData} />
+            <UrkioAiConsultant user={user} userData={userData} />
 
           </CallProvider>
         </Router>

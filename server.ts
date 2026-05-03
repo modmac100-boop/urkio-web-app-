@@ -95,7 +95,7 @@ async function startServer() {
   });
 
   // AI Chat endpoint for local development
-  app.post('/api/chat', async (req, res) => {
+  const chatHandler = async (req: express.Request, res: express.Response) => {
     const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
     try {
       const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
@@ -155,15 +155,9 @@ async function startServer() {
 
       const moodPrompt = SYSTEM_PROMPTS[condition as keyof typeof SYSTEM_PROMPTS] || SYSTEM_PROMPTS.general;
       
-      const systemPrompt = `${moodPrompt}
-      Current Language: ${language === 'ar' ? 'Arabic (العربية)' : 'English'}.
-      User Name: ${userContext?.displayName || (language === 'ar' ? 'مستخدم Urkio' : 'Urkio User')}.
-      
-      Professional Guidelines:
-      - Respond strictly in the specified language: ${language}.
-      - Be deeply empathetic and human-like.
-      - If the user expresses distress, provide a warm response and recommend a specialist.
-      - Keep the tone premium and consistent with Urkio's branding.`;
+      const systemPrompt = `You are URKIO AI CONSULTANT, a highly empathetic AI for a healing and development platform. You act as a 'Social Development Expert' and 'Personal Growth Mentor'. 
+      Language: ${language || 'ar'}. 
+      Context: User is ${userContext?.displayName || 'Urkio User'} in a ${condition || 'general'} state. Keep responses professional, warm, and focused on Self-Mastery & Healing.`;
 
       const result = await client.models.generateContentStream({
         model: 'gemini-1.5-flash',
@@ -224,7 +218,63 @@ async function startServer() {
         }
       }
     }
-  });
+  };
+
+  app.post('/api/chat', chatHandler);
+  app.post('/api/generate', chatHandler);
+    const { messages, userId, userContext, condition = "general", language = "ar" } = req.body;
+    try {
+      const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+
+      const lastMessage = messages?.[messages.length - 1]?.content || '';
+      
+      // --- SAFETY GUARD ---
+      if (assessRiskLevel(lastMessage) === 'high') {
+         const warning = language === 'ar' 
+           ? "أستطيع أن أشعر بمدى الألم الذي تمر به. حياتك غالية جداً. يرجى التواصل مع أخصائي محترف فوراً أو الاتصال بخط الطوارئ."
+           : "I can hear how much pain you are in. Your life is valuable. Please connect with a professional specialist immediately or call an emergency helpline.";
+         res.write(warning);
+         res.end();
+         return;
+      }
+
+      // --- MOCK FALLBACK if API KEY is MISSING ---
+      if (!apiKey) {
+        console.warn('GEMINI_API_KEY not configured. Using mock response.');
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.setHeader('Transfer-Encoding', 'chunked');
+        
+        const mockResponses: Record<string, string[]> = {
+          ar: [
+            "أنا هنا لأسمعك. رحلتك في Urkio هي أولوية بالنسبة لنا. كيف يمكنني دعمك اليوم؟",
+            "أقدر شجاعتك في مشاركة هذا. تذكر أن كل خطوة صغيرة تقربك من التوازن.",
+            "هل ترغب في التحدث أكثر عن هذا الشعور؟ أنا هنا بجانبك.",
+            "مرحباً بك في Urkio. أنا مرشدك الذكي، وجاهز لمساعدتك في أي وقت."
+          ],
+          en: [
+            "I'm here to listen. Your journey in Urkio is our priority. How can I support you today?",
+            "I appreciate your courage in sharing this. Remember, every small step brings you closer to balance.",
+            "Would you like to talk more about this feeling? I'm here right by your side.",
+            "Welcome to Urkio. I'm your AI guide, ready to help you anytime."
+          ]
+        };
+
+        const list = mockResponses[language === 'ar' ? 'ar' : 'en'];
+        const randomResp = list[Math.floor(Math.random() * list.length)];
+        
+        // Simulate streaming
+        const words = randomResp.split(' ');
+        for (const word of words) {
+          res.write(word + ' ');
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        res.end();
+        return;
+      }
+
+      const client = new GoogleGenAI({ apiKey });
+      
+
 
   // Mock Dyte meeting endpoint
   app.post('/api/dyte/meeting', (req, res) => {

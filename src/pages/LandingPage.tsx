@@ -308,7 +308,7 @@ export function LandingPage({
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
-                onClick={() => openSignUp('user')}
+                onClick={() => window.dispatchEvent(new CustomEvent('open-urkio-agent'))}
                 className="w-full sm:w-auto bg-linear-to-r from-ur-primary via-[#00f2fe] to-[#000080] bg-size-[200%_auto] transition-all duration-700 hover:bg-right text-slate-950 px-8 py-4 rounded-xl font-bold text-base shadow-2xl shadow-ur-primary/30 hover:-translate-y-1 active:scale-95"
               >
                 {t('landing.agent_button', isRTL ? 'تحدث مع مرشدك الذكي' : 'Start Your Transformation')}

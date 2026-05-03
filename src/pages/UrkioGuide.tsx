@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { UrkioAgentChat } from '../services/UrkioAgentService';
+import { UrkioConsultant } from '../components/UrkioConsultant';
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean, error: Error | null }> {
   constructor(props: { children: ReactNode }) {
@@ -39,7 +39,7 @@ export function UrkioGuide({ user, userData }: any) {
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-8rem)]">
       <ErrorBoundary>
-        <UrkioAgentChat user={user} userData={userData} />
+        <UrkioConsultant user={user} userData={userData} />
       </ErrorBoundary>
     </div>
   );

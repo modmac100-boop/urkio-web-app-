@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 
 export const config = {
   runtime: 'edge',
@@ -22,29 +22,51 @@ export default async function handler(req: Request) {
       });
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    // Using gemini-1.5-flash for better performance/speed, but naming the endpoint as requested
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const client = new GoogleGenAI({ apiKey });
 
     let finalPrompt = prompt;
 
     // If we have history/context, reconstruct a rich prompt (Urkio specialized)
     if (messages && messages.length > 0) {
       const historyText = messages.map((m: any) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`).join('\n');
-      const systemInstruction = `You are the Urkio Guide, an empathetic AI for a healing and development platform. 
+      const systemInstruction = `You are URKIO AI CONSULTANT, a highly empathetic AI for a healing and development platform. You act as a 'Social Development Expert' and 'Personal Growth Mentor'. 
       Language: ${language || 'ar'}. 
-      Context: User is ${userContext?.displayName || 'Urkio User'} in a ${condition || 'general'} state.`;
+      Context: User is ${userContext?.displayName || 'Urkio User'} in a ${condition || 'general'} state. Keep responses professional, warm, and focused on Self-Mastery & Healing.`;
       
       finalPrompt = `${systemInstruction}\n\nConversation History:\n${historyText}\n\nUser: ${prompt || messages[messages.length-1].content}\nAssistant:`;
     }
 
-    const result = await model.generateContent(finalPrompt);
-    const response = await result.response;
-    const text = response.text();
+    // Use zero-latency streaming logic
+    const result = await client.models.generateContentStream({
+      model: 'gemini-1.5-flash',
+      contents: finalPrompt
+    });
 
-    return new Response(JSON.stringify({ text }), {
+    const stream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        try {
+          for await (const chunk of result.stream) {
+            const chunkText = chunk.text();
+            if (chunkText) {
+              controller.enqueue(encoder.encode(chunkText));
+            }
+          }
+          controller.close();
+        } catch (err) {
+          controller.error(err);
+        }
+      }
+    });
+
+    return new Response(stream, {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Transfer-Encoding': 'chunked',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
     });
   } catch (error: any) {
     console.error('[Urkio AI] Generate Error:', error);

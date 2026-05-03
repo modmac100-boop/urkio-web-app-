@@ -204,7 +204,7 @@ export function VoiceAgentWidget({ user, userData }: VoiceAgentWidgetProps) {
 
     } catch (error: any) {
       console.error('Voice API failed:', error);
-      const errorPrefix = t('agent.error', 'Sorry, a small connection hiccup. We are still with you, please try again.');
+      const errorPrefix = t('agent.error', 'نعتذر، حدث اضطراب بسيط في الاتصال. نحن معك، يرجى المحاولة مرة أخرى.');
       const mockText = `${errorPrefix}\n\n${getMockResponse(msgText)}`;
       
       // Simulate typing/streaming for assistant
