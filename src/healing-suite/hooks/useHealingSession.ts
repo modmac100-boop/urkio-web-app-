@@ -37,6 +37,7 @@ export interface HealingSessionState {
 }
 
 const FALLBACK_APP_ID = "a5557dd007124b7aa7dfce0e3d61a7da";
+const FALLBACK_CERT = "63e7a05a48ac41e5af746e75d0dbdfac";
 const APP_ID = import.meta.env.VITE_AGORA_APP_ID || FALLBACK_APP_ID;
 
 // HD Video Profiles per session mode
@@ -79,22 +80,32 @@ export function useHealingSession(
   const updateState = (patch: Partial<HealingSessionState>) =>
     setState(prev => ({ ...prev, ...patch }));
 
-  // ── Token Fetch ─────────────────────────────────────────────────────────────
+  // ── Token Fetch (with retry) ──────────────────────────────────────────────
   const fetchToken = async (channelName: string, uid: number, publisherRole: boolean): Promise<{ token: string | null; appId: string }> => {
-    try {
-      const res = await fetch('/api/agora/token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          channelName,
-          uid,
-          role: publisherRole ? 'publisher' : 'subscriber',
-        }),
-      });
-      return await res.json();
-    } catch {
-      return { token: null, appId: APP_ID || FALLBACK_APP_ID };
+    const MAX_RETRIES = 3;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const res = await fetch('/api/agora/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            channelName,
+            uid,
+            role: publisherRole ? 'publisher' : 'subscriber',
+          }),
+        });
+        if (!res.ok) throw new Error(`Token endpoint returned ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.warn(`[HealingSuite] Token fetch attempt ${attempt}/${MAX_RETRIES} failed:`, err);
+        if (attempt < MAX_RETRIES) {
+          await new Promise(r => setTimeout(r, 1000 * attempt));
+        }
+      }
     }
+    // All retries exhausted — return null so we attempt tokenless join
+    console.error('[HealingSuite] Token fetch failed after all retries. Will attempt null-token join.');
+    return { token: null, appId: APP_ID || FALLBACK_APP_ID };
   };
 
   // ── Join Session ─────────────────────────────────────────────────────────────
@@ -210,8 +221,10 @@ export function useHealingSession(
             throw new Error(`Connection Failed: ${fallbackErr.message || 'Unknown Agora Error'}. Please check if your Agora project has "App Certificate" enabled.`);
           }
         } else if (isTokenError && token === null) {
-          console.error('[HealingSuite] SECURITY ERROR: Your Agora project REQUIRES a token (App Certificate is enabled), but none was provided.');
-          throw new Error('SECURITY ERROR: This Agora project requires an App Certificate. ACTION REQUIRED: Please add AGORA_APP_CERTIFICATE to your Coolify Environment Variables and restart the deployment.');
+          // The /api/agora/token endpoint was unreachable. This is a deployment config issue,
+          // not a user error. Log clearly and surface a helpful message.
+          console.error('[HealingSuite] SECURITY ERROR: Agora requires a token but the token endpoint was unreachable. Ensure AGORA_APP_CERTIFICATE is set in Coolify and the server is running.');
+          throw new Error('Connection failed: Could not reach the token server. Please ensure the server is running and AGORA_APP_CERTIFICATE is set in your Coolify environment variables.');
         } else {
           throw new Error(`Agora Join Failed: ${joinErr.message || 'Check your internet connection or Agora App ID.'}`);
         }

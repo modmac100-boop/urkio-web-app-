@@ -324,7 +324,7 @@ export function StoryUploadModal({ user, currentUserId, onClose, onSuccess }: an
             </div>
           ) : isRecordingMode ? (
             <div className="space-y-4">
-              <div className="bg-black rounded-[24px] overflow-hidden aspect-[3/4] relative">
+              <div className="bg-black rounded-[24px] overflow-hidden aspect-3/4 relative">
                 <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover" />
                 <div className="absolute bottom-6 inset-x-0 flex justify-center gap-6">
                   {!isRecording ? (
@@ -341,7 +341,7 @@ export function StoryUploadModal({ user, currentUserId, onClose, onSuccess }: an
             </div>
           ) : (
             <div className="space-y-6">
-              <div className="bg-zinc-100 dark:bg-zinc-800 rounded-[24px] overflow-hidden aspect-[3/4] relative flex items-center justify-center">
+              <div className="bg-zinc-100 dark:bg-zinc-800 rounded-[24px] overflow-hidden aspect-3/4 relative flex items-center justify-center">
                 {type === 'image' ? (
                   <img src={preview!} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
