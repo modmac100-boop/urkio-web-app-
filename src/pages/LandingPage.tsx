@@ -293,16 +293,15 @@ export function LandingPage({
               {isRTL ? (
                 <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
-                <>Urkio: Your Journey Toward <span className="text-ur-primary italic">Healing</span> and Self-Elevation</>
+                <>Urkio: Your Path to Healing & Self-Mastery  <span className="text-ur-primary italic">Healing</span> and Self-Elevation</>
               )}
             </h1>
 
             {/* Subtext */}
             <p className="text-base md:text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
               {isRTL
-                ? 'مساحة آمنة، تشفير تام، ومرشدون يفهمونك. طوّر ذاتك، ابنِ مجتمعك، واكتشف قوتك الكامنة في رحلة تعافي استثنائية.'
-                : 'Safe space, full encryption, and guides who truly understand. Develop yourself, build your community, and discover your potential.'}
-            </p>
+                ? 'ملاذك الآمن للنمو والتحول. تواصل مع خبراء معتمدين في مساحة خاصة ومشفّرة بالكامل. نحن هنا لندعم رحلتك.'
+                : 'A private sanctuary for growth and transformation. Connect with verified experts in a secure, fully encrypted space. '} </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">

@@ -297,7 +297,7 @@ export function LandingPageV2({
               {isRTL ? (
                 <>أوركيو: رحلتك نحو <span className="text-ur-primary italic">التشافي</span> والارتقاء بذاتك</>
               ) : (
-                <>Urkio: Your Journey Toward <br />
+                <>Urkio: Your Path to Healing & Self-Mastery <br />
                   <span className="text-transparent bg-clip-text bg-linear-to-r from-ur-primary to-[#C8A96E] italic pr-4">
                     Healing and Self-Elevation
                   </span></>
